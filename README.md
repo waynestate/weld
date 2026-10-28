@@ -95,7 +95,21 @@ The same subcommands work on every OS:
 | `up` | Bring the whole stack up, as above |
 | `down` | Stop and remove the containers |
 | `test` | Run `composer ci` in the app container |
+| `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs |
+
+## Check your setup
+
+`weld:doctor` strikes an arc across the whole setup and reports every joint: the PHP version, the
+app key, debug in production, secure session cookies, writable storage, the database and pending
+migrations. One line per check, PASS or WARN or FAIL; exit code 1 when anything FAILs, so it works
+as a gate. A good bead is a quiet one: all PASS and nothing to say.
+
+- Windows (PowerShell): `.\bin\weld.ps1 doctor`
+- macOS / Linux: `bin/weld.sh doctor`
+- Straight to the container: `docker compose run --rm app php artisan weld:doctor`
+
+Add `--json` to any of them for a machine-readable report.
 
 ## WELD and Sourdough
 

@@ -4,7 +4,7 @@
 # The app and Vite run in Docker; PHP and Node live in the containers, so the
 # host only needs Docker. Windows has its own native path: bin/weld.ps1.
 #
-# Usage: bin/weld.sh <up|down|test|logs>
+# Usage: bin/weld.sh <up|down|test|doctor|logs>
 
 set -eu
 
@@ -20,6 +20,7 @@ usage() {
     echo "         Vite, generate the app key if needed, and migrate."
     echo "  down   Stop and remove the containers."
     echo "  test   Run 'composer ci' in the app container."
+    echo "  doctor Run 'php artisan weld:doctor' in the app container."
     echo "  logs   Follow the container logs; Ctrl+C stops."
 }
 
@@ -54,6 +55,10 @@ case "$cmd" in
     test)
         echo "weld: docker compose run --rm app composer ci"
         docker compose run --rm app composer ci
+        ;;
+    doctor)
+        echo "weld: docker compose run --rm app php artisan weld:doctor"
+        docker compose run --rm app php artisan weld:doctor
         ;;
     logs)
         echo "weld: docker compose logs -f"
