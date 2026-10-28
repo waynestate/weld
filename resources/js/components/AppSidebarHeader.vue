@@ -12,13 +12,19 @@ interface WsSidebar {
 
 const sidebar = inject<WsSidebar | undefined>('wsu-sidebar');
 
-defineProps<{
-    breadcrumbs?: BreadcrumbItemType[];
-}>();
+withDefaults(
+    defineProps<{
+        breadcrumbs?: BreadcrumbItemType[];
+    }>(),
+    {
+        breadcrumbs: () => [],
+    },
+);
 </script>
 
 <template>
     <header class="app-sidebar-header">
+        <!-- TODO(wayneui): no WayneUI class for a header bar inside the sidebar layout's main column; local styles below until one exists. -->
         <button
             type="button"
             class="wsu-btn wsu-btn--icon app-sidebar-header__toggle"
@@ -30,6 +36,7 @@ defineProps<{
             <Menu class="wsu-icon" aria-hidden="true" />
         </button>
 
+        <!-- TODO(wayneui): .wsu-breadcrumbs adds space beneath itself for page-header placement; here it sits inline beside the toggle. Confirm placement. -->
         <nav v-if="breadcrumbs.length > 0" class="wsu-breadcrumbs" aria-label="Breadcrumb">
             <ol class="wsu-breadcrumbs__list">
                 <li v-for="(item, index) in breadcrumbs" :key="index" class="wsu-breadcrumbs__item">

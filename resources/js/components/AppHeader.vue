@@ -129,25 +129,28 @@ onBeforeUnmount(() => {
                     <component :is="item.icon" class="wsu-icon" aria-hidden="true" />
                 </a>
 
+                <!-- TODO(wayneui): no WayneUI menu/dropdown component (only .wsu-app-bar__user, a static label); local disclosure menu until one exists. -->
                 <div ref="userRoot" class="app-header__user">
                     <button
                         type="button"
                         class="app-header__user-trigger"
+                        aria-label="Account"
+                        aria-controls="app-header-user-menu"
                         :aria-expanded="userMenuOpen"
-                        aria-haspopup="true"
                         @click="toggleUserMenu"
                     >
                         <UserInfo :user="auth.user" :show-name="false" />
                     </button>
-                    <div v-if="userMenuOpen" class="app-header__user-menu">
+                    <div v-if="userMenuOpen" id="app-header-user-menu" class="app-header__user-menu">
                         <UserMenuContent :user="auth.user" />
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- TODO(wayneui): WayneUI repeats primary links in the sidebar drawer (.wsu-sidebar__primary-nav); this header-only layout has no drawer, so it keeps a local panel. -->
         <div v-if="mobileNavOpen" id="app-header-nav" class="app-header__mobile-nav">
-            <nav aria-label="Primary">
+            <nav aria-label="Primary, mobile">
                 <Link
                     v-for="item in mainNavItems"
                     :key="item.title"
@@ -174,6 +177,7 @@ onBeforeUnmount(() => {
             </div>
         </div>
 
+        <!-- TODO(wayneui): WayneUI places breadcrumbs above the page header, not inside the app bar; confirm where this trail should live. -->
         <nav v-if="props.breadcrumbs.length > 1" class="wsu-breadcrumbs app-header__breadcrumbs" aria-label="Breadcrumb">
             <ol class="wsu-breadcrumbs__list">
                 <li v-for="(item, index) in props.breadcrumbs" :key="index" class="wsu-breadcrumbs__item">

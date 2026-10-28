@@ -29,6 +29,8 @@ provide('wsu-sidebar', sidebar);
 
 <template>
     <div class="wsu-shell" :class="[variant === 'sidebar' && 'wsu-shell--sidebar', props.class]">
+        <!-- sr-only/focus:not-sr-only are Tailwind's, standing in until WayneUI's stylesheet (which styles .wsu-skip-link) is loaded. -->
+        <a href="#main" class="wsu-skip-link sr-only focus:not-sr-only">Skip to main content</a>
         <slot />
     </div>
 </template>

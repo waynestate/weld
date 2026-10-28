@@ -1,6 +1,5 @@
 <script setup lang="ts">
 interface Props {
-    variant?: 'header' | 'sidebar';
     class?: string;
 }
 

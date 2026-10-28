@@ -13,6 +13,7 @@ defineProps<Props>();
 
 <template>
     <div class="user-menu">
+        <!-- TODO(wayneui): no WayneUI menu list classes; local styles until a menu component exists. -->
         <div class="user-menu__header">
             <UserInfo :user="user" :show-email="true" />
         </div>

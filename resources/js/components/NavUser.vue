@@ -45,17 +45,19 @@ onBeforeUnmount(() => {
 
 <template>
     <div ref="root" class="nav-user">
+        <!-- TODO(wayneui): no WayneUI menu/dropdown component; local disclosure menu until one exists. -->
         <button
             type="button"
             class="nav-user__trigger"
+            aria-controls="nav-user-menu"
             :aria-expanded="open"
-            aria-haspopup="true"
             @click="toggle"
         >
             <UserInfo :user="user" />
             <ChevronsUpDown class="wsu-icon nav-user__chevron" aria-hidden="true" />
         </button>
-        <div v-if="open" class="nav-user__menu">
+        <!-- A disclosure, not role="menu": no aria-haspopup, so screen readers do not expect arrow-key menu behaviour. -->
+        <div v-if="open" id="nav-user-menu" class="nav-user__menu">
             <UserMenuContent :user="user" />
         </div>
     </div>
