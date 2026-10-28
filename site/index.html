@@ -57,6 +57,14 @@
           <span class="wsu-sr-only">WELD</span>
           <span class="hero__letters" aria-hidden="true"><span style="--i:0">W</span><span style="--i:1">E</span><span style="--i:2">L</span><span style="--i:3">D</span></span>
         </h1>
+        <!-- What the letters stand for, set as plain, even words. Screen readers
+             get the sentence whole; the animated copy (split so each word can
+             unroll out of its first letter) is hidden from them, so nobody
+             hears "W ... ired". -->
+        <p class="acro">
+          <span class="wsu-sr-only">WELD stands for Wired, Everything, Linked, Deployed.</span>
+          <span class="acro__line" aria-hidden="true"><span class="acro__word" style="--i:0"><span class="acro__init">W</span><span class="acro__rest">ired,</span></span> <span class="acro__word" style="--i:1"><span class="acro__init">E</span><span class="acro__rest">verything,</span></span> <span class="acro__word" style="--i:2"><span class="acro__init">L</span><span class="acro__rest">inked,</span></span> <span class="acro__word" style="--i:3"><span class="acro__init">D</span><span class="acro__rest">eployed.</span></span></span>
+        </p>
         <p class="hero__tagline">Many parts, <span class="seam">one piece.<span class="seam__bead" aria-hidden="true"><span class="seam__fill"></span></span><span class="seam__runner" aria-hidden="true"><span class="spark"></span></span></span></p>
         <p class="hero__blurb">One Laravel + Inertia/Vue app with every part of the stack already joined — WayneUI, CREED, Pinstripe, PREFLIGHT, PROCTOR, SESAME and HELMET. Clone it, rename it, deploy it.</p>
         <div class="quickstart">
@@ -95,7 +103,7 @@
           </li>
           <!-- WayneUI is project 0: the page the signed-in user actually sees. -->
           <li class="journey__stop" style="--i:2">
-            <span class="journey__icon journey__icon--tile"><img src="assets/marks/wayneui-shield.svg" width="46" height="46" alt=""></span>
+            <span class="journey__icon journey__icon--tile"><img src="assets/marks/wayneui.svg" width="46" height="46" alt=""></span>
             <span class="journey__text"><span class="journey__name">WayneUI</span> <span class="journey__role">renders the page</span></span>
           </li>
           <li class="journey__stop" style="--i:3">
@@ -135,7 +143,7 @@
 
         <article class="cast-card cast-card--split" style="--span:7">
           <div class="cast-card__info">
-            <img class="cast-card__mark cast-card__mark--tile" src="assets/marks/wayneui-shield.svg" width="56" height="56" alt="WayneUI mark: the Wayne State University shield">
+            <img class="cast-card__mark cast-card__mark--tile" src="assets/marks/wayneui.svg" width="56" height="56" alt="WayneUI mark: a rounded frame holding a solid form, with a gold tab on the lower edge">
             <h3 class="cast-card__name">WayneUI</h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">2.0</span>
@@ -375,7 +383,6 @@ sourdough new my-app --raw</code>
   <div class="wsu-container">
     <p class="site-footer__joke">bugs &gt; /dev/null (we wish)</p>
     <p class="site-footer__org">Wayne State University · Enterprise Applications</p>
-    <p class="site-footer__hint">Safety glasses recommended.</p>
   </div>
 </footer>
 

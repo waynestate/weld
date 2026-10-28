@@ -236,7 +236,7 @@
     // The bead under "one piece." drips sparks while it is laid down.
     setTimeout(function () {
       Sparks.trail(document.querySelector(".seam__runner .spark"), 880, 2);
-    }, 1000);
+    }, 1450);
 
     embers(document.querySelector(".hero__embers"));
   }
@@ -427,7 +427,7 @@
   if (motionOn()) {
     var quick = document.querySelector(".quickstart");
     if (quick) {
-      prepType(quick)(1150);
+      prepType(quick)(1700);
     }
 
     // Arm every terminal now (hidden); type each as it scrolls into view.
@@ -563,7 +563,7 @@
   /* ------------------------------------------------------------ 8. the torch */
 
   // Type w-e-l-d anywhere on the page and the pointer becomes a torch for a
-  // dozen seconds. The footer says safety glasses are recommended. It meant it.
+  // dozen seconds. Bring your own welding mask.
   var toast = document.querySelector(".torch-toast");
   var keys = "";
   var torchUntil = 0;
