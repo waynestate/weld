@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="WELD">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" aria-label="WELD">
 <title>WELD</title>
-<!-- 16 px version: three ripples and a puddle, same geometry coarsened so every shape is at least 2 px. -->
-<clipPath id="t"><rect width="512" height="512" rx="112"/></clipPath><g clip-path="url(#t)"><g transform="translate(256 256) rotate(-25)"><rect x="-800" y="-800" width="1600" height="800" fill="#0C5449"/><rect x="-800" y="0" width="1600" height="800" fill="#04231E"/><path d="M-150.0 -190Q110.0 0 -150.0 190Q-70.0 0 -150.0 -190Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path d="M-30.0 -190Q230.0 0 -30.0 190Q50.0 0 -30.0 -190Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path d="M90.0 -190Q350.0 0 90.0 190Q170.0 0 90.0 -190Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><circle cx="300" cy="0" r="62" fill="#FFFFFF"/></g></g>
+<!-- 16 px: no ripples, a thick gold stroke and a white dot on the two-tone tile. -->
+<clipPath id="b"><rect width="16" height="16" rx="3.5"/></clipPath><g clip-path="url(#b)"><rect width="16" height="16" fill="#0c5449"/><g transform="rotate(-30 8 8)"><rect x="-4" y="8" width="26" height="12" fill="#073a32"/><path d="M-3 8H9.5" stroke="#ffcc33" stroke-width="3.8" stroke-linecap="round"/><circle cx="11.4" cy="8" r="2.1" fill="#fff"/></g></g>
 </svg>

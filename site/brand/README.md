@@ -1,61 +1,66 @@
 # WELD brand files
 
-**The mark is the weld bead itself.** A good TIG weld, seen from above, is a row of overlapping crescent ripples, and
-every welder knows it on sight. The tile is split along a slanted seam into two green fields, a row of eight gold
-ripples is laid down the seam, and a white-hot dot sits at the leading end: the puddle. Many parts, one piece, drawn
-literally. There is no letterform in it, so nothing reads as the Wayne State W, which is a protected university mark.
-It holds at 32 px as a gold seam joining two halves, and it animates naturally: the ripples lay down one by one.
+**The mark is the weld bead itself.** A good TIG weld, seen from above, is a row of overlapping ripples, and every
+welder knows it on sight. The tile is split along a seam at -30 degrees into two green plates. A fat gold bead, built
+from overlapping circles with darker gold ripple arcs, runs up the seam to the puddle: a cream disc with a white-hot
+core. Ahead of the puddle the seam is still an open dark gap. **The gap ahead of the puddle is the work still to
+do.** (The line is the lead's.) Many parts, one piece, drawn literally.
+
+There is no letterform in it, so nothing reads as the Wayne State W, a protected university mark. There are no sparks
+on purpose: they read as AI sparkles or lightbulb rays. It holds at 32 px as a gold seam joining two halves, and it
+animates naturally: the puddle advances and the gap closes.
 
 (The first torch-and-plates attempt looked like an eyedropper over an open book. We do not talk about the eyedropper.
-The bead is also, strictly, a stack of dimes, minus the money.)
+The second attempt, a row of gold crescents, looked like bananas. The bananas are retired too.)
 
 ## Colours
 | Role | Colour |
 |---|---|
-| The upper plate (field) | Wayne State green `#0C5449` |
-| The lower plate (field) | Deep green `#04231E`, a shade of the same green |
-| The puddle | White `#FFFFFF`. Orange `#FF7A1A` is reserved as the one optional hot accent and is not in the mark today |
-| The weld bead (the only gold) | Wayne State gold `#FFCC33` |
-| Plates on dark backgrounds | White `#FFFFFF` |
+| Upper plate | Wayne State green `#0C5449` |
+| Lower plate | Deep green `#073A32` |
+| The open gap ahead of the puddle | Near-black green `#021A16` |
+| The weld bead | Wayne State gold `#FFCC33`, ripple arcs `#D69C00` |
+| The puddle | Cream `#FFF4CC` disc, white `#FFFFFF` core |
+| Plates on dark backgrounds | Lifted greens `#1A7566` and `#0C5449` |
 | Light surface | Off-white `#F2F7F6` |
 | Dark surface, terminal | Near-black `#0F1F1C` |
 
-Gold never sits behind white text. The bead is always gold, except in the one-colour mark.
+Gold never sits behind white text. The bead is always gold, except in the one-colour mark. There is no orange in the
+mark.
 
 ## Files
 | File | Use |
 |---|---|
-| `weld-mark.svg` | The mark on light backgrounds: green fields, gold bead, white puddle, rounded square |
-| `weld-mark-white.svg` | The mark on dark backgrounds: the fields are lifted to a lighter green so the square holds against near-black |
-| `weld-mark-mono.svg` | One colour (`currentColor`): the rounded square with the ripples and puddle knocked out. Inline it; as an `<img>` it draws black |
-| `weld-mark-animated.svg` | Front-page motion. The ripples lay down one by one along the seam, then the puddle pulses once. About 2.5 seconds, plays once. With `prefers-reduced-motion: reduce` it shows the finished mark |
-| `weld-tile.svg` | The app icon. Same drawing as the mark, on a 512 tile with corner radius 112 |
-| `weld-favicon.svg` | The tile with a larger puddle, for 32 and 64 px |
-| `weld-favicon-16.svg` | A coarser drawing for 16 px: three ripples and a puddle, every shape at least 2 px |
+| `weld-mark.svg` | The mark on light backgrounds: the full tile, same art as `weld-tile.svg` |
+| `weld-mark-white.svg` | The mark on dark backgrounds: plates lifted to lighter greens so the tile holds against near-black |
+| `weld-mark-mono.svg` | One colour (`currentColor`): the tile with the bead and puddle knocked out and the ripple arcs drawn back in. Inline it; as an `<img>` it draws black |
+| `weld-mark-animated.svg` | Front-page motion. The puddle advances up the seam, the ripples lay down one by one behind it, and the open gap ahead shrinks. About 2.2 seconds, plays once. With `prefers-reduced-motion: reduce` it shows the finished static mark |
+| `weld-tile.svg` | The app icon: the finished mark on a 512 tile with corner radius 112 |
+| `weld-favicon.svg` | The tile with heavier ripple arcs, for 32 and 64 px |
+| `weld-favicon-16.svg` | A simplified 16 px drawing: a thick gold stroke and a white dot on the two-tone tile, no ripples |
 | `weld-avatar-512.png` | The GitLab project avatar and the Open Graph image base |
 | `favicon-16.png`, `favicon-32.png`, `favicon-64.png`, `favicon.ico` | Browser favicons. The `.ico` holds all three |
 | `weld-board.png` | The 12-panel brand board |
 
 ## Geometry
-Hand-written paths on a 512 unit square, not traced. Everything is drawn along the seam axis and then rotated 18
-degrees, so the seam climbs to the right. The two fields are the halves of that axis. Each ripple is one crescent path:
-tips 148 units apart across the seam, outer arc bulging 58 units forward, inner arc 18, so each is 40 thick. Eight of
-them step 50 units apart, with a 6 unit round-joined stroke in the same gold to soften the tips. The puddle is a 28 unit
-circle, 46 units ahead of the last ripple. Four kinds of shape, no gradients, no masks (except the one-colour version),
-no outlines.
+Hand-written, on a 512 unit tile with corner radius 112. Everything sits on one axis, rotated -30 degrees about the
+tile centre. The lower plate is the half-plane below the axis. The bead is 17 gold circles of radius 56, stepped 26
+units apart, so each overlaps its neighbours by more than half. Each has a 5 unit `#D69C00` arc on its trailing side.
+The puddle is a radius 56 cream disc with a radius 34 white core, offset 4 units forward. Ahead of it, a 6 unit
+near-black line runs to the tile edge: the gap. No gradients, no sparks, no outlines.
 
 ## Clear space
-Keep a tenth of the mark's width clear on every side. The mark SVGs already carry a 26 unit margin.
+Keep a tenth of the mark's width clear on every side.
 
 ## Rules
-- Never add a letter to the mark, and never rework the ripples until any part reads as a W. The Wayne State W is not ours.
+- Never add a letter to the mark, and never rework it until any part reads as a W. The Wayne State W is not ours.
+- Never add sparks, glows or lightbulb rays.
 - Never recolour the bead. Gold is the weld.
-- Never add a glow or gradient to the puddle.
 - Never stretch, mirror or rotate the mark. The weld always travels up and to the right.
 
 ## Motion
-The animation is CSS inside the SVG. Each ripple fades and slides in from behind, 0.16 seconds after the last, and the
-puddle pulses once at the end. Nothing flashes.
+The animation is CSS inside the SVG. The puddle and the gap move linearly while each ripple fades in as the puddle
+passes. Nothing flashes.
 
 ## Rendering
 The PNGs were rendered from the SVGs with headless Edge at 1x. The `.ico` was assembled with Pillow from the three

@@ -1,20 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-26 -26 564 564" role="img" aria-label="WELD">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="WELD">
 <title>WELD</title>
-<!-- WELD, animated: the ripples lay down one by one along the seam, then the puddle pulses once. Plays once. prefers-reduced-motion shows the finished mark. -->
+<!-- WELD, animated: the puddle advances up the seam laying ripples one by one while the open gap ahead of it shrinks. Plays once. prefers-reduced-motion shows the finished mark. -->
 <style>
-.r{animation:wd-r .35s cubic-bezier(.2,.9,.3,1) both;transform-box:fill-box;transform-origin:0 50%}
 .r0{animation-delay:0.25s}
-.r1{animation-delay:0.41s}
-.r2{animation-delay:0.57s}
-.r3{animation-delay:0.73s}
-.r4{animation-delay:0.89s}
-.r5{animation-delay:1.05s}
-.r6{animation-delay:1.21s}
-.r7{animation-delay:1.37s}
-.pd{transform-box:fill-box;transform-origin:center;animation:wd-p 1.6s ease-in-out 1.5s 1 both}
-@keyframes wd-r{from{opacity:0;transform:translateX(-26px) scaleX(.6)}to{opacity:1;transform:none}}
-@keyframes wd-p{0%,100%{transform:scale(1)}40%{transform:scale(1.35)}}
-@media (prefers-reduced-motion:reduce){.r,.pd{animation:none;opacity:1}}
+.r1{animation-delay:0.37s}
+.r2{animation-delay:0.49s}
+.r3{animation-delay:0.61s}
+.r4{animation-delay:0.73s}
+.r5{animation-delay:0.85s}
+.r6{animation-delay:0.97s}
+.r7{animation-delay:1.09s}
+.r8{animation-delay:1.21s}
+.r9{animation-delay:1.33s}
+.r10{animation-delay:1.45s}
+.r11{animation-delay:1.57s}
+.r12{animation-delay:1.69s}
+.r13{animation-delay:1.81s}
+.r14{animation-delay:1.93s}
+.r15{animation-delay:2.05s}
+.r16{animation-delay:2.17s}
+.r{animation:wd-r .3s ease-out both;animation-fill-mode:backwards}
+.pd{animation:wd-p 1.92s linear 0.25s backwards}
+.gp{animation:wd-g 1.92s linear 0.25s backwards}
+@keyframes wd-r{from{opacity:0}to{opacity:1}}
+@keyframes wd-p{from{transform:translateX(-416px)}to{transform:none}}
+@keyframes wd-g{from{x:-94px;width:916px}to{x:322px;width:500px}}
+@media (prefers-reduced-motion:reduce){.r,.pd,.gp{animation:none}}
 </style>
-<clipPath id="t"><rect width="512" height="512" rx="112"/></clipPath><g clip-path="url(#t)"><g transform="translate(256 256) rotate(-18)"><rect x="-800" y="-800" width="1600" height="800" fill="#0C5449"/><rect x="-800" y="0" width="1600" height="800" fill="#04231E"/><path class="r r0" d="M-240.0 -74Q-124.0 0 -240.0 74Q-204.0 0 -240.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r1" d="M-190.0 -74Q-74.0 0 -190.0 74Q-154.0 0 -190.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r2" d="M-140.0 -74Q-24.0 0 -140.0 74Q-104.0 0 -140.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r3" d="M-90.0 -74Q26.0 0 -90.0 74Q-54.0 0 -90.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r4" d="M-40.0 -74Q76.0 0 -40.0 74Q-4.0 0 -40.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r5" d="M10.0 -74Q126.0 0 10.0 74Q46.0 0 10.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r6" d="M60.0 -74Q176.0 0 60.0 74Q96.0 0 60.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r7" d="M110.0 -74Q226.0 0 110.0 74Q146.0 0 110.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><circle class="pd" cx="214" cy="0" r="28" fill="#FFFFFF"/></g></g>
+<defs><clipPath id="t"><rect width="512" height="512" rx="112"/></clipPath></defs>
+<g clip-path="url(#t)"><rect width="512" height="512" fill="#0c5449"/><g transform="rotate(-30 256 256)"><rect x="-300" y="256" width="1100" height="500" fill="#073a32"/><rect class="gp" x="322" y="253" width="500" height="6" fill="#021a16"/><g fill="#ffcc33"><circle class="r r0" cx="-120" cy="256" r="56"/><circle class="r r1" cx="-94" cy="256" r="56"/><circle class="r r2" cx="-68" cy="256" r="56"/><circle class="r r3" cx="-42" cy="256" r="56"/><circle class="r r4" cx="-16" cy="256" r="56"/><circle class="r r5" cx="10" cy="256" r="56"/><circle class="r r6" cx="36" cy="256" r="56"/><circle class="r r7" cx="62" cy="256" r="56"/><circle class="r r8" cx="88" cy="256" r="56"/><circle class="r r9" cx="114" cy="256" r="56"/><circle class="r r10" cx="140" cy="256" r="56"/><circle class="r r11" cx="166" cy="256" r="56"/><circle class="r r12" cx="192" cy="256" r="56"/><circle class="r r13" cx="218" cy="256" r="56"/><circle class="r r14" cx="244" cy="256" r="56"/><circle class="r r15" cx="270" cy="256" r="56"/><circle class="r r16" cx="296" cy="256" r="56"/></g><g fill="none" stroke="#d69c00" stroke-width="5" stroke-linecap="round"><path class="r r0" d="M-107.0,201.5 A56,56 0 0 0 -107.0,310.5"/><path class="r r1" d="M-81.0,201.5 A56,56 0 0 0 -81.0,310.5"/><path class="r r2" d="M-55.0,201.5 A56,56 0 0 0 -55.0,310.5"/><path class="r r3" d="M-29.0,201.5 A56,56 0 0 0 -29.0,310.5"/><path class="r r4" d="M-3.0,201.5 A56,56 0 0 0 -3.0,310.5"/><path class="r r5" d="M23.0,201.5 A56,56 0 0 0 23.0,310.5"/><path class="r r6" d="M49.0,201.5 A56,56 0 0 0 49.0,310.5"/><path class="r r7" d="M75.0,201.5 A56,56 0 0 0 75.0,310.5"/><path class="r r8" d="M101.0,201.5 A56,56 0 0 0 101.0,310.5"/><path class="r r9" d="M127.0,201.5 A56,56 0 0 0 127.0,310.5"/><path class="r r10" d="M153.0,201.5 A56,56 0 0 0 153.0,310.5"/><path class="r r11" d="M179.0,201.5 A56,56 0 0 0 179.0,310.5"/><path class="r r12" d="M205.0,201.5 A56,56 0 0 0 205.0,310.5"/><path class="r r13" d="M231.0,201.5 A56,56 0 0 0 231.0,310.5"/><path class="r r14" d="M257.0,201.5 A56,56 0 0 0 257.0,310.5"/><path class="r r15" d="M283.0,201.5 A56,56 0 0 0 283.0,310.5"/><path class="r r16" d="M309.0,201.5 A56,56 0 0 0 309.0,310.5"/></g><g class="pd"><circle cx="322" cy="256" r="56" fill="#fff4cc"/><circle cx="326" cy="256" r="34" fill="#ffffff"/></g></g></g>
 </svg>
