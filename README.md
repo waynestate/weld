@@ -20,7 +20,28 @@ Megazord, except it comes with a deploy script and nobody has to shout to make i
 
 ## Status
 
-Just struck the arc. The scaffold comes next. Until then this README is the plan, not a promise.
+The Laravel base is in. The stack packages arrive once they are on Packagist, and each one gets welded on as it lands.
+Until then, WELD runs on the starter kit plus these stack defaults:
+
+- `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
+- `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
+- `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap
+- `.gitattributes` sets `* text=auto eol=lf`
+- The license is MIT
+
+## Run it locally
+
+The same commands work on Windows, macOS and Linux.
+
+1. `composer install`
+2. Copy `.env.example` to `.env`
+3. `php artisan key:generate`
+4. `php artisan migrate`
+5. `npm ci`
+6. `npm run build`
+7. `composer run dev`
+
+Then open http://localhost:8000.
 
 ## WELD and Sourdough
 
