@@ -136,7 +136,7 @@
       <div class="section__head section__head--main">
         <p class="eyebrow">Every part, its own character</p>
         <h2 id="cast-title">The cast</h2>
-        <p>Seven parts welded into WELD, one sibling that bakes your own, and the crew coming off the line next.</p>
+        <p>Seven parts welded into WELD, five that work the shop floor around it, one sibling that bakes your own, and the crew still on the drawing board.</p>
       </div>
 
       <div class="cast">
@@ -281,6 +281,106 @@
           </div>
         </article>
 
+        <!-- The shop floor: built parts that work around the app rather than
+             inside it. Lines come from each project's README. -->
+        <article class="cast-card cast-card--stack" style="--span:4">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/booster.png" width="56" height="56" alt="BOOSTER mark: a syringe with fins, lifting off on a gold flame">
+            <h3 class="cast-card__name">BOOSTER</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Sting | Mild</span>
+            </p>
+            <p class="cast-card__line">Upgrades, one hop at a time: Rector rewrites the code, your tests sign off, a person merges.</p>
+          </div>
+          <div class="term" data-term>
+<pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>booster plan</span></span>
+<span class="term__out"><span class="t-gold">1.</span> laravel-10-to-11</span>
+<span class="term__out"><span class="t-gold">2.</span> laravel-11-to-12</span>
+<span class="term__out"><span class="t-gold">3.</span> php-82-to-83</span>
+<span class="term__prompt" aria-hidden="true"><span class="t-dim">$</span> <span class="caret"></span></span></pre>
+          </div>
+        </article>
+
+        <article class="cast-card cast-card--stack" style="--span:4">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/rollcall.png" width="56" height="56" alt="ROLLCALL mark: an open register with gold ticks">
+            <h3 class="cast-card__name">ROLLCALL</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Attendance | Taken</span>
+            </p>
+            <p class="cast-card__line">The fleet scanner: every app answers “present”, with its PHP, framework and auth, read against the policy.</p>
+          </div>
+          <div class="term" data-term>
+<pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>rollcall report</span></span>
+<span class="term__out"><span class="t-ok">✓</span> snapshot   today</span>
+<span class="term__out"><span class="t-gold">drift</span>      none</span>
+<span class="term__out"><span class="t-gold">back row</span>   PHP 7.4, waving</span>
+<span class="term__prompt" aria-hidden="true"><span class="t-dim">$</span> <span class="caret"></span></span></pre>
+          </div>
+        </article>
+
+        <article class="cast-card cast-card--stack" style="--span:4">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/squire.png" width="56" height="56" alt="SQUIRE mark: a satchel with a gold buckle">
+            <h3 class="cast-card__name">SQUIRE</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Armour | Carried</span>
+            </p>
+            <p class="cast-card__line">The Citadel kit: build.sh, the release script, the health check, and local parity on the real images.</p>
+          </div>
+          <div class="term" data-term>
+<pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>squire doctor</span></span>
+<span class="term__out"><span class="t-ok">✓</span> build.sh     packages only</span>
+<span class="term__out"><span class="t-ok">✓</span> release.sh   idempotent</span>
+<span class="term__out"><span class="t-ok">✓</span> /up          answers</span>
+<span class="term__prompt" aria-hidden="true"><span class="t-dim">$</span> <span class="caret"></span></span></pre>
+          </div>
+        </article>
+
+        <article class="cast-card cast-card--split" style="--span:7">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/drawbridge.png" width="56" height="56" alt="DRAWBRIDGE mark: a castle tower lowering its bridge on a gold chain">
+            <h3 class="cast-card__name">DRAWBRIDGE</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Moat | Full</span>
+            </p>
+            <p class="cast-card__line">The sign-in gateway in front of the apps: one OpenID Connect client through Entra ID, so each app only checks one small signed token.</p>
+          </div>
+          <div class="term" data-term>
+            <p class="term__bar" aria-hidden="true">~/drawbridge</p>
+<pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>drawbridge config:validate</span></span>
+<span class="term__out"><span class="t-ok">✓</span> oidc        Entra ID, PKCE</span>
+<span class="term__out"><span class="t-ok">✓</span> protected   /admin/</span>
+<span class="term__out"><span class="t-ok">✓</span> headers     stripped, every spelling</span>
+<span class="term__out"><span class="t-gold">bridge:</span> lowered</span>
+<span class="term__prompt" aria-hidden="true"><span class="t-dim">$</span> <span class="caret"></span></span></pre>
+          </div>
+        </article>
+
+        <article class="cast-card cast-card--split" style="--span:5">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/advisor.png" width="56" height="56" alt="ADVISOR mark: a speech bubble holding a gold compass needle">
+            <h3 class="cast-card__name">ADVISOR</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Office hours | Always</span>
+            </p>
+            <p class="cast-card__line">The stack's own MCP server: read-only tools that tell your coding agent what applies to your app, and what to do next.</p>
+          </div>
+          <div class="term" data-term>
+            <p class="term__bar" aria-hidden="true">~/my-app</p>
+<pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>advisor mcp</span></span>
+<span class="term__out"><span class="t-ok">✓</span> serving   stdio</span>
+<span class="term__out"><span class="t-ok">✓</span> tools     read-only</span>
+<span class="term__out"><span class="t-gold">answers:</span> from policy.json</span>
+<span class="term__prompt" aria-hidden="true"><span class="t-dim">$</span> <span class="caret"></span></span></pre>
+          </div>
+        </article>
+
         <!-- Sourdough is WELD's sibling rather than a part of it, so it gets the
              full width and the dark side of the oven. -->
         <article class="cast-card cast-card--split cast-card--sibling" style="--span:12">
@@ -305,34 +405,22 @@
 
       </div>
 
+      <!-- Not built yet, so no mark yet either: an empty mould holds the place
+           (marks are never drawn here; they arrive with the project). -->
       <h3 class="bench__title">Next off the line</h3>
       <ul class="bench">
         <li class="bench-card">
-          <img class="bench-card__mark" src="assets/marks/squire.png" width="48" height="48" alt="SQUIRE mark: a satchel with a gold buckle">
+          <span class="bench-card__mark bench-card__mark--mould" aria-hidden="true"></span>
           <div>
-            <p class="bench-card__name">SQUIRE <span class="chip chip--next">next</span></p>
-            <p class="bench-card__line">Carries the release to Citadel.</p>
+            <p class="bench-card__name">Pantry <span class="chip chip--next">next</span></p>
+            <p class="bench-card__line">The package shelf: one registry for Composer and npm, one vendor namespace.</p>
           </div>
         </li>
         <li class="bench-card">
-          <img class="bench-card__mark" src="assets/marks/rollcall.png" width="48" height="48" alt="ROLLCALL mark: an open register with gold ticks">
+          <span class="bench-card__mark bench-card__mark--mould" aria-hidden="true"></span>
           <div>
-            <p class="bench-card__name">ROLLCALL <span class="chip chip--next">next</span></p>
-            <p class="bench-card__line">Every app answers “present”, with its PHP version.</p>
-          </div>
-        </li>
-        <li class="bench-card">
-          <img class="bench-card__mark" src="assets/marks/advisor.png" width="48" height="48" alt="ADVISOR mark: a speech bubble holding a gold compass needle">
-          <div>
-            <p class="bench-card__name">ADVISOR <span class="chip chip--next">next</span></p>
-            <p class="bench-card__line">Ask what applies to your app, and what to do next.</p>
-          </div>
-        </li>
-        <li class="bench-card">
-          <img class="bench-card__mark" src="assets/marks/drawbridge.png" width="48" height="48" alt="DRAWBRIDGE mark: a castle tower lowering its bridge on a gold chain">
-          <div>
-            <p class="bench-card__name">DRAWBRIDGE <span class="chip chip--next">next</span></p>
-            <p class="bench-card__line">The Citadel sign-in gateway, lowered on request.</p>
+            <p class="bench-card__name">Rolodex <span class="chip chip--next">next</span></p>
+            <p class="bench-card__line">Person data with types, so nobody has to flip through cards by hand.</p>
           </div>
         </li>
       </ul>
