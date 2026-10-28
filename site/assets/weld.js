@@ -441,13 +441,13 @@
   /* ------------------------------------------------------------- 5. journey */
 
   // The seam between the stops is laid down when the journey scrolls into
-  // view: 2.4s, one stop every 0.6s, sparks dripping off the tip.
+  // view: 3s for six stops, one every 0.6s, sparks dripping off the tip.
   var journey = document.querySelector("[data-journey]");
   if (journey && motionOn()) {
     journey.classList.add("is-armed");
     onceVisible([journey], 0.6, function () {
       journey.classList.add("is-welded");
-      Sparks.trail(journey.querySelector(".journey__runner .spark"), 2350, 1);
+      Sparks.trail(journey.querySelector(".journey__runner .spark"), 2950, 1);
       Array.prototype.forEach.call(journey.querySelectorAll(".journey__icon"), function (icon, n) {
         setTimeout(function () {
           var r = icon.getBoundingClientRect();

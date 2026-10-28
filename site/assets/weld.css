@@ -37,6 +37,7 @@
   --weld-term-dim: #8fa8a1;
   --weld-term-ok: #9fe0b4;
   --weld-cream-muted: #4f5d58;
+  --weld-tile: #065a4e;        /* the green of the marks' own tiles */
   --weld-focus: var(--weld-gold);
   --weld-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 18px 40px -18px rgba(2, 26, 22, 0.55);
   --weld-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -422,7 +423,7 @@ body {
 
 /* --------------------------------------------------------------- 4. journey */
 
-/* One request, five stops, as an ordered list: real text, readable in any
+/* One request, six stops, as an ordered list: real text, readable in any
    order, one markup for both directions. Across from 720px; down below. */
 
 .journey {
@@ -441,7 +442,7 @@ body {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -468,6 +469,14 @@ body {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* WayneUI's mark is the WSU shield, not a tile: seat it on the same green
+   tile the other marks carry, as the cast does. */
+.journey__icon--tile {
+  /* In px from the icon size: a % padding would follow the column width. */
+  padding: calc(var(--icon) * 0.16);
+  background-color: var(--weld-tile);
 }
 
 /* A gold ring marks a stop the request has passed. At rest it is on, a
@@ -504,8 +513,8 @@ body {
   position: absolute;
   z-index: 0;
   top: calc(var(--icon) / 2 - 1px);
-  left: 10%;
-  right: 10%;
+  left: calc(100% / 12);   /* half a column: centre of the first stop */
+  right: calc(100% / 12);
   height: 2px;
   background-image: linear-gradient(90deg, var(--weld-cream-40) 50%, transparent 50%);
   background-size: 8px 2px;
@@ -581,7 +590,7 @@ body {
    tile the other marks carry, so the row of marks reads as one family. */
 .cast-card__mark--tile {
   padding: 9px;
-  background-color: var(--weld-green);
+  background-color: var(--weld-tile);
 }
 
 .cast-card__name {
@@ -1302,7 +1311,7 @@ body {
 
   .motion .journey.is-armed.is-welded .journey__bead {
     clip-path: inset(0 0 0 0);
-    transition: clip-path 2400ms linear;
+    transition: clip-path 3000ms linear;
   }
 
   .motion .journey.is-welded .journey__fill::after {
@@ -1350,7 +1359,7 @@ body {
   }
 
   .motion .journey.is-welded .journey__runner {
-    animation: run-x 2400ms linear backwards;
+    animation: run-x 3000ms linear backwards;
   }
 
   /* Afterwards, every eight seconds, one request glints along the finished
@@ -1369,7 +1378,7 @@ body {
   }
 
   .motion .journey.is-welded .journey__glint {
-    animation: glint-x 8s linear 3.2s infinite;
+    animation: glint-x 8s linear 3.6s infinite;
   }
 
   @keyframes glint-x {
@@ -1390,7 +1399,7 @@ body {
 
   .motion .journey.is-armed.is-welded .journey__stop .journey__icon::before {
     animation: ring-glint 8s linear infinite;
-    animation-delay: calc(3.2s + var(--i) * 800ms);
+    animation-delay: calc(3.6s + var(--i) * 640ms);
   }
 
   @keyframes ring-glint {
