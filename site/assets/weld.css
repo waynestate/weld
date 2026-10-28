@@ -1,15 +1,24 @@
 /* ============================================================================
-   WELD front page — first rough draft (2026-10-27).
+   WELD front page (2026-10-27, second pass).
 
    The frame: one WSU green field, cream cards, one gold accent. Every project
-   keeps its own mark; the frame never changes. Built on WayneUI 2.0.8, copied
-   from its documented static path (wayne-ui/apps/site/public/v2) so the page
-   works offline: tokens, container, buttons, skip link and focus ring come
-   from wayne-ui.css; everything below is WELD's own.
+   keeps its own mark on its own green tile; the frame never changes. Built on
+   WayneUI 2.0.8, copied from its documented static path
+   (wayne-ui/apps/site/public/v2) so the page works offline: tokens, container,
+   buttons, skip link and focus ring come from wayne-ui.css (all inside
+   @layer, so the unlayered rules below win without !important).
 
    Colours are the WELD brand set (site/brand/README.md): green #0C5449, deep
    green #073A32, gold #FFCC33, cream #FFF4CC, terminal #0F1F1C.
+
+   File map:
+     1. tokens and frame        5. cast (bento, terminals, bench)
+     2. header and seam         6. paths, footer, toast
+     3. hero                    7. responsive
+     4. journey                 8. motion (only with .motion, see the end)
    ========================================================================== */
+
+/* -------------------------------------------------------- 1. tokens, frame */
 
 :root {
   --weld-green: #0c5449;
@@ -17,17 +26,22 @@
   --weld-green-ink: #021a16;
   --weld-gold: #ffcc33;
   --weld-gold-bright: #ffd65c;
+  --weld-gold-hot: #fff1b8;   /* a bead that has not cooled yet */
+  --weld-ember: #ff9f43;      /* the one warm accent, sparks only */
   --weld-cream: #fff4cc;
   --weld-cream-85: rgba(255, 244, 204, 0.85);
   --weld-cream-40: rgba(255, 244, 204, 0.4);
+  --weld-cream-20: rgba(255, 244, 204, 0.2);
   --weld-ink: #0f1f1c;
   --weld-term-text: #dce8e4;
   --weld-term-dim: #8fa8a1;
-  --weld-cream-muted: #5c6b66;
+  --weld-term-ok: #9fe0b4;
+  --weld-cream-muted: #4f5d58;
   --weld-focus: var(--weld-gold);
+  --weld-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 18px 40px -18px rgba(2, 26, 22, 0.55);
+  --weld-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --weld-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-/* ------------------------------------------------------------------ frame */
 
 body {
   background-color: var(--weld-green);
@@ -46,7 +60,17 @@ body {
   --weld-focus: var(--weld-ink);
 }
 
-/* ----------------------------------------------------------------- header */
+.eyebrow {
+  margin: 0;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.8125rem;
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--weld-gold);
+}
+
+/* ------------------------------------------------------ 2. header and seam */
 
 .site-header {
   padding-block: var(--wsu-space-5);
@@ -66,10 +90,8 @@ body {
   text-decoration: none;
 }
 
-.brand__mark {
-  width: 40px;
-  height: 40px;
-  color: var(--weld-cream);
+.brand img {
+  border-radius: 7px;
 }
 
 .brand__name {
@@ -89,75 +111,217 @@ body {
   padding: 0.125rem 0.625rem;
 }
 
-/* ------------------------------------------------------------------- hero */
+/* A thin gold seam along the top of the window that grows as you read. Only
+   where the browser can tie it to scroll natively; otherwise it is absent. */
+.seam-progress {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ 3. hero */
 
 .hero {
-  padding-block: clamp(2.5rem, 7vw, 5.5rem) clamp(3rem, 7vw, 5.5rem);
+  padding-block: clamp(1.5rem, 5vw, 4rem) clamp(3rem, 7vw, 5.5rem);
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
   text-align: center;
 }
 
+.hero__copy {
+  max-width: 46rem;
+  min-width: 0;
+}
+
+/* The art: the helmet as an app icon, a warm glow behind it, embers on top.
+   The box has a fixed aspect ratio, so nothing below it moves when the
+   canvas wakes up. */
+.hero__art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(190px, 44vw, 400px);
+  aspect-ratio: 1;
+}
+
+.hero__glow {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 204, 51, 0.28), rgba(255, 204, 51, 0.08) 55%, transparent 72%);
+}
+
+.hero__embers {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* App-icon treatment. The PNG carries its own green tile, a shade off the
+   page green; instead of hiding the seam we make it the point: a raised icon
+   with a soft shadow and a hairline cream rim that follows its 20% corner. */
+.hero__icon {
+  position: relative;
+  width: 58%;
+  aspect-ratio: 1;
+  border-radius: 20%;
+  box-shadow:
+    0 0 0 1px rgba(255, 244, 204, 0.16),
+    0 2px 0 0 rgba(255, 244, 204, 0.08) inset,
+    0 28px 48px -16px rgba(2, 26, 22, 0.75),
+    0 8px 16px -8px rgba(2, 26, 22, 0.6);
+}
+
 .hero__mark {
-  width: clamp(96px, 13vw, 160px);
-  margin-inline: auto;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 20%;
+}
+
+/* The arc flash sits on the visor (68%, 46% of the mark). Hidden unless the
+   motion layer strikes it, once. */
+.hero__flash {
+  position: absolute;
+  left: 68%;
+  top: 46%;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 240, 0.95), rgba(255, 214, 92, 0.55) 35%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0.2);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .hero__title {
-  margin: 1.25rem 0 0;
-  font-size: clamp(3.5rem, 9vw, 6.5rem);
+  margin: 0.5rem 0 0;
+  font-size: clamp(4rem, 11vw, 8rem);
   font-weight: var(--wsu-font-weight-black);
-  letter-spacing: -0.02em;
-  line-height: 1;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
   color: var(--weld-cream);
 }
 
+.hero__letters span {
+  display: inline-block;
+}
+
 .hero__tagline {
-  margin: 0.875rem 0 0;
-  font-size: clamp(1.25rem, 2.6vw, 1.75rem);
+  margin: 0.75rem 0 0;
+  font-size: clamp(1.375rem, 2.8vw, 2rem);
   font-weight: var(--wsu-font-weight-bold);
   color: var(--weld-gold);
 }
 
+/* "one piece." sits on a weld bead: a gold line with the overlapping ripples
+   a real bead has. With motion on it is laid down left to right. */
+.seam {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.seam__bead {
+  position: absolute;
+  left: 0;
+  right: 0.25em;
+  bottom: -0.2em;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.seam__fill,
+.journey__fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 0 50%, rgba(255, 255, 255, 0.35) 0 2px, transparent 2.5px) 0 0 / 6px 100% repeat-x,
+    var(--weld-gold);
+}
+
+.seam__runner {
+  position: absolute;
+  left: 0;
+  right: 0.25em;
+  bottom: calc(-0.2em + 3px);
+  height: 0;
+  opacity: 0;
+}
+
 .hero__blurb {
-  max-width: 46rem;
+  max-width: 40rem;
   margin: 1.5rem auto 0;
   font-size: var(--wsu-font-size-lg);
   line-height: var(--wsu-font-lineHeight-base);
   color: var(--weld-cream);
+  text-wrap: pretty;
 }
 
 /* Quick start: one dark bar, the command, and a gold copy button. */
 .quickstart {
   display: flex;
   align-items: stretch;
-  max-width: 46rem;
+  max-width: 40rem;
   margin: 2rem auto 0;
   background-color: var(--weld-ink);
-  border: 1px solid var(--weld-cream-40);
+  border: 1px solid var(--weld-cream-20);
   border-radius: var(--wsu-radius-box);
+  box-shadow: 0 18px 40px -24px rgba(2, 26, 22, 0.9);
   overflow: hidden;
 }
 
 .quickstart__code {
   flex: 1;
-  /* Let the flex item shrink below its (nowrap) content width, so the copy
-     button stays visible on narrow screens; the command scrolls inside. */
   min-width: 0;
   margin: 0;
   padding: 0.875rem 1.25rem;
   font-family: var(--wsu-font-family-mono);
   font-size: 0.9375rem;
+  line-height: 1.6;
   color: var(--weld-term-text);
   text-align: left;
-  white-space: nowrap;
-  overflow-x: auto;
+  /* The command wraps at spaces rather than scrolling, so the whole of it is
+     always visible, phone included. */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
-.quickstart__code .t-dim {
+.t-dim {
   color: var(--weld-term-dim);
 }
 
+.t-gold {
+  color: var(--weld-gold);
+}
+
+.t-ok {
+  color: var(--weld-term-ok);
+}
+
+/* The terminal caret: a gold block. Blinks only with motion on. */
+.caret {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.15em;
+  margin-left: 1px;
+  vertical-align: -0.2em;
+  background-color: var(--weld-gold);
+  border-radius: 1px;
+}
+
 .copy-btn {
+  position: relative;
   align-self: stretch;
+  min-width: 5.5rem;
+  min-height: 44px;
   border: 0;
   padding-inline: 1.25rem;
   font-family: var(--wsu-font-family-body);
@@ -172,11 +336,33 @@ body {
   background-color: var(--weld-gold-bright);
 }
 
+.copy-btn:focus-visible {
+  outline-offset: -5px;
+  --weld-focus: var(--weld-ink);
+}
+
 .hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.75rem;
   margin-top: 2rem;
 }
 
-/* --------------------------------------------------------------- sections */
+.hero__link {
+  font-weight: var(--wsu-font-weight-bold);
+  color: var(--weld-cream);
+  text-decoration-color: var(--weld-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+.hero__link:hover {
+  color: var(--weld-gold);
+}
+
+/* ------------------------------------------------------------- sections */
 
 .section {
   padding-block: clamp(2.5rem, 6vw, 4.5rem);
@@ -201,222 +387,176 @@ body {
   margin: 0.75rem 0 0;
   font-size: var(--wsu-font-size-lg);
   color: var(--weld-cream-85);
+  text-wrap: pretty;
 }
 
-/* ---------------------------------------------------------------- journey */
+/* The journey is a diagram, so its head is quiet... */
+.section__head--light h2 {
+  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  letter-spacing: 0.02em;
+}
 
-/* One request, five stops. The diagram is inline SVG; the gold dot travels
-   the path and each stop lights up as it passes. The horizontal drawing is
-   shown from 720px up; below that a vertical drawing takes over, so the
-   labels never get smaller than they can be read. */
+.section__head--light p {
+  margin-top: 0.375rem;
+  font-size: 1rem;
+}
 
-.journey__svg {
-  display: block;
-  width: 100%;
-  height: auto;
+/* ...and the cast is the main event. */
+.section__head--main h2 {
+  margin-top: 0.5rem;
+  font-size: clamp(2.75rem, 7vw, 4.5rem);
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.section--journey {
+  padding-block: clamp(1.5rem, 4vw, 3rem);
+}
+
+.section--cast {
+  padding-top: clamp(3rem, 7vw, 5.5rem);
+}
+
+/* --------------------------------------------------------------- 4. journey */
+
+/* One request, five stops, as an ordered list: real text, readable in any
+   order, one markup for both directions. Across from 720px; down below. */
+
+.journey {
+  --icon: 64px;
+  position: relative;
+  max-width: 880px;
   margin-inline: auto;
 }
 
-.journey--h .journey__svg {
-  max-width: 1000px;
+.journey__stops {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.journey--v {
-  display: none;
+.journey__stop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
 }
 
-.journey--v .journey__svg {
-  max-width: 420px;
+.journey__icon {
+  position: relative;
+  display: block;
+  width: var(--icon);
+  height: var(--icon);
+  border-radius: 20%;
+  box-shadow: 0 10px 22px -10px rgba(2, 26, 22, 0.8);
 }
 
-.journey__line {
-  stroke: var(--weld-cream-40);
-  stroke-width: 3;
+.journey__icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-.stop__ring {
-  fill: none;
-  stroke: var(--weld-cream-40);
-  stroke-width: 2;
+/* A gold ring marks a stop the request has passed. At rest it is on, a
+   little faint, so the path reads with or without motion. */
+.journey__icon::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 2px solid var(--weld-gold);
+  border-radius: 26%;
+  opacity: 0.55;
 }
 
-.stop__halo {
-  fill: none;
-  stroke: var(--weld-gold);
-  stroke-width: 4;
-  opacity: 0;
-  animation: stop-light 6s linear infinite;
-  animation-delay: calc(var(--i) * 1s);
+.journey__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
 }
 
-.stop__name {
-  fill: var(--weld-cream);
-  font-family: var(--wsu-font-family-body);
-  font-size: 22px;
+.journey__name {
+  font-size: 0.9375rem;
   font-weight: var(--wsu-font-weight-black);
-  letter-spacing: 0.06em;
-  text-anchor: middle;
-  animation: stop-name 6s linear infinite;
-  animation-delay: calc(var(--i) * 1s);
+  letter-spacing: 0.08em;
+  color: var(--weld-cream);
 }
 
-.stop__role {
-  fill: var(--weld-cream-85);
-  font-family: var(--wsu-font-family-body);
-  font-size: 16px;
-  text-anchor: middle;
+.journey__role {
+  font-size: 0.875rem;
+  color: var(--weld-cream-85);
 }
 
-/* The vertical drawing anchors its labels to the left of the line. */
-.journey--v .stop__name,
-.journey--v .stop__role {
-  text-anchor: start;
+/* The seam: centre of the first icon to centre of the last. */
+.journey__track {
+  position: absolute;
+  z-index: 0;
+  top: calc(var(--icon) / 2 - 1px);
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background-image: linear-gradient(90deg, var(--weld-cream-40) 50%, transparent 50%);
+  background-size: 8px 2px;
 }
 
-.journey__dot {
-  fill: var(--weld-gold);
-  animation: journey-dot 6s linear infinite;
+.journey__bead {
+  position: absolute;
+  inset: -1px 0;
+  border-radius: 2px;
+  overflow: hidden;
 }
 
-.journey--v .journey__dot {
-  animation-name: journey-dot-v;
+.journey__runner,
+.journey__glint {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
 }
 
-/* 6s loop: 4s of travel (one stop per second), 2s of rest at the end. */
-@keyframes journey-dot {
-  0% {
-    transform: translateX(0);
-    opacity: 0;
-  }
-  3% {
-    opacity: 1;
-  }
-  66.67% {
-    transform: translateX(800px);
-    opacity: 1;
-  }
-  74% {
-    transform: translateX(800px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(800px);
-    opacity: 0;
-  }
-}
+/* ------------------------------------------------------------------ 5. cast */
 
-@keyframes journey-dot-v {
-  0% {
-    transform: translateY(0);
-    opacity: 0;
-  }
-  3% {
-    opacity: 1;
-  }
-  66.67% {
-    transform: translateY(800px);
-    opacity: 1;
-  }
-  74% {
-    transform: translateY(800px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(800px);
-    opacity: 0;
-  }
-}
-
-@keyframes stop-light {
-  0% {
-    opacity: 0;
-  }
-  1.5% {
-    opacity: 1;
-  }
-  10% {
-    opacity: 1;
-  }
-  22% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes stop-name {
-  0%,
-  1.5% {
-    fill: var(--weld-cream);
-  }
-  6% {
-    fill: var(--weld-gold);
-  }
-  16% {
-    fill: var(--weld-gold);
-  }
-  26%,
-  100% {
-    fill: var(--weld-cream);
-  }
-}
-
-/* Reduced motion: the same diagram, standing still. No dot, no pulses; a
-   faint gold ring on every stop keeps the path readable. */
-@media (prefers-reduced-motion: reduce) {
-  .journey__dot {
-    display: none;
-  }
-
-  .stop__halo {
-    animation: none;
-    opacity: 0.45;
-  }
-
-  .stop__name {
-    animation: none;
-  }
-}
-
-@media (max-width: 719px) {
-  .journey--h {
-    display: none;
-  }
-
-  .journey--v {
-    display: block;
-  }
-}
-
-/* ------------------------------------------------------------------ cast */
-
-/* A bento grid: wide and narrow cards in the spec's order, so the row never
-   reads as a spreadsheet. Each card is split in two — cream, with the mark,
-   the name, two chips and the line; dark, with the tool really running. */
+/* A bento grid on twelve columns: 7 + 5, then three stacked cards, then
+   5 + 7, then Sourdough across the whole width. Split cards put the
+   terminal beside the info; stacked cards put it underneath. */
 
 .cast {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 1rem;
 }
 
 .cast-card {
-  grid-column: span 4;
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  grid-column: span var(--span, 4);
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  min-width: 0;
   background-color: var(--weld-cream);
   border-radius: var(--wsu-radius-box);
+  box-shadow: var(--weld-shadow);
   overflow: hidden;
+  isolation: isolate;
 }
 
-.cast-card--wide {
-  grid-column: span 8;
+.cast-card--split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+}
+
+.cast-card--stack {
+  grid-template-rows: 1fr auto;
 }
 
 .cast-card__info {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.75rem;
   padding: 1.5rem;
   color: var(--weld-ink);
@@ -425,25 +565,36 @@ body {
 .cast-card__mark {
   width: 56px;
   height: 56px;
-  border-radius: 12px;
+  border-radius: 18%;
+  box-shadow: 0 8px 16px -8px rgba(2, 26, 22, 0.55);
+}
+
+/* WayneUI's mark is the WSU shield, not a tile: seat it on the same green
+   tile the other marks carry, so the row of marks reads as one family. */
+.cast-card__mark--tile {
+  padding: 9px;
+  background-color: var(--weld-green);
 }
 
 .cast-card__name {
-  margin: 0;
+  margin: 0.25rem 0 0;
   font-size: 1.5rem;
   font-weight: var(--wsu-font-weight-black);
   letter-spacing: 0.02em;
   line-height: 1.1;
+  color: inherit;
 }
 
-.cast-card--wide .cast-card__name {
-  font-size: 1.75rem;
+.cast-card[style*="--span:7"] .cast-card__name,
+.cast-card--sibling .cast-card__name {
+  font-size: 1.875rem;
 }
 
 .cast-card__chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  margin: 0;
 }
 
 .chip {
@@ -452,6 +603,7 @@ body {
   font-size: var(--wsu-font-size-xs);
   font-weight: var(--wsu-font-weight-bold);
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .chip--version {
@@ -469,40 +621,184 @@ body {
   font-size: 0.9375rem;
   line-height: var(--wsu-font-lineHeight-base);
   color: var(--weld-cream-muted);
+  text-wrap: pretty;
 }
 
-.cast-card__term {
+.cast-card__line code {
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.875em;
+  color: var(--weld-ink);
+}
+
+/* The terminal side. */
+.term {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: center;
-  padding: 1.5rem;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 1.25rem 1.5rem 1.5rem;
   background-color: var(--weld-ink);
 }
 
-.cast-card__term pre {
-  margin: 0;
-  font-family: var(--wsu-font-family-mono);
-  font-size: 0.8125rem;
-  line-height: 1.7;
-  color: var(--weld-term-text);
-  /* pre-wrap keeps the fake output on its own lines and wraps at spaces;
-     the longest token ("my-app") fits the narrow cards, so no mid-word
-     breaks are needed. */
-  white-space: pre-wrap;
+.cast-card--stack .term {
+  margin: 0 0.5rem 0.5rem;
+  border-radius: calc(var(--wsu-radius-box) - 4px);
+  padding-block: 1rem 1.125rem;
 }
 
-.cast-card__term .t-dim {
+.term__bar {
+  margin: 0 0 0.75rem;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.75rem;
   color: var(--weld-term-dim);
 }
 
-.cast-card__term .t-gold {
+.term__body {
+  margin: 0;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  color: var(--weld-term-text);
+  /* pre-wrap keeps each line its own and wraps long ones at spaces. */
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.term__prompt .caret {
+  width: 0.55em;
+  height: 1.05em;
+}
+
+/* The cursor glow: a warm spot that follows the pointer across a card.
+   Moved with transform only; sits under the content. Shown on hover. */
+.cast-card__glow {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 360px;
+  height: 360px;
+  margin: -180px 0 0 -180px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 204, 51, 0.38), rgba(255, 204, 51, 0) 70%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Sourdough: the sibling, on the dark side of the oven. */
+.cast-card--sibling {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  background-color: var(--weld-green-deep);
+  box-shadow: 0 0 0 1px var(--weld-cream-20) inset;
+}
+
+.cast-card--sibling .cast-card__info {
+  color: var(--weld-cream);
+  justify-content: center;
+}
+
+.cast-card--sibling .cast-card__line {
+  max-width: 34rem;
+  color: var(--weld-cream-85);
+}
+
+.cast-card--sibling .chip--version {
+  color: var(--weld-ink);
+  background-color: var(--weld-cream);
+}
+
+.cast-card--sibling .term {
+  margin: 0.5rem;
+  border-radius: calc(var(--wsu-radius-box) - 4px);
+}
+
+.cast-card--sibling .cast-card__glow {
+  background: radial-gradient(closest-side, rgba(255, 204, 51, 0.2), rgba(255, 204, 51, 0) 70%);
+}
+
+.cast-card--sibling :focus-visible {
+  --weld-focus: var(--weld-gold);
+}
+
+/* The bench: who comes off the line next. Smaller, quieter, no terminals. */
+.bench__title {
+  margin: clamp(2.5rem, 5vw, 3.5rem) 0 1rem;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.8125rem;
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--weld-gold);
 }
 
-/* ---------------------------------------------------------- pick your path */
+.bench {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 
+.bench-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--weld-cream-20);
+  border-radius: var(--wsu-radius-box);
+  background-color: rgba(7, 58, 50, 0.55);
+}
+
+.bench-card__mark {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 18%;
+  box-shadow: 0 8px 16px -8px rgba(2, 26, 22, 0.8);
+}
+
+.bench-card__name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.06em;
+  color: var(--weld-cream);
+}
+
+.chip--next {
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.04em;
+  padding: 0.0625rem 0.5rem;
+  color: var(--weld-gold);
+  border: 1px solid rgba(255, 204, 51, 0.6);
+}
+
+.bench-card__line {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--weld-cream-85);
+}
+
+/* -------------------------------------------------- 6. paths, footer, toast */
+
+/* The overflow fix. These columns used to be repeat(3, 1fr), and 1fr has a
+   minimum of "auto": the min-content width of the card. Each card holds a
+   no-wrap command about 470px wide, so every track grew to fit it and the
+   grid ran ~260px past the window at 1440 and ~140px past it at 390.
+   minmax(0, 1fr) lets the tracks shrink; the commands now wrap. */
 .paths {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -510,10 +806,16 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  min-width: 0;
   padding: 1.5rem;
   background-color: var(--weld-cream);
   border-radius: var(--wsu-radius-box);
+  box-shadow: var(--weld-shadow);
   color: var(--weld-ink);
+}
+
+.path-card--featured {
+  box-shadow: 0 0 0 3px var(--weld-gold), var(--weld-shadow);
 }
 
 .path-card h3 {
@@ -537,12 +839,11 @@ body {
   border-radius: var(--wsu-radius-field);
   font-family: var(--wsu-font-family-mono);
   font-size: 0.8125rem;
+  line-height: 1.6;
   color: var(--weld-term-text);
-  white-space: nowrap;
-  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
-
-/* ----------------------------------------------------------------- footer */
 
 .site-footer {
   margin-top: clamp(2rem, 5vw, 4rem);
@@ -565,39 +866,167 @@ body {
   color: var(--weld-gold);
 }
 
-.site-footer__org {
+.site-footer__org,
+.site-footer__hint {
   margin: 0;
   font-size: var(--wsu-font-size-sm);
   color: var(--weld-cream-85);
 }
 
-/* -------------------------------------------------------------- responsive */
+.site-footer__hint {
+  font-style: italic;
+}
 
-@media (max-width: 900px) {
+/* The torch toast: a tiny terminal in the corner. Empty and invisible until
+   the easter egg fires. */
+.torch-toast {
+  position: fixed;
+  z-index: 50;
+  right: 1rem;
+  bottom: 1rem;
+  max-width: min(22rem, calc(100vw - 2rem));
+  padding: 0.875rem 1rem;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--weld-term-text);
+  background-color: var(--weld-ink);
+  border: 1px solid rgba(255, 204, 51, 0.5);
+  border-radius: var(--wsu-radius-box);
+  box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.6);
+  white-space: pre-wrap;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.torch-toast.is-on {
+  visibility: visible;
+  opacity: 1;
+}
+
+.spark-layer {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------ 7. responsive */
+
+@media (min-width: 960px) {
+  /* Desktop hero: copy on the left, the helmet on the right. */
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .hero__art {
+    order: 2;
+    justify-self: center;
+  }
+
+  .hero__blurb,
+  .quickstart {
+    margin-inline: 0;
+  }
+
+  .hero__cta {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 1080px) {
+  .bench {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 960px) {
+  .cast-card[style*="--span:7"],
+  .cast-card[style*="--span:5"] {
+    grid-column: span 12;
+  }
+
   .paths {
-    grid-template-columns: 1fr;
-    max-width: 28rem;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 32rem;
     margin-inline: auto;
   }
 }
 
-@media (max-width: 560px) {
-  .cast-card,
-  .cast-card--wide {
-    grid-column: span 12;
-    grid-template-columns: 1fr;
+/* Under 720px the journey turns and runs down the page, icons at 56px. */
+@media (max-width: 719px) {
+  .journey {
+    --icon: 56px;
+    --row: 84px;
+    max-width: 20rem;
   }
 
-  .cast-card__term {
-    padding-block: 1.25rem;
+  .journey__stops {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .journey__stop {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    height: var(--row);
+    text-align: left;
+  }
+
+  .journey__text {
+    padding-top: 0.375rem;
+  }
+
+  .journey__track {
+    top: calc(var(--icon) / 2);
+    bottom: calc(var(--row) - var(--icon) / 2);
+    left: calc(var(--icon) / 2 - 1px);
+    right: auto;
+    width: 2px;
+    height: auto;
+    background-image: linear-gradient(180deg, var(--weld-cream-40) 50%, transparent 50%);
+    background-size: 2px 8px;
+  }
+
+  .journey__bead {
+    inset: 0 -1px;
   }
 }
 
-/* The quick-start command is longer than a phone screen; let it wrap so the
-   whole thing stays visible instead of scrolling out of view. */
+@media (max-width: 640px) {
+  .cast-card,
+  .cast-card--stack {
+    grid-column: span 12;
+  }
+
+  .cast-card--split,
+  .cast-card--sibling {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cast-card--split .term {
+    margin: 0 0.5rem 0.5rem;
+    border-radius: calc(var(--wsu-radius-box) - 4px);
+  }
+
+  .bench {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 480px) {
   .quickstart__code {
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
+    padding-inline: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .copy-btn {
+    min-width: 4.5rem;
+    padding-inline: 0.875rem;
   }
 }
