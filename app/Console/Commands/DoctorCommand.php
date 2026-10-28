@@ -44,7 +44,7 @@ class DoctorCommand extends Command
         }
 
         if ($this->option('json')) {
-            $this->line(json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            $this->line(json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR));
         }
 
         return collect($results)->contains('status', 'FAIL') ? self::FAILURE : self::SUCCESS;
@@ -55,11 +55,14 @@ class DoctorCommand extends Command
      */
     private function checkPhpVersion(): array
     {
+        $version = PHP_VERSION;
+
+        // @phpstan-ignore smaller.alwaysFalse (composer.json pins PHP ^8.3, but doctor reports honestly on an older runtime)
         if (PHP_VERSION_ID < 80300) {
-            return ['FAIL', 'PHP '.PHP.' is below the 8.3 floor'];
+            return ['FAIL', 'PHP '.$version.' is below the 8.3 floor'];
         }
 
-        return ['PASS', 'PHP '.PHP.' meets the 8.3 floor'];
+        return ['PASS', 'PHP '.$version.' meets the 8.3 floor'];
     }
 
     /**
@@ -147,9 +150,9 @@ class DoctorCommand extends Command
     {
         try {
             /** @var Migrator $migrator */
-            $migrator = $this->app->make(Migrator::class);
-            $files = $migrator->getMigrationFiles($this->app->databasePath('migrations'));
-            $ran = $migrator->repositoryExists() ? $migrator->repository()->getRan() : [];
+            $migrator = app()->make(Migrator::class);
+            $files = $migrator->getMigrationFiles(app()->databasePath('migrations'));
+            $ran = $migrator->repositoryExists() ? $migrator->getRepository()->getRan() : [];
 
             $pending = array_values(array_diff(
                 array_map(static fn (string $file): string => substr(basename($file), 0, -4), $files),

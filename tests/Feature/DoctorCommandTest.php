@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Contracts\Console\Kernel;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Tests\TestCase;
 
 /**
@@ -39,16 +41,26 @@ class DoctorCommandTest extends TestCase
 
     public function test_json_output_decodes_and_has_the_php_version_entry()
     {
-        $pending = $this->artisan('weld:doctor', ['--json' => true]);
+        $output = new BufferedOutput;
 
-        $exitCode = $pending->run();
-        $results = json_decode($pending->output(), true, 512, JSON_THROW_ON_ERROR);
+        $exitCode = $this->app->make(Kernel::class)
+            ->call('weld:doctor', ['--json' => true], $output);
+
+        $results = json_decode($output->fetch(), true, 512, JSON_THROW_ON_ERROR);
 
         $this->assertSame(0, $exitCode);
         $this->assertIsArray($results);
         $this->assertCount(7, $results);
 
-        $phpVersion = collect($results)->firstWhere('id', 'php-version');
+        $phpVersion = null;
+
+        foreach ($results as $entry) {
+            if ($entry['id'] === 'php-version') {
+                $phpVersion = $entry;
+
+                break;
+            }
+        }
 
         $this->assertNotNull($phpVersion, 'the --json report is missing its php-version entry');
         $this->assertSame(['id', 'status', 'message'], array_keys($phpVersion));
