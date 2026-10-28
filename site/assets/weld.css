@@ -1,0 +1,603 @@
+/* ============================================================================
+   WELD front page — first rough draft (2026-10-27).
+
+   The frame: one WSU green field, cream cards, one gold accent. Every project
+   keeps its own mark; the frame never changes. Built on WayneUI 2.0.8, copied
+   from its documented static path (wayne-ui/apps/site/public/v2) so the page
+   works offline: tokens, container, buttons, skip link and focus ring come
+   from wayne-ui.css; everything below is WELD's own.
+
+   Colours are the WELD brand set (site/brand/README.md): green #0C5449, deep
+   green #073A32, gold #FFCC33, cream #FFF4CC, terminal #0F1F1C.
+   ========================================================================== */
+
+:root {
+  --weld-green: #0c5449;
+  --weld-green-deep: #073a32;
+  --weld-green-ink: #021a16;
+  --weld-gold: #ffcc33;
+  --weld-gold-bright: #ffd65c;
+  --weld-cream: #fff4cc;
+  --weld-cream-85: rgba(255, 244, 204, 0.85);
+  --weld-cream-40: rgba(255, 244, 204, 0.4);
+  --weld-ink: #0f1f1c;
+  --weld-term-text: #dce8e4;
+  --weld-term-dim: #8fa8a1;
+  --weld-cream-muted: #5c6b66;
+  --weld-focus: var(--weld-gold);
+}
+
+/* ------------------------------------------------------------------ frame */
+
+body {
+  background-color: var(--weld-green);
+  color: var(--weld-cream);
+}
+
+/* Gold focus ring on the green field; dark ring on cream cards, where gold
+   would disappear. */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 3px solid var(--weld-focus);
+  outline-offset: 2px;
+}
+
+.cast-card :focus-visible,
+.path-card :focus-visible {
+  --weld-focus: var(--weld-ink);
+}
+
+/* ----------------------------------------------------------------- header */
+
+.site-header {
+  padding-block: var(--wsu-space-5);
+}
+
+.site-header .wsu-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wsu-space-4);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.brand__mark {
+  width: 40px;
+  height: 40px;
+  color: var(--weld-cream);
+}
+
+.brand__name {
+  font-size: 1.125rem;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.12em;
+  color: var(--weld-cream);
+}
+
+.brand__version {
+  font-family: var(--wsu-font-family-mono);
+  font-size: var(--wsu-font-size-xs);
+  font-weight: var(--wsu-font-weight-bold);
+  color: var(--weld-ink);
+  background-color: var(--weld-gold);
+  border-radius: var(--wsu-radius-full);
+  padding: 0.125rem 0.625rem;
+}
+
+/* ------------------------------------------------------------------- hero */
+
+.hero {
+  padding-block: clamp(2.5rem, 7vw, 5.5rem) clamp(3rem, 7vw, 5.5rem);
+  text-align: center;
+}
+
+.hero__mark {
+  width: clamp(96px, 13vw, 160px);
+  margin-inline: auto;
+}
+
+.hero__title {
+  margin: 1.25rem 0 0;
+  font-size: clamp(3.5rem, 9vw, 6.5rem);
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--weld-cream);
+}
+
+.hero__tagline {
+  margin: 0.875rem 0 0;
+  font-size: clamp(1.25rem, 2.6vw, 1.75rem);
+  font-weight: var(--wsu-font-weight-bold);
+  color: var(--weld-gold);
+}
+
+.hero__blurb {
+  max-width: 46rem;
+  margin: 1.5rem auto 0;
+  font-size: var(--wsu-font-size-lg);
+  line-height: var(--wsu-font-lineHeight-base);
+  color: var(--weld-cream);
+}
+
+/* Quick start: one dark bar, the command, and a gold copy button. */
+.quickstart {
+  display: flex;
+  align-items: stretch;
+  max-width: 46rem;
+  margin: 2rem auto 0;
+  background-color: var(--weld-ink);
+  border: 1px solid var(--weld-cream-40);
+  border-radius: var(--wsu-radius-box);
+  overflow: hidden;
+}
+
+.quickstart__code {
+  flex: 1;
+  /* Let the flex item shrink below its (nowrap) content width, so the copy
+     button stays visible on narrow screens; the command scrolls inside. */
+  min-width: 0;
+  margin: 0;
+  padding: 0.875rem 1.25rem;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.9375rem;
+  color: var(--weld-term-text);
+  text-align: left;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.quickstart__code .t-dim {
+  color: var(--weld-term-dim);
+}
+
+.copy-btn {
+  align-self: stretch;
+  border: 0;
+  padding-inline: 1.25rem;
+  font-family: var(--wsu-font-family-body);
+  font-size: 0.9375rem;
+  font-weight: var(--wsu-font-weight-bold);
+  color: #09090b;
+  background-color: var(--weld-gold);
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background-color: var(--weld-gold-bright);
+}
+
+.hero__cta {
+  margin-top: 2rem;
+}
+
+/* --------------------------------------------------------------- sections */
+
+.section {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.section__head {
+  max-width: 46rem;
+  margin: 0 auto clamp(2rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.section__head h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: -0.01em;
+  line-height: var(--wsu-font-lineHeight-tight);
+  color: var(--weld-cream);
+}
+
+.section__head p {
+  margin: 0.75rem 0 0;
+  font-size: var(--wsu-font-size-lg);
+  color: var(--weld-cream-85);
+}
+
+/* ---------------------------------------------------------------- journey */
+
+/* One request, five stops. The diagram is inline SVG; the gold dot travels
+   the path and each stop lights up as it passes. The horizontal drawing is
+   shown from 720px up; below that a vertical drawing takes over, so the
+   labels never get smaller than they can be read. */
+
+.journey__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-inline: auto;
+}
+
+.journey--h .journey__svg {
+  max-width: 1000px;
+}
+
+.journey--v {
+  display: none;
+}
+
+.journey--v .journey__svg {
+  max-width: 420px;
+}
+
+.journey__line {
+  stroke: var(--weld-cream-40);
+  stroke-width: 3;
+}
+
+.stop__ring {
+  fill: none;
+  stroke: var(--weld-cream-40);
+  stroke-width: 2;
+}
+
+.stop__halo {
+  fill: none;
+  stroke: var(--weld-gold);
+  stroke-width: 4;
+  opacity: 0;
+  animation: stop-light 6s linear infinite;
+  animation-delay: calc(var(--i) * 1s);
+}
+
+.stop__name {
+  fill: var(--weld-cream);
+  font-family: var(--wsu-font-family-body);
+  font-size: 22px;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.06em;
+  text-anchor: middle;
+  animation: stop-name 6s linear infinite;
+  animation-delay: calc(var(--i) * 1s);
+}
+
+.stop__role {
+  fill: var(--weld-cream-85);
+  font-family: var(--wsu-font-family-body);
+  font-size: 16px;
+  text-anchor: middle;
+}
+
+/* The vertical drawing anchors its labels to the left of the line. */
+.journey--v .stop__name,
+.journey--v .stop__role {
+  text-anchor: start;
+}
+
+.journey__dot {
+  fill: var(--weld-gold);
+  animation: journey-dot 6s linear infinite;
+}
+
+.journey--v .journey__dot {
+  animation-name: journey-dot-v;
+}
+
+/* 6s loop: 4s of travel (one stop per second), 2s of rest at the end. */
+@keyframes journey-dot {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  66.67% {
+    transform: translateX(800px);
+    opacity: 1;
+  }
+  74% {
+    transform: translateX(800px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(800px);
+    opacity: 0;
+  }
+}
+
+@keyframes journey-dot-v {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  66.67% {
+    transform: translateY(800px);
+    opacity: 1;
+  }
+  74% {
+    transform: translateY(800px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(800px);
+    opacity: 0;
+  }
+}
+
+@keyframes stop-light {
+  0% {
+    opacity: 0;
+  }
+  1.5% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 1;
+  }
+  22% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes stop-name {
+  0%,
+  1.5% {
+    fill: var(--weld-cream);
+  }
+  6% {
+    fill: var(--weld-gold);
+  }
+  16% {
+    fill: var(--weld-gold);
+  }
+  26%,
+  100% {
+    fill: var(--weld-cream);
+  }
+}
+
+/* Reduced motion: the same diagram, standing still. No dot, no pulses; a
+   faint gold ring on every stop keeps the path readable. */
+@media (prefers-reduced-motion: reduce) {
+  .journey__dot {
+    display: none;
+  }
+
+  .stop__halo {
+    animation: none;
+    opacity: 0.45;
+  }
+
+  .stop__name {
+    animation: none;
+  }
+}
+
+@media (max-width: 719px) {
+  .journey--h {
+    display: none;
+  }
+
+  .journey--v {
+    display: block;
+  }
+}
+
+/* ------------------------------------------------------------------ cast */
+
+/* A bento grid: wide and narrow cards in the spec's order, so the row never
+   reads as a spreadsheet. Each card is split in two — cream, with the mark,
+   the name, two chips and the line; dark, with the tool really running. */
+
+.cast {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+}
+
+.cast-card {
+  grid-column: span 4;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: var(--weld-cream);
+  border-radius: var(--wsu-radius-box);
+  overflow: hidden;
+}
+
+.cast-card--wide {
+  grid-column: span 8;
+}
+
+.cast-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  color: var(--weld-ink);
+}
+
+.cast-card__mark {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+}
+
+.cast-card__name {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+
+.cast-card--wide .cast-card__name {
+  font-size: 1.75rem;
+}
+
+.cast-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--wsu-radius-full);
+  font-size: var(--wsu-font-size-xs);
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.05em;
+}
+
+.chip--version {
+  color: var(--weld-cream);
+  background-color: var(--weld-ink);
+}
+
+.chip--joke {
+  color: #09090b;
+  background-color: var(--weld-gold);
+}
+
+.cast-card__line {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: var(--wsu-font-lineHeight-base);
+  color: var(--weld-cream-muted);
+}
+
+.cast-card__term {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: var(--weld-ink);
+}
+
+.cast-card__term pre {
+  margin: 0;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--weld-term-text);
+  /* pre-wrap keeps the fake output on its own lines and wraps at spaces;
+     the longest token ("my-app") fits the narrow cards, so no mid-word
+     breaks are needed. */
+  white-space: pre-wrap;
+}
+
+.cast-card__term .t-dim {
+  color: var(--weld-term-dim);
+}
+
+.cast-card__term .t-gold {
+  color: var(--weld-gold);
+}
+
+/* ---------------------------------------------------------- pick your path */
+
+.paths {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.path-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background-color: var(--weld-cream);
+  border-radius: var(--wsu-radius-box);
+  color: var(--weld-ink);
+}
+
+.path-card h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.02em;
+}
+
+.path-card p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: var(--wsu-font-lineHeight-base);
+  color: var(--weld-cream-muted);
+}
+
+.path-card code {
+  margin-top: auto;
+  padding: 0.75rem 1rem;
+  background-color: var(--weld-ink);
+  border-radius: var(--wsu-radius-field);
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.8125rem;
+  color: var(--weld-term-text);
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* ----------------------------------------------------------------- footer */
+
+.site-footer {
+  margin-top: clamp(2rem, 5vw, 4rem);
+  padding-block: 2.5rem;
+  background-color: var(--weld-green-deep);
+}
+
+.site-footer .wsu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.site-footer__joke {
+  margin: 0;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.9375rem;
+  color: var(--weld-gold);
+}
+
+.site-footer__org {
+  margin: 0;
+  font-size: var(--wsu-font-size-sm);
+  color: var(--weld-cream-85);
+}
+
+/* -------------------------------------------------------------- responsive */
+
+@media (max-width: 900px) {
+  .paths {
+    grid-template-columns: 1fr;
+    max-width: 28rem;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .cast-card,
+  .cast-card--wide {
+    grid-column: span 12;
+    grid-template-columns: 1fr;
+  }
+
+  .cast-card__term {
+    padding-block: 1.25rem;
+  }
+}
+
+/* The quick-start command is longer than a phone screen; let it wrap so the
+   whole thing stays visible instead of scrolling out of view. */
+@media (max-width: 480px) {
+  .quickstart__code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}

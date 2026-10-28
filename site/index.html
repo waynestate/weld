@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en" data-theme="wsu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WELD — Many parts, one piece.</title>
+<meta name="description" content="WELD is the front page of the Wayne State developer stack: one Laravel + Inertia/Vue app with every part already joined. Clone it, rename it, deploy it.">
+<link rel="icon" href="brand/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="brand/favicon-32.png">
+<!--
+  WayneUI 2.0.8, copied from its documented static path
+  (wayne-ui/apps/site/public/v2) so this page works offline.
+-->
+<link rel="stylesheet" href="assets/wayne-ui/wayne-ui.css">
+<link rel="stylesheet" href="assets/weld.css">
+</head>
+<body>
+<a class="wsu-skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wsu-container">
+    <a class="brand" href="#main">
+      <img src="brand/weld-avatar-256.png" width="32" height="32" alt="">
+      <span class="brand__name">WELD</span>
+    </a>
+    <span class="brand__version">0.1</span>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ================================================================ hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wsu-container">
+      <img class="hero__mark" src="brand/weld-avatar-512.png" width="160" alt="WELD: a welder's helmet">
+      <h1 class="hero__title" id="hero-title">WELD</h1>
+      <p class="hero__tagline">Many parts, one piece.</p>
+      <p class="hero__blurb">One Laravel + Inertia/Vue app with every part of the stack already joined — WayneUI, CREED, Pinstripe, PREFLIGHT, PROCTOR, SESAME and HELMET. Clone it, rename it, deploy it.</p>
+      <div class="quickstart">
+        <code class="quickstart__code" id="quickstart-cmd"><span class="t-dim">$</span> composer create-project waynestate/weld my-app</code>
+        <button class="copy-btn" type="button" data-copy="composer create-project waynestate/weld my-app" data-target="#quickstart-cmd">
+          <span class="copy-btn__label">Copy</span>
+        </button>
+      </div>
+      <p class="hero__cta">
+        <a class="wsu-btn wsu-btn--accent wsu-btn--lg" href="#paths">Get started</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================= journey -->
+  <section class="section" aria-labelledby="journey-title">
+    <div class="wsu-container">
+      <div class="section__head">
+        <h2 id="journey-title">The journey</h2>
+        <p>One request, five stops, from the edge of the network to the deploy.</p>
+      </div>
+
+      <!-- Horizontal drawing, 720px and up. -->
+      <div class="journey journey--h">
+        <svg class="journey__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 240" role="img" aria-labelledby="jh-title jh-desc">
+          <title id="jh-title">One request's journey through the stack</title>
+          <desc id="jh-desc">HELMET sets security headers, SESAME signs the user in, PROCTOR checks the code, PREFLIGHT runs CI, and SQUIRE deploys. A gold dot travels the path and each stop lights up as it passes.</desc>
+          <defs>
+            <clipPath id="stop-h-0"><circle cx="100" cy="90" r="46"/></clipPath>
+            <clipPath id="stop-h-1"><circle cx="300" cy="90" r="46"/></clipPath>
+            <clipPath id="stop-h-2"><circle cx="500" cy="90" r="46"/></clipPath>
+            <clipPath id="stop-h-3"><circle cx="700" cy="90" r="46"/></clipPath>
+          </defs>
+          <line class="journey__line" x1="100" y1="90" x2="900" y2="90"/>
+          <g class="stop" style="--i:0">
+            <circle class="stop__ring" cx="100" cy="90" r="52"/>
+            <circle class="stop__halo" cx="100" cy="90" r="52"/>
+            <image href="assets/marks/helmet-avatar-512.png" x="54" y="44" width="92" height="92" clip-path="url(#stop-h-0)"/>
+            <text class="stop__name" x="100" y="178">HELMET</text>
+            <text class="stop__role" x="100" y="202">sets security headers</text>
+          </g>
+          <g class="stop" style="--i:1">
+            <circle class="stop__ring" cx="300" cy="90" r="52"/>
+            <circle class="stop__halo" cx="300" cy="90" r="52"/>
+            <image href="assets/marks/sesame-avatar-512.png" x="254" y="44" width="92" height="92" clip-path="url(#stop-h-1)"/>
+            <text class="stop__name" x="300" y="178">SESAME</text>
+            <text class="stop__role" x="300" y="202">signs the user in</text>
+          </g>
+          <g class="stop" style="--i:2">
+            <circle class="stop__ring" cx="500" cy="90" r="52"/>
+            <circle class="stop__halo" cx="500" cy="90" r="52"/>
+            <image href="assets/marks/proctor-avatar-512.png" x="454" y="44" width="92" height="92" clip-path="url(#stop-h-2)"/>
+            <text class="stop__name" x="500" y="178">PROCTOR</text>
+            <text class="stop__role" x="500" y="202">checks the code</text>
+          </g>
+          <g class="stop" style="--i:3">
+            <circle class="stop__ring" cx="700" cy="90" r="52"/>
+            <circle class="stop__halo" cx="700" cy="90" r="52"/>
+            <image href="assets/marks/preflight-avatar-512.png" x="654" y="44" width="92" height="92" clip-path="url(#stop-h-3)"/>
+            <text class="stop__name" x="700" y="178">PREFLIGHT</text>
+            <text class="stop__role" x="700" y="202">runs CI</text>
+          </g>
+          <g class="stop" style="--i:4">
+            <circle class="stop__ring" cx="900" cy="90" r="52"/>
+            <circle class="stop__halo" cx="900" cy="90" r="52"/>
+            <!-- SQUIRE has no mark yet: a neutral placeholder circle with an S. -->
+            <circle cx="900" cy="90" r="46" fill="var(--weld-cream)"/>
+            <text x="900" y="105" text-anchor="middle" font-family="Lato, sans-serif" font-size="44" font-weight="900" fill="var(--weld-green-ink)">S</text>
+            <text class="stop__name" x="900" y="178">SQUIRE</text>
+            <text class="stop__role" x="900" y="202">deploys</text>
+          </g>
+          <circle class="journey__dot" cx="100" cy="90" r="9"/>
+        </svg>
+      </div>
+
+      <!-- Vertical drawing, under 720px: the same stops, top to bottom. -->
+      <div class="journey journey--v">
+        <svg class="journey__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 1000" role="img" aria-labelledby="jv-title jv-desc">
+          <title id="jv-title">One request's journey through the stack</title>
+          <desc id="jv-desc">HELMET sets security headers, SESAME signs the user in, PROCTOR checks the code, PREFLIGHT runs CI, and SQUIRE deploys. A gold dot travels the path and each stop lights up as it passes.</desc>
+          <defs>
+            <clipPath id="stop-v-0"><circle cx="80" cy="100" r="46"/></clipPath>
+            <clipPath id="stop-v-1"><circle cx="80" cy="300" r="46"/></clipPath>
+            <clipPath id="stop-v-2"><circle cx="80" cy="500" r="46"/></clipPath>
+            <clipPath id="stop-v-3"><circle cx="80" cy="700" r="46"/></clipPath>
+          </defs>
+          <line class="journey__line" x1="80" y1="100" x2="80" y2="900"/>
+          <g class="stop" style="--i:0">
+            <circle class="stop__ring" cx="80" cy="100" r="52"/>
+            <circle class="stop__halo" cx="80" cy="100" r="52"/>
+            <image href="assets/marks/helmet-avatar-512.png" x="34" y="54" width="92" height="92" clip-path="url(#stop-v-0)"/>
+            <text class="stop__name" x="150" y="96">HELMET</text>
+            <text class="stop__role" x="150" y="120">sets security headers</text>
+          </g>
+          <g class="stop" style="--i:1">
+            <circle class="stop__ring" cx="80" cy="300" r="52"/>
+            <circle class="stop__halo" cx="80" cy="300" r="52"/>
+            <image href="assets/marks/sesame-avatar-512.png" x="34" y="254" width="92" height="92" clip-path="url(#stop-v-1)"/>
+            <text class="stop__name" x="150" y="296">SESAME</text>
+            <text class="stop__role" x="150" y="320">signs the user in</text>
+          </g>
+          <g class="stop" style="--i:2">
+            <circle class="stop__ring" cx="80" cy="500" r="52"/>
+            <circle class="stop__halo" cx="80" cy="500" r="52"/>
+            <image href="assets/marks/proctor-avatar-512.png" x="34" y="454" width="92" height="92" clip-path="url(#stop-v-2)"/>
+            <text class="stop__name" x="150" y="496">PROCTOR</text>
+            <text class="stop__role" x="150" y="520">checks the code</text>
+          </g>
+          <g class="stop" style="--i:3">
+            <circle class="stop__ring" cx="80" cy="700" r="52"/>
+            <circle class="stop__halo" cx="80" cy="700" r="52"/>
+            <image href="assets/marks/preflight-avatar-512.png" x="34" y="654" width="92" height="92" clip-path="url(#stop-v-3)"/>
+            <text class="stop__name" x="150" y="696">PREFLIGHT</text>
+            <text class="stop__role" x="150" y="720">runs CI</text>
+          </g>
+          <g class="stop" style="--i:4">
+            <circle class="stop__ring" cx="80" cy="900" r="52"/>
+            <circle class="stop__halo" cx="80" cy="900" r="52"/>
+            <circle cx="80" cy="900" r="46" fill="var(--weld-cream)"/>
+            <text x="80" y="915" text-anchor="middle" font-family="Lato, sans-serif" font-size="44" font-weight="900" fill="var(--weld-green-ink)">S</text>
+            <text class="stop__name" x="150" y="896">SQUIRE</text>
+            <text class="stop__role" x="150" y="920">deploys</text>
+          </g>
+          <circle class="journey__dot" cx="80" cy="100" r="9"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ cast -->
+  <section class="section" aria-labelledby="cast-title">
+    <div class="wsu-container">
+      <div class="section__head">
+        <h2 id="cast-title">The cast</h2>
+        <p>Every part of the stack, with its own name and character.</p>
+      </div>
+      <div class="cast">
+
+        <article class="cast-card cast-card--wide">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/creed-avatar-512.png" alt="CREED mark: a stone arch whose gold keystone holds the other stones in place">
+            <h3 class="cast-card__name">CREED</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Volume | Eleven</span>
+            </p>
+            <p class="cast-card__line">The written standards.</p>
+          </div>
+          <div class="cast-card__term" aria-hidden="true">
+<pre><span class="t-dim">$</span> creed policy show
+<span class="t-gold">volume:</span> eleven</pre>
+          </div>
+        </article>
+
+        <article class="cast-card">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/proctor-avatar-512.png" alt="PROCTOR mark: a watchful eye with a gold square pupil">
+            <h3 class="cast-card__name">PROCTOR</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Strictness | Kind</span>
+            </p>
+            <p class="cast-card__line">One command that checks an app against them.</p>
+          </div>
+          <div class="cast-card__term" aria-hidden="true">
+<pre><span class="t-dim">$</span> proctor check
+<span class="t-gold">✓</span> 42 checks passed</pre>
+          </div>
+        </article>
+
+        <article class="cast-card">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/preflight-avatar-512.png" alt="PREFLIGHT mark: a runway with a gold centre line">
+            <h3 class="cast-card__name">PREFLIGHT</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Checklist | Long</span>
+            </p>
+            <p class="cast-card__line">Shared CI.</p>
+          </div>
+          <div class="cast-card__term" aria-hidden="true">
+<pre><span class="t-dim">$</span> preflight run
+<span class="t-gold">✓</span> portability: pass</pre>
+          </div>
+        </article>
+
+        <article class="cast-card cast-card--wide">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/sesame-avatar-512.png" alt="SESAME mark: an open door with a gold gap">
+            <h3 class="cast-card__name">SESAME</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Says | Open</span>
+            </p>
+            <p class="cast-card__line">Sign-in (CAS today, SAML later).</p>
+          </div>
+          <div class="cast-card__term" aria-hidden="true">
+<pre><span class="t-dim">$</span> sesame login
+<span class="t-gold">✓</span> signed in via CAS</pre>
+          </div>
+        </article>
+
+        <article class="cast-card cast-card--wide">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/helmet-avatar-512.png" alt="HELMET mark: a white football helmet with a gold facemask">
+            <h3 class="cast-card__name">HELMET</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Fit | Snug</span>
+            </p>
+            <p class="cast-card__line">Security headers and runtime hardening.</p>
+          </div>
+          <div class="cast-card__term" aria-hidden="true">
+<pre><span class="t-dim">$</span> helmet headers
+<span class="t-gold">CSP:</span> strict</pre>
+          </div>
+        </article>
+
+        <article class="cast-card">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/pinstripe-avatar-512.png" alt="Pinstripe mark: a letter P drawn in pinstripes with a gold dot">
+            <h3 class="cast-card__name">Pinstripe</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Creases | Sharp</span>
+            </p>
+            <p class="cast-card__line">Code style presets.</p>
+          </div>
+          <div class="cast-card__term" aria-hidden="true">
+<pre><span class="t-dim">$</span> pinstripe apply
+<span class="t-gold">style:</span> sharp</pre>
+          </div>
+        </article>
+
+        <article class="cast-card">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/sourdough-avatar-512.png" alt="Sourdough mark: a bread proofing basket with a gold band">
+            <h3 class="cast-card__name">Sourdough</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">0.1</span>
+              <span class="chip chip--joke">Starter | Alive</span>
+            </p>
+            <p class="cast-card__line">Generates and feeds new apps.</p>
+          </div>
+          <div class="cast-card__term" aria-hidden="true">
+<pre><span class="t-dim">$</span> sourdough new my-app
+<span class="t-gold">✓</span> shaped</pre>
+          </div>
+        </article>
+
+        <article class="cast-card cast-card--wide">
+          <div class="cast-card__info">
+            <img class="cast-card__mark" src="assets/marks/wayneui-shield.svg" alt="WayneUI mark: the Wayne State University shield">
+            <h3 class="cast-card__name">WayneUI</h3>
+            <p class="cast-card__chips">
+              <span class="chip chip--version">2.0</span>
+              <span class="chip chip--joke">Contrast | AA</span>
+            </p>
+            <p class="cast-card__line">The interface.</p>
+          </div>
+          <div class="cast-card__term" aria-hidden="true">
+<pre><span class="t-dim">$</span> pnpm verify
+<span class="t-gold">a11y:</span> 100</pre>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================== pick your path -->
+  <section class="section" id="paths" aria-labelledby="paths-title">
+    <div class="wsu-container">
+      <div class="section__head">
+        <h2 id="paths-title">Pick your path</h2>
+        <p>Three shapes, one stack.</p>
+      </div>
+      <div class="paths">
+
+        <article class="path-card">
+          <h3>Raw PHP</h3>
+          <p>No framework, no build. The core, and nothing else.</p>
+          <code>composer create-project waynestate/weld my-app --path=raw-php</code>
+        </article>
+
+        <article class="path-card">
+          <h3>Laravel + Blade</h3>
+          <p>The classic WSU shape: Laravel with Blade views.</p>
+          <code>composer create-project waynestate/weld my-app --path=blade</code>
+        </article>
+
+        <article class="path-card">
+          <h3>Laravel + Inertia/Vue</h3>
+          <p>The full WELD shape: Inertia and Vue, the way WELD runs.</p>
+          <code>composer create-project waynestate/weld my-app --path=inertia</code>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wsu-container">
+    <p class="site-footer__joke">bugs &gt; /dev/null (we wish)</p>
+    <p class="site-footer__org">Wayne State University · Enterprise Applications</p>
+  </div>
+</footer>
+
+<script src="assets/weld.js" defer></script>
+</body>
+</html>
