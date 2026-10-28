@@ -953,15 +953,10 @@ body {
   color: var(--weld-gold);
 }
 
-.site-footer__org,
-.site-footer__hint {
+.site-footer__org {
   margin: 0;
   font-size: var(--wsu-font-size-sm);
   color: var(--weld-cream-85);
-}
-
-.site-footer__hint {
-  font-style: italic;
 }
 
 /* The torch toast: a tiny terminal in the corner. Empty and invisible until

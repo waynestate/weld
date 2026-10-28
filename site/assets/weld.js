@@ -563,7 +563,7 @@
   /* ------------------------------------------------------------ 8. the torch */
 
   // Type w-e-l-d anywhere on the page and the pointer becomes a torch for a
-  // dozen seconds. The footer says safety glasses are recommended. It meant it.
+  // dozen seconds. Bring your own welding mask.
   var toast = document.querySelector(".torch-toast");
   var keys = "";
   var torchUntil = 0;
