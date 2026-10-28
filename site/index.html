@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WELD — Many parts, one piece.</title>
 <meta name="description" content="WELD is the front page of the Wayne State developer stack: one Laravel + Inertia/Vue app with every part already joined. Clone it, rename it, deploy it.">
-<link rel="icon" href="brand/weld-favicon.svg" type="image/svg+xml">
+<link rel="icon" href="brand/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="brand/favicon-32.png">
 <!--
   WayneUI 2.0.8, copied from its documented static path
-  (wayne-ui/apps/site/public/v2) so this page works offline. The CDN form is
-  <link rel="stylesheet" href="https://wayneui.apps.wayne.edu/v2/wayne-ui.css">.
+  (wayne-ui/apps/site/public/v2) so this page works offline.
 -->
 <link rel="stylesheet" href="assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="assets/weld.css">
@@ -20,11 +20,7 @@
 <header class="site-header">
   <div class="wsu-container">
     <a class="brand" href="#main">
-      <!-- WELD mark, one colour (site/brand/weld-mark-mono.svg), inlined so it takes currentColor. -->
-      <svg class="brand__mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
-        <defs><clipPath id="wt"><rect width="512" height="512" rx="112"/></clipPath><mask id="wm"><rect width="512" height="512" fill="#fff"/><g transform="rotate(-30 256 256)" fill="#000"><circle cx="-120" cy="256" r="56"/><circle cx="-94" cy="256" r="56"/><circle cx="-68" cy="256" r="56"/><circle cx="-42" cy="256" r="56"/><circle cx="-16" cy="256" r="56"/><circle cx="10" cy="256" r="56"/><circle cx="36" cy="256" r="56"/><circle cx="62" cy="256" r="56"/><circle cx="88" cy="256" r="56"/><circle cx="114" cy="256" r="56"/><circle cx="140" cy="256" r="56"/><circle cx="166" cy="256" r="56"/><circle cx="192" cy="256" r="56"/><circle cx="218" cy="256" r="56"/><circle cx="244" cy="256" r="56"/><circle cx="270" cy="256" r="56"/><circle cx="296" cy="256" r="56"/><circle cx="322" cy="256" r="56"/></g></mask></defs>
-        <g clip-path="url(#wt)"><rect width="512" height="512" fill="currentColor" mask="url(#wm)"/><g transform="rotate(-30 256 256)" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M-107.0,201.5 A56,56 0 0 0 -107.0,310.5"/><path d="M-81.0,201.5 A56,56 0 0 0 -81.0,310.5"/><path d="M-55.0,201.5 A56,56 0 0 0 -55.0,310.5"/><path d="M-29.0,201.5 A56,56 0 0 0 -29.0,310.5"/><path d="M-3.0,201.5 A56,56 0 0 0 -3.0,310.5"/><path d="M23.0,201.5 A56,56 0 0 0 23.0,310.5"/><path d="M49.0,201.5 A56,56 0 0 0 49.0,310.5"/><path d="M75.0,201.5 A56,56 0 0 0 75.0,310.5"/><path d="M101.0,201.5 A56,56 0 0 0 101.0,310.5"/><path d="M127.0,201.5 A56,56 0 0 0 127.0,310.5"/><path d="M153.0,201.5 A56,56 0 0 0 153.0,310.5"/><path d="M179.0,201.5 A56,56 0 0 0 179.0,310.5"/><path d="M205.0,201.5 A56,56 0 0 0 205.0,310.5"/><path d="M231.0,201.5 A56,56 0 0 0 231.0,310.5"/><path d="M257.0,201.5 A56,56 0 0 0 257.0,310.5"/><path d="M283.0,201.5 A56,56 0 0 0 283.0,310.5"/><path d="M309.0,201.5 A56,56 0 0 0 309.0,310.5"/></g></g>
-      </svg>
+      <img src="brand/weld-avatar-256.png" width="32" height="32" alt="">
       <span class="brand__name">WELD</span>
     </a>
     <span class="brand__version">0.1</span>
@@ -36,7 +32,7 @@
   <!-- ================================================================ hero -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="wsu-container">
-      <img class="hero__mark" src="brand/weld-mark-animated.svg" alt="WELD mark: a weld bead joining two plates, the open gap ahead of it the work still to do">
+      <img class="hero__mark" src="brand/weld-avatar-512.png" width="160" alt="WELD: a welder's helmet">
       <h1 class="hero__title" id="hero-title">WELD</h1>
       <p class="hero__tagline">Many parts, one piece.</p>
       <p class="hero__blurb">One Laravel + Inertia/Vue app with every part of the stack already joined — WayneUI, CREED, Pinstripe, PREFLIGHT, PROCTOR, SESAME and HELMET. Clone it, rename it, deploy it.</p>

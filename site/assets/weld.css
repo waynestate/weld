@@ -97,7 +97,7 @@ body {
 }
 
 .hero__mark {
-  width: clamp(96px, 13vw, 144px);
+  width: clamp(96px, 13vw, 160px);
   margin-inline: auto;
 }
 
