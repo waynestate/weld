@@ -78,17 +78,24 @@ Best practices for building, running and deploying WELD live in [BEST_PRACTICES.
 
 ## Run it locally
 
-The same commands work on Windows, macOS and Linux.
+One command strikes the spark; the containers do the welding. Docker is the only
+prerequisite — PHP and Node run in the containers, so the host needs neither.
 
-1. `composer install`
-2. Copy `.env.example` to `.env`
-3. `php artisan key:generate`
-4. `php artisan migrate`
-5. `npm ci`
-6. `npm run build`
-7. `composer run dev`
+- Windows (PowerShell 5.1 or 7): `.\bin\weld.ps1 up`
+- macOS / Linux: `bin/weld.sh up`
 
-Then open http://localhost:8000.
+`up` copies `.env.example` to `.env` if it is missing, installs the PHP and Node
+dependencies in the containers, starts the app and Vite, generates the app key if
+it is not set, and runs the migrations. Then open http://localhost:8000.
+
+The same subcommands work on every OS:
+
+| Command | What it does |
+|---|---|
+| `up` | Bring the whole stack up, as above |
+| `down` | Stop and remove the containers |
+| `test` | Run `composer ci` in the app container |
+| `logs` | Follow the container logs |
 
 ## WELD and Sourdough
 
