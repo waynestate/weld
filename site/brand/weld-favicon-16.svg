@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" aria-label="WELD">
+<title>WELD</title>
+<!-- Hand-hinted on the 16 px grid. One unit is one pixel. A green block and a 2.4 px gold bead. The white seam is dropped at this size. -->
+<clipPath id="b"><rect width="16" height="16" rx="3.5"/></clipPath>
+<rect width="16" height="16" rx="3.5" fill="#0C5449"/>
+<g clip-path="url(#b)" fill="none" stroke-linejoin="miter" stroke-miterlimit="10">
+<path d="M-1 4L4 12.5L8 4L12 12.5L17 4" stroke="#FFCC33" stroke-width="2.4"/>
+</g>
+</svg>

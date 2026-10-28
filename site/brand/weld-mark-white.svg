@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-30 -30 360 360" role="img" aria-label="WELD">
+<title>WELD</title>
+<!-- WELD mark. Two plates joined along a W-shaped seam, with a gold weld bead filling the seam. Drawn from exact geometry in a 300 unit block, not traced. Every gap is 10 wide and the bead is 38 tall. -->
+<path transform="translate(0 0)" d="M0 30A30 30 0 0 1 30 0H270A30 30 0 0 1 300 30V31L225 183L150 31L75 183L0 31V30Z" fill="#FFFFFF"/><path transform="translate(0 0)" d="M0 89L75 241L150 89L225 241L300 89V270A30 30 0 0 1 270 300H30A30 30 0 0 1 0 270Z" fill="#FFFFFF"/><path d="M0 41L75 193L150 41L225 193L300 41L300 79L225 231L150 79L75 231L0 79Z" fill="#FFCC33"/>
+</svg>
