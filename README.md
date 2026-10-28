@@ -1,6 +1,6 @@
-<p align="center">
+<div align="center">
   <a href="site/index.html"><img src="docs/readme/hero.jpg" width="100%" alt="WELD's front page: the headline WELD, 'Wired, Everything, Linked, Deployed. Many parts, one piece.', the composer create-project command, and the welder's-helmet mark on a green tile."></a>
-</p>
+</div>
 
 # WELD
 
@@ -46,15 +46,15 @@ php artisan key:generate
 | SESAME | Sign-in, with CAS today and the auth gateway later, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` |
 
-<p align="center">
+<div align="center">
   <img src="docs/readme/journey.svg" width="100%" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, PREFLIGHT runs CI, SQUIRE deploys.">
-</p>
-<p align="center"><sub>One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.</sub></p>
+</div>
+<div align="center"><sub>One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.</sub></div>
 
 <details>
 <summary><b>See the front page</b>: three cuts from <code>site/</code> at phone width</summary>
 <br>
-<p align="center"><img src="docs/readme/gallery.jpg" width="100%" alt="Three phone-width crops of WELD's front page on the green shop floor: the hero with the helmet mark, the start of 'The cast' with WayneUI's card, and 'Pick your path' with the raw PHP and Laravel + Blade cards."></p>
+<div align="center"><img src="docs/readme/gallery.jpg" width="100%" alt="Three phone-width crops of WELD's front page on the green shop floor: the hero with the helmet mark, the start of 'The cast' with WayneUI's card, and 'Pick your path' with the raw PHP and Laravel + Blade cards."></div>
 </details>
 
 ## Status
@@ -98,7 +98,7 @@ Pick Sourdough when you want a starter you shape yourself. Pick WELD when you wa
 
 ## The cast
 
-<p align="center">
+<div align="center">
   <a href="https://github.com/waynestate/wayne-ui" title="WayneUI"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/cast/wayneui-dark.png"><img src="docs/readme/cast/wayneui.png" width="48" alt="WayneUI"></picture></a>
   <a href="https://github.com/waynestate/creed" title="CREED"><img src="docs/readme/cast/creed.png" width="48" alt="CREED"></a>
   <a href="https://github.com/waynestate/proctor" title="PROCTOR"><img src="docs/readme/cast/proctor.png" width="48" alt="PROCTOR"></a>
@@ -113,7 +113,7 @@ Pick Sourdough when you want a starter you shape yourself. Pick WELD when you wa
   <a href="https://github.com/waynestate/drawbridge" title="DRAWBRIDGE"><img src="docs/readme/cast/drawbridge.png" width="48" alt="DRAWBRIDGE"></a>
   <a href="https://github.com/waynestate/advisor" title="ADVISOR"><img src="docs/readme/cast/advisor.png" width="48" alt="ADVISOR"></a>
   <a href="https://github.com/waynestate/weld" title="WELD"><img src="docs/readme/cast/weld.png" width="48" alt="WELD"></a>
-</p>
+</div>
 
-<p align="center"><sub>Fourteen parts, one bead. The README art is cut from the front page by
+<div align="center"><sub>Fourteen parts, one bead. The README art is cut from the front page by
 <a href="scripts/readme-art/README.md"><code>scripts/readme-art</code></a>; no sparks were drawn in its making.</sub></p>
