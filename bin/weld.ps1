@@ -1,4 +1,4 @@
-# weld.ps1 — run WELD locally on Windows with one command.
+# weld.ps1: run WELD locally on Windows with one command.
 #
 # Works on Windows PowerShell 5.1 and PowerShell 7; no bash, no WSL. The app
 # and Vite run in Docker; PHP and Node live in the containers, so the host

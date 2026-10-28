@@ -1,5 +1,5 @@
 #!/bin/sh
-# weld.sh — run WELD locally on Linux and macOS with one command.
+# weld.sh: run WELD locally on Linux and macOS with one command.
 #
 # The app and Vite run in Docker; PHP and Node live in the containers, so the
 # host only needs Docker. Windows has its own native path: bin/weld.ps1.
