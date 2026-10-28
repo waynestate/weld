@@ -17,6 +17,8 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 hooked up: sign-in, security headers, checks, coding standards, CI and the WayneUI interface. Think of it as the
 Megazord, except it comes with a deploy script and nobody has to shout to make it combine.
 
+Development happens on Wayne State's GitLab; this repository is a release mirror. Changes land there first.
+
 ## Get it
 
 WELD is an app you start from, not a library you require — the Megazord ships in a repo, not a box.

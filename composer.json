@@ -3,6 +3,10 @@
     "name": "waynestate/weld",
     "type": "project",
     "description": "The Wayne State app stack, welded into one application.",
+    "homepage": "https://weld.apps.wayne.edu/",
+    "support": {
+        "source": "https://github.com/waynestate/weld"
+    },
     "keywords": [
         "laravel",
         "framework"
