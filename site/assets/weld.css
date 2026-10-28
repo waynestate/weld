@@ -1247,17 +1247,17 @@ body {
     to { opacity: 1; }
   }
 
-  .motion .quickstart.is-armed [data-type] {
+  .motion .quickstart.is-armed #quickstart-cmd [data-type] {
     opacity: 1;
     animation: none;
   }
 
-  .motion .quickstart.is-armed .caret {
+  .motion .quickstart.is-armed #quickstart-cmd .caret {
     opacity: 0;
     animation: none;
   }
 
-  .motion .quickstart.is-armed.is-done .caret {
+  .motion .quickstart.is-armed.is-done #quickstart-cmd .caret {
     opacity: 1;
     animation: caret-blink 1.1s linear infinite;
   }
