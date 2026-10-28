@@ -1,24 +1,11 @@
 <script setup lang="ts">
 import AppLogo from '@/components/AppLogo.vue';
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import UserInfo from '@/components/UserInfo.vue';
 import UserMenuContent from '@/components/UserMenuContent.vue';
-import { getInitials } from '@/composables/useInitials';
 import type { BreadcrumbItem, NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { BookOpen, ChevronRight, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
 interface Props {
     breadcrumbs?: BreadcrumbItem[];
@@ -31,11 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
 const page = usePage();
 const auth = computed(() => page.props.auth);
 
-const isCurrentRoute = (url: string) => {
-    return page.url === url;
-};
-
-const activeItemStyles = computed(() => (url: string) => (isCurrentRoute(url) ? 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100' : ''));
+const isCurrentRoute = (url: string) => page.url === url;
 
 const mainNavItems: NavItem[] = [
     {
@@ -57,133 +40,245 @@ const rightNavItems: NavItem[] = [
         icon: BookOpen,
     },
 ];
+
+// Mobile navigation panel.
+const mobileNavOpen = ref(false);
+const toggleMobileNav = () => {
+    mobileNavOpen.value = !mobileNavOpen.value;
+};
+
+// User menu.
+const userMenuOpen = ref(false);
+const userRoot = ref<HTMLElement | null>(null);
+const toggleUserMenu = () => {
+    userMenuOpen.value = !userMenuOpen.value;
+};
+const closeUserMenu = () => {
+    userMenuOpen.value = false;
+};
+
+const onDocumentClick = (event: MouseEvent) => {
+    if (userRoot.value && !userRoot.value.contains(event.target as Node)) {
+        closeUserMenu();
+    }
+};
+
+const onKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+        closeUserMenu();
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('click', onDocumentClick);
+    document.addEventListener('keydown', onKeydown);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener('click', onDocumentClick);
+    document.removeEventListener('keydown', onKeydown);
+});
 </script>
 
 <template>
-    <div>
-        <div class="border-b border-sidebar-border/80">
-            <div class="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
-                <!-- Mobile Menu -->
-                <div class="lg:hidden">
-                    <Sheet>
-                        <SheetTrigger :as-child="true">
-                            <Button variant="ghost" size="icon" class="mr-2 h-9 w-9">
-                                <Menu class="h-5 w-5" />
-                            </Button>
-                        </SheetTrigger>
-                        <SheetContent side="left" class="w-[300px] p-6">
-                            <SheetTitle class="sr-only">Navigation Menu</SheetTitle>
-                            <SheetHeader class="flex justify-start text-left">
-                                <AppLogoIcon class="size-6 fill-current text-black dark:text-white" />
-                            </SheetHeader>
-                            <div class="flex flex-col justify-between h-full space-y-4 py-6 flex-1">
-                                <nav class="-mx-3 space-y-1">
-                                    <Link
-                                        v-for="item in mainNavItems"
-                                        :key="item.title"
-                                        :href="item.href"
-                                        class="flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
-                                        :class="activeItemStyles(item.href)"
-                                    >
-                                        <component v-if="item.icon" :is="item.icon" class="h-5 w-5" />
-                                        {{ item.title }}
-                                    </Link>
-                                </nav>
-                                <div class="flex flex-col space-y-4">
-                                    <a
-                                        v-for="item in rightNavItems"
-                                        :key="item.title"
-                                        :href="item.href"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="flex items-center space-x-2 text-sm font-medium"
-                                    >
-                                        <component v-if="item.icon" :is="item.icon" class="h-5 w-5" />
-                                        <span>{{ item.title }}</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </SheetContent>
-                    </Sheet>
-                </div>
+    <header class="wsu-app-bar wsu-app-bar--compact">
+        <div class="wsu-app-bar__inner">
+            <button
+                type="button"
+                class="wsu-btn wsu-btn--icon app-header__nav-toggle"
+                aria-label="Open navigation menu"
+                aria-controls="app-header-nav"
+                :aria-expanded="mobileNavOpen"
+                @click="toggleMobileNav"
+            >
+                <Menu class="wsu-icon" aria-hidden="true" />
+            </button>
 
-                <Link :href="route('dashboard')" class="flex items-center gap-x-2">
-                    <AppLogo class="hidden h-6 xl:block" />
+            <Link :href="route('dashboard')" class="wsu-app-bar__brand">
+                <AppLogo />
+            </Link>
+
+            <nav class="wsu-app-bar__nav" aria-label="Primary">
+                <Link
+                    v-for="item in mainNavItems"
+                    :key="item.title"
+                    :href="item.href"
+                    class="wsu-app-bar__item"
+                    :aria-current="isCurrentRoute(item.href) ? 'page' : undefined"
+                >
+                    <component v-if="item.icon" :is="item.icon" class="wsu-app-bar__item-icon" aria-hidden="true" />
+                    {{ item.title }}
                 </Link>
+            </nav>
 
-                <!-- Desktop Menu -->
-                <div class="hidden h-full lg:flex lg:flex-1">
-                    <NavigationMenu class="ml-10 flex h-full items-stretch">
-                        <NavigationMenuList class="flex h-full items-stretch space-x-2">
-                            <NavigationMenuItem v-for="(item, index) in mainNavItems" :key="index" class="relative flex h-full items-center">
-                                <Link :href="item.href">
-                                    <NavigationMenuLink
-                                        :class="[navigationMenuTriggerStyle(), activeItemStyles(item.href), 'h-9 cursor-pointer px-3']"
-                                    >
-                                        <component v-if="item.icon" :is="item.icon" class="mr-2 h-4 w-4" />
-                                        {{ item.title }}
-                                    </NavigationMenuLink>
-                                </Link>
-                                <div class="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
-                            </NavigationMenuItem>
-                        </NavigationMenuList>
-                    </NavigationMenu>
-                </div>
+            <div class="wsu-app-bar__end">
+                <button type="button" class="wsu-btn wsu-btn--icon app-header__search" aria-label="Search">
+                    <Search class="wsu-icon" aria-hidden="true" />
+                </button>
 
-                <div class="ml-auto flex items-center space-x-2">
-                    <div class="relative flex items-center space-x-1">
-                        <Button variant="ghost" size="icon" class="group h-9 w-9 cursor-pointer">
-                            <Search class="size-5 opacity-80 group-hover:opacity-100" />
-                        </Button>
+                <a
+                    v-for="item in rightNavItems"
+                    :key="item.title"
+                    :href="item.href"
+                    class="wsu-btn wsu-btn--icon app-header__link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    :aria-label="item.title"
+                    :title="item.title"
+                >
+                    <component :is="item.icon" class="wsu-icon" aria-hidden="true" />
+                </a>
 
-                        <div class="hidden space-x-1 lg:flex">
-                            <template v-for="item in rightNavItems" :key="item.title">
-                                <TooltipProvider :delay-duration="0">
-                                    <Tooltip>
-                                        <TooltipTrigger>
-                                            <Button variant="ghost" size="icon" as-child class="group h-9 w-9 cursor-pointer">
-                                                <a :href="item.href" target="_blank" rel="noopener noreferrer">
-                                                    <span class="sr-only">{{ item.title }}</span>
-                                                    <component :is="item.icon" class="size-5 opacity-80 group-hover:opacity-100" />
-                                                </a>
-                                            </Button>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p>{{ item.title }}</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                            </template>
-                        </div>
+                <div ref="userRoot" class="app-header__user">
+                    <button
+                        type="button"
+                        class="app-header__user-trigger"
+                        :aria-expanded="userMenuOpen"
+                        aria-haspopup="true"
+                        @click="toggleUserMenu"
+                    >
+                        <UserInfo :user="auth.user" :show-name="false" />
+                    </button>
+                    <div v-if="userMenuOpen" class="app-header__user-menu">
+                        <UserMenuContent :user="auth.user" />
                     </div>
-
-                    <DropdownMenu>
-                        <DropdownMenuTrigger :as-child="true">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary"
-                            >
-                                <Avatar class="size-8 overflow-hidden rounded-full">
-                                    <AvatarImage :src="auth.user.avatar" :alt="auth.user.name" />
-                                    <AvatarFallback class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white">
-                                        {{ getInitials(auth.user?.name) }}
-                                    </AvatarFallback>
-                                </Avatar>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" class="w-56">
-                            <UserMenuContent :user="auth.user" />
-                        </DropdownMenuContent>
-                    </DropdownMenu>
                 </div>
             </div>
         </div>
 
-        <div v-if="props.breadcrumbs.length > 1" class="flex w-full border-b border-sidebar-border/70">
-            <div class="mx-auto flex h-12 w-full items-center justify-start px-4 text-neutral-500 md:max-w-7xl">
-                <Breadcrumbs :breadcrumbs="breadcrumbs" />
+        <div v-if="mobileNavOpen" id="app-header-nav" class="app-header__mobile-nav">
+            <nav aria-label="Primary">
+                <Link
+                    v-for="item in mainNavItems"
+                    :key="item.title"
+                    :href="item.href"
+                    class="app-header__mobile-link"
+                    :aria-current="isCurrentRoute(item.href) ? 'page' : undefined"
+                >
+                    <component v-if="item.icon" :is="item.icon" class="wsu-icon" aria-hidden="true" />
+                    {{ item.title }}
+                </Link>
+            </nav>
+            <div class="app-header__mobile-footer">
+                <a
+                    v-for="item in rightNavItems"
+                    :key="item.title"
+                    :href="item.href"
+                    class="app-header__mobile-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <component :is="item.icon" class="wsu-icon" aria-hidden="true" />
+                    {{ item.title }}
+                </a>
             </div>
         </div>
-    </div>
+
+        <nav v-if="props.breadcrumbs.length > 1" class="wsu-breadcrumbs app-header__breadcrumbs" aria-label="Breadcrumb">
+            <ol class="wsu-breadcrumbs__list">
+                <li v-for="(item, index) in props.breadcrumbs" :key="index" class="wsu-breadcrumbs__item">
+                    <template v-if="index === props.breadcrumbs.length - 1">
+                        <span aria-current="page">{{ item.title }}</span>
+                    </template>
+                    <template v-else>
+                        <a :href="item.href" class="wsu-breadcrumbs__link">{{ item.title }}</a>
+                        <ChevronRight class="wsu-breadcrumbs__separator wsu-icon" aria-hidden="true" />
+                    </template>
+                </li>
+            </ol>
+        </nav>
+    </header>
 </template>
+
+<style scoped>
+/* The nav toggle and the mobile panel only matter below the docked breakpoint,
+   where the bar's own nav is hidden. */
+@media (min-width: 48rem) {
+    .app-header__nav-toggle,
+    .app-header__mobile-nav {
+        display: none;
+    }
+}
+
+.app-header__search,
+.app-header__link {
+    color: inherit;
+}
+
+.app-header__user {
+    position: relative;
+}
+
+.app-header__user-trigger {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+    border: none;
+    border-radius: 9999px;
+    background: none;
+    cursor: pointer;
+}
+
+/* The user sits at the top of the bar, so the menu opens downward. */
+.app-header__user-menu {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    inset-inline-end: 0;
+    z-index: 50;
+    min-width: 14rem;
+    background-color: hsl(var(--popover));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    box-shadow:
+        0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.app-header__mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border-block-end: 1px solid hsl(var(--border));
+}
+
+.app-header__mobile-nav nav,
+.app-header__mobile-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.app-header__mobile-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: inherit;
+    text-decoration: none;
+}
+
+.app-header__mobile-link:hover {
+    background-color: hsl(var(--accent));
+}
+
+.app-header__mobile-link[aria-current='page'] {
+    background-color: hsl(var(--accent));
+    font-weight: 600;
+}
+
+.app-header__mobile-link .wsu-icon {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+}
+
+.app-header__breadcrumbs {
+    margin-block-end: 0;
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+    border-block-end: 1px solid hsl(var(--border));
+}
+</style>

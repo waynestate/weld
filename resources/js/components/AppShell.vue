@@ -1,30 +1,34 @@
 <script setup lang="ts">
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { onMounted, ref } from 'vue';
+import { provide, reactive } from 'vue';
 
 interface Props {
     variant?: 'header' | 'sidebar';
+    class?: string;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
-const isOpen = ref(true);
-
-onMounted(() => {
-    isOpen.value = localStorage.getItem('sidebar') !== 'false';
+// The drawer state lives here so the sidebar (and whatever opens it) can share
+// it without a prop-drilling chain. A reactive object, not a ref: nested refs
+// do not auto-unwrap in templates.
+const sidebar = reactive({
+    isDrawerOpen: false,
+    openDrawer() {
+        this.isDrawerOpen = true;
+    },
+    closeDrawer() {
+        this.isDrawerOpen = false;
+    },
+    toggleDrawer() {
+        this.isDrawerOpen = !this.isDrawerOpen;
+    },
 });
 
-const handleSidebarChange = (open: boolean) => {
-    isOpen.value = open;
-    localStorage.setItem('sidebar', String(open));
-};
+provide('wsu-sidebar', sidebar);
 </script>
 
 <template>
-    <div v-if="variant === 'header'" class="flex min-h-screen w-full flex-col">
+    <div class="wsu-shell" :class="[variant === 'sidebar' && 'wsu-shell--sidebar', props.class]">
         <slot />
     </div>
-    <SidebarProvider v-else :default-open="isOpen" :open="isOpen" @update:open="handleSidebarChange">
-        <slot />
-    </SidebarProvider>
 </template>

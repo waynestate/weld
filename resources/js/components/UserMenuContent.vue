@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import UserInfo from '@/components/UserInfo.vue';
-import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import type { User } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { Settings } from 'lucide-vue-next';
@@ -13,18 +12,53 @@ defineProps<Props>();
 </script>
 
 <template>
-    <DropdownMenuLabel class="p-0 font-normal">
-        <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+    <div class="user-menu">
+        <div class="user-menu__header">
             <UserInfo :user="user" :show-email="true" />
         </div>
-    </DropdownMenuLabel>
-    <DropdownMenuSeparator />
-    <DropdownMenuGroup>
-        <DropdownMenuItem :as-child="true">
-            <Link class="block w-full" :href="route('profile.edit')" as="button">
-                <Settings class="mr-2 h-4 w-4" />
-                Settings
-            </Link>
-        </DropdownMenuItem>
-    </DropdownMenuGroup>
+        <div class="wsu-divider" role="separator" />
+        <ul class="user-menu__list">
+            <li>
+                <Link :href="route('profile.edit')" class="user-menu__item">
+                    <Settings class="wsu-icon" aria-hidden="true" />
+                    Settings
+                </Link>
+            </li>
+        </ul>
+    </div>
 </template>
+
+<style scoped>
+.user-menu__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.user-menu__list {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem;
+}
+
+.user-menu__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.user-menu__item:hover {
+    background-color: hsl(var(--accent));
+}
+
+.user-menu__item .wsu-icon {
+    inline-size: 1rem;
+    block-size: 1rem;
+}
+</style>

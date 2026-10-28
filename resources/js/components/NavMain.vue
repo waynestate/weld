@@ -1,14 +1,6 @@
 <script setup lang="ts">
-import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type SharedData } from '@/types';
+import type { NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import type { Component } from 'vue';
-
-interface NavItem {
-    title: string;
-    url: string;
-    icon: Component;
-}
 
 defineProps<{
     items: NavItem[];
@@ -18,17 +10,19 @@ const page = usePage<SharedData>();
 </script>
 
 <template>
-    <SidebarGroup class="px-2 py-0">
-        <SidebarGroupLabel>Platform</SidebarGroupLabel>
-        <SidebarMenu>
-            <SidebarMenuItem v-for="item in items" :key="item.title">
-                <SidebarMenuButton as-child :is-active="item.url === page.url">
-                    <Link :href="item.url">
-                        <component :is="item.icon" />
-                        <span>{{ item.title }}</span>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-        </SidebarMenu>
-    </SidebarGroup>
+    <div>
+        <p id="nav-main" class="wsu-sidebar__heading">Platform</p>
+        <ul class="wsu-sidebar__list" aria-labelledby="nav-main">
+            <li v-for="item in items" :key="item.title">
+                <Link
+                    :href="item.href"
+                    class="wsu-sidebar__link"
+                    :aria-current="item.href === page.url ? 'page' : undefined"
+                >
+                    <component v-if="item.icon" :is="item.icon" class="wsu-icon" aria-hidden="true" />
+                    <span>{{ item.title }}</span>
+                </Link>
+            </li>
+        </ul>
+    </div>
 </template>

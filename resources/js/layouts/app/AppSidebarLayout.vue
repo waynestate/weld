@@ -16,10 +16,12 @@ withDefaults(defineProps<Props>(), {
 
 <template>
     <AppShell variant="sidebar">
-        <AppSidebar />
-        <AppContent variant="sidebar">
-            <AppSidebarHeader :breadcrumbs="breadcrumbs" />
-            <slot />
-        </AppContent>
+        <div class="wsu-shell__body">
+            <AppSidebar />
+            <AppContent variant="sidebar">
+                <AppSidebarHeader :breadcrumbs="breadcrumbs" />
+                <slot />
+            </AppContent>
+        </div>
     </AppShell>
 </template>
