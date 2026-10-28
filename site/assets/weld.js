@@ -559,4 +559,77 @@
       }
     });
   });
+
+  /* ------------------------------------------------------------ 8. the torch */
+
+  // Type w-e-l-d anywhere on the page and the pointer becomes a torch for a
+  // dozen seconds. The footer says safety glasses are recommended. It meant it.
+  var toast = document.querySelector(".torch-toast");
+  var keys = "";
+  var torchUntil = 0;
+  var toastTimer = 0;
+
+  function say(text, ms) {
+    if (!toast) {
+      return;
+    }
+    toast.textContent = text;
+    toast.classList.add("is-on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toast.classList.remove("is-on");
+    }, ms);
+  }
+
+  function lightTorch() {
+    if (!motionOn()) {
+      say("$ weld --torch\n✓ torch lit, sparks off: your system asks for less motion. Respect.", 5000);
+      return;
+    }
+    torchUntil = Date.now() + 12000;
+    say("$ weld --torch\n✓ torch lit for 12 seconds. Move the pointer. Safety glasses on.", 4500);
+    if (heroIcon && heroIcon.getBoundingClientRect().bottom > 0) {
+      strike(true);
+    }
+    setTimeout(function () {
+      if (Date.now() >= torchUntil) {
+        say("✓ torch off. Nice bead.", 2500);
+      }
+    }, 12050);
+  }
+
+  document.addEventListener("keydown", function (e) {
+    var t = e.target;
+    if (e.ctrlKey || e.metaKey || e.altKey || (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))) {
+      return;
+    }
+    if (!e.key || e.key.length !== 1) {
+      return;
+    }
+    keys = (keys + e.key.toLowerCase()).slice(-4);
+    if (keys === "weld") {
+      keys = "";
+      lightTorch();
+    }
+  });
+
+  var lastTorch = 0;
+  document.addEventListener("pointermove", function (e) {
+    if (Date.now() > torchUntil) {
+      return;
+    }
+    var now = performance.now();
+    if (now - lastTorch < 16) {
+      return;
+    }
+    lastTorch = now;
+    Sparks.emit(e.clientX, e.clientY, { count: 3, speed: 0.45, spread: Math.PI, life: 600 });
+  }, { passive: true });
+
+  // For whoever opens the console: a little welcome, and a hint.
+  if (window.console && console.log) {
+    console.log("%cWELD%c  Many parts, one piece.\nLooking under the hood? It's welded shut. (Kidding: type w-e-l-d on the page.)",
+      "font:900 20px Lato,sans-serif;color:#ffcc33;background:#0c5449;padding:4px 10px;border-radius:4px",
+      "color:inherit");
+  }
 })();
