@@ -1,0 +1,24 @@
+# WELD's local stack: the Sail layout without the ceremony. The app (PHP and
+# Composer in one image) and Vite, both on the project bind-mounted at
+# /var/www/html. SQLite per .env.example, so there is no database service.
+# Images are pinned to version tags, ports bind to 127.0.0.1 only, and every
+# value the app needs comes from .env, which Laravel and Vite read themselves.
+
+services:
+  app:
+    image: composer:2.10.3
+    working_dir: /var/www/html
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    ports:
+      - '127.0.0.1:8000:8000'
+    volumes:
+      - .:/var/www/html
+
+  vite:
+    image: node:22-bookworm-slim
+    working_dir: /var/www/html
+    command: npm run dev -- --host
+    ports:
+      - '127.0.0.1:5173:5173'
+    volumes:
+      - .:/var/www/html
