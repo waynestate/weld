@@ -21,7 +21,7 @@ Development happens on Wayne State's GitLab; this repository is a release mirror
 
 ## Get it
 
-WELD is an app you start from, not a library you require — the Megazord ships in a repo, not a box.
+WELD is an app you start from, not a library you require. The Megazord ships in a repo, not a box.
 Clone it and it is yours to rename:
 
 ```
@@ -81,7 +81,7 @@ Best practices for building, running and deploying WELD live in [BEST_PRACTICES.
 ## Run it locally
 
 One command strikes the spark; the containers do the welding. Docker is the only
-prerequisite — PHP and Node run in the containers, so the host needs neither.
+prerequisite: PHP and Node run in the containers, so the host needs neither.
 
 - Windows (PowerShell 5.1 or 7): `.\bin\weld.ps1 up`
 - macOS / Linux: `bin/weld.sh up`
