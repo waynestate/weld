@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-30 -30 360 360" role="img" aria-label="WELD">
+<title>WELD</title>
+<!-- WELD, animated. The two plates slide together and lock, the gold bead runs along the seam from left to right,
+     and a small spark flashes where the bead ends. It flashes once, well under three flashes a second. The drawing
+     below is the finished mark, so anything that ignores CSS shows it as is, and prefers-reduced-motion turns the
+     animation off. Plates follow the colour scheme; the bead stays gold. -->
+<style>
+.p{fill:#0C5449}
+.t{animation:wd-t .7s cubic-bezier(.2,.9,.25,1) both}
+.b{animation:wd-b .7s cubic-bezier(.2,.9,.25,1) .08s both}
+.run{transform-box:fill-box;transform-origin:0 50%;animation:wd-run .85s cubic-bezier(.45,.05,.4,1) .85s both}
+.sp{transform-box:fill-box;transform-origin:center;animation:wd-sp .5s ease-out 1.65s both}
+@keyframes wd-t{from{transform:translateY(-46px);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}
+@keyframes wd-b{from{transform:translateY(46px);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}
+@keyframes wd-run{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes wd-sp{0%{transform:scale(0) rotate(-45deg);opacity:1}45%{transform:scale(1.25) rotate(0);opacity:1}100%{transform:scale(0) rotate(30deg);opacity:0}}
+@media (prefers-color-scheme:dark){.p{fill:#FFFFFF}}
+@media (prefers-reduced-motion:reduce){.t,.b,.run,.sp{animation:none}.sp{opacity:0}}
+</style>
+<clipPath id="wd-clip"><rect class="run" x="-5" y="-5" width="310" height="400"/></clipPath>
+<path class="p t" d="M0 30A30 30 0 0 1 30 0H270A30 30 0 0 1 300 30V31L225 183L150 31L75 183L0 31V30Z"/>
+<path class="p b" d="M0 89L75 241L150 89L225 241L300 89V270A30 30 0 0 1 270 300H30A30 30 0 0 1 0 270Z"/>
+<path clip-path="url(#wd-clip)" d="M0 41L75 193L150 41L225 193L300 41L300 79L225 231L150 79L75 231L0 79Z" fill="#FFCC33"/>
+<g class="sp"><path d="M300 36L304.32 55.68L324 60L304.32 64.32L300 84L295.68 64.32L276 60L295.68 55.68Z" fill="#FFCC33"/></g>
+</svg>

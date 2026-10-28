@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="WELD">
+<title>WELD</title>
+<clipPath id="t"><rect width="512" height="512" rx="112"/></clipPath>
+<g clip-path="url(#t)"><rect width="512" height="512" fill="#0C5449"/><g transform="scale(1.70667)"><path d="M0 30L75 182L150 30L225 182L300 30L300 94L225 246L150 94L75 246L0 94Z" fill="#F2F7F6"/><path d="M0 40L75 192L150 40L225 192L300 40L300 84L225 236L150 84L75 236L0 84Z" fill="#FFCC33"/></g></g>
+</svg>
