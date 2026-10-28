@@ -139,6 +139,9 @@ body {
 
 .quickstart__code {
   flex: 1;
+  /* Let the flex item shrink below its (nowrap) content width, so the copy
+     button stays visible on narrow screens; the command scrolls inside. */
+  min-width: 0;
   margin: 0;
   padding: 0.875rem 1.25rem;
   font-family: var(--wsu-font-family-mono);
@@ -481,8 +484,10 @@ body {
   font-size: 0.8125rem;
   line-height: 1.7;
   color: var(--weld-term-text);
+  /* pre-wrap keeps the fake output on its own lines and wraps at spaces;
+     the longest token ("my-app") fits the narrow cards, so no mid-word
+     breaks are needed. */
   white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
 
 .cast-card__term .t-dim {
