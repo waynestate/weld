@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" aria-label="WELD">
-<title>WELD</title>
-<!-- 16 px: no ripples, a thick gold stroke and a white dot on the two-tone tile. -->
-<clipPath id="b"><rect width="16" height="16" rx="3.5"/></clipPath><g clip-path="url(#b)"><rect width="16" height="16" fill="#0c5449"/><g transform="rotate(-30 8 8)"><rect x="-4" y="8" width="26" height="12" fill="#073a32"/><path d="M-3 8H9.5" stroke="#ffcc33" stroke-width="3.8" stroke-linecap="round"/><circle cx="11.4" cy="8" r="2.1" fill="#fff"/></g></g>
-</svg>
