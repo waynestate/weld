@@ -6,7 +6,8 @@
    and brand files, and writes them under docs/readme/. Nothing is drawn by
    hand: the hero and the gallery are screenshots of the real page, the
    journey diagram is built from the page's own journey section, the cast is
-   the marks resized, and the badges read their facts from composer.json.
+   the marks resized (WayneUI composed on its green tile), and the badges
+   read their facts from composer.json.
 
    Run from any folder (every path resolves from this file's own location):
 
@@ -20,7 +21,7 @@
 import { chromium } from "playwright";
 import { makeBadge } from "badge-maker";
 import sharp from "sharp";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -54,11 +55,10 @@ function fail(msg) {
 /* ------------------------------------------------------------- 1. cast strip */
 
 // One 96x96 PNG per stack part (shown at 48 px in the README). The marks are
-// copied and resized only, never redrawn. WayneUI ships twice: the green mark
-// for light pages and the reverse (white) mark for dark pages.
+// copied and resized only, never redrawn. WayneUI is composed instead: its
+// reverse mark (white frame, gold tab) set on a Wayne State green tile, so it
+// reads as a sibling of the other thirteen.
 const CAST = [
-  "wayneui",
-  "wayneui-dark",
   "creed",
   "proctor",
   "sesame",
@@ -75,14 +75,49 @@ const CAST = [
 ];
 
 function castSource(name) {
-  if (name === "wayneui") return path.join(scriptDir, "src", "wayneui-avatar.png");
-  if (name === "wayneui-dark") return path.join(siteDir, "assets", "marks", "wayneui.svg");
   if (name === "weld") return path.join(siteDir, "brand", "weld-avatar-256.png");
   return path.join(siteDir, "assets", "marks", `${name}.png`);
 }
 
+// The WayneUI tile: the reverse mark, traced from WayneUI's approved artwork,
+// set on a green rounded tile. The traced paths are placed unchanged: no edits
+// to any d= value, fill, or the mark's own viewBox. The visible ink spans
+// 1546 x 1551 of the 1980 x 1989 viewBox and is centred in it, so this scale
+// makes the mark 352 px tall on the 512 tile (about 69%), matching the square
+// marks WELD and SESAME.
+function wayneuiTileSvg() {
+  const raw = readFileSync(path.join(scriptDir, "src", "wayneui-mark-reverse.svg"), "utf8");
+  const open = raw.indexOf("<svg");
+  const openEnd = raw.indexOf(">", open) + 1;
+  const close = raw.lastIndexOf("</svg>");
+  if (open < 0 || openEnd < 2 || close < openEnd) fail("wayneui-mark-reverse.svg: no <svg> element");
+  // Everything between the opening tag and the final </svg>, verbatim (the
+  // file's own line endings included, so the paths stay byte-identical).
+  const inner = raw.slice(openEnd, close).replace(/^\r?\n/, "");
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="WayneUI">
+  <rect width="512" height="512" rx="80" ry="80" fill="#0C5449"/>
+  <svg x="31.3" y="30.3" width="449.4" height="451.4" viewBox="0 0 1980 1989">
+${inner}</svg>
+</svg>
+`;
+}
+
 async function buildCast() {
   console.log("cast:");
+  // WayneUI first: one source (the traced mark) for both the SVG and the PNG.
+  const tile = Buffer.from(wayneuiTileSvg(), "utf8");
+  record("cast/wayneui.svg", tile);
+  const tilePng = await sharp(tile, { density: 300 })
+    .resize(96, 96, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .png({ palette: true, quality: 85, compressionLevel: 9 })
+    .toBuffer();
+  record("cast/wayneui.png", tilePng);
+  // The old dark-variant tile is gone: the green tile works on every surface.
+  const stale = path.join(castDir, "wayneui-dark.png");
+  if (existsSync(stale)) {
+    rmSync(stale);
+    console.log("  removed cast/wayneui-dark.png (no longer generated)");
+  }
   for (const name of CAST) {
     const src = castSource(name);
     if (!existsSync(src)) {
@@ -90,10 +125,7 @@ async function buildCast() {
       continue;
     }
     const buf = readFileSync(src);
-    // The reverse WayneUI mark is a transparent SVG (white frame, gold tab);
-    // rasterise it at 300 dpi and seat it on a transparent 96x96 tile, unaltered.
-    const options = name === "wayneui-dark" ? { density: 300 } : undefined;
-    const png = await sharp(buf, options)
+    const png = await sharp(buf)
       .resize(96, 96, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .png({ palette: true, quality: 85, compressionLevel: 9 })
       .toBuffer();
@@ -193,8 +225,7 @@ function buildJourneySvg(stops) {
   const images = stops
     .map((s, i) => {
       const cx = margin + i * step;
-      // The journey sits on green, so WayneUI uses the reverse (dark) mark.
-      const castName = s.name.toLowerCase() === "wayneui" ? "wayneui-dark" : s.name.toLowerCase();
+      const castName = s.name.toLowerCase();
       const castFile = path.join(castDir, `${castName}.png`);
       if (!existsSync(castFile)) fail(`journey needs cast/${castName}.png (build the cast first)`);
       const b64 = readFileSync(castFile).toString("base64");

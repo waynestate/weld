@@ -99,7 +99,7 @@ Pick Sourdough when you want a starter you shape yourself. Pick WELD when you wa
 ## The cast
 
 <div align="center">
-  <a href="https://github.com/waynestate/wayne-ui" title="WayneUI"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/cast/wayneui-dark.png"><img src="docs/readme/cast/wayneui.png" width="48" alt="WayneUI"></picture></a>
+  <a href="https://github.com/waynestate/wayne-ui" title="WayneUI"><img src="docs/readme/cast/wayneui.png" width="48" alt="WayneUI"></a>
   <a href="https://github.com/waynestate/creed" title="CREED"><img src="docs/readme/cast/creed.png" width="48" alt="CREED"></a>
   <a href="https://github.com/waynestate/proctor" title="PROCTOR"><img src="docs/readme/cast/proctor.png" width="48" alt="PROCTOR"></a>
   <a href="https://github.com/waynestate/sesame" title="SESAME"><img src="docs/readme/cast/sesame.png" width="48" alt="SESAME"></a>
