@@ -22,6 +22,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Session Serialization
+    |--------------------------------------------------------------------------
+    |
+    | This option determines how your session data is serialized. By default,
+    | sessions are serialized using JSON, which is a safer and more portable
+    | format than PHP's native serialization. You may change this value if
+    | you need to store complex objects within the session.
+    |
+    */
+
+    'serialization' => 'json',
+
+    /*
+    |--------------------------------------------------------------------------
     | Session Lifetime
     |--------------------------------------------------------------------------
     |
