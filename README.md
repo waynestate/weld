@@ -27,6 +27,8 @@ Until then, WELD runs on the starter kit plus these stack defaults:
 - `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
 - `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap
 - `.gitattributes` sets `* text=auto eol=lf`
+- `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8 and audit, the same command on
+  GitLab and GitHub
 - The starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; SESAME owns
   sign-in at `/login`, `/logout` and `/cas/*`, and `/login` answers 503 until SESAME is welded in
 - The license is MIT
