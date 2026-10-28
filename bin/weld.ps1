@@ -4,7 +4,7 @@
 # and Vite run in Docker; PHP and Node live in the containers, so the host
 # only needs Docker. Linux and macOS have their own native path: bin/weld.sh.
 #
-# Usage: bin\weld.ps1 <up|down|test|logs>
+# Usage: bin\weld.ps1 <up|down|test|doctor|logs>
 
 [CmdletBinding()]
 param(
@@ -23,6 +23,7 @@ function Show-Usage {
     Write-Host "         Vite, generate the app key if needed, and migrate."
     Write-Host "  down   Stop and remove the containers."
     Write-Host "  test   Run 'composer ci' in the app container."
+    Write-Host "  doctor Run 'php artisan weld:doctor' in the app container."
     Write-Host "  logs   Follow the container logs; Ctrl+C stops."
 }
 
@@ -66,6 +67,9 @@ try {
         }
         'test' {
             Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'composer', 'ci')
+        }
+        'doctor' {
+            Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'php', 'artisan', 'weld:doctor')
         }
         'logs' {
             Invoke-Docker -Arguments @('compose', 'logs', '-f')
