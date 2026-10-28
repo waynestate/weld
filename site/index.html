@@ -57,6 +57,14 @@
           <span class="wsu-sr-only">WELD</span>
           <span class="hero__letters" aria-hidden="true"><span style="--i:0">W</span><span style="--i:1">E</span><span style="--i:2">L</span><span style="--i:3">D</span></span>
         </h1>
+        <!-- What the letters stand for, set as plain, even words. Screen readers
+             get the sentence whole; the animated copy (split so each word can
+             unroll out of its first letter) is hidden from them, so nobody
+             hears "W ... ired". -->
+        <p class="acro">
+          <span class="wsu-sr-only">WELD stands for Wired, Everything, Linked, Deployed.</span>
+          <span class="acro__line" aria-hidden="true"><span class="acro__word" style="--i:0"><span class="acro__init">W</span><span class="acro__rest">ired,</span></span> <span class="acro__word" style="--i:1"><span class="acro__init">E</span><span class="acro__rest">verything,</span></span> <span class="acro__word" style="--i:2"><span class="acro__init">L</span><span class="acro__rest">inked,</span></span> <span class="acro__word" style="--i:3"><span class="acro__init">D</span><span class="acro__rest">eployed.</span></span></span>
+        </p>
         <p class="hero__tagline">Many parts, <span class="seam">one piece.<span class="seam__bead" aria-hidden="true"><span class="seam__fill"></span></span><span class="seam__runner" aria-hidden="true"><span class="spark"></span></span></span></p>
         <p class="hero__blurb">One Laravel + Inertia/Vue app with every part of the stack already joined — WayneUI, CREED, Pinstripe, PREFLIGHT, PROCTOR, SESAME and HELMET. Clone it, rename it, deploy it.</p>
         <div class="quickstart">

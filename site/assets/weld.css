@@ -213,8 +213,30 @@ body {
   display: inline-block;
 }
 
+/* The acronym, as four plain words in one even style: no initial is
+   picked out. With motion on, each word unrolls out of its first letter as
+   the letters above cool, and settles even. The words are laid out from
+   the start, so nothing shifts. */
+.acro {
+  margin: 0.875rem 0 0;
+  font-size: clamp(1rem, 1.7vw, 1.3125rem);
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.03em;
+  color: var(--weld-cream);
+}
+
+.acro__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.acro__init,
+.acro__rest {
+  display: inline-block;
+}
+
 .hero__tagline {
-  margin: 0.75rem 0 0;
+  margin: 0.5rem 0 0;
   font-size: clamp(1.375rem, 2.8vw, 2rem);
   font-weight: var(--wsu-font-weight-bold);
   color: var(--weld-gold);
@@ -1251,18 +1273,40 @@ body {
   }
 
   .motion .hero__copy .eyebrow { animation-delay: 80ms; }
-  .motion .hero__tagline { animation-delay: 520ms; }
-  .motion .hero__blurb { animation-delay: 700ms; }
-  .motion .quickstart { animation-delay: 820ms; }
-  .motion .hero__cta { animation-delay: 940ms; }
+  .motion .hero__tagline { animation-delay: 1150ms; }
+  .motion .hero__blurb { animation-delay: 1250ms; }
+  .motion .quickstart { animation-delay: 1350ms; }
+  .motion .hero__cta { animation-delay: 1450ms; }
 
   @keyframes rise {
     from { opacity: 0; transform: translateY(12px); }
   }
 
+  /* The acronym: each first letter lands warm and cools to the same cream
+     as the rest, then its word unrolls out of it. */
+  .motion .acro__init {
+    animation: initial-in 600ms var(--weld-ease-out) backwards;
+    animation-delay: calc(380ms + var(--i) * 80ms);
+  }
+
+  @keyframes initial-in {
+    0%   { opacity: 0; transform: translateY(0.3em); color: var(--weld-gold-hot); text-shadow: 0 0 14px rgba(255, 204, 51, 0.9); }
+    100% { opacity: 1; transform: none; color: var(--weld-cream); text-shadow: 0 0 0 rgba(255, 204, 51, 0); }
+  }
+
+  .motion .acro__rest {
+    animation: word-unroll 650ms var(--weld-ease-out) backwards;
+    animation-delay: calc(820ms + var(--i) * 140ms);
+  }
+
+  @keyframes word-unroll {
+    from { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-0.35em); }
+    to   { opacity: 1; clip-path: inset(0 0 0 0); transform: none; }
+  }
+
   /* The bead under "one piece." is laid down left to right, starting hot. */
   .motion .seam__bead {
-    animation: bead-draw 900ms linear 1000ms backwards;
+    animation: bead-draw 900ms linear 1450ms backwards;
   }
 
   @keyframes bead-draw {
@@ -1280,7 +1324,7 @@ body {
   }
 
   .motion .seam__fill::after {
-    animation: bead-cool 1800ms ease-out 1000ms backwards;
+    animation: bead-cool 1800ms ease-out 1450ms backwards;
   }
 
   @keyframes bead-cool {
@@ -1289,7 +1333,7 @@ body {
   }
 
   .motion .seam__runner {
-    animation: run-x 900ms linear 1000ms backwards;
+    animation: run-x 900ms linear 1450ms backwards;
   }
 
   @keyframes run-x {
@@ -1307,15 +1351,15 @@ body {
   }
 
   /* The quick-start command types itself. Until weld.js takes over it is
-     hidden, with a fallback that shows it at 2.5s if the script never runs. */
+     hidden, with a fallback that shows it at 3s if the script never runs. */
   .motion #quickstart-cmd [data-type] {
     opacity: 0;
-    animation: show-late 1ms 2.5s forwards;
+    animation: show-late 1ms 3s forwards;
   }
 
   .motion #quickstart-cmd .caret {
     opacity: 0;
-    animation: show-late 1ms 2.5s forwards;
+    animation: show-late 1ms 3s forwards;
   }
 
   @keyframes show-late {

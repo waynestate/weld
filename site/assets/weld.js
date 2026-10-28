@@ -236,7 +236,7 @@
     // The bead under "one piece." drips sparks while it is laid down.
     setTimeout(function () {
       Sparks.trail(document.querySelector(".seam__runner .spark"), 880, 2);
-    }, 1000);
+    }, 1450);
 
     embers(document.querySelector(".hero__embers"));
   }
@@ -427,7 +427,7 @@
   if (motionOn()) {
     var quick = document.querySelector(".quickstart");
     if (quick) {
-      prepType(quick)(1150);
+      prepType(quick)(1700);
     }
 
     // Arm every terminal now (hidden); type each as it scrolls into view.
