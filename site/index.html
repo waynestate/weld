@@ -80,7 +80,7 @@
     <div class="wsu-container">
       <div class="section__head section__head--light">
         <h2 id="journey-title">The journey</h2>
-        <p>One request, five stops, from the edge of the network to the deploy.</p>
+        <p>One request, six stops, from the edge of the network to the deploy.</p>
       </div>
 
       <div class="journey" data-journey>
@@ -93,15 +93,20 @@
             <span class="journey__icon"><img src="assets/marks/sesame.png" width="256" height="256" alt=""></span>
             <span class="journey__text"><span class="journey__name">SESAME</span> <span class="journey__role">signs the user in</span></span>
           </li>
+          <!-- WayneUI is project 0: the page the signed-in user actually sees. -->
           <li class="journey__stop" style="--i:2">
+            <span class="journey__icon journey__icon--tile"><img src="assets/marks/wayneui-shield.svg" width="46" height="46" alt=""></span>
+            <span class="journey__text"><span class="journey__name">WayneUI</span> <span class="journey__role">renders the page</span></span>
+          </li>
+          <li class="journey__stop" style="--i:3">
             <span class="journey__icon"><img src="assets/marks/proctor.png" width="256" height="256" alt=""></span>
             <span class="journey__text"><span class="journey__name">PROCTOR</span> <span class="journey__role">checks the code</span></span>
           </li>
-          <li class="journey__stop" style="--i:3">
+          <li class="journey__stop" style="--i:4">
             <span class="journey__icon"><img src="assets/marks/preflight.png" width="256" height="256" alt=""></span>
             <span class="journey__text"><span class="journey__name">PREFLIGHT</span> <span class="journey__role">runs CI</span></span>
           </li>
-          <li class="journey__stop" style="--i:4">
+          <li class="journey__stop" style="--i:5">
             <span class="journey__icon"><img src="assets/marks/squire.png" width="256" height="256" alt=""></span>
             <span class="journey__text"><span class="journey__name">SQUIRE</span> <span class="journey__role">deploys</span></span>
           </li>
@@ -331,26 +336,33 @@
     <div class="wsu-container">
       <div class="section__head">
         <h2 id="paths-title">Pick your path</h2>
-        <p>Three shapes, one stack.</p>
+        <p>Three shapes, one stack. WELD is the Inertia/Vue shape, already joined; Sourdough bakes the others.</p>
       </div>
       <div class="paths">
 
+        <!-- Commands as documented in sourdough/README.md (0.1) and design/weld.md.
+             Only --raw generates in Sourdough 0.1; the Laravel shapes print
+             their plan and stop, so Blade says "coming soon" instead of
+             showing a command that would not work today. -->
         <article class="path-card">
+          <p class="path-card__from">From Sourdough</p>
           <h3>Raw PHP</h3>
-          <p>No framework, no build. The core, and nothing else.</p>
-          <code>composer create-project waynestate/weld my-app --path=raw-php</code>
+          <p>No framework, no build: plain PHP on WayneUI's standalone path.</p>
+          <code>composer global require waynestate/sourdough
+sourdough new my-app --raw</code>
         </article>
 
         <article class="path-card">
+          <p class="path-card__from">From Sourdough <span class="chip chip--soon">Coming soon</span></p>
           <h3>Laravel + Blade</h3>
-          <p>The classic WSU shape: Laravel with Blade views.</p>
-          <code>composer create-project waynestate/weld my-app --path=blade</code>
+          <p>The classic WSU shape: Laravel with Blade views. Sourdough has the plan for it, but 0.1 doesn't bake it yet; it rises in a later release.</p>
         </article>
 
         <article class="path-card path-card--featured">
+          <p class="path-card__from">This is WELD</p>
           <h3>Laravel + Inertia/Vue</h3>
-          <p>The full WELD shape: Inertia and Vue, the way WELD runs.</p>
-          <code>composer create-project waynestate/weld my-app --path=inertia</code>
+          <p>Inertia and Vue with every part already joined, the way WELD runs.</p>
+          <code>composer create-project waynestate/weld my-app</code>
         </article>
 
       </div>
