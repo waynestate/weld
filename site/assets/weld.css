@@ -493,8 +493,9 @@ body {
   height: 100%;
 }
 
-/* WayneUI's mark is the WSU shield, not a tile: seat it on the same green
-   tile the other marks carry, as the cast does. */
+/* WayneUI's mark (its reversed variant: white frame, gold tab, copied from
+   wayne-ui/brand/mark-reverse.svg) is drawn bare, not on a tile: seat it on
+   the same green tile the other marks carry, as the cast does. */
 .journey__icon--tile {
   /* In px from the icon size: a % padding would follow the column width. */
   padding: calc(var(--icon) * 0.16);
@@ -635,8 +636,9 @@ body {
   box-shadow: 0 8px 16px -8px rgba(2, 26, 22, 0.55);
 }
 
-/* WayneUI's mark is the WSU shield, not a tile: seat it on the same green
-   tile the other marks carry, so the row of marks reads as one family. */
+/* WayneUI's mark (the reversed variant, from wayne-ui/brand) is drawn bare,
+   not on a tile: seat it on the same green tile the other marks carry, so
+   the row of marks reads as one family. */
 .cast-card__mark--tile {
   padding: 9px;
   background-color: var(--weld-tile);
