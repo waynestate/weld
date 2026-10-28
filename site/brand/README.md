@@ -10,7 +10,7 @@ There is no letterform in it, so nothing reads as the Wayne State W, a protected
 on purpose: they read as AI sparkles or lightbulb rays. It holds at 32 px as a gold seam joining two halves, and it
 animates naturally: the puddle advances and the gap closes.
 
-(The first torch-and-plates attempt looked like an eyedropper over an open book. We do not talk about the eyedropper.
+(PROCTOR would worry if there were sparks. The first torch-and-plates attempt looked like an eyedropper over an open book. We do not talk about the eyedropper.
 The second attempt, a row of gold crescents, looked like bananas. The bananas are retired too.)
 
 ## Colours
@@ -68,5 +68,5 @@ favicon PNGs.
 
 ## The board
 `weld-board.png` is composed in code from the real SVGs, so every mark on it is the true mark. It shows primary,
-stacked, off-white and dark logos, app icon, standalone and one-colour marks, favicons, palette, type, `weld doctor` in
+stacked, off-white and dark logos, app icon, standalone and one-colour marks, favicons, palette, type, `proctor check` in
 use, and backgrounds.
