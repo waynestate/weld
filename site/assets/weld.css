@@ -592,3 +592,12 @@ body {
     padding-block: 1.25rem;
   }
 }
+
+/* The quick-start command is longer than a phone screen; let it wrap so the
+   whole thing stays visible instead of scrolling out of view. */
+@media (max-width: 480px) {
+  .quickstart__code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
