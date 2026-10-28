@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8117a3a3ea17b88af8d0ca72ac9df512",
+    "content-hash": "c4457b9cb59964f7d6ac671f7b3c7e0f",
     "packages": [
         {
             "name": "brick/math",
@@ -8937,53 +8937,11 @@
                 }
             ],
             "time": "2025-12-08T11:19:18+00:00"
-        },
-        {
-            "name": "waynestate/pinstripe",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "git@gitlab.example:enterprise-apps/pinstripe.git",
-                "reference": "5f191addb9201918fc00a2c6d7cb47fbbd5a6559"
-            },
-            "require": {
-                "laravel/pint": "^1.32",
-                "php": "^8.3",
-                "phpstan/extension-installer": "^1.4",
-                "phpstan/phpstan": "^2.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^12"
-            },
-            "suggest": {
-                "larastan/larastan": "^3.13 (Laravel apps: include phpstan/laravel.neon)"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload-dev": {
-                "psr-4": {
-                    "WayneState\\Pinstripe\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "ci": [
-                    "@composer validate --strict",
-                    "phpunit",
-                    "@composer audit"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "The coding standard for the Wayne State app stack: shared Pint and PHPStan presets.",
-            "time": "2026-10-28T04:09:19+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "waynestate/pinstripe": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

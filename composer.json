@@ -8,12 +8,6 @@
         "framework"
     ],
     "license": "MIT",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@gitlab.example:enterprise-apps/pinstripe.git"
-        }
-    ],
     "require": {
         "php": "^8.3",
         "inertiajs/inertia-laravel": "^2.0",
@@ -29,8 +23,8 @@
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^12.0",
-        "waynestate/pinstripe": "dev-main"
+        "phpstan/extension-installer": "^1.4",
+        "phpunit/phpunit": "^12.0"
     },
     "autoload": {
         "psr-4": {

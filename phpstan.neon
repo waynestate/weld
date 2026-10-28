@@ -1,9 +1,13 @@
 # WELD's PHPStan config, from Pinstripe's Laravel preset (level 8).
+# Copied from Pinstripe 0.1 presets; switch to
+# includes: vendor/waynestate/pinstripe/phpstan/laravel.neon
+# once Pinstripe is on Packagist.
 # Larastan registers itself through phpstan/extension-installer, so there is
 # no Larastan include line to maintain here.
-includes:
-    - vendor/waynestate/pinstripe/phpstan/laravel.neon
 parameters:
+    level: 8
+    reportIgnoresWithoutComments: true
+    reportUnmatchedIgnoredErrors: true
     # The application code. config/ is Laravel-generated boilerplate whose
     # env() calls trip level 8 (bool|string vs string), so it is out of scope,
     # the same way HELMET analyses src/ rather than the whole tree.
