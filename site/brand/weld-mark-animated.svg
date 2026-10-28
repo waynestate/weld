@@ -1,25 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-30 -30 360 360" role="img" aria-label="WELD">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="16 10 480 456" role="img" aria-label="WELD">
 <title>WELD</title>
-<!-- WELD, animated. The two plates slide together and lock, the gold bead runs along the seam from left to right,
-     and a small spark flashes where the bead ends. It flashes once, well under three flashes a second. The drawing
-     below is the finished mark, so anything that ignores CSS shows it as is, and prefers-reduced-motion turns the
-     animation off. Plates follow the colour scheme; the bead stays gold. -->
+<!-- WELD, animated: the torch drops in, a spark flashes, and the bead rises across the joint. One flash, plays once. prefers-reduced-motion shows the finished mark. -->
 <style>
-.p{fill:#0C5449}
-.t{animation:wd-t .7s cubic-bezier(.2,.9,.25,1) both}
-.b{animation:wd-b .7s cubic-bezier(.2,.9,.25,1) .08s both}
-.run{transform-box:fill-box;transform-origin:0 50%;animation:wd-run .85s cubic-bezier(.45,.05,.4,1) .85s both}
-.sp{transform-box:fill-box;transform-origin:center;animation:wd-sp .5s ease-out 1.65s both}
-@keyframes wd-t{from{transform:translateY(-46px);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}
-@keyframes wd-b{from{transform:translateY(46px);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}
-@keyframes wd-run{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.pl,.tb{fill:#0C5449}
+.tcb{animation:wd-t .7s cubic-bezier(.2,.9,.25,1) both}
+.bdr{transform-box:fill-box;transform-origin:50% 100%;animation:wd-b .5s cubic-bezier(.3,.9,.3,1) .7s both}
+.sp{transform-box:view-box;transform-origin:256px 300px;animation:wd-sp .6s ease-out .55s both}
+@keyframes wd-t{from{transform:translate(70px,-70px);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}
+@keyframes wd-b{from{transform:scale(.2,0)}to{transform:none}}
 @keyframes wd-sp{0%{transform:scale(0) rotate(-45deg);opacity:1}45%{transform:scale(1.25) rotate(0);opacity:1}100%{transform:scale(0) rotate(30deg);opacity:0}}
-@media (prefers-color-scheme:dark){.p{fill:#FFFFFF}}
-@media (prefers-reduced-motion:reduce){.t,.b,.run,.sp{animation:none}.sp{opacity:0}}
+@media (prefers-color-scheme:dark){.pl,.tb{fill:#FFFFFF}}
+@media (prefers-reduced-motion:reduce){.tcb,.bdr,.sp{animation:none}.sp{opacity:0}}
 </style>
-<clipPath id="wd-clip"><rect class="run" x="-5" y="-5" width="310" height="400"/></clipPath>
-<path class="p t" d="M0 30A30 30 0 0 1 30 0H270A30 30 0 0 1 300 30V31L225 183L150 31L75 183L0 31V30Z"/>
-<path class="p b" d="M0 89L75 241L150 89L225 241L300 89V270A30 30 0 0 1 270 300H30A30 30 0 0 1 0 270Z"/>
-<path clip-path="url(#wd-clip)" d="M0 41L75 193L150 41L225 193L300 41L300 79L225 231L150 79L75 231L0 79Z" fill="#FFCC33"/>
-<g class="sp"><path d="M300 36L304.32 55.68L324 60L304.32 64.32L300 84L295.68 64.32L276 60L295.68 55.68Z" fill="#FFCC33"/></g>
+<path class="pl" d="M56 346H242V418Q242 436 224 436H92Q56 436 56 400Z"/><path class="pl" d="M270 346H456V400Q456 436 420 436H288Q270 436 270 418Z"/><g class="bdr"><path class="bd" d="M206 346Q214 318 256 318Q298 318 306 346H270V428H242V346Z" fill="#FFCC33"/></g><g class="tcb"><g class="tc" transform="rotate(44 256 292)"><path d="M248 292L240 226H272L264 292Z" fill="#FFCC33"/><rect x="233" y="196" width="46" height="34" rx="6" fill="#FFCC33"/><rect x="241" y="150" width="30" height="50" class="tb"/><path d="M216 150V92Q216 60 248 60H264Q296 60 296 92V150Z" class="tb"/></g></g><g class="sp"><path d="M241.3 298.0L218.8 307.9L243.3 307.8Z" fill="#FF7A1A"/><path d="M244.0 290.3L193.9 284.5L240.8 302.9Z" fill="#FF7A1A"/><path d="M250.6 285.1L193.6 243.8L240.6 296.2Z" fill="#FF7A1A"/><path d="M258.7 284.1L224.5 213.5L243.7 289.6Z" fill="#FF7A1A"/><path d="M264.9 287.1L266.9 222.8L251.0 285.2Z" fill="#FF7A1A"/><path d="M268.1 291.0L284.6 254.2L258.8 285.2Z" fill="#FF7A1A"/><circle cx="256" cy="300" r="15" fill="#FF7A1A"/><circle cx="256" cy="300" r="7" fill="#FFFFFF"/></g>
 </svg>
