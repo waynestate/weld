@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { Separator } from '@/components/ui/separator';
-
 interface Props {
     title: string;
     description?: string;
@@ -16,5 +14,22 @@ defineProps<Props>();
             {{ description }}
         </p>
     </div>
-    <Separator class="my-6" />
+    <!-- TODO(wayneui): .wsu-divider is WayneUI's separator; its rule is drawn by ::before/::after in its stylesheet, which WELD does not load yet, so a stand-in keeps the line visible. -->
+    <div class="wsu-divider heading-divider my-6" role="separator"></div>
 </template>
+
+<style scoped>
+/* Stand-in for WayneUI's .wsu-divider line until its stylesheet is loaded. */
+.heading-divider {
+    display: flex;
+    align-items: center;
+}
+
+.heading-divider::before,
+.heading-divider::after {
+    content: '';
+    flex: 1 1 0%;
+    block-size: 1px;
+    background-color: hsl(var(--border));
+}
+</style>
