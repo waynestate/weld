@@ -654,6 +654,28 @@ body {
   color: inherit;
 }
 
+/* Each name is the link to that part's own front page. The underline grows
+   in on hover; with reduced motion it simply appears. */
+.cast-card__link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-decoration-color: color-mix(in srgb, currentColor 25%, transparent);
+  text-underline-offset: 0.18em;
+}
+
+.cast-card__link:hover,
+.cast-card__link:focus-visible {
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 0.12em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cast-card__link {
+    transition: text-decoration-color 180ms ease, text-decoration-thickness 180ms ease;
+  }
+}
+
 .cast-card[style*="--span:7"] .cast-card__name,
 .cast-card--sibling .cast-card__name {
   font-size: 1.875rem;
