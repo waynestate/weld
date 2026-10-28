@@ -835,6 +835,27 @@ body {
   box-shadow: 0 0 0 3px var(--weld-gold), var(--weld-shadow);
 }
 
+.path-card .path-card__from {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--weld-cream-muted);
+}
+
+.chip--soon {
+  font-family: var(--wsu-font-family-body);
+  text-transform: none;
+  letter-spacing: 0.03em;
+  color: var(--weld-cream);
+  background-color: var(--weld-ink);
+}
+
 .path-card h3 {
   margin: 0;
   font-size: 1.25rem;

@@ -336,26 +336,33 @@
     <div class="wsu-container">
       <div class="section__head">
         <h2 id="paths-title">Pick your path</h2>
-        <p>Three shapes, one stack.</p>
+        <p>Three shapes, one stack. WELD is the Inertia/Vue shape, already joined; Sourdough bakes the others.</p>
       </div>
       <div class="paths">
 
+        <!-- Commands as documented in sourdough/README.md (0.1) and design/weld.md.
+             Only --raw generates in Sourdough 0.1; the Laravel shapes print
+             their plan and stop, so Blade says "coming soon" instead of
+             showing a command that would not work today. -->
         <article class="path-card">
+          <p class="path-card__from">From Sourdough</p>
           <h3>Raw PHP</h3>
-          <p>No framework, no build. The core, and nothing else.</p>
-          <code>composer create-project waynestate/weld my-app --path=raw-php</code>
+          <p>No framework, no build: plain PHP on WayneUI's standalone path.</p>
+          <code>composer global require waynestate/sourdough
+sourdough new my-app --raw</code>
         </article>
 
         <article class="path-card">
+          <p class="path-card__from">From Sourdough <span class="chip chip--soon">Coming soon</span></p>
           <h3>Laravel + Blade</h3>
-          <p>The classic WSU shape: Laravel with Blade views.</p>
-          <code>composer create-project waynestate/weld my-app --path=blade</code>
+          <p>The classic WSU shape: Laravel with Blade views. Sourdough has the plan for it, but 0.1 doesn't bake it yet; it rises in a later release.</p>
         </article>
 
         <article class="path-card path-card--featured">
+          <p class="path-card__from">This is WELD</p>
           <h3>Laravel + Inertia/Vue</h3>
-          <p>The full WELD shape: Inertia and Vue, the way WELD runs.</p>
-          <code>composer create-project waynestate/weld my-app --path=inertia</code>
+          <p>Inertia and Vue with every part already joined, the way WELD runs.</p>
+          <code>composer create-project waynestate/weld my-app</code>
         </article>
 
       </div>
