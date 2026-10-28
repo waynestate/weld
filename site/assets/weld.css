@@ -509,12 +509,36 @@ body {
 }
 
 /* The seam: centre of the first icon to centre of the last. */
+.journey {
+  /* How far the seam stops short of each tile's centre: half the tile, the
+     5px gold ring around it, then 7px of clear air. */
+  --seam-gap: calc(var(--icon) / 2 + 12px);
+}
+
+/* The seam runs centre to centre, but a mask cuts it into five segments that
+   live only in the gaps, 7px clear of each tile's ring. Everything inside
+   the track (the dashed base, the bead, the riding spark, the glint) is
+   masked the same way, so nothing ever draws over or under a tile; the glint
+   simply passes behind the tiles. The track is a 40px band, not a 2px line,
+   so the spark's glow isn't clipped to the line's height. */
 .journey__track {
   position: absolute;
   z-index: 0;
-  top: calc(var(--icon) / 2 - 1px);
+  top: calc(var(--icon) / 2 - 20px);
   left: calc(100% / 12);   /* half a column: centre of the first stop */
   right: calc(100% / 12);
+  height: 40px;
+  -webkit-mask: linear-gradient(90deg, transparent var(--seam-gap), #000 var(--seam-gap) calc(100% - var(--seam-gap)), transparent calc(100% - var(--seam-gap))) 0 0 / calc(100% / 5) 100% repeat-x;
+  mask: linear-gradient(90deg, transparent var(--seam-gap), #000 var(--seam-gap) calc(100% - var(--seam-gap)), transparent calc(100% - var(--seam-gap))) 0 0 / calc(100% / 5) 100% repeat-x;
+}
+
+/* The dashed base line, on the band's centre. */
+.journey__track::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 1px);
   height: 2px;
   background-image: linear-gradient(90deg, var(--weld-cream-40) 50%, transparent 50%);
   background-size: 8px 2px;
@@ -522,7 +546,10 @@ body {
 
 .journey__bead {
   position: absolute;
-  inset: -1px 0;
+  left: 0;
+  right: 0;
+  top: calc(50% - 2px);
+  height: 4px;
   border-radius: 2px;
   overflow: hidden;
 }
@@ -1000,7 +1027,9 @@ body {
 @media (max-width: 719px) {
   .journey {
     --icon: 56px;
-    --row: 84px;
+    --row: 100px;
+    /* Tighter rows: 6px of clear air, which still leaves ~22px of seam. */
+    --seam-gap: calc(var(--icon) / 2 + 11px);
     max-width: 20rem;
     /* Running down the page, nothing travels sideways: no clip needed. */
     overflow-x: visible;
@@ -1025,8 +1054,19 @@ body {
   .journey__track {
     top: calc(var(--icon) / 2);
     bottom: calc(var(--row) - var(--icon) / 2);
-    left: calc(var(--icon) / 2 - 1px);
+    left: calc(var(--icon) / 2 - 20px);
     right: auto;
+    width: 40px;
+    height: auto;
+    -webkit-mask: linear-gradient(180deg, transparent var(--seam-gap), #000 var(--seam-gap) calc(100% - var(--seam-gap)), transparent calc(100% - var(--seam-gap))) 0 0 / 100% calc(100% / 5) repeat-y;
+    mask: linear-gradient(180deg, transparent var(--seam-gap), #000 var(--seam-gap) calc(100% - var(--seam-gap)), transparent calc(100% - var(--seam-gap))) 0 0 / 100% calc(100% / 5) repeat-y;
+  }
+
+  .journey__track::before {
+    left: calc(50% - 1px);
+    right: auto;
+    top: 0;
+    bottom: 0;
     width: 2px;
     height: auto;
     background-image: linear-gradient(180deg, var(--weld-cream-40) 50%, transparent 50%);
@@ -1034,7 +1074,12 @@ body {
   }
 
   .journey__bead {
-    inset: 0 -1px;
+    left: calc(50% - 2px);
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    height: auto;
   }
 }
 
