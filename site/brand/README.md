@@ -1,21 +1,23 @@
 # WELD brand files
 
-**The mark is a torch laying a weld bead.** Two plates sit side by side, a gold bead fills the joint, and a welding
-torch comes in from the upper right with a spark burst at its tip. Many parts, one piece. There is no letterform in it:
-the mark is deliberately nothing like the Wayne State W, which is a protected university mark.
+**The mark is the weld bead itself.** A good TIG weld, seen from above, is a row of overlapping crescent ripples, and
+every welder knows it on sight. The tile is split along a slanted seam into two green fields, a row of eight gold
+ripples is laid down the seam, and a white-hot dot sits at the leading end: the puddle. Many parts, one piece, drawn
+literally. There is no letterform in it, so nothing reads as the Wayne State W, which is a protected university mark.
+It holds at 32 px as a gold seam joining two halves, and it animates naturally: the ripples lay down one by one.
 
-Why a torch and not a letter: the bead across two plates is the whole idea, and a torch with sparks says "welding" at a
-glance, even at 32 px. The spark is the one hot accent; everything else is Wayne State green, gold and off-white.
-(Yes, the sparks are normal. `weld doctor` would worry if they were not.)
+(The first torch-and-plates attempt looked like an eyedropper over an open book. We do not talk about the eyedropper.
+The bead is also, strictly, a stack of dimes, minus the money.)
 
 ## Colours
 | Role | Colour |
 |---|---|
-| Plates and torch on a light background, the tile | Wayne State green `#0C5449` |
-| The spark (the only accent) | Hot orange `#FF7A1A`, white core |
-| The weld bead and torch nozzle (the only gold) | Wayne State gold `#FFCC33` |
+| The upper plate (field) | Wayne State green `#0C5449` |
+| The lower plate (field) | Deep green `#04231E`, a shade of the same green |
+| The puddle | White `#FFFFFF`. Orange `#FF7A1A` is reserved as the one optional hot accent and is not in the mark today |
+| The weld bead (the only gold) | Wayne State gold `#FFCC33` |
 | Plates on dark backgrounds | White `#FFFFFF` |
-| Light surface, plates and torch on the tile | Off-white `#F2F7F6` |
+| Light surface | Off-white `#F2F7F6` |
 | Dark surface, terminal | Near-black `#0F1F1C` |
 
 Gold never sits behind white text. The bead is always gold, except in the one-colour mark.
@@ -23,36 +25,37 @@ Gold never sits behind white text. The bead is always gold, except in the one-co
 ## Files
 | File | Use |
 |---|---|
-| `weld-mark.svg` | The mark on light backgrounds: green plates and torch, gold bead and nozzle, orange spark |
-| `weld-mark-white.svg` | The mark on dark or green backgrounds: white plates and torch |
-| `weld-mark-mono.svg` | One colour (`currentColor`), for print and single-ink use. Inline it; as an `<img>` it draws black |
-| `weld-mark-animated.svg` | Front-page motion. The torch drops in, a spark flashes once, and the bead rises across the joint. About 1.2 seconds, plays once. Plates and torch follow light and dark. With `prefers-reduced-motion: reduce` the animation is off and the page shows the finished mark minus the spark |
-| `weld-tile.svg` | The app icon: the mark on a rounded green tile, plates and torch in off-white |
-| `weld-favicon.svg` | The tile at 32 and 64 px |
-| `weld-favicon-16.svg` | Hand-hinted on the 16 px grid. One unit is one pixel: plates, bead, torch bar and a spark |
+| `weld-mark.svg` | The mark on light backgrounds: green fields, gold bead, white puddle, rounded square |
+| `weld-mark-white.svg` | The mark on dark backgrounds: the fields are lifted to a lighter green so the square holds against near-black |
+| `weld-mark-mono.svg` | One colour (`currentColor`): the rounded square with the ripples and puddle knocked out. Inline it; as an `<img>` it draws black |
+| `weld-mark-animated.svg` | Front-page motion. The ripples lay down one by one along the seam, then the puddle pulses once. About 2.5 seconds, plays once. With `prefers-reduced-motion: reduce` it shows the finished mark |
+| `weld-tile.svg` | The app icon. Same drawing as the mark, on a 512 tile with corner radius 112 |
+| `weld-favicon.svg` | The tile with a larger puddle, for 32 and 64 px |
+| `weld-favicon-16.svg` | A coarser drawing for 16 px: three ripples and a puddle, every shape at least 2 px |
 | `weld-avatar-512.png` | The GitLab project avatar and the Open Graph image base |
 | `favicon-16.png`, `favicon-32.png`, `favicon-64.png`, `favicon.ico` | Browser favicons. The `.ico` holds all three |
 | `weld-board.png` | The 12-panel brand board |
 
 ## Geometry
-Hand-written paths on a 512 unit grid, not traced. Two plates run from x = 56 to 456 with a 28 unit joint at x = 242 to
-270. The bead is one gold path: an arch over the joint that drops into it as a stem. The torch is a single group
-(nozzle, collar, neck, handle) rotated 44 degrees about the nozzle tip at (256, 292). The spark is six tapered rays and
-a round core centred at (256, 300). The tile is the same drawing, scaled 1.1, on a 512 square with corner radius 112.
-No masks, no gradients, no traced bitmaps.
+Hand-written paths on a 512 unit square, not traced. Everything is drawn along the seam axis and then rotated 18
+degrees, so the seam climbs to the right. The two fields are the halves of that axis. Each ripple is one crescent path:
+tips 148 units apart across the seam, outer arc bulging 58 units forward, inner arc 18, so each is 40 thick. Eight of
+them step 50 units apart, with a 6 unit round-joined stroke in the same gold to soften the tips. The puddle is a 28 unit
+circle, 46 units ahead of the last ripple. Four kinds of shape, no gradients, no masks (except the one-colour version),
+no outlines.
 
 ## Clear space
-Keep a tenth of the mark's width clear on every side. The viewBox of each mark SVG already carries that margin.
+Keep a tenth of the mark's width clear on every side. The mark SVGs already carry a 26 unit margin.
 
 ## Rules
-- Never add a letter to the mark, and never redraw it so any part reads as a W. The Wayne State W is not ours.
+- Never add a letter to the mark, and never rework the ripples until any part reads as a W. The Wayne State W is not ours.
 - Never recolour the bead. Gold is the weld.
-- Never add a glow or gradient to the spark. It is flat orange `#FF7A1A` with a white core.
-- Never stretch, rotate or mirror the mark.
+- Never add a glow or gradient to the puddle.
+- Never stretch, mirror or rotate the mark. The weld always travels up and to the right.
 
 ## Motion
-The animation is CSS inside the SVG. The torch slides in from the upper right, the spark flashes once, and the bead
-rises across the joint. Nothing flashes more than once.
+The animation is CSS inside the SVG. Each ripple fades and slides in from behind, 0.16 seconds after the last, and the
+puddle pulses once at the end. Nothing flashes.
 
 ## Rendering
 The PNGs were rendered from the SVGs with headless Edge at 1x. The `.ico` was assembled with Pillow from the three
@@ -60,5 +63,5 @@ favicon PNGs.
 
 ## The board
 `weld-board.png` is composed in code from the real SVGs, so every mark on it is the true mark. It shows primary,
-stacked, reversed and dark logos, app icon, standalone and one-colour marks, favicons, palette, type, `weld doctor` in
+stacked, off-white and dark logos, app icon, standalone and one-colour marks, favicons, palette, type, `weld doctor` in
 use, and backgrounds.

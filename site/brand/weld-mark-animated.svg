@@ -1,16 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="16 10 480 456" role="img" aria-label="WELD">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-26 -26 564 564" role="img" aria-label="WELD">
 <title>WELD</title>
-<!-- WELD, animated: the torch drops in, a spark flashes, and the bead rises across the joint. One flash, plays once. prefers-reduced-motion shows the finished mark. -->
+<!-- WELD, animated: the ripples lay down one by one along the seam, then the puddle pulses once. Plays once. prefers-reduced-motion shows the finished mark. -->
 <style>
-.pl,.tb{fill:#0C5449}
-.tcb{animation:wd-t .7s cubic-bezier(.2,.9,.25,1) both}
-.bdr{transform-box:fill-box;transform-origin:50% 100%;animation:wd-b .5s cubic-bezier(.3,.9,.3,1) .7s both}
-.sp{transform-box:view-box;transform-origin:256px 300px;animation:wd-sp .6s ease-out .55s both}
-@keyframes wd-t{from{transform:translate(70px,-70px);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}
-@keyframes wd-b{from{transform:scale(.2,0)}to{transform:none}}
-@keyframes wd-sp{0%{transform:scale(0) rotate(-45deg);opacity:1}45%{transform:scale(1.25) rotate(0);opacity:1}100%{transform:scale(0) rotate(30deg);opacity:0}}
-@media (prefers-color-scheme:dark){.pl,.tb{fill:#FFFFFF}}
-@media (prefers-reduced-motion:reduce){.tcb,.bdr,.sp{animation:none}.sp{opacity:0}}
+.r{animation:wd-r .35s cubic-bezier(.2,.9,.3,1) both;transform-box:fill-box;transform-origin:0 50%}
+.r0{animation-delay:0.25s}
+.r1{animation-delay:0.41s}
+.r2{animation-delay:0.57s}
+.r3{animation-delay:0.73s}
+.r4{animation-delay:0.89s}
+.r5{animation-delay:1.05s}
+.r6{animation-delay:1.21s}
+.r7{animation-delay:1.37s}
+.pd{transform-box:fill-box;transform-origin:center;animation:wd-p 1.6s ease-in-out 1.5s 1 both}
+@keyframes wd-r{from{opacity:0;transform:translateX(-26px) scaleX(.6)}to{opacity:1;transform:none}}
+@keyframes wd-p{0%,100%{transform:scale(1)}40%{transform:scale(1.35)}}
+@media (prefers-reduced-motion:reduce){.r,.pd{animation:none;opacity:1}}
 </style>
-<path class="pl" d="M56 346H242V418Q242 436 224 436H92Q56 436 56 400Z"/><path class="pl" d="M270 346H456V400Q456 436 420 436H288Q270 436 270 418Z"/><g class="bdr"><path class="bd" d="M206 346Q214 318 256 318Q298 318 306 346H270V428H242V346Z" fill="#FFCC33"/></g><g class="tcb"><g class="tc" transform="rotate(44 256 292)"><path d="M248 292L240 226H272L264 292Z" fill="#FFCC33"/><rect x="233" y="196" width="46" height="34" rx="6" fill="#FFCC33"/><rect x="241" y="150" width="30" height="50" class="tb"/><path d="M216 150V92Q216 60 248 60H264Q296 60 296 92V150Z" class="tb"/></g></g><g class="sp"><path d="M241.3 298.0L218.8 307.9L243.3 307.8Z" fill="#FF7A1A"/><path d="M244.0 290.3L193.9 284.5L240.8 302.9Z" fill="#FF7A1A"/><path d="M250.6 285.1L193.6 243.8L240.6 296.2Z" fill="#FF7A1A"/><path d="M258.7 284.1L224.5 213.5L243.7 289.6Z" fill="#FF7A1A"/><path d="M264.9 287.1L266.9 222.8L251.0 285.2Z" fill="#FF7A1A"/><path d="M268.1 291.0L284.6 254.2L258.8 285.2Z" fill="#FF7A1A"/><circle cx="256" cy="300" r="15" fill="#FF7A1A"/><circle cx="256" cy="300" r="7" fill="#FFFFFF"/></g>
+<clipPath id="t"><rect width="512" height="512" rx="112"/></clipPath><g clip-path="url(#t)"><g transform="translate(256 256) rotate(-18)"><rect x="-800" y="-800" width="1600" height="800" fill="#0C5449"/><rect x="-800" y="0" width="1600" height="800" fill="#04231E"/><path class="r r0" d="M-240.0 -74Q-124.0 0 -240.0 74Q-204.0 0 -240.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r1" d="M-190.0 -74Q-74.0 0 -190.0 74Q-154.0 0 -190.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r2" d="M-140.0 -74Q-24.0 0 -140.0 74Q-104.0 0 -140.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r3" d="M-90.0 -74Q26.0 0 -90.0 74Q-54.0 0 -90.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r4" d="M-40.0 -74Q76.0 0 -40.0 74Q-4.0 0 -40.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r5" d="M10.0 -74Q126.0 0 10.0 74Q46.0 0 10.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r6" d="M60.0 -74Q176.0 0 60.0 74Q96.0 0 60.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><path class="r r7" d="M110.0 -74Q226.0 0 110.0 74Q146.0 0 110.0 -74Z" fill="#FFCC33" stroke="#FFCC33" stroke-width="6" stroke-linejoin="round"/><circle class="pd" cx="214" cy="0" r="28" fill="#FFFFFF"/></g></g>
 </svg>
