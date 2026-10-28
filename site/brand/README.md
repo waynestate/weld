@@ -6,7 +6,7 @@ WELD is the gear you put on to join the parts: put the helmet on, strike the
 arc, and the stack holds together. The helmet faces right, toward the work.
 
 The mark was generated with ChatGPT as a single raster image. Every size in this
-folder was exported from that one image, so nobody should redraw it — there is no
+folder was exported from that one image, so nobody should redraw it: there is no
 vector source to redraw from, and the raster is the mark.
 
 No sparks were drawn in the making of this mark; it was generated, not welded.
