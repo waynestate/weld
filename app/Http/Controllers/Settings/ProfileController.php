@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
+use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,18 +45,29 @@ class ProfileController extends Controller
 
     /**
      * Delete the user's profile.
+     *
+     * WELD signs people in through SESAME, so there is no local credential to
+     * confirm with. Deletion is confirmed by typing the user's own email address.
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
         $user = $request->user();
 
         if ($user === null) {
             abort(403);
         }
+
+        $request->validate([
+            'confirmation' => [
+                'required',
+                'bail',
+                function (string $attribute, mixed $value, Closure $fail) use ($user) {
+                    if (! is_string($value) || ! hash_equals(strtolower((string) $user->email), strtolower($value))) {
+                        $fail('The confirmation must match your email address.');
+                    }
+                },
+            ],
+        ]);
 
         Auth::logout();
 

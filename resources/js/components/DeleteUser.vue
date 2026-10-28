@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { X } from 'lucide-vue-next';
 
 // Components
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
+import { type SharedData, type User } from '@/types';
+
+const page = usePage<SharedData>();
+const user = page.props.auth.user as User;
 
 const dialogRef = ref<HTMLDialogElement | null>(null);
-const passwordInput = ref<HTMLInputElement | null>(null);
+const confirmationInput = ref<HTMLInputElement | null>(null);
 
 const form = useForm({
-    password: '',
+    confirmation: '',
 });
 
 const openDialog = () => {
@@ -24,7 +28,7 @@ const deleteUser = (e: Event) => {
     form.delete(route('profile.destroy'), {
         preserveScroll: true,
         onSuccess: () => closeModal(),
-        onError: () => passwordInput.value?.focus(),
+        onError: () => confirmationInput.value?.focus(),
         onFinish: () => form.reset(),
     });
 };
@@ -57,22 +61,23 @@ const closeModal = () => {
                     </div>
 
                     <p class="wsu-prose">
-                        Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your
-                        password to confirm you would like to permanently delete your account.
+                        Once your account is deleted, all of its resources and data will also be permanently deleted. Please type your
+                        email address to confirm you would like to permanently delete your account.
                     </p>
 
                     <div class="wsu-field">
-                        <label class="sr-only" for="password">Password</label>
+                        <label class="wsu-field__label" for="confirmation">Type your email address to confirm</label>
                         <input
                             class="wsu-input"
-                            id="password"
-                            type="password"
-                            name="password"
-                            ref="passwordInput"
-                            v-model="form.password"
-                            placeholder="Password"
+                            id="confirmation"
+                            type="text"
+                            name="confirmation"
+                            ref="confirmationInput"
+                            v-model="form.confirmation"
+                            autocomplete="off"
                         />
-                        <InputError :message="form.errors.password" />
+                        <p class="wsu-field__hint">Your email address: {{ user.email }}</p>
+                        <InputError :message="form.errors.confirmation" />
                     </div>
 
                     <div class="wsu-dialog__footer">

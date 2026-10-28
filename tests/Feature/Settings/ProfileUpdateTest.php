@@ -68,7 +68,7 @@ class ProfileUpdateTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->delete('/settings/profile', [
-                'password' => 'password',
+                'confirmation' => $user->email,
             ]);
 
         $response
@@ -79,7 +79,25 @@ class ProfileUpdateTest extends TestCase
         $this->assertNull($user->fresh());
     }
 
-    public function test_correct_password_must_be_provided_to_delete_account()
+    public function test_confirmation_is_case_insensitive()
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->delete('/settings/profile', [
+                'confirmation' => strtoupper($user->email),
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/');
+
+        $this->assertGuest();
+        $this->assertNull($user->fresh());
+    }
+
+    public function test_wrong_email_cannot_delete_account()
     {
         $user = User::factory()->create();
 
@@ -87,11 +105,27 @@ class ProfileUpdateTest extends TestCase
             ->actingAs($user)
             ->from('/settings/profile')
             ->delete('/settings/profile', [
-                'password' => 'wrong-password',
+                'confirmation' => 'someone-else@example.com',
             ]);
 
         $response
-            ->assertSessionHasErrors('password')
+            ->assertSessionHasErrors('confirmation')
+            ->assertRedirect('/settings/profile');
+
+        $this->assertNotNull($user->fresh());
+    }
+
+    public function test_missing_confirmation_cannot_delete_account()
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->from('/settings/profile')
+            ->delete('/settings/profile');
+
+        $response
+            ->assertSessionHasErrors('confirmation')
             ->assertRedirect('/settings/profile');
 
         $this->assertNotNull($user->fresh());
