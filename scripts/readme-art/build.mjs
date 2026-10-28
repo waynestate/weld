@@ -54,9 +54,11 @@ function fail(msg) {
 /* ------------------------------------------------------------- 1. cast strip */
 
 // One 96x96 PNG per stack part (shown at 48 px in the README). The marks are
-// copied and resized only, never redrawn.
+// copied and resized only, never redrawn. WayneUI ships twice: the green mark
+// for light pages and the reverse (white) mark for dark pages.
 const CAST = [
   "wayneui",
+  "wayneui-dark",
   "creed",
   "proctor",
   "sesame",
@@ -73,8 +75,9 @@ const CAST = [
 ];
 
 function castSource(name) {
+  if (name === "wayneui") return path.join(scriptDir, "src", "wayneui-avatar.png");
+  if (name === "wayneui-dark") return path.join(siteDir, "assets", "marks", "wayneui.svg");
   if (name === "weld") return path.join(siteDir, "brand", "weld-avatar-256.png");
-  if (name === "wayneui") return path.join(siteDir, "assets", "marks", "wayneui.svg");
   return path.join(siteDir, "assets", "marks", `${name}.png`);
 }
 
@@ -87,9 +90,9 @@ async function buildCast() {
       continue;
     }
     const buf = readFileSync(src);
-    // The WayneUI mark is a transparent SVG (white frame, gold tab); rasterise
-    // it at 300 dpi and seat it on a transparent 96x96 tile, unaltered.
-    const options = name === "wayneui" ? { density: 300 } : undefined;
+    // The reverse WayneUI mark is a transparent SVG (white frame, gold tab);
+    // rasterise it at 300 dpi and seat it on a transparent 96x96 tile, unaltered.
+    const options = name === "wayneui-dark" ? { density: 300 } : undefined;
     const png = await sharp(buf, options)
       .resize(96, 96, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .png({ palette: true, quality: 85, compressionLevel: 9 })
@@ -175,7 +178,9 @@ function buildJourneySvg(stops) {
   const margin = 110;
   const step = (W - 2 * margin) / (stops.length - 1);
   const mark = 72;
-  const markTop = 54;
+  // Centred vertically: the margin above the marks (markTop) equals the margin
+  // below the captions (H - captionY - descender), with a 4px descender at 14px.
+  const markTop = 55;
   const centerY = markTop + mark / 2;
   const nameY = markTop + mark + 30;
   const captionY = nameY + 24;
@@ -188,8 +193,10 @@ function buildJourneySvg(stops) {
   const images = stops
     .map((s, i) => {
       const cx = margin + i * step;
-      const castFile = path.join(castDir, `${s.name.toLowerCase()}.png`);
-      if (!existsSync(castFile)) fail(`journey needs cast/${s.name.toLowerCase()}.png (build the cast first)`);
+      // The journey sits on green, so WayneUI uses the reverse (dark) mark.
+      const castName = s.name.toLowerCase() === "wayneui" ? "wayneui-dark" : s.name.toLowerCase();
+      const castFile = path.join(castDir, `${castName}.png`);
+      if (!existsSync(castFile)) fail(`journey needs cast/${castName}.png (build the cast first)`);
       const b64 = readFileSync(castFile).toString("base64");
       return `  <image x="${cx - mark / 2}" y="${markTop}" width="${mark}" height="${mark}" href="data:image/png;base64,${b64}"/>`;
     })
@@ -270,8 +277,10 @@ async function buildGallery(page) {
 <meta charset="utf-8">
 <style>
   html, body { margin: 0; padding: 0; }
-  body { background: #0C5449; padding: 40px; display: flex; gap: 32px; }
+  /* The sheet is exactly as wide as its content: 3×360 + 2×32 + 2×40 = 1224. */
+  .sheet { width: fit-content; background: #0C5449; padding: 40px; display: flex; gap: 32px; }
   img {
+    box-sizing: border-box; /* the 1px border sits inside the 360x640 */
     display: block;
     width: 360px;
     height: 640px;
@@ -283,13 +292,15 @@ async function buildGallery(page) {
 </style>
 </head>
 <body>
+<div class="sheet">
 ${crops.map((c) => `  <img src="${pathToFileURL(path.join(siteDir, "screenshots", "sections", c)).href}" alt="">`).join("\n")}
+</div>
 </body>
 </html>`;
   await page.setContent(html, { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
-  await assertClean(page, "body", "gallery");
-  const png = await page.locator("body").screenshot();
+  await assertClean(page, ".sheet", "gallery");
+  const png = await page.locator(".sheet").screenshot();
   const jpg = await sharp(png).resize({ width: 1280 }).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
   record("gallery.jpg", jpg);
 }
