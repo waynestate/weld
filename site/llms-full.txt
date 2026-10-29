@@ -150,11 +150,92 @@ WELD stands for Wired, Everything, Linked, Deployed.
 
 Many parts, one piece.
 
-One Laravel + Inertia/Vue app with every part of the stack already joined: WayneUI, CREED, Pinstripe, Preflight, PROCTOR, SESAME and HELMET. Clone it, rename it, deploy it.
+The whole Wayne State app stack in **one install**: a Laravel + Inertia/Vue app with sign-in, security headers, the standards checks, code style, CI and the WayneUI look already joined. Clone it, rename it, deploy it.
 
 `$ composer create-project waynestate/weld my-app`
 
-[Get started](https://weld.apps.wayne.edu/#paths) [Meet the cast](https://weld.apps.wayne.edu/#cast-title)
+Not a Laravel + Vue app? [Sourdough](https://sourdough.apps.wayne.edu/) bakes a new app in the shape you pick, with the same pieces wired in.
+
+[Get started](https://weld.apps.wayne.edu/#start) [Which piece do I need?](https://weld.apps.wayne.edu/#chooser) [Meet the cast](https://weld.apps.wayne.edu/#cast-title)
+
+Start here
+
+### One install. One command to run it.
+
+Yes, that is a lot of parts. Most of you can skip the introductions: make the app, run one command, and you hit the ground running with every seam already welded. The separate pieces are there because Wayne State's developers and apps come in every shape, and nobody should have to buy the whole shop to borrow one torch.
+
+1. ### Make it
+   A fresh copy of WELD, with `.env` written and the app key set.
+   ```
+   composer create-project waynestate/weld my-app
+   ```
+2. ### Run it
+   The one command. Docker is the only thing you need: it installs, migrates and serves at `localhost:8000`.
+   ```
+   # macOS, Linux
+   bin/weld.sh up
+   # Windows (PowerShell)
+   .\bin\weld.ps1 up
+   ```
+3. ### Check it
+   Tests, code style, static analysis and the audit in one command, the same one CI runs on every push.
+   ```
+   composer ci
+   ```
+
+Want a different shape? [Sourdough](https://sourdough.apps.wayne.edu/) is the other one-install start: `sourdough new my-app --raw` bakes a raw PHP app with the same pieces wired in, and the Laravel shapes rise in a later release.
+
+Already have an app?
+
+### Which piece do I need?
+
+Most Wayne State apps are older than this stack, and mixed: some raw PHP, some Laravel, some that only want sign-in or only an upgrade. So every piece also works on its own. WELD is all of them, already welded together.
+
+- I'm starting a new app
+  WELD or [Sourdough](https://sourdough.apps.wayne.edu/)
+  WELD is the finished Laravel + Inertia/Vue app, every piece joined. Sourdough makes a new app in the shape you pick; today that is raw PHP.
+- My old raw PHP app just needs sign-in
+  [SESAME](https://sesame.apps.wayne.edu/)
+  Wayne State sign-in (CAS or Entra ID) for raw PHP or Laravel, and the session stays your app's.
+- I'm stuck on PHP 7
+  [Booster](https://booster.apps.wayne.edu/)
+  Upgrades PHP and Laravel one hop at a time, with a playbook for Vue 2 to 3. Your tests sign off; a person merges.
+- I'm deploying to Citadel
+  [Squire](https://squire.apps.wayne.edu/)
+  The Citadel kit: the build and release scripts, the health check, and local runs on the real images.
+- I want CI on every push
+  [Preflight](https://preflight.apps.wayne.edu/)
+  GitLab CI components that run the stack's checks on every push. More on the checks below.
+- I want safe defaults at runtime
+  [HELMET](https://helmet.apps.wayne.edu/)
+  The safe runtime baseline: security headers, a hardened session, trusted proxies and a `/up` health check.
+- I want it to look like Wayne State
+  [WayneUI](https://wayneui.apps.wayne.edu/)
+  The look: Wayne State's design system, for static HTML, raw PHP, Blade or Vue.
+- I want Citadel to sign people in before my app
+  [Drawbridge](https://drawbridge.apps.wayne.edu/)
+  The shared sign-in gateway in front of Citadel's apps, so each app only checks one small signed token.
+- I look after a lot of apps
+  [Rollcall](https://rollcall.apps.wayne.edu/)
+  A fleet view: which apps run which PHP, framework and sign-in, read against the policy.
+- I code with an AI agent
+  [ADVISOR](https://advisor.apps.wayne.edu/)
+  An MCP server that tells you, and your agent, what applies to your app and what to do next.
+
+#### The checks are one pipeline, not four linters
+
+CREED is the rules, PROCTOR grades against them, Pinstripe sets the code style, and Preflight runs it all in CI.
+
+1. [CREED](https://creed.apps.wayne.edu/) the rules
+   The written standards, plus `policy.json`: which PHP, Laravel and Node versions are supported.
+2. [PROCTOR](https://proctor.apps.wayne.edu/) the grader
+   One command that marks your app against CREED: pass, warning or fail.
+3. [Pinstripe](https://pinstripe.apps.wayne.edu/) the code style
+   Shared presets for Pint, PHPStan, ESLint and Prettier, so every app is pressed the same way.
+4. [Preflight](https://preflight.apps.wayne.edu/) the runner
+   The CI pipeline that runs all of it, and your tests, on every push.
+
+In WELD all four are already joined: `composer ci` and `composer proctor` on your machine, the same checks in Preflight on every push.
 
 ### The journey
 
@@ -171,7 +252,7 @@ Every part, its own character
 
 ### The cast
 
-Seven parts welded into WELD, five that work the shop floor around it, one sibling that bakes your own, and the crew still on the drawing board.
+You have met them in one line each; here is everyone up close. Seven parts welded into WELD, five that work the shop floor around it, one sibling that bakes your own, and the crew still on the drawing board.
 
 ![WayneUI mark: a rounded frame holding a solid form, with a gold tab on the lower edge](https://weld.apps.wayne.edu/assets/marks/wayneui.svg)
 
@@ -196,7 +277,7 @@ $
 
 0.1 Volume | Eleven
 
-The written standards, and the `policy.json` every other part reads.
+The rulebook: the written standards, and the `policy.json` of supported versions every other part reads.
 
 ```
 $ creed policy show
@@ -213,7 +294,7 @@ $
 
 0.2 Fit | Snug
 
-Security headers and runtime hardening.
+The safe runtime baseline: headers, sessions, proxies and `/up`.
 
 ```
 $ helmet headers
@@ -245,7 +326,7 @@ $
 
 0.2 Strictness | Kind
 
-One command that checks an app against the standards.
+The grader: one command that marks an app against CREED.
 
 ```
 $ proctor check
@@ -261,7 +342,7 @@ $
 
 0.1 Checklist | Long
 
-Shared CI, from GitLab CI/CD components.
+The CI pipeline that runs the checks on every push, from GitLab CI/CD components.
 
 ```
 $ preflight run
@@ -277,7 +358,7 @@ $
 
 0.1 Creases | Sharp
 
-The coding standard: Pint, PHPStan level 8, ESLint and Prettier, pressed and ready.
+The code style: Pint, PHPStan level 8, ESLint and Prettier presets, pressed and ready.
 
 ```
 $ pinstripe apply

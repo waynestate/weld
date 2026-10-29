@@ -75,15 +75,17 @@
           <span class="acro__line" aria-hidden="true"><span class="acro__word" style="--i:0"><span class="acro__init">W</span><span class="acro__rest">ired,</span></span> <span class="acro__word" style="--i:1"><span class="acro__init">E</span><span class="acro__rest">verything,</span></span> <span class="acro__word" style="--i:2"><span class="acro__init">L</span><span class="acro__rest">inked,</span></span> <span class="acro__word" style="--i:3"><span class="acro__init">D</span><span class="acro__rest">eployed.</span></span></span>
         </p>
         <p class="hero__tagline">Many parts, <span class="seam">one piece.<span class="seam__bead" aria-hidden="true"><span class="seam__fill"></span></span><span class="seam__runner" aria-hidden="true"><span class="spark"></span></span></span></p>
-        <p class="hero__blurb">One Laravel + Inertia/Vue app with every part of the stack already joined: WayneUI, CREED, Pinstripe, Preflight, PROCTOR, SESAME and HELMET. Clone it, rename it, deploy it.</p>
+        <p class="hero__blurb">The whole Wayne State app stack in <strong>one install</strong>: a Laravel + Inertia/Vue app with sign-in, security headers, the standards checks, code style, CI and the WayneUI look already joined. Clone it, rename it, deploy it.</p>
         <div class="quickstart">
           <code class="quickstart__code" id="quickstart-cmd"><span class="t-dim">$</span> <span data-type>composer create-project waynestate/weld my-app</span><span class="caret" aria-hidden="true"></span></code>
           <button class="copy-btn" type="button" data-copy="composer create-project waynestate/weld my-app" data-target="#quickstart-cmd">
             <span class="copy-btn__label">Copy</span>
           </button>
         </div>
+        <p class="hero__alt">Not a Laravel + Vue app? <a class="hero__alt-link" href="https://sourdough.apps.wayne.edu/">Sourdough</a> bakes a new app in the shape you pick, with the same pieces wired in.</p>
         <p class="hero__cta">
-          <a class="wsu-btn wsu-btn--accent wsu-btn--lg" href="#paths">Get started</a>
+          <a class="wsu-btn wsu-btn--accent wsu-btn--lg" href="#start">Get started</a>
+          <a class="hero__link" href="#chooser">Which piece do I need?</a>
           <a class="hero__link" href="#cast-title">Meet the cast</a>
         </p>
         <!-- Where an agent reads this page. The script adds Copy page as Markdown and Open in
@@ -98,6 +100,147 @@
         </nav>
       </div>
 
+    </div>
+  </section>
+
+  <!-- =========================================================== start here -->
+  <!-- The answer to "wait, there's more?": one install, three commands, before
+       anyone meets the cast. Commands as documented in README.md (Get it, Run it
+       locally) and MAINTAINING.md (composer ci). -->
+  <section class="section section--start" id="start" aria-labelledby="start-title">
+    <div class="wsu-container">
+      <div class="section__head">
+        <p class="eyebrow">Start here</p>
+        <h2 id="start-title">One install. One command to run it.</h2>
+        <p class="start__lead">Yes, that is a lot of parts. Most of you can skip the introductions: make the app, run one command, and you hit the ground running with every seam already welded. The separate pieces are there because Wayne State's developers and apps come in every shape, and nobody should have to buy the whole shop to borrow one torch.</p>
+      </div>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step__num" aria-hidden="true">1</span>
+          <h3 class="step__title">Make it</h3>
+          <p class="step__line">A fresh copy of WELD, with <code>.env</code> written and the app key set.</p>
+          <pre class="step__code"><code>composer create-project waynestate/weld my-app</code></pre>
+        </li>
+        <li class="step step--key">
+          <span class="step__num" aria-hidden="true">2</span>
+          <h3 class="step__title">Run it</h3>
+          <p class="step__line">The one command. Docker is the only thing you need: it installs, migrates and serves at <code>localhost:8000</code>.</p>
+          <pre class="step__code"><code><span class="t-dim"># macOS, Linux</span>
+bin/weld.sh up
+<span class="t-dim"># Windows (PowerShell)</span>
+.\bin\weld.ps1 up</code></pre>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">3</span>
+          <h3 class="step__title">Check it</h3>
+          <p class="step__line">Tests, code style, static analysis and the audit in one command, the same one CI runs on every push.</p>
+          <pre class="step__code"><code>composer ci</code></pre>
+        </li>
+      </ol>
+
+      <p class="start__also">Want a different shape? <a href="https://sourdough.apps.wayne.edu/">Sourdough</a> is the other one-install start: <code>sourdough new my-app --raw</code> bakes a raw PHP app with the same pieces wired in, and the Laravel shapes rise in a later release.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================= chooser -->
+  <!-- Keyed on the reader's situation, one plain sentence per piece. Lines come
+       from each project's README. The four check-shaped tools are drawn as one
+       pipeline so they stop reading as four linters. -->
+  <section class="section section--chooser" id="chooser" aria-labelledby="chooser-title">
+    <div class="wsu-container">
+      <div class="section__head">
+        <p class="eyebrow">Already have an app?</p>
+        <h2 id="chooser-title">Which piece do I need?</h2>
+        <p>Most Wayne State apps are older than this stack, and mixed: some raw PHP, some Laravel, some that only want sign-in or only an upgrade. So every piece also works on its own. WELD is all of them, already welded together.</p>
+      </div>
+
+      <ul class="choices">
+        <li class="choice choice--wide">
+          <p class="choice__if">I'm starting a new app</p>
+          <p class="choice__pick">
+            <span class="choice__one"><img src="brand/weld-avatar-256.png" width="40" height="40" alt=""> <span class="choice__name">WELD</span></span>
+            <span class="choice__or">or</span>
+            <span class="choice__one"><img src="assets/marks/sourdough.png" width="40" height="40" alt=""> <a class="choice__name" href="https://sourdough.apps.wayne.edu/">Sourdough</a></span>
+          </p>
+          <p class="choice__line">WELD is the finished Laravel + Inertia/Vue app, every piece joined. Sourdough makes a new app in the shape you pick; today that is raw PHP.</p>
+        </li>
+        <li class="choice">
+          <p class="choice__if">My old raw PHP app just needs sign-in</p>
+          <p class="choice__pick"><img src="assets/marks/sesame.png" width="40" height="40" alt=""> <a class="choice__name" href="https://sesame.apps.wayne.edu/">SESAME</a></p>
+          <p class="choice__line">Wayne State sign-in (CAS or Entra ID) for raw PHP or Laravel, and the session stays your app's.</p>
+        </li>
+        <li class="choice">
+          <p class="choice__if">I'm stuck on PHP 7</p>
+          <p class="choice__pick"><img src="assets/marks/booster.png" width="40" height="40" alt=""> <a class="choice__name" href="https://booster.apps.wayne.edu/">Booster</a></p>
+          <p class="choice__line">Upgrades PHP and Laravel one hop at a time, with a playbook for Vue 2 to 3. Your tests sign off; a person merges.</p>
+        </li>
+        <li class="choice">
+          <p class="choice__if">I'm deploying to Citadel</p>
+          <p class="choice__pick"><img src="assets/marks/squire.png" width="40" height="40" alt=""> <a class="choice__name" href="https://squire.apps.wayne.edu/">Squire</a></p>
+          <p class="choice__line">The Citadel kit: the build and release scripts, the health check, and local runs on the real images.</p>
+        </li>
+        <li class="choice">
+          <p class="choice__if">I want CI on every push</p>
+          <p class="choice__pick"><img src="assets/marks/preflight.png" width="40" height="40" alt=""> <a class="choice__name" href="https://preflight.apps.wayne.edu/">Preflight</a></p>
+          <p class="choice__line">GitLab CI components that run the stack's checks on every push. More on the checks below.</p>
+        </li>
+        <li class="choice">
+          <p class="choice__if">I want safe defaults at runtime</p>
+          <p class="choice__pick"><img src="assets/marks/helmet.png" width="40" height="40" alt=""> <a class="choice__name" href="https://helmet.apps.wayne.edu/">HELMET</a></p>
+          <p class="choice__line">The safe runtime baseline: security headers, a hardened session, trusted proxies and a <code>/up</code> health check.</p>
+        </li>
+        <li class="choice">
+          <p class="choice__if">I want it to look like Wayne State</p>
+          <p class="choice__pick"><img class="choice__tile" src="assets/marks/wayneui.svg" width="40" height="40" alt=""> <a class="choice__name" href="https://wayneui.apps.wayne.edu/">WayneUI</a></p>
+          <p class="choice__line">The look: Wayne State's design system, for static HTML, raw PHP, Blade or Vue.</p>
+        </li>
+        <li class="choice">
+          <p class="choice__if">I want Citadel to sign people in before my app</p>
+          <p class="choice__pick"><img src="assets/marks/drawbridge.png" width="40" height="40" alt=""> <a class="choice__name" href="https://drawbridge.apps.wayne.edu/">Drawbridge</a></p>
+          <p class="choice__line">The shared sign-in gateway in front of Citadel's apps, so each app only checks one small signed token.</p>
+        </li>
+        <li class="choice">
+          <p class="choice__if">I look after a lot of apps</p>
+          <p class="choice__pick"><img src="assets/marks/rollcall.png" width="40" height="40" alt=""> <a class="choice__name" href="https://rollcall.apps.wayne.edu/">Rollcall</a></p>
+          <p class="choice__line">A fleet view: which apps run which PHP, framework and sign-in, read against the policy.</p>
+        </li>
+        <li class="choice">
+          <p class="choice__if">I code with an AI agent</p>
+          <p class="choice__pick"><img src="assets/marks/advisor.png" width="40" height="40" alt=""> <a class="choice__name" href="https://advisor.apps.wayne.edu/">ADVISOR</a></p>
+          <p class="choice__line">An MCP server that tells you, and your agent, what applies to your app and what to do next.</p>
+        </li>
+      </ul>
+
+      <!-- One pipeline, four stations. With motion on, the seam is laid along it
+           like the journey's; with reduced motion it is simply there. -->
+      <div class="pipeline">
+        <h3 class="pipeline__title">The checks are one pipeline, not four linters</h3>
+        <p class="pipeline__sum">CREED is the rules, PROCTOR grades against them, Pinstripe sets the code style, and Preflight runs it all in CI.</p>
+        <ol class="pipeline__stops">
+          <li class="pipeline__stop">
+            <img src="assets/marks/creed.png" width="48" height="48" alt="">
+            <p class="pipeline__name"><a href="https://creed.apps.wayne.edu/">CREED</a> <span class="pipeline__role">the rules</span></p>
+            <p class="pipeline__line">The written standards, plus <code>policy.json</code>: which PHP, Laravel and Node versions are supported.</p>
+          </li>
+          <li class="pipeline__stop">
+            <img src="assets/marks/proctor.png" width="48" height="48" alt="">
+            <p class="pipeline__name"><a href="https://proctor.apps.wayne.edu/">PROCTOR</a> <span class="pipeline__role">the grader</span></p>
+            <p class="pipeline__line">One command that marks your app against CREED: pass, warning or fail.</p>
+          </li>
+          <li class="pipeline__stop">
+            <img src="assets/marks/pinstripe.png" width="48" height="48" alt="">
+            <p class="pipeline__name"><a href="https://pinstripe.apps.wayne.edu/">Pinstripe</a> <span class="pipeline__role">the code style</span></p>
+            <p class="pipeline__line">Shared presets for Pint, PHPStan, ESLint and Prettier, so every app is pressed the same way.</p>
+          </li>
+          <li class="pipeline__stop">
+            <img src="assets/marks/preflight.png" width="48" height="48" alt="">
+            <p class="pipeline__name"><a href="https://preflight.apps.wayne.edu/">Preflight</a> <span class="pipeline__role">the runner</span></p>
+            <p class="pipeline__line">The CI pipeline that runs all of it, and your tests, on every push.</p>
+          </li>
+        </ol>
+        <p class="pipeline__fine">In WELD all four are already joined: <code>composer ci</code> and <code>composer proctor</code> on your machine, the same checks in Preflight on every push.</p>
+      </div>
     </div>
   </section>
 
@@ -155,7 +298,7 @@
       <div class="section__head section__head--main">
         <p class="eyebrow">Every part, its own character</p>
         <h2 id="cast-title">The cast</h2>
-        <p>Seven parts welded into WELD, five that work the shop floor around it, one sibling that bakes your own, and the crew still on the drawing board.</p>
+        <p>You have met them in one line each; here is everyone up close. Seven parts welded into WELD, five that work the shop floor around it, one sibling that bakes your own, and the crew still on the drawing board.</p>
       </div>
 
       <div class="cast">
@@ -189,7 +332,7 @@
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Volume | Eleven</span>
             </p>
-            <p class="cast-card__line">The written standards, and the <code>policy.json</code> every other part reads.</p>
+            <p class="cast-card__line">The rulebook: the written standards, and the <code>policy.json</code> of supported versions every other part reads.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
@@ -210,7 +353,7 @@
               <span class="chip chip--version">0.2</span>
               <span class="chip chip--joke">Fit | Snug</span>
             </p>
-            <p class="cast-card__line">Security headers and runtime hardening.</p>
+            <p class="cast-card__line">The safe runtime baseline: headers, sessions, proxies and <code>/up</code>.</p>
           </div>
           <div class="term" data-term>
 <pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>helmet headers</span></span>
@@ -248,7 +391,7 @@
               <span class="chip chip--version">0.2</span>
               <span class="chip chip--joke">Strictness | Kind</span>
             </p>
-            <p class="cast-card__line">One command that checks an app against the standards.</p>
+            <p class="cast-card__line">The grader: one command that marks an app against CREED.</p>
           </div>
           <div class="term" data-term>
 <pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>proctor check</span></span>
@@ -267,7 +410,7 @@
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Checklist | Long</span>
             </p>
-            <p class="cast-card__line">Shared CI, from GitLab CI/CD components.</p>
+            <p class="cast-card__line">The CI pipeline that runs the checks on every push, from GitLab CI/CD components.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
@@ -287,7 +430,7 @@
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Creases | Sharp</span>
             </p>
-            <p class="cast-card__line">The coding standard: Pint, PHPStan level 8, ESLint and Prettier, pressed and ready.</p>
+            <p class="cast-card__line">The code style: Pint, PHPStan level 8, ESLint and Prettier presets, pressed and ready.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
