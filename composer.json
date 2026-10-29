@@ -18,7 +18,8 @@
         "laravel/framework": "^13.29",
         "laravel/tinker": "^3.0",
         "tightenco/ziggy": "^2.4",
-        "waynestate/helmet": "^0.1"
+        "waynestate/helmet": "^0.1",
+        "waynestate/sesame": "^0.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

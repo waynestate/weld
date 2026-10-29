@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Waynestate\Helmet\Headers\SecurityHeaders;
 
@@ -60,7 +62,7 @@ if (is_string($helmetCsp) && $helmetCsp !== '') {
 }
 
 $policyPath = env('HELMET_POLICY_PATH');
-if (!is_string($policyPath) || $policyPath === '') {
+if (! is_string($policyPath) || $policyPath === '') {
     $defaultPolicyPath = base_path('vendor/waynestate/creed/policy/policy.json');
     $policyPath = is_file($defaultPolicyPath) ? $defaultPolicyPath : null;
 }

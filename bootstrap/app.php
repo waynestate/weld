@@ -13,7 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Guests go to the SESAME placeholder until SESAME owns /login.
+        // SESAME owns sign-in at /login, so any guest Laravel's own guards
+        // would bounce still lands on SESAME's door.
         $middleware->redirectGuestsTo('/login');
 
         // Trust only the address HA-Proxy connects from, so X-Forwarded-Proto

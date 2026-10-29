@@ -41,4 +41,25 @@ class AuthRoutesTest extends TestCase
             'Fortify routes are back: '.$fortify->implode(', '),
         );
     }
+
+    public function test_login_and_logout_are_owned_by_sesame()
+    {
+        // Exactly one route per URI, and it must be the one SESAME
+        // registers. If WELD ever grows its own /login or /logout again,
+        // this fails instead of the app silently signing people in twice.
+        foreach (['login' => 'sesame.login', 'logout' => 'sesame.logout'] as $uri => $expectedName) {
+            $routes = collect(Route::getRoutes())->filter(fn ($route) => $route->uri() === $uri);
+
+            $this->assertCount(
+                1,
+                $routes,
+                "Expected exactly one /{$uri} route, found {$routes->count()}.",
+            );
+            $this->assertSame(
+                $expectedName,
+                $routes->first()->getName(),
+                "/{$uri} must be SESAME's {$expectedName} route.",
+            );
+        }
+    }
 }

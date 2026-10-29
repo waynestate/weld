@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Waynestate\Sesame\Sesame;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -45,7 +46,9 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
-                'user' => $request->user(),
+                // Sign-in is SESAME's, so the shared user comes from its
+                // session, not from a Laravel guard.
+                'user' => app(Sesame::class)->user(),
             ],
         ]);
     }

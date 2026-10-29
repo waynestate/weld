@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Waynestate\Sesame\Sesame;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -16,6 +17,8 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $user = app(Sesame::class)->user();
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -24,7 +27,7 @@ class ProfileUpdateRequest extends FormRequest
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($this->user()?->id),
+                Rule::unique(User::class)->ignore($user instanceof User ? $user->id : null),
             ],
         ];
     }
