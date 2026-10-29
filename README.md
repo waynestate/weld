@@ -61,7 +61,8 @@ php artisan key:generate
 
 ## Status
 
-HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast arrives as each package lands.
+HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is on Packagist too and gets welded on
+in turn.
 What is on the bench today:
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
@@ -70,8 +71,8 @@ What is on the bench today:
 - `.gitattributes` sets `* text=auto eol=lf`
 - `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8 and audit, the same command on
   GitLab and GitHub
-- `pint.json` and `phpstan.neon` copy Pinstripe's 0.1 Laravel presets (Pinstripe is not on Packagist yet); they
-  switch to `includes: vendor/waynestate/pinstripe/...` once it lands
+- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe is on Packagist now
+  (`dev-main`, no tag yet), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
 - HELMET appends its security headers and CSP middleware to the web group; the Vite build takes the per-request
   nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays Laravel's built-in health route
 - SESAME owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and
