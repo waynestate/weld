@@ -4,6 +4,17 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- PROCTOR is welded in from Packagist (`waynestate/proctor` dev dependency, CREED's `policy.json` carried by
+  `waynestate/creed`): `composer proctor` measures WELD against the version policy, and a CI job runs it on every
+  pipeline. Warnings pass, failures block. The package's own bin looks for its autoloader where only a project-root
+  install puts one, so WELD carries a thin launcher, `bin/proctor-check.php`, that runs the same checks through the
+  package's public classes; it goes away when the package ships a fixed bin.
+- SESAME is welded in from Packagist (`waynestate/sesame`): sign-in moves from the starter kit's password forms to
+  `/login` and `/logout`, owned by the package. The fake driver signs in locally; pointing at CAS is an env change.
+  A `username` column joins `users`, and `App\Sesame\UserResolver` imports the identity on first sign-in.
+- HELMET is welded in from Packagist (`waynestate/helmet`): security headers and CSP on every web response, a
+  published `config/helmet.php`, trusted proxies in `bootstrap/app.php`, and the Vite build asks for the per-request
+  nonce. `/up` stays Laravel's built-in health route. Every web response now wears the baseline.
 - `docs/running-off-citadel.md`: the off-Citadel contract: OpenShift, Coolify and plain Docker, with Citadel for
   comparison. Traffic and trusted proxies per platform, `php://stderr` logs, writable paths, non-root user, `/up`,
   and `weld:doctor` after every deploy. Same bead, four different tables.
