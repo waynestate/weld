@@ -4,6 +4,10 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Ziggy's route list leaves the inline `<script>` from `@routes` and moves into the Vite bundle: `composer ziggy`
+  generates `resources/js/ziggy.js` (plus `ziggy.d.ts`), the app entry imports it and passes it to `ZiggyVue`, so
+  `route()` works in Vue exactly as before while HELMET's strict CSP stays closed. A CI job regenerates the file and
+  fails on any diff, and a feature test pins the contract that every script tag on the app page carries a nonce.
 - PROCTOR is welded in from Packagist (`waynestate/proctor` dev dependency, CREED's `policy.json` carried by
   `waynestate/creed`): `composer proctor` measures WELD against the version policy, and a CI job runs it on every
   pipeline. Warnings pass, failures block. The package's own bin looks for its autoloader where only a project-root

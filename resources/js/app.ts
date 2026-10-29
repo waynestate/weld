@@ -6,6 +6,11 @@ import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { initializeTheme } from './composables/useAppearance';
+// Welcome aboard, new dev. The route list used to ride in an inline <script>
+// from @routes, but HELMET's strict CSP only admits scripts that carry a
+// nonce, so that one never made it past security. It is welded into the Vite
+// bundle now: regenerate it with `composer ziggy` whenever routes change.
+import { Ziggy } from './ziggy';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -28,7 +33,8 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(ZiggyVue)
+            // The generated file's url is the build machine's; the browser's origin is the truth.
+            .use(ZiggyVue, { ...Ziggy, url: window.location.origin, port: null })
             .mount(el);
     },
     progress: {
