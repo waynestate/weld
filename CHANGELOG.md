@@ -4,6 +4,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+## 0.1.0 (2026-10-29)
+
 - `waynestate/helmet` moves from `^0.1` to `^0.2` (locked at 0.2.3). The published `config/helmet.php`
   re-syncs with the package: `HELMET_PRESET` fills the proxy list (an unknown name throws at boot),
   and the security headers middleware joins the global chain, so every response carries the baseline.
