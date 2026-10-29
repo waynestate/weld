@@ -7,16 +7,17 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Tests\TestCase;
 
 /**
- * weld:doctor strikes an arc across the setup and reports every joint.
- * A green run exits 0; any FAIL exits 1; --json hands the report to a
- * machine instead of a human.
+ * weld:doctor strikes an arc across the local setup and reports every
+ * joint. A green run exits 0; any FAIL exits 1; --json hands the report to
+ * a machine instead of a human. The standards checks (PHP version, debug,
+ * session cookies) live in PROCTOR, and the report points there.
  */
 class DoctorCommandTest extends TestCase
 {
     public function test_a_green_run_exits_zero()
     {
         $this->artisan('weld:doctor')
-            ->expectsOutputToContain('PASS  php-version')
+            ->expectsOutputToContain('PASS  app-key')
             ->assertExitCode(0);
     }
 
@@ -29,17 +30,14 @@ class DoctorCommandTest extends TestCase
             ->assertExitCode(1);
     }
 
-    public function test_debug_in_production_fails()
+    public function test_the_report_points_at_proctor_for_the_standards_checks()
     {
-        app()->detectEnvironment(fn (): string => 'production');
-        config(['app.debug' => true]);
-
         $this->artisan('weld:doctor')
-            ->expectsOutputToContain('FAIL  debug-in-production')
-            ->assertExitCode(1);
+            ->expectsOutputToContain('Standards (PHP version, debug, session cookies): run composer proctor')
+            ->assertExitCode(0);
     }
 
-    public function test_json_output_decodes_and_has_the_php_version_entry()
+    public function test_json_output_decodes_and_has_the_setup_entries()
     {
         $output = new BufferedOutput;
 
@@ -50,20 +48,24 @@ class DoctorCommandTest extends TestCase
 
         $this->assertSame(0, $exitCode);
         $this->assertIsArray($results);
-        $this->assertCount(7, $results);
+        $this->assertCount(4, $results);
+        $this->assertSame(
+            ['app-key', 'storage-writable', 'database', 'migrations'],
+            array_column($results, 'id'),
+        );
 
-        $phpVersion = null;
+        $appKey = null;
 
         foreach ($results as $entry) {
-            if ($entry['id'] === 'php-version') {
-                $phpVersion = $entry;
+            if ($entry['id'] === 'app-key') {
+                $appKey = $entry;
 
                 break;
             }
         }
 
-        $this->assertNotNull($phpVersion, 'the --json report is missing its php-version entry');
-        $this->assertSame(['id', 'status', 'message'], array_keys($phpVersion));
-        $this->assertContains($phpVersion['status'], ['PASS', 'WARN', 'FAIL']);
+        $this->assertNotNull($appKey, 'the --json report is missing its app-key entry');
+        $this->assertSame(['id', 'status', 'message'], array_keys($appKey));
+        $this->assertContains($appKey['status'], ['PASS', 'WARN', 'FAIL']);
     }
 }
