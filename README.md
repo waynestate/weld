@@ -47,6 +47,7 @@ php artisan key:generate
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in, with CAS today and the auth gateway later, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` |
+| Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue without an inline script |
 
 <div align="center">
   <img src="docs/readme/journey.svg" width="100%" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, PREFLIGHT runs CI, SQUIRE deploys.">
