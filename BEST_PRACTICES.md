@@ -19,7 +19,7 @@ Each practice ends with exactly one tag.
 | `Documented` | Written down in the README or a config file, with no check behind it. |
 | `Not yet` | A gap. |
 
-The tags describe the repo as it stands on 2026-10-28. The Laravel base has landed: the starter kit is in, the password auth (register, login, password reset, two-factor) is removed on purpose, CI runs on both GitLab and GitHub from the same `composer ci` contract, and the stack defaults (PHP floor, stderr logging, database sessions and cache, the 191-character index cap) are set. The stack packages (SESAME, HELMET, PROCTOR, Preflight, Pinstripe, CREED and WayneUI) are not yet Composer or npm dependencies, so the practices that depend on them are `Not yet` and say which package they wait on. The `Stack:` line on each entry says what the tag should become and which tool owns it.
+The tags describe the repo as it stands on 2026-10-28. The Laravel base has landed: the starter kit is in, the password auth (register, login, password reset, two-factor) is removed on purpose, CI runs on both GitLab and GitHub from the same `composer ci` contract, and the stack defaults (PHP floor, stderr logging, database sessions and cache, the 191-character index cap) are set. The stack packages are partly wired in: SESAME and HELMET sit in `require`, CREED and PROCTOR in `require-dev`, and Preflight, Pinstripe and WayneUI are not yet Composer or npm dependencies, so the practices that depend on those three are `Not yet` and say which package they wait on. The `Stack:` line on each entry says what the tag should become and which tool owns it.
 
 ---
 
@@ -179,7 +179,7 @@ The tags describe the repo as it stands on 2026-10-28. The Laravel base has land
 - **Practice:** Require `laravel/framework` at or above the latest patched release, run `composer audit` in CI, and let CREED's `policy.json` name the minimum patch level. A critical TokenGuard authentication bypass was published on 2026-10-19 (fixed in 13.29.0 and 12.68.0).
 - **Why:** Framework advisories arrive several times a year.
 - **Sources:** [laravel/framework advisories](https://github.com/laravel/framework/security/advisories), [GHSA-f9x3-7vq9-cph6](https://github.com/laravel/framework/security/advisories/GHSA-f9x3-7vq9-cph6).
-- **Stack:** `Checked`. `composer.json:14` pins `laravel/framework: ^13.29` (at or above the patched release), `composer.json:51` runs `@composer audit` inside the `ci` script, and `.gitlab-ci.yml:9` includes the Preflight `composer-audit` component, so the audit runs in CI. CREED's `policy.json` is a dependency and PROCTOR measures against it.
+- **Stack:** `Checked`. `composer.json:18` pins `laravel/framework: ^13.29` (at or above the patched release), `composer.json:61` runs `@composer audit` inside the `ci` script, and `.gitlab-ci.yml:9` includes the Preflight `composer-audit` component, so the audit runs in CI. CREED's `policy.json` is a dependency and PROCTOR measures against it.
 
 ### W26. Debug is off outside local
 - **Practice:** `APP_DEBUG=false` in production. The debug page has had an XSS advisory (Low, 2026-09-10).
