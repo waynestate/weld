@@ -33,7 +33,8 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(ZiggyVue, Ziggy)
+            // The generated file's url is the build machine's; the browser's origin is the truth.
+            .use(ZiggyVue, { ...Ziggy, url: window.location.origin, port: null })
             .mount(el);
     },
     progress: {
