@@ -10,6 +10,10 @@
 <title>WELD: Many parts, one piece.</title>
 <meta name="description" content="WELD is the front page of the Wayne State developer stack: one Laravel + Inertia/Vue app with every part already joined. Clone it, rename it, deploy it.">
 <meta name="theme-color" content="#0c5449">
+<link rel="canonical" href="https://weld.apps.wayne.edu/">
+<!-- For agents (ADR-0019): this page as Markdown, written by bin/agent-ready.php from Squire's kit.
+     The front controller also sends the twin to any client that asks for text/markdown. -->
+<link rel="alternate" type="text/markdown" href="index.md">
 <link rel="icon" href="brand/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="brand/favicon-32.png">
 <!--
@@ -17,6 +21,7 @@
   (wayne-ui/apps/site/public/v2) so this page works offline.
 -->
 <link rel="stylesheet" href="assets/wayne-ui/wayne-ui.css">
+<link rel="stylesheet" href="assets/agent-ready.css">
 <link rel="stylesheet" href="assets/weld.css">
 <script>
   /* Strike the arc only for people who are happy with motion. Everyone else
@@ -81,6 +86,16 @@
           <a class="wsu-btn wsu-btn--accent wsu-btn--lg" href="#paths">Get started</a>
           <a class="hero__link" href="#cast-title">Meet the cast</a>
         </p>
+        <!-- Where an agent reads this page. The script adds Copy page as Markdown and Open in
+             ChatGPT; without it, the plain links still work. -->
+        <nav class="ar-page hero__agent" aria-labelledby="hero-agent-label" data-ar-page>
+          <p class="ar-page__label" id="hero-agent-label">For your agent</p>
+          <ul class="ar-page__list">
+            <li><a class="ar-page__link" href="#agents">Prompts</a></li>
+            <li><a class="ar-page__link" href="index.md" type="text/markdown">This page as Markdown</a></li>
+            <li><a class="ar-page__link" href="llms.txt">llms.txt</a></li>
+          </ul>
+        </nav>
       </div>
 
     </div>
@@ -462,6 +477,91 @@ sourdough new my-app --raw</code>
     </div>
   </section>
 
+  <!-- ==================================================== agent prompts -->
+  <!-- Job tickets for the reader's own coding agent: role, task, the stack's constraints, the
+       output wanted, and a standing order to ask before guessing. The text is plain HTML, so an
+       agent reading this page (or index.md) gets it without the script; agent-ready.js only adds
+       the buttons. Keep the commands in step with the README: bin/agent-ready.php --check fails a
+       prompt that runs a command the docs do not. WELD ships one shape (Laravel with Inertia and
+       Vue), so there is one start and one job on it; the other shapes are Sourdough's. -->
+  <section class="section section--agents" id="agents" aria-labelledby="agents-title">
+    <div class="wsu-container">
+      <div class="section__head">
+        <p class="eyebrow">Hand it to your agent</p>
+        <h2 id="agents-title">Job tickets</h2>
+        <p>Two tickets, ready for the coding agent you already use. Copy one, or run it straight in OpenCode, Claude Code, Codex or ChatGPT. Each one says what is already welded, what the agent may not touch, and to ask before it guesses.</p>
+      </div>
+
+      <div class="agents">
+        <section class="ar-prompt ar-prompt--lead" id="prompt-get-started" aria-labelledby="prompt-get-started-title" data-ar-prompt>
+          <header class="ar-prompt__head">
+            <span class="ar-prompt__glyph" aria-hidden="true">&gt;_</span>
+            <div>
+              <p class="ar-prompt__kicker">Ticket W-1 · A new app</p>
+              <h3 class="ar-prompt__title" id="prompt-get-started-title">Get started with WELD</h3>
+              <p class="ar-prompt__desc">Clone it, bring it up in Docker, run the doctor and the gate, and plan the rename that makes it yours.</p>
+            </div>
+          </header>
+          <pre class="ar-prompt__text"><code>You are a coding agent helping a Wayne State University developer start a new app from WELD: the Wayne State application stack welded into one Laravel app with Inertia and Vue. Sign-in (SESAME), security headers (HELMET), the standards check (PROCTOR) and CI are already joined. The job is to get it running and make it this developer's own.
+
+Read first:
+- https://weld.apps.wayne.edu/llms.txt, the index of WELD's pages, each one as Markdown. Fetch the pages you need; do not work from memory.
+- ADVISOR, the stack's MCP server, if it is connected: get_project_status and read_project_docs for weld answer from the stack's own docs, and policy_lookup gives today's PHP, Laravel and Node support from CREED. If it is not connected, say so and work from the pages. How to add it: https://advisor.apps.wayne.edu/llms.txt
+
+Task:
+1. Clone WELD into a new folder with `git clone https://github.com/waynestate/weld.git my-app`, using the app name I give you in place of my-app.
+2. Bring it up with Docker, the only prerequisite: `.\bin\weld.ps1 up` on Windows (PowerShell), `bin/weld.sh up` on macOS and Linux. It copies .env.example to .env, installs the PHP and Node dependencies in the containers, sets the app key and runs the migrations.
+3. Check the setup with the doctor subcommand (`.\bin\weld.ps1 doctor` or `bin/weld.sh doctor`) and report every line that is not PASS.
+4. Run the gate with the test subcommand, which runs `composer ci` in the app container, and the standards check with `composer proctor` (in the app container if the host has no PHP).
+5. Propose what to rename to make it mine: APP_NAME in .env.example and the package name in composer.json. Do not change them yet.
+
+Constraints:
+- WELD is Laravel with Inertia and Vue. If I want raw PHP or Laravel with Blade, stop and point me at Sourdough: https://sourdough.apps.wayne.edu/llms.txt
+- Sign-in is SESAME's, at /login and /logout, and its fake driver stands in locally. Never add password auth back.
+- Never commit .env, and never paste a secret into a prompt or a file.
+- Give separate commands for Windows (PowerShell), macOS and Linux wherever they differ.
+- Ask me before you guess: an app name, a check that fails for a reason you cannot explain, or anything that touches a deploy.
+
+Output: what you ran and what it said, the doctor report, then the rename plan as numbered steps, then your questions.</code></pre>
+        </section>
+
+        <section class="ar-prompt" id="prompt-add-page" aria-labelledby="prompt-add-page-title" data-ar-prompt>
+          <header class="ar-prompt__head">
+            <span class="ar-prompt__glyph" aria-hidden="true">&gt;_</span>
+            <div>
+              <p class="ar-prompt__kicker">Ticket W-2 · Laravel, Inertia and Vue</p>
+              <h3 class="ar-prompt__title" id="prompt-add-page-title">Add a signed-in page to a WELD app</h3>
+              <p class="ar-prompt__desc">One route behind SESAME, one Vue page in the app's layout, one test, and the gate run green.</p>
+            </div>
+          </header>
+          <pre class="ar-prompt__text"><code>You are a coding agent adding one signed-in page to an app built from WELD: the Wayne State application stack welded into one Laravel app with Inertia and Vue, at Wayne State University.
+
+Read first:
+- https://weld.apps.wayne.edu/llms.txt, then the pages it lists. BEST_PRACTICES.md in this repo says what each practice expects and which stack tool checks it.
+- ADVISOR, the stack's MCP server, if it is connected: call list_stack_rules with permutation laravel-inertia-vue, and read_project_docs for weld and sesame. If it is not connected, say so and work from the pages.
+- routes/web.php, resources/js/pages/Dashboard.vue, resources/js/layouts/ and tests/Feature/DashboardTest.php.
+
+Task:
+1. If I have not said what the page is for, its URL and who may see it, ask.
+2. Add the route in routes/web.php the way the dashboard route does it: Inertia::render for a page in resources/js/pages, behind the auth.sesame middleware, with a route name.
+3. Write the Vue page with script setup and TypeScript, inside AppLayout with breadcrumbs, the way Dashboard.vue does.
+4. Add a feature test beside DashboardTest.php: a guest is sent to /login, and a user signed in with the fake driver gets the page.
+5. Run the gate: `composer ci`, or the test subcommand of bin/weld.sh (macOS, Linux) or bin\weld.ps1 (Windows) when the host has no PHP.
+
+Constraints:
+- Sign-in belongs to SESAME: protect the route with auth.sesame, and never add password auth.
+- HELMET sends a strict CSP with a per-request nonce: no inline scripts, and no new script hosts.
+- Keep PHPStan at level 8 and Pint clean. Never lower either to get the gate green.
+- Ask me before you guess, and before you add a migration, a Composer or npm package, or anything that touches a deploy.
+
+Output: the files you changed, the gate's result, then your questions.</code></pre>
+        </section>
+
+        <p class="agents__fine">The agent reads the same pages you do: <a href="llms.txt">llms.txt</a> lists them, <a href="llms-full.txt">llms-full.txt</a> holds them all in one file, and this page has a <a href="index.md" type="text/markdown">Markdown twin</a>. Nothing here phones home; the buttons only copy text or open the tool you picked. A good bead is a quiet one, and so is a good agent run.</p>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="site-footer">
@@ -474,6 +574,7 @@ sourdough new my-app --raw</code>
 <!-- Where the torch reports in. Empty until someone finds it. -->
 <div class="torch-toast" role="status" aria-live="polite"></div>
 
+<script src="assets/agent-ready.js" defer></script>
 <script src="assets/weld.js" defer></script>
 </body>
 </html>

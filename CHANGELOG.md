@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Added: agent-ready site (prompt blocks, Markdown twins, llms.txt), from Squire's kit.
 - Fixed: stale capability claims in the site and docs.
 - Changed: project names written as words except acronyms.
 - `npm run typecheck` (vue-tsc, no emit) joins the scripts, and it passes: the ten errors from the first run
