@@ -1,6 +1,5 @@
 # Changelog
 
-Notable changes to WELD, newest first.
 
 ## Unreleased
 
