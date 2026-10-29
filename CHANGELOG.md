@@ -11,8 +11,8 @@ Notable changes to WELD, newest first.
 - PROCTOR is welded in from Packagist (`waynestate/proctor` dev dependency, CREED's `policy.json` carried by
   `waynestate/creed`): `composer proctor` measures WELD against the version policy, and a CI job runs it on every
   pipeline. Warnings pass, failures block. The package's own bin looks for its autoloader where only a project-root
-  install puts one, so WELD carries a thin launcher, `bin/proctor-check.php`, that runs the same checks through the
-  package's public classes; it goes away when the package ships a fixed bin.
+  install puts one, so `composer proctor` runs directly without a temporary launcher.
+  
 - SESAME is welded in from Packagist (`waynestate/sesame`): sign-in moves from the starter kit's password forms to
   `/login` and `/logout`, owned by the package. The fake driver signs in locally; pointing at CAS is an env change.
   A `username` column joins `users`, and `App\Sesame\UserResolver` imports the identity on first sign-in.
