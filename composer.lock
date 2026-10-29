@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "926b719f277eff55b205549c50c91e89",
+    "content-hash": "0bcd552b547581a3750db6aba51f12cb",
     "packages": [
         {
             "name": "brick/math",
@@ -3162,6 +3162,76 @@
             "time": "2026-08-24T00:54:40+00:00"
         },
         {
+            "name": "promphp/prometheus_client_php",
+            "version": "v2.15.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PromPHP/prometheus_client_php.git",
+                "reference": "e153786bda5ca1d07335a2b5f477742c37195c40"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PromPHP/prometheus_client_php/zipball/e153786bda5ca1d07335a2b5f477742c37195c40",
+                "reference": "e153786bda5ca1d07335a2b5f477742c37195c40",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^8.2"
+            },
+            "replace": {
+                "endclothing/prometheus_client_php": "*",
+                "jimdo/prometheus_client_php": "*",
+                "lkaemmerling/prometheus_client_php": "*"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^6.3|^7.0",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^1.5.4",
+                "phpstan/phpstan-phpunit": "^1.1.0",
+                "phpstan/phpstan-strict-rules": "^1.1.0",
+                "phpunit/phpunit": "^9.4",
+                "predis/predis": "^2.3",
+                "squizlabs/php_codesniffer": "^3.6 || ^4.0",
+                "symfony/polyfill-apcu": "^1.6"
+            },
+            "suggest": {
+                "ext-apc": "Required if using APCu.",
+                "ext-pdo": "Required if using PDO.",
+                "ext-redis": "Required if using Redis.",
+                "predis/predis": "Required if using Predis.",
+                "promphp/prometheus_push_gateway_php": "An easy client for using Prometheus PushGateway.",
+                "symfony/polyfill-apcu": "Required if you use APCu."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Prometheus\\": "src/Prometheus/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Lukas Kämmerling",
+                    "email": "kontakt@lukas-kaemmerling.de"
+                }
+            ],
+            "description": "Prometheus instrumentation library for PHP applications.",
+            "support": {
+                "issues": "https://github.com/PromPHP/prometheus_client_php/issues",
+                "source": "https://github.com/PromPHP/prometheus_client_php/tree/v2.15.1"
+            },
+            "time": "2026-05-28T07:51:04+00:00"
+        },
+        {
             "name": "psr/clock",
             "version": "1.0.0",
             "source": {
@@ -4552,16 +4622,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v7.4.21",
+            "version": "v7.4.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "58c89144c7a36dd89c3d01917e9fa3a72d8aaf31"
+                "reference": "63eda1d0c4de229d6b3e825709e49dd5c149699a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/58c89144c7a36dd89c3d01917e9fa3a72d8aaf31",
-                "reference": "58c89144c7a36dd89c3d01917e9fa3a72d8aaf31",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/63eda1d0c4de229d6b3e825709e49dd5c149699a",
+                "reference": "63eda1d0c4de229d6b3e825709e49dd5c149699a",
                 "shasum": ""
             },
             "require": {
@@ -4610,7 +4680,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v7.4.21"
+                "source": "https://github.com/symfony/http-foundation/tree/v7.4.22"
             },
             "funding": [
                 {
@@ -4630,7 +4700,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-08T16:56:12+00:00"
+            "time": "2026-10-27T13:26:03+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -6956,30 +7026,35 @@
         },
         {
             "name": "waynestate/helmet",
-            "version": "0.1.0",
+            "version": "0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/helmet.git",
-                "reference": "5b54d617ad7583c4243c4519c764ee9097653c6b"
+                "reference": "65c12168b8f5b32ac852ab0d592587e5b0c84a23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/helmet/zipball/5b54d617ad7583c4243c4519c764ee9097653c6b",
-                "reference": "5b54d617ad7583c4243c4519c764ee9097653c6b",
+                "url": "https://api.github.com/repos/waynestate/helmet/zipball/65c12168b8f5b32ac852ab0d592587e5b0c84a23",
+                "reference": "65c12168b8f5b32ac852ab0d592587e5b0c84a23",
                 "shasum": ""
             },
             "require": {
                 "monolog/monolog": "^3.0",
                 "paragonie/csp-builder": "^3.1",
                 "php": "^8.3",
+                "promphp/prometheus_client_php": "^2.15",
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^2.0",
-                "psr/http-server-middleware": "^1.0"
+                "psr/http-server-middleware": "^1.0",
+                "symfony/http-foundation": "^7.4"
             },
             "require-dev": {
+                "laravel/pint": "^1.32",
                 "nyholm/psr7": "^1.8",
                 "orchestra/testbench": "^10.0 || ^11.0",
-                "phpunit/phpunit": "^11.5"
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^11.5",
+                "waynestate/pinstripe": "^0.1"
             },
             "suggest": {
                 "laravel/framework": "For the Laravel adapter (step 2)"
@@ -7010,12 +7085,13 @@
                     "name": "Wayne State University, Enterprise Applications"
                 }
             ],
-            "description": "Wayne State's baseline runtime: security headers, session hardening, trusted proxies, a health check and structured logs for apps on Citadel.",
+            "description": "Wayne State's baseline runtime: security headers, session hardening, trusted proxies, a health check and structured logs for web apps.",
+            "homepage": "https://helmet.apps.wayne.edu/",
             "support": {
                 "issues": "https://github.com/waynestate/helmet/issues",
-                "source": "https://github.com/waynestate/helmet/tree/0.1.0"
+                "source": "https://github.com/waynestate/helmet"
             },
-            "time": "2026-10-27T23:49:48+00:00"
+            "time": "2026-10-29T16:30:33+00:00"
         },
         {
             "name": "waynestate/sesame",
