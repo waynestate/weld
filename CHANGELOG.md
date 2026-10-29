@@ -4,6 +4,11 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- `npm run typecheck` (vue-tsc, no emit) joins the scripts. The tsconfig `types` array drops two entries that
+  never resolved (`vue/tsx`, `./resources/js/types`); both type files stay in the program through `include`.
+- `site/assets/wayne-ui/marks/warrior-strong-reverse.svg` comes back from the WayneUI static bundle; the CSS
+  has pointed at it since the front page assets landed.
+
 ## 0.1.0 (2026-10-29)
 
 - `waynestate/helmet` moves from `^0.1` to `^0.2` (locked at 0.2.3). The published `config/helmet.php`
