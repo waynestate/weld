@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 240" role="img" aria-labelledby="journey-title journey-desc">
   <title id="journey-title">WELD's journey: one request, six stops</title>
-  <desc id="journey-desc">WELD's journey: one request, six stops: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, PREFLIGHT runs CI, SQUIRE deploys.</desc>
+  <desc id="journey-desc">WELD's journey: one request, six stops: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys.</desc>
   <style>
     @keyframes bead-run {
       0% { transform: translateX(0); }
@@ -38,8 +38,8 @@
   <text x="534" y="181" text-anchor="middle" font-family="Lato, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="rgba(255,244,204,.75)">renders the page</text>
   <text x="746" y="157" text-anchor="middle" font-family="Lato, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFF4CC">PROCTOR</text>
   <text x="746" y="181" text-anchor="middle" font-family="Lato, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="rgba(255,244,204,.75)">checks the code</text>
-  <text x="958" y="157" text-anchor="middle" font-family="Lato, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFF4CC">PREFLIGHT</text>
+  <text x="958" y="157" text-anchor="middle" font-family="Lato, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFF4CC">Preflight</text>
   <text x="958" y="181" text-anchor="middle" font-family="Lato, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="rgba(255,244,204,.75)">runs CI</text>
-  <text x="1170" y="157" text-anchor="middle" font-family="Lato, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFF4CC">SQUIRE</text>
+  <text x="1170" y="157" text-anchor="middle" font-family="Lato, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFF4CC">Squire</text>
   <text x="1170" y="181" text-anchor="middle" font-family="Lato, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="rgba(255,244,204,.75)">deploys</text>
 </svg>
