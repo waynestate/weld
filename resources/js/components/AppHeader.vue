@@ -2,7 +2,7 @@
 import AppLogo from '@/components/AppLogo.vue';
 import UserInfo from '@/components/UserInfo.vue';
 import UserMenuContent from '@/components/UserMenuContent.vue';
-import type { BreadcrumbItem, NavItem } from '@/types';
+import type { BreadcrumbItem, NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, ChevronRight, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],
 });
 
-const page = usePage();
+const page = usePage<SharedData>();
 const auth = computed(() => page.props.auth);
 
 const isCurrentRoute = (url: string) => page.url === url;
