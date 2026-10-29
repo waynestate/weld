@@ -10,7 +10,7 @@ import { initializeTheme } from './composables/useAppearance';
 // from @routes, but HELMET's strict CSP only admits scripts that carry a
 // nonce, so that one never made it past security. It is welded into the Vite
 // bundle now: regenerate it with `composer ziggy` whenever routes change.
-import { Ziggy } from './ziggy';
+import { Ziggy } from './ziggy-value';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
