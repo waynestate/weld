@@ -1168,14 +1168,21 @@ body {
   color: var(--weld-cream);
 }
 
+/* Project-name links carry no underline (the cast's rule); hover turns the
+   name gold and lifts its mark, and focus keeps the gold ring. Links in prose
+   keep their underline. */
 a.choice__name {
-  text-decoration-color: var(--weld-gold);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.2em;
+  text-decoration: none;
+  border-radius: 4px;
 }
 
 a.choice__name:hover {
   color: var(--weld-gold);
+}
+
+.choice__pick :has(> a.choice__name:hover) img,
+.choice__pick:has(> a.choice__name:hover) img {
+  filter: brightness(1.12) saturate(1.1);
 }
 
 .choice__or {
@@ -1274,11 +1281,20 @@ a.choice__name:hover {
   letter-spacing: 0.02em;
 }
 
+/* Same rule on the cream panel: no underline; hover turns the name WSU
+   green and brightens its mark, and focus keeps the dark ring. */
 .pipeline__name a {
   color: inherit;
-  text-decoration-color: var(--weld-gold);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.2em;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.pipeline__name a:hover {
+  color: var(--weld-green);
+}
+
+.pipeline__stop:has(.pipeline__name a:hover) img {
+  filter: brightness(1.12) saturate(1.1);
 }
 
 .pipeline__role {
@@ -2031,6 +2047,17 @@ a.choice__name:hover {
 
     .motion .step:hover {
       transform: translateY(-4px);
+    }
+
+    .motion .choice__pick img,
+    .motion .pipeline__stop img {
+      transition: transform 160ms ease, filter 160ms ease;
+    }
+
+    .motion .choice__pick :has(> a.choice__name:hover) img,
+    .motion .choice__pick:has(> a.choice__name:hover) img,
+    .motion .pipeline__stop:has(.pipeline__name a:hover) img {
+      transform: translateY(-2px);
     }
 
     .motion .path-card--featured:hover {
