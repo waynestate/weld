@@ -24,7 +24,15 @@ Development happens on Wayne State's GitLab; this repository is a release mirror
 ## Get it
 
 WELD is an app you start from, not a library you require. The Megazord ships in a repo, not a box.
-Clone it and it is yours to rename:
+Composer makes you a fresh copy, writes `.env`, generates the app key and runs the first migration:
+
+```
+composer create-project waynestate/weld my-app
+cd my-app
+npm ci
+```
+
+Or clone it, if you want the history too, and it is yours to rename:
 
 ```
 git clone https://github.com/waynestate/weld.git my-app
