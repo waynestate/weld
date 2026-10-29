@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "32c56caf6a957c2126b16fc382c88905",
+    "content-hash": "339950795b858539ebc753ad8eafd7df",
     "packages": [
         {
             "name": "brick/math",
@@ -7085,6 +7085,83 @@
     ],
     "packages-dev": [
         {
+            "name": "composer/semver",
+            "version": "3.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/semver.git",
+                "reference": "9dfce66f1e97360ea5e6d3e38ab14277e4cc591e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/semver/zipball/9dfce66f1e97360ea5e6d3e38ab14277e4cc591e",
+                "reference": "9dfce66f1e97360ea5e6d3e38ab14277e4cc591e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.11",
+                "symfony/phpunit-bridge": "^3 || ^7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Semver\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                },
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com",
+                    "homepage": "http://robbast.nl"
+                }
+            ],
+            "description": "Version comparison library that offers utilities, version constraint parsing and validation.",
+            "keywords": [
+                "semantic",
+                "semver",
+                "validation",
+                "versioning"
+            ],
+            "support": {
+                "irc": "ircs://irc.libera.chat:6697/composer",
+                "issues": "https://github.com/composer/semver/issues",
+                "source": "https://github.com/composer/semver/tree/3.5.2"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-10-22T15:37:26+00:00"
+        },
+        {
             "name": "fakerphp/faker",
             "version": "v1.24.1",
             "source": {
@@ -9641,6 +9718,96 @@
                 }
             ],
             "time": "2025-12-08T11:19:18+00:00"
+        },
+        {
+            "name": "waynestate/creed",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/waynestate/creed.git",
+                "reference": "843923bb29b23704d01ea04934b4c7f8d6c831f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/waynestate/creed/zipball/843923bb29b23704d01ea04934b4c7f8d6c831f7",
+                "reference": "843923bb29b23704d01ea04934b4c7f8d6c831f7",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "opis/json-schema": "^2.4",
+                "phpunit/phpunit": "^11.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Waynestate\\Creed\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wayne State University, Enterprise Applications"
+                }
+            ],
+            "description": "The Wayne State app stack version policy as data, with a framework-free PHP reader.",
+            "support": {
+                "issues": "https://github.com/waynestate/creed/issues",
+                "source": "https://github.com/waynestate/creed/tree/0.1.0"
+            },
+            "time": "2026-10-27T23:55:36+00:00"
+        },
+        {
+            "name": "waynestate/proctor",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/waynestate/proctor.git",
+                "reference": "030045522dbafc1d5490e276c7d21966f2c72c27"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/waynestate/proctor/zipball/030045522dbafc1d5490e276c7d21966f2c72c27",
+                "reference": "030045522dbafc1d5490e276c7d21966f2c72c27",
+                "shasum": ""
+            },
+            "require": {
+                "composer/semver": "^3.4",
+                "php": "^8.3",
+                "symfony/console": "^7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.5"
+            },
+            "bin": [
+                "bin/proctor"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Waynestate\\Proctor\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wayne State University, Enterprise Applications"
+                }
+            ],
+            "description": "A framework-free PHP CLI that measures a PHP app against the version policy.",
+            "support": {
+                "issues": "https://github.com/waynestate/proctor/issues",
+                "source": "https://github.com/waynestate/proctor/tree/0.1.0"
+            },
+            "time": "2026-10-27T23:10:27+00:00"
         }
     ],
     "aliases": [],

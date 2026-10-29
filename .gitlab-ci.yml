@@ -13,3 +13,11 @@ composer-ci:
   script:
     - composer install --no-interaction --no-progress --prefer-dist
     - composer ci
+
+# PROCTOR measures WELD against the CREED version policy. Warnings are
+# allowed; failures block the pipeline.
+proctor:
+  image: composer:2.10.3
+  script:
+    - composer install --no-interaction --no-progress --prefer-dist
+    - composer proctor
