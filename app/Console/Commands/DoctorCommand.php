@@ -7,9 +7,10 @@ use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\DB;
 
 /**
- * weld:doctor strikes an arc across the setup and reports every joint that
- * is not holding: the PHP version, the app key, debug in production, secure
- * session cookies, writable storage, the database and pending migrations.
+ * weld:doctor strikes an arc across the local setup and reports every joint
+ * that is not holding: the app key, writable storage, the database and
+ * pending migrations. The standards checks (PHP version, debug in
+ * production, secure session cookies) belong to PROCTOR: composer proctor.
  *
  * One line per check: PASS, WARN or FAIL. The exit code is 1 when any check
  * FAILs and 0 otherwise. --json hands the same report to a machine instead
@@ -24,10 +25,7 @@ class DoctorCommand extends Command
     public function handle(): int
     {
         $checks = [
-            'php-version' => $this->checkPhpVersion(),
             'app-key' => $this->checkAppKey(),
-            'debug-in-production' => $this->checkDebugInProduction(),
-            'session-secure' => $this->checkSessionSecure(),
             'storage-writable' => $this->checkStorageWritable(),
             'database' => $this->checkDatabase(),
             'migrations' => $this->checkMigrations(),
@@ -45,24 +43,11 @@ class DoctorCommand extends Command
 
         if ($this->option('json')) {
             $this->line(json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR));
+        } else {
+            $this->line('Standards (PHP version, debug, session cookies): run composer proctor');
         }
 
         return collect($results)->contains('status', 'FAIL') ? self::FAILURE : self::SUCCESS;
-    }
-
-    /**
-     * @return array{0: string, 1: string} [status, message]
-     */
-    private function checkPhpVersion(): array
-    {
-        $version = PHP_VERSION;
-
-        // @phpstan-ignore smaller.alwaysFalse (composer.json pins PHP ^8.3, but doctor reports honestly on an older runtime)
-        if (PHP_VERSION_ID < 80300) {
-            return ['FAIL', 'PHP '.$version.' is below the 8.3 floor'];
-        }
-
-        return ['PASS', 'PHP '.$version.' meets the 8.3 floor'];
     }
 
     /**
@@ -75,38 +60,6 @@ class DoctorCommand extends Command
         }
 
         return ['FAIL', 'APP_KEY is empty; run php artisan key:generate'];
-    }
-
-    /**
-     * @return array{0: string, 1: string} [status, message]
-     */
-    private function checkDebugInProduction(): array
-    {
-        if (! app()->environment('production')) {
-            return ['PASS', 'environment is '.app()->environment().', not production'];
-        }
-
-        if (config('app.debug')) {
-            return ['FAIL', 'APP_DEBUG is true in production'];
-        }
-
-        return ['PASS', 'APP_DEBUG is off in production'];
-    }
-
-    /**
-     * @return array{0: string, 1: string} [status, message]
-     */
-    private function checkSessionSecure(): array
-    {
-        if (! app()->environment('production')) {
-            return ['PASS', 'environment is '.app()->environment().', not production'];
-        }
-
-        if (config('session.secure') === true) {
-            return ['PASS', 'session cookies are flagged secure'];
-        }
-
-        return ['WARN', 'SESSION_SECURE_COOKIE is not true in production'];
     }
 
     /**
