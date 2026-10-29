@@ -52,6 +52,7 @@
         "fix": "pint",
         "analyse": "phpstan analyse --memory-limit=1G",
         "proctor": "php bin/proctor-check.php --policy=vendor/waynestate/creed/policy/policy.json",
+        "ziggy": "php artisan ziggy:generate --types",
         "ci": [
             "@composer validate --strict",
             "@test",
