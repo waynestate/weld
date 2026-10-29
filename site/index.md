@@ -1,14 +1,14 @@
 ---
 title: "WELD: Many parts, one piece."
-description: "WELD is the front page of the Wayne State developer stack: one Laravel + Inertia/Vue app with every part already joined. Clone it, rename it, deploy it."
+description: "WELD is a Laravel 13 app with Inertia and Vue that comes with the rest of the Wayne State stack already set up: sign-in, security headers, the standards check, code style and CI. Start your app from it."
 url: https://weld.apps.wayne.edu/
 llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-![WELD: a welder's helmet](https://weld.apps.wayne.edu/brand/weld-avatar-512.png)
+![WELD logo: a welder's helmet](https://weld.apps.wayne.edu/brand/weld-avatar-512.png)
 
-Wayne State's app stack, welded
+The Wayne State app stack
 
 # WELD
 
@@ -16,96 +16,96 @@ WELD stands for Wired, Everything, Linked, Deployed.
 
 Many parts, one piece.
 
-The whole Wayne State app stack in **one install**: a Laravel + Inertia/Vue app with sign-in, security headers, the standards checks, code style, CI and the WayneUI look already joined. Clone it, rename it, deploy it.
+WELD is a Laravel 13 app with Inertia and Vue, and the rest of the stack is already in it: sign-in, security headers, the standards check, code style, CI and WayneUI. It's **one install**. Rename it and start on your own pages.
 
 `$ composer create-project waynestate/weld my-app`
 
-Not a Laravel + Vue app? [Sourdough](https://sourdough.apps.wayne.edu/) bakes a new app in the shape you pick, with the same pieces wired in.
+Need raw PHP instead? [Sourdough](https://sourdough.apps.wayne.edu/) starts one with the same sign-in, headers and checks.
 
 [Get started](https://weld.apps.wayne.edu/#start) [Which piece do I need?](https://weld.apps.wayne.edu/#chooser) [Meet the cast](https://weld.apps.wayne.edu/#cast-title)
 
 Start here
 
-## One install. One command to run it.
+## Install it, then run one command
 
-Yes, that is a lot of parts. Most of you can skip the introductions: make the app, run one command, and you hit the ground running with every seam already welded. The separate pieces are there because Wayne State's developers and apps come in every shape, and nobody should have to buy the whole shop to borrow one torch.
+Yes, this is a lot of packages. Most of you can ignore that. Install WELD, run the one command in step 2, and you have a working app with all of it set up. We split the stack into separate projects because Wayne State developers work on very different apps, and you shouldn't have to buy the whole shop to borrow one torch.
 
-1. ### Make it
-   A fresh copy of WELD, with `.env` written and the app key set.
+1. ### Install
+   Composer makes a fresh copy, writes `.env`, sets the app key and runs the first migration.
    ```
    composer create-project waynestate/weld my-app
    ```
-2. ### Run it
-   The one command. Docker is the only thing you need: it installs, migrates and serves at `localhost:8000`.
+2. ### Start it in Docker
+   This is the one command. You only need Docker, because PHP and Node run in the containers. Then open `localhost:8000`.
    ```
    # macOS, Linux
    bin/weld.sh up
    # Windows (PowerShell)
    .\bin\weld.ps1 up
    ```
-3. ### Check it
-   Tests, code style, static analysis and the audit in one command, the same one CI runs on every push.
+3. ### Run the checks
+   Runs the tests, Pint, PHPStan and `composer audit`, the same command CI runs. The standards check is separate: `composer proctor`.
    ```
    composer ci
    ```
 
-Want a different shape? [Sourdough](https://sourdough.apps.wayne.edu/) is the other one-install start: `sourdough new my-app --raw` bakes a raw PHP app with the same pieces wired in, and the Laravel shapes rise in a later release.
+Not on Laravel and Vue? [Sourdough](https://sourdough.apps.wayne.edu/) is the other starter. `sourdough new my-app --raw` makes a raw PHP app with SESAME, HELMET, PROCTOR and Preflight in place. Raw PHP is all it makes today; the Laravel shapes are still proofing.
 
 Already have an app?
 
 ## Which piece do I need?
 
-Most Wayne State apps are older than this stack, and mixed: some raw PHP, some Laravel, some that only want sign-in or only an upgrade. So every piece also works on its own. WELD is all of them, already welded together.
+Most Wayne State apps are older than this stack. Some are raw PHP, some are Laravel, and plenty only need sign-in or an upgrade. That's why every piece also works on its own. WELD is simply all of them installed together.
 
 - I'm starting a new app
   WELD or [Sourdough](https://sourdough.apps.wayne.edu/)
-  WELD is the finished Laravel + Inertia/Vue app, every piece joined. Sourdough makes a new app in the shape you pick; today that is raw PHP.
-- My old raw PHP app just needs sign-in
+  Pick WELD for Laravel with Inertia and Vue, with everything already installed. Pick Sourdough for raw PHP, the only shape it makes today.
+- My raw PHP app just needs sign-in
   [SESAME](https://sesame.apps.wayne.edu/)
-  Wayne State sign-in (CAS or Entra ID) for raw PHP or Laravel, and the session stays your app's.
+  Adds CAS or Entra ID sign-in to a raw PHP or Laravel app. Your app keeps its own session.
 - I'm stuck on PHP 7
   [Booster](https://booster.apps.wayne.edu/)
-  Upgrades PHP and Laravel one hop at a time, with a playbook for Vue 2 to 3. Your tests sign off; a person merges.
+  Upgrades PHP and Laravel one version at a time, and has a playbook for Vue 2 to 3. It never commits; you read the diff and merge it.
 - I'm deploying to Citadel
   [Squire](https://squire.apps.wayne.edu/)
-  The Citadel kit: the build and release scripts, the health check, and local runs on the real images.
+  The build and release scripts Citadel expects, a health check, and a way to run your app locally on the same images.
 - I want CI on every push
   [Preflight](https://preflight.apps.wayne.edu/)
-  GitLab CI components that run the stack's checks on every push. More on the checks below.
+  GitLab CI components for PHP tests on each supported version, PROCTOR, Composer audit, Pint, PHPStan and ESLint.
 - I want safe defaults at runtime
   [HELMET](https://helmet.apps.wayne.edu/)
-  The safe runtime baseline: security headers, a hardened session, trusted proxies and a `/up` health check.
+  Sends the security headers and CSP, hardens the session cookie and checks proxies before your first page is served.
 - I want it to look like Wayne State
   [WayneUI](https://wayneui.apps.wayne.edu/)
-  The look: Wayne State's design system, for static HTML, raw PHP, Blade or Vue.
+  Wayne State's design system. It works in static HTML, raw PHP, Blade and Vue.
 - I want Citadel to sign people in before my app
   [Drawbridge](https://drawbridge.apps.wayne.edu/)
-  The shared sign-in gateway in front of Citadel's apps, so each app only checks one small signed token.
+  A gateway that signs people in through Entra ID before they reach your app. Your app then checks one small signed token.
 - I look after a lot of apps
   [Rollcall](https://rollcall.apps.wayne.edu/)
-  A fleet view: which apps run which PHP, framework and sign-in, read against the policy.
+  Scans your apps and reports which PHP, Laravel and sign-in package each one runs, checked against CREED's support dates.
 - I code with an AI agent
   [ADVISOR](https://advisor.apps.wayne.edu/)
-  An MCP server that tells you, and your agent, what applies to your app and what to do next.
+  An MCP server your agent can ask about the stack. It answers from CREED's policy file, not from what the model remembers.
 
-### The checks are one pipeline, not four linters
+### How the four check projects fit together
 
-CREED is the rules, PROCTOR grades against them, Pinstripe sets the code style, and Preflight runs it all in CI.
+CREED writes the rules down and PROCTOR grades your app against them. Pinstripe is the code style. Preflight runs all of it in CI.
 
 1. [CREED](https://creed.apps.wayne.edu/) the rules
    The written standards, plus `policy.json`: which PHP, Laravel and Node versions are supported.
 2. [PROCTOR](https://proctor.apps.wayne.edu/) the grader
-   One command that marks your app against CREED: pass, warning or fail.
+   Reads your `composer.json` and lock file and reports each check against CREED as pass, warning, info or fail.
 3. [Pinstripe](https://pinstripe.apps.wayne.edu/) the code style
-   Shared presets for Pint, PHPStan, ESLint and Prettier, so every app is pressed the same way.
+   Shared presets for Pint, PHPStan, Rector, ESLint and Prettier. Your app adds only its own exceptions.
 4. [Preflight](https://preflight.apps.wayne.edu/) the runner
    The CI pipeline that runs all of it, and your tests, on every push.
 
-In WELD all four are already joined: `composer ci` and `composer proctor` on your machine, the same checks in Preflight on every push.
+WELD already has all four set up. Run `composer ci` and `composer proctor` on your machine, and GitLab runs both through Preflight on every push.
 
 ## The journey
 
-One request, six stops, from the edge of the network to the deploy.
+Roughly in order: what happens to a request on its way to the page, then what happens to your code before it ships.
 
 1. [HELMET](https://helmet.apps.wayne.edu/) sets security headers
 2. [SESAME](https://sesame.apps.wayne.edu/) signs the user in
@@ -114,19 +114,19 @@ One request, six stops, from the edge of the network to the deploy.
 5. [Preflight](https://preflight.apps.wayne.edu/) runs CI
 6. [Squire](https://squire.apps.wayne.edu/) deploys
 
-Every part, its own character
+Up close
 
 ## The cast
 
-You have met them in one line each; here is everyone up close. Seven parts welded into WELD, five that work the shop floor around it, one sibling that bakes your own, and the crew still on the drawing board.
+The same projects with a bit more detail. The first seven are part of WELD. The next five work around your app: upgrades, the fleet scan, deploys, the sign-in gateway and the MCP server. After those come Sourdough and the one we're building next.
 
-![WayneUI mark: a rounded frame holding a solid form, with a gold tab on the lower edge](https://weld.apps.wayne.edu/assets/marks/wayneui.svg)
+![WayneUI logo: a rounded frame around a solid shape, with a gold tab on the lower edge](https://weld.apps.wayne.edu/assets/marks/wayneui.svg)
 
 ### [WayneUI](https://wayneui.apps.wayne.edu/)
 
 2.0 Contrast | AA
 
-The interface. Wayne State's design system, wired into the Vue front end and the Blade layouts.
+Wayne State's design system. WELD uses it in the Vue front end and the Blade layouts.
 
 ```
 $ pnpm verify
@@ -137,13 +137,13 @@ a11y: 100
 $
 ```
 
-![CREED mark: a stone arch whose gold keystone holds the other stones in place](https://weld.apps.wayne.edu/assets/marks/creed.png)
+![CREED logo: a stone arch with a gold keystone](https://weld.apps.wayne.edu/assets/marks/creed.png)
 
 ### [CREED](https://creed.apps.wayne.edu/)
 
 0.1 Volume | Eleven
 
-The rulebook: the written standards, and the `policy.json` of supported versions every other part reads.
+The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 
 ```
 $ creed policy show
@@ -154,13 +154,13 @@ volume   eleven
 $
 ```
 
-![HELMET mark: a white football helmet with a gold facemask](https://weld.apps.wayne.edu/assets/marks/helmet.png)
+![HELMET logo: a white football helmet with a gold facemask](https://weld.apps.wayne.edu/assets/marks/helmet.png)
 
 ### [HELMET](https://helmet.apps.wayne.edu/)
 
 0.2 Fit | Snug
 
-The safe runtime baseline: headers, sessions, proxies and `/up`.
+In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
 ```
 $ helmet headers
@@ -170,13 +170,13 @@ frames   DENY
 $
 ```
 
-![SESAME mark: an open door with a gold gap](https://weld.apps.wayne.edu/assets/marks/sesame.png)
+![SESAME logo: an open door with a gold gap](https://weld.apps.wayne.edu/assets/marks/sesame.png)
 
 ### [SESAME](https://sesame.apps.wayne.edu/)
 
 0.2 Says | Open
 
-Sign-in: CAS, Entra ID and the auth gateway.
+Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
 ```
 $ sesame login
@@ -186,13 +186,13 @@ $ sesame login
 $
 ```
 
-![PROCTOR mark: a watchful eye with a gold square pupil](https://weld.apps.wayne.edu/assets/marks/proctor.png)
+![PROCTOR logo: an eye with a gold square pupil](https://weld.apps.wayne.edu/assets/marks/proctor.png)
 
 ### [PROCTOR](https://proctor.apps.wayne.edu/)
 
 0.2 Strictness | Kind
 
-The grader: one command that marks an app against CREED.
+In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
 ```
 $ proctor check
@@ -202,13 +202,13 @@ $ proctor check
 $
 ```
 
-![Preflight mark: a runway with a gold centre line](https://weld.apps.wayne.edu/assets/marks/preflight.png)
+![Preflight logo: a runway with a gold centre line](https://weld.apps.wayne.edu/assets/marks/preflight.png)
 
 ### [Preflight](https://preflight.apps.wayne.edu/)
 
 0.1 Checklist | Long
 
-The CI pipeline that runs the checks on every push, from GitLab CI/CD components.
+GitLab CI/CD components. WELD's pipeline uses them to run the tests on PHP 8.3, 8.4 and 8.5, plus the audit.
 
 ```
 $ preflight run
@@ -218,13 +218,13 @@ $ preflight run
 $
 ```
 
-![Pinstripe mark: a striped necktie with a gold tie bar](https://weld.apps.wayne.edu/assets/marks/pinstripe.png)
+![Pinstripe logo: a striped necktie with a gold tie bar](https://weld.apps.wayne.edu/assets/marks/pinstripe.png)
 
 ### [Pinstripe](https://pinstripe.apps.wayne.edu/)
 
 0.1 Creases | Sharp
 
-The code style: Pint, PHPStan level 8, ESLint and Prettier presets, pressed and ready.
+The code style presets. WELD runs Pint and PHPStan at level 8 from a copy of Pinstripe's 0.1 Laravel presets.
 
 ```
 $ pinstripe apply
@@ -235,13 +235,13 @@ style: sharp
 $
 ```
 
-![Booster mark: a syringe with fins, lifting off on a gold flame](https://weld.apps.wayne.edu/assets/marks/booster.png)
+![Booster logo: a syringe with rocket fins and a gold flame](https://weld.apps.wayne.edu/assets/marks/booster.png)
 
 ### [Booster](https://booster.apps.wayne.edu/)
 
 0.1 Sting | Mild
 
-Upgrades, one hop at a time: Rector rewrites the code, your tests sign off, a person merges.
+Plans an upgrade as hops, like Laravel 10 to 11, and runs them one at a time with Rector. Your tests have to pass on the new PHP before the next hop starts.
 
 ```
 $ booster plan
@@ -251,13 +251,13 @@ $ booster plan
 $
 ```
 
-![Rollcall mark: an open register with gold ticks](https://weld.apps.wayne.edu/assets/marks/rollcall.png)
+![Rollcall logo: an open register with gold ticks](https://weld.apps.wayne.edu/assets/marks/rollcall.png)
 
 ### [Rollcall](https://rollcall.apps.wayne.edu/)
 
 0.1 Attendance | Taken
 
-The fleet scanner: every app answers “present”, with its PHP, framework and auth, read against the policy.
+Every app answers “present”, with its PHP, Laravel and auth versions. Rollcall only reports. It never opens an issue or blocks a deploy.
 
 ```
 $ rollcall report
@@ -267,13 +267,13 @@ back row   PHP 7.4, waving
 $
 ```
 
-![Squire mark: a satchel with a gold buckle](https://weld.apps.wayne.edu/assets/marks/squire.png)
+![Squire logo: a satchel with a gold buckle](https://weld.apps.wayne.edu/assets/marks/squire.png)
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
-0.2 Armour | Carried
+0.3 Armour | Carried
 
-The Citadel kit: build.sh, the release script, the health check, and local parity on the real images.
+The deploy kit for Citadel: `build.sh`, a release script, a health check and local runs on the same images. This page deploys with it too.
 
 ```
 $ squire doctor
@@ -283,13 +283,13 @@ $ squire doctor
 $
 ```
 
-![Drawbridge mark: a castle tower lowering its bridge on a gold chain](https://weld.apps.wayne.edu/assets/marks/drawbridge.png)
+![Drawbridge logo: a castle tower with its bridge down on a gold chain](https://weld.apps.wayne.edu/assets/marks/drawbridge.png)
 
 ### [Drawbridge](https://drawbridge.apps.wayne.edu/)
 
 0.1 Moat | Full
 
-The sign-in gateway in front of the apps: one OpenID Connect client through Entra ID, so each app only checks one small signed token.
+One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app.
 
 ```
 $ drawbridge config:validate
@@ -300,13 +300,13 @@ bridge: lowered
 $
 ```
 
-![ADVISOR mark: a speech bubble holding a gold compass needle](https://weld.apps.wayne.edu/assets/marks/advisor.png)
+![ADVISOR logo: a speech bubble with a gold compass needle](https://weld.apps.wayne.edu/assets/marks/advisor.png)
 
 ### [ADVISOR](https://advisor.apps.wayne.edu/)
 
 0.1 Office hours | Always
 
-The stack's own MCP server: read-only tools that tell your coding agent what applies to your app, and what to do next.
+Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only in 0.1: it can't write files or run shell commands.
 
 ```
 $ advisor mcp
@@ -316,13 +316,13 @@ answers: from policy.json
 $
 ```
 
-![Sourdough mark: a starter jar with a gold band](https://weld.apps.wayne.edu/assets/marks/sourdough.png)
+![Sourdough logo: a starter jar with a gold band](https://weld.apps.wayne.edu/assets/marks/sourdough.png)
 
 ### [Sourdough](https://sourdough.apps.wayne.edu/)
 
 0.1 Rise | Daily
 
-Starters you feed. Pick Sourdough when you want a starter you shape yourself; pick WELD when you want the finished piece.
+`sourdough new` makes a new app with SESAME, HELMET, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. Version 0.1 makes raw PHP apps only.
 
 ```
 $ sourdough new --raw
@@ -339,13 +339,13 @@ $
 
 ## Pick your path
 
-Three shapes, one stack. WELD is the Inertia/Vue shape, already joined; Sourdough bakes the others.
+The stack has three app shapes. WELD is the Inertia and Vue one. Sourdough makes raw PHP today and will make Laravel with Blade later.
 
 From Sourdough
 
 ### Raw PHP
 
-No framework, no build: plain PHP on WayneUI's standalone path.
+Plain PHP with no framework and no build step, using WayneUI's standalone files.
 
 `composer global require waynestate/sourdough sourdough new my-app --raw`
 
@@ -353,13 +353,13 @@ From Sourdough Coming soon
 
 ### Laravel + Blade
 
-The classic WSU shape: Laravel with Blade views. Sourdough has the plan for it, but 0.1 doesn't bake it yet; it rises in a later release.
+Laravel with Blade views, the classic WSU shape. Sourdough 0.1 prints the plan for it and stops, so there's no command to show here yet.
 
 This is WELD
 
 ### Laravel + Inertia/Vue
 
-Inertia and Vue with every part already joined, the way WELD runs.
+Laravel 13 with Inertia 2 and Vue 3. This is the shape WELD is, with the stack already installed.
 
 `composer create-project waynestate/weld my-app`
 
@@ -367,11 +367,11 @@ Hand it to your agent
 
 ## Job tickets
 
-Two tickets, ready for the coding agent you already use. Copy one, or run it straight in OpenCode, Claude Code, Codex or ChatGPT. Each one says what is already welded, what the agent may not touch, and to ask before it guesses.
+Two prompts for whatever coding agent you use. Copy one, or open it in OpenCode, Claude Code, Codex or ChatGPT. Each tells the agent what's already set up and what it must leave alone, and both tell it to ask you before it guesses.
 
 ### Get started with WELD
 
-Clone it, bring it up in Docker, run the doctor and the gate, and plan the rename that makes it yours.
+Gets a new app running in Docker, checks it, and plans the rename. It won't rename anything until you say so.
 
 A prompt for your coding agent. Copy it as it stands:
 
@@ -401,7 +401,7 @@ Output: what you ran and what it said, the doctor report, then the rename plan a
 
 ### Add a signed-in page to a WELD app
 
-One route behind SESAME, one Vue page in the app's layout, one test, and the gate run green.
+Adds a route behind SESAME, a Vue page in the app layout and a feature test, then runs the checks.
 
 A prompt for your coding agent. Copy it as it stands:
 
@@ -429,4 +429,4 @@ Constraints:
 Output: the files you changed, the gate's result, then your questions.
 ```
 
-The agent reads the same pages you do: [llms.txt](https://weld.apps.wayne.edu/llms.txt) lists them, [llms-full.txt](https://weld.apps.wayne.edu/llms-full.txt) holds them all in one file, and this page has a [Markdown twin](https://weld.apps.wayne.edu/index.md). Nothing here phones home; the buttons only copy text or open the tool you picked. A good bead is a quiet one, and so is a good agent run.
+The agent reads the same pages you do: [llms.txt](https://weld.apps.wayne.edu/llms.txt) lists them, [llms-full.txt](https://weld.apps.wayne.edu/llms-full.txt) holds them all in one file, and this page has a [Markdown twin](https://weld.apps.wayne.edu/index.md). Nothing here phones home. The buttons only copy text or open the tool you picked.
