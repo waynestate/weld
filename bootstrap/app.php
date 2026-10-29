@@ -16,6 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // Guests go to the SESAME placeholder until SESAME owns /login.
         $middleware->redirectGuestsTo('/login');
 
+        // Trust only the address HA-Proxy connects from, so X-Forwarded-Proto
+        // is honored only for requests that really arrived over HTTPS. A
+        // literal list, because this closure runs before config is loaded.
+        $middleware->trustProxies(at: ['172.18.0.1']);
+
         $middleware->web(append: [
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
