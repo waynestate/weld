@@ -41,20 +41,20 @@ Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `ph
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run
 PROCTOR, Ziggy or the JS lint.
 
-Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer (SQUIRE kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.
+Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer (Squire kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.
 
 ## CI
 
-- **GitLab:** PREFLIGHT's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a
+- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a
   `proctor` job (warnings pass, failures block) and a `ziggy` drift job.
-- **GitHub:** `.github/workflows/ci.yml` calls PREFLIGHT's reusable workflow with `composer ci`.
+- **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci`.
 - Green means all of those pass. JS lint is not in CI yet.
 
 ## Keeping the joints current
 
 - When HELMET, SESAME, CREED or PROCTOR release, raise the constraint here (`composer require waynestate/<part>:^0.x`),
   run all the checks above, and commit the lock file.
-- When Laravel, Inertia or Vue release, BOOSTER's hops are the way to move; WELD is a good first test for them.
+- When Laravel, Inertia or Vue release, Booster's hops are the way to move; WELD is a good first test for them.
 - After route changes, regenerate Ziggy and commit the result.
 
 ## Releasing
@@ -74,7 +74,7 @@ WELD targets Citadel first. `docs/running-off-citadel.md` covers other hosts.
 ## The front page
 
 `site/` is the stack's front page, for `https://weld.apps.wayne.edu/` on Citadel, served through a small raw-PHP
-`deploy/` layer generated with SQUIRE (separate from the WELD app itself).
+`deploy/` layer generated with Squire (separate from the WELD app itself).
 
 ## Who maintains it
 

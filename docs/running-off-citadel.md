@@ -1,6 +1,6 @@
 # Running WELD off Citadel
 
-WELD deploys on Citadel through SQUIRE: one container per app, and builds run at release time inside the app
+WELD deploys on Citadel through Squire: one container per app, and builds run at release time inside the app
 container. The stack rule (ADR-0010, portable beyond Citadel) says the same app must also run on OpenShift, Coolify
 and plain Docker. This page is the per-platform contract: how traffic reaches the app, where logs go, what may be
 written, which user runs it, how the platform knows it is alive, and what to run after every deploy.
