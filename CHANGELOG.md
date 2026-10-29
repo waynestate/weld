@@ -4,10 +4,26 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
-- `npm run typecheck` (vue-tsc, no emit) joins the scripts. The tsconfig `types` array drops two entries that
-  never resolved (`vue/tsx`, `./resources/js/types`); both type files stay in the program through `include`.
+- `npm run typecheck` (vue-tsc, no emit) joins the scripts, and it passes: the ten errors from the first run
+  are fixed in the bullets below.
 - `site/assets/wayne-ui/marks/warrior-strong-reverse.svg` comes back from the WayneUI static bundle; the CSS
   has pointed at it since the front page assets landed.
+- The tsconfig `types` array keeps `vite/client` and regains `./resources/js/types`: the shared interfaces
+  move from `index.ts` to `index.d.ts`, which is the shape that entry resolves to. `vue/tsx` stays out,
+  because it never resolved.
+- `VITE_APP_NAME` is declared in a new `resources/js/env.d.ts` against vite/client's `ImportMetaEnv`,
+  replacing the inline `declare module` block in the app entry.
+- The app entry imports the Ziggy config from a new `ziggy-value.js` beside the generated `ziggy.js`, with a
+  matching `ziggy-value.d.ts`: the generated declaration names the routes but not the value, and the value's
+  string `location` predates the package's typed shape, so the declaration stops at the config minus that
+  field.
+- `SharedData` extends Inertia's `PageProps`, so it satisfies the constraint `usePage` puts on its type
+  argument.
+- AppHeader types its page with `usePage<SharedData>()`, so the user menu meets a `User` instead of
+  `unknown`.
+- TextLink's optional `method` prop takes Inertia's `Method` union instead of `string`.
+- Welcome reads the signed-in state from `usePage<SharedData>()` instead of `$page`, which vue-tsc does not
+  recognize on the component instance.
 
 ## 0.1.0 (2026-10-29)
 
