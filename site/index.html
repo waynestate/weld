@@ -8,7 +8,7 @@
 <meta name="stack-env" content="auto">
 <script src="assets/stack-env.js" defer></script>
 <title>WELD: Many parts, one piece.</title>
-<meta name="description" content="WELD is the front page of the Wayne State developer stack: one Laravel + Inertia/Vue app with every part already joined. Clone it, rename it, deploy it.">
+<meta name="description" content="WELD is a Laravel 13 app with Inertia and Vue that comes with the rest of the Wayne State stack already set up: sign-in, security headers, the standards check, code style and CI. Start your app from it.">
 <meta name="theme-color" content="#0c5449">
 <link rel="canonical" href="https://weld.apps.wayne.edu/">
 <!-- For agents (ADR-0019): this page as Markdown, written by bin/agent-ready.php from Squire's kit.
@@ -55,13 +55,13 @@
         <div class="hero__glow" aria-hidden="true"></div>
         <canvas class="hero__embers" aria-hidden="true"></canvas>
         <div class="hero__icon">
-          <img class="hero__mark" src="brand/weld-avatar-512.png" width="512" height="512" alt="WELD: a welder's helmet">
+          <img class="hero__mark" src="brand/weld-avatar-512.png" width="512" height="512" alt="WELD logo: a welder's helmet">
           <span class="hero__flash" aria-hidden="true"></span>
         </div>
       </div>
 
       <div class="hero__copy">
-        <p class="eyebrow">Wayne State's app stack, welded</p>
+        <p class="eyebrow">The Wayne State app stack</p>
         <h1 class="hero__title" id="hero-title">
           <span class="wsu-sr-only">WELD</span>
           <span class="hero__letters" aria-hidden="true"><span style="--i:0">W</span><span style="--i:1">E</span><span style="--i:2">L</span><span style="--i:3">D</span></span>
@@ -75,14 +75,14 @@
           <span class="acro__line" aria-hidden="true"><span class="acro__word" style="--i:0"><span class="acro__init">W</span><span class="acro__rest">ired,</span></span> <span class="acro__word" style="--i:1"><span class="acro__init">E</span><span class="acro__rest">verything,</span></span> <span class="acro__word" style="--i:2"><span class="acro__init">L</span><span class="acro__rest">inked,</span></span> <span class="acro__word" style="--i:3"><span class="acro__init">D</span><span class="acro__rest">eployed.</span></span></span>
         </p>
         <p class="hero__tagline">Many parts, <span class="seam">one piece.<span class="seam__bead" aria-hidden="true"><span class="seam__fill"></span></span><span class="seam__runner" aria-hidden="true"><span class="spark"></span></span></span></p>
-        <p class="hero__blurb">The whole Wayne State app stack in <strong>one install</strong>: a Laravel + Inertia/Vue app with sign-in, security headers, the standards checks, code style, CI and the WayneUI look already joined. Clone it, rename it, deploy it.</p>
+        <p class="hero__blurb">WELD is a Laravel 13 app with Inertia and Vue, and the rest of the stack is already in it: sign-in, security headers, the standards check, code style, CI and WayneUI. It's <strong>one install</strong>. Rename it and start on your own pages.</p>
         <div class="quickstart">
           <code class="quickstart__code" id="quickstart-cmd"><span class="t-dim">$</span> <span data-type>composer create-project waynestate/weld my-app</span><span class="caret" aria-hidden="true"></span></code>
           <button class="copy-btn" type="button" data-copy="composer create-project waynestate/weld my-app" data-target="#quickstart-cmd">
             <span class="copy-btn__label">Copy</span>
           </button>
         </div>
-        <p class="hero__alt">Not a Laravel + Vue app? <a class="hero__alt-link" href="https://sourdough.apps.wayne.edu/">Sourdough</a> bakes a new app in the shape you pick, with the same pieces wired in.</p>
+        <p class="hero__alt">Need raw PHP instead? <a class="hero__alt-link" href="https://sourdough.apps.wayne.edu/">Sourdough</a> starts one with the same sign-in, headers and checks.</p>
         <p class="hero__cta">
           <a class="wsu-btn wsu-btn--accent wsu-btn--lg" href="#start">Get started</a>
           <a class="hero__link" href="#chooser">Which piece do I need?</a>
@@ -111,21 +111,21 @@
     <div class="wsu-container">
       <div class="section__head">
         <p class="eyebrow">Start here</p>
-        <h2 id="start-title">One install. One command to run it.</h2>
-        <p class="start__lead">Yes, that is a lot of parts. Most of you can skip the introductions: make the app, run one command, and you hit the ground running with every seam already welded. The separate pieces are there because Wayne State's developers and apps come in every shape, and nobody should have to buy the whole shop to borrow one torch.</p>
+        <h2 id="start-title">Install it, then run one command</h2>
+        <p class="start__lead">Yes, this is a lot of packages. Most of you can ignore that. Install WELD, run the one command in step 2, and you have a working app with all of it set up. We split the stack into separate projects because Wayne State developers work on very different apps, and you shouldn't have to buy the whole shop to borrow one torch.</p>
       </div>
 
       <ol class="steps">
         <li class="step">
           <span class="step__num" aria-hidden="true">1</span>
-          <h3 class="step__title">Make it</h3>
-          <p class="step__line">A fresh copy of WELD, with <code>.env</code> written and the app key set.</p>
+          <h3 class="step__title">Install</h3>
+          <p class="step__line">Composer makes a fresh copy, writes <code>.env</code>, sets the app key and runs the first migration.</p>
           <pre class="step__code"><code>composer create-project waynestate/weld my-app</code></pre>
         </li>
         <li class="step step--key">
           <span class="step__num" aria-hidden="true">2</span>
-          <h3 class="step__title">Run it</h3>
-          <p class="step__line">The one command. Docker is the only thing you need: it installs, migrates and serves at <code>localhost:8000</code>.</p>
+          <h3 class="step__title">Start it in Docker</h3>
+          <p class="step__line">This is the one command. You only need Docker, because PHP and Node run in the containers. Then open <code>localhost:8000</code>.</p>
           <pre class="step__code"><code><span class="t-dim"># macOS, Linux</span>
 bin/weld.sh up
 <span class="t-dim"># Windows (PowerShell)</span>
@@ -133,13 +133,13 @@ bin/weld.sh up
         </li>
         <li class="step">
           <span class="step__num" aria-hidden="true">3</span>
-          <h3 class="step__title">Check it</h3>
-          <p class="step__line">Tests, code style, static analysis and the audit in one command, the same one CI runs on every push.</p>
+          <h3 class="step__title">Run the checks</h3>
+          <p class="step__line">Runs the tests, Pint, PHPStan and <code>composer audit</code>, the same command CI runs. The standards check is separate: <code>composer proctor</code>.</p>
           <pre class="step__code"><code>composer ci</code></pre>
         </li>
       </ol>
 
-      <p class="start__also">Want a different shape? <a href="https://sourdough.apps.wayne.edu/">Sourdough</a> is the other one-install start: <code>sourdough new my-app --raw</code> bakes a raw PHP app with the same pieces wired in, and the Laravel shapes rise in a later release.</p>
+      <p class="start__also">Not on Laravel and Vue? <a href="https://sourdough.apps.wayne.edu/">Sourdough</a> is the other starter. <code>sourdough new my-app --raw</code> makes a raw PHP app with SESAME, HELMET, PROCTOR and Preflight in place. Raw PHP is all it makes today; the Laravel shapes are still proofing.</p>
     </div>
   </section>
 
@@ -152,7 +152,7 @@ bin/weld.sh up
       <div class="section__head">
         <p class="eyebrow">Already have an app?</p>
         <h2 id="chooser-title">Which piece do I need?</h2>
-        <p>Most Wayne State apps are older than this stack, and mixed: some raw PHP, some Laravel, some that only want sign-in or only an upgrade. So every piece also works on its own. WELD is all of them, already welded together.</p>
+        <p>Most Wayne State apps are older than this stack. Some are raw PHP, some are Laravel, and plenty only need sign-in or an upgrade. That's why every piece also works on its own. WELD is simply all of them installed together.</p>
       </div>
 
       <ul class="choices">
@@ -163,60 +163,60 @@ bin/weld.sh up
             <span class="choice__or">or</span>
             <span class="choice__one"><img src="assets/marks/sourdough.png" width="40" height="40" alt=""> <a class="choice__name" href="https://sourdough.apps.wayne.edu/">Sourdough</a></span>
           </p>
-          <p class="choice__line">WELD is the finished Laravel + Inertia/Vue app, every piece joined. Sourdough makes a new app in the shape you pick; today that is raw PHP.</p>
+          <p class="choice__line">Pick WELD for Laravel with Inertia and Vue, with everything already installed. Pick Sourdough for raw PHP, the only shape it makes today.</p>
         </li>
         <li class="choice">
-          <p class="choice__if">My old raw PHP app just needs sign-in</p>
+          <p class="choice__if">My raw PHP app just needs sign-in</p>
           <p class="choice__pick"><img src="assets/marks/sesame.png" width="40" height="40" alt=""> <a class="choice__name" href="https://sesame.apps.wayne.edu/">SESAME</a></p>
-          <p class="choice__line">Wayne State sign-in (CAS or Entra ID) for raw PHP or Laravel, and the session stays your app's.</p>
+          <p class="choice__line">Adds CAS or Entra ID sign-in to a raw PHP or Laravel app. Your app keeps its own session.</p>
         </li>
         <li class="choice">
           <p class="choice__if">I'm stuck on PHP 7</p>
           <p class="choice__pick"><img src="assets/marks/booster.png" width="40" height="40" alt=""> <a class="choice__name" href="https://booster.apps.wayne.edu/">Booster</a></p>
-          <p class="choice__line">Upgrades PHP and Laravel one hop at a time, with a playbook for Vue 2 to 3. Your tests sign off; a person merges.</p>
+          <p class="choice__line">Upgrades PHP and Laravel one version at a time, and has a playbook for Vue 2 to 3. It never commits; you read the diff and merge it.</p>
         </li>
         <li class="choice">
           <p class="choice__if">I'm deploying to Citadel</p>
           <p class="choice__pick"><img src="assets/marks/squire.png" width="40" height="40" alt=""> <a class="choice__name" href="https://squire.apps.wayne.edu/">Squire</a></p>
-          <p class="choice__line">The Citadel kit: the build and release scripts, the health check, and local runs on the real images.</p>
+          <p class="choice__line">The build and release scripts Citadel expects, a health check, and a way to run your app locally on the same images.</p>
         </li>
         <li class="choice">
           <p class="choice__if">I want CI on every push</p>
           <p class="choice__pick"><img src="assets/marks/preflight.png" width="40" height="40" alt=""> <a class="choice__name" href="https://preflight.apps.wayne.edu/">Preflight</a></p>
-          <p class="choice__line">GitLab CI components that run the stack's checks on every push. More on the checks below.</p>
+          <p class="choice__line">GitLab CI components for PHP tests on each supported version, PROCTOR, Composer audit, Pint, PHPStan and ESLint.</p>
         </li>
         <li class="choice">
           <p class="choice__if">I want safe defaults at runtime</p>
           <p class="choice__pick"><img src="assets/marks/helmet.png" width="40" height="40" alt=""> <a class="choice__name" href="https://helmet.apps.wayne.edu/">HELMET</a></p>
-          <p class="choice__line">The safe runtime baseline: security headers, a hardened session, trusted proxies and a <code>/up</code> health check.</p>
+          <p class="choice__line">Sends the security headers and CSP, hardens the session cookie and checks proxies before your first page is served.</p>
         </li>
         <li class="choice">
           <p class="choice__if">I want it to look like Wayne State</p>
           <p class="choice__pick"><img class="choice__tile" src="assets/marks/wayneui.svg" width="40" height="40" alt=""> <a class="choice__name" href="https://wayneui.apps.wayne.edu/">WayneUI</a></p>
-          <p class="choice__line">The look: Wayne State's design system, for static HTML, raw PHP, Blade or Vue.</p>
+          <p class="choice__line">Wayne State's design system. It works in static HTML, raw PHP, Blade and Vue.</p>
         </li>
         <li class="choice">
           <p class="choice__if">I want Citadel to sign people in before my app</p>
           <p class="choice__pick"><img src="assets/marks/drawbridge.png" width="40" height="40" alt=""> <a class="choice__name" href="https://drawbridge.apps.wayne.edu/">Drawbridge</a></p>
-          <p class="choice__line">The shared sign-in gateway in front of Citadel's apps, so each app only checks one small signed token.</p>
+          <p class="choice__line">A gateway that signs people in through Entra ID before they reach your app. Your app then checks one small signed token.</p>
         </li>
         <li class="choice">
           <p class="choice__if">I look after a lot of apps</p>
           <p class="choice__pick"><img src="assets/marks/rollcall.png" width="40" height="40" alt=""> <a class="choice__name" href="https://rollcall.apps.wayne.edu/">Rollcall</a></p>
-          <p class="choice__line">A fleet view: which apps run which PHP, framework and sign-in, read against the policy.</p>
+          <p class="choice__line">Scans your apps and reports which PHP, Laravel and sign-in package each one runs, checked against CREED's support dates.</p>
         </li>
         <li class="choice">
           <p class="choice__if">I code with an AI agent</p>
           <p class="choice__pick"><img src="assets/marks/advisor.png" width="40" height="40" alt=""> <a class="choice__name" href="https://advisor.apps.wayne.edu/">ADVISOR</a></p>
-          <p class="choice__line">An MCP server that tells you, and your agent, what applies to your app and what to do next.</p>
+          <p class="choice__line">An MCP server your agent can ask about the stack. It answers from CREED's policy file, not from what the model remembers.</p>
         </li>
       </ul>
 
       <!-- One pipeline, four stations. With motion on, the seam is laid along it
            like the journey's; with reduced motion it is simply there. -->
       <div class="pipeline">
-        <h3 class="pipeline__title">The checks are one pipeline, not four linters</h3>
-        <p class="pipeline__sum">CREED is the rules, PROCTOR grades against them, Pinstripe sets the code style, and Preflight runs it all in CI.</p>
+        <h3 class="pipeline__title">How the four check projects fit together</h3>
+        <p class="pipeline__sum">CREED writes the rules down and PROCTOR grades your app against them. Pinstripe is the code style. Preflight runs all of it in CI.</p>
         <ol class="pipeline__stops">
           <li class="pipeline__stop">
             <img src="assets/marks/creed.png" width="48" height="48" alt="">
@@ -226,12 +226,12 @@ bin/weld.sh up
           <li class="pipeline__stop">
             <img src="assets/marks/proctor.png" width="48" height="48" alt="">
             <p class="pipeline__name"><a href="https://proctor.apps.wayne.edu/">PROCTOR</a> <span class="pipeline__role">the grader</span></p>
-            <p class="pipeline__line">One command that marks your app against CREED: pass, warning or fail.</p>
+            <p class="pipeline__line">Reads your <code>composer.json</code> and lock file and reports each check against CREED as pass, warning, info or fail.</p>
           </li>
           <li class="pipeline__stop">
             <img src="assets/marks/pinstripe.png" width="48" height="48" alt="">
             <p class="pipeline__name"><a href="https://pinstripe.apps.wayne.edu/">Pinstripe</a> <span class="pipeline__role">the code style</span></p>
-            <p class="pipeline__line">Shared presets for Pint, PHPStan, ESLint and Prettier, so every app is pressed the same way.</p>
+            <p class="pipeline__line">Shared presets for Pint, PHPStan, Rector, ESLint and Prettier. Your app adds only its own exceptions.</p>
           </li>
           <li class="pipeline__stop">
             <img src="assets/marks/preflight.png" width="48" height="48" alt="">
@@ -239,7 +239,7 @@ bin/weld.sh up
             <p class="pipeline__line">The CI pipeline that runs all of it, and your tests, on every push.</p>
           </li>
         </ol>
-        <p class="pipeline__fine">In WELD all four are already joined: <code>composer ci</code> and <code>composer proctor</code> on your machine, the same checks in Preflight on every push.</p>
+        <p class="pipeline__fine">WELD already has all four set up. Run <code>composer ci</code> and <code>composer proctor</code> on your machine, and GitLab runs both through Preflight on every push.</p>
       </div>
     </div>
   </section>
@@ -250,7 +250,7 @@ bin/weld.sh up
     <div class="wsu-container">
       <div class="section__head section__head--light">
         <h2 id="journey-title">The journey</h2>
-        <p>One request, six stops, from the edge of the network to the deploy.</p>
+        <p>Roughly in order: what happens to a request on its way to the page, then what happens to your code before it ships.</p>
       </div>
 
       <div class="journey" data-journey>
@@ -296,22 +296,22 @@ bin/weld.sh up
   <section class="section section--cast" aria-labelledby="cast-title">
     <div class="wsu-container">
       <div class="section__head section__head--main">
-        <p class="eyebrow">Every part, its own character</p>
+        <p class="eyebrow">Up close</p>
         <h2 id="cast-title">The cast</h2>
-        <p>You have met them in one line each; here is everyone up close. Seven parts welded into WELD, five that work the shop floor around it, one sibling that bakes your own, and the crew still on the drawing board.</p>
+        <p>The same projects with a bit more detail. The first seven are part of WELD. The next five work around your app: upgrades, the fleet scan, deploys, the sign-in gateway and the MCP server. After those come Sourdough and the one we're building next.</p>
       </div>
 
       <div class="cast">
 
         <article class="cast-card cast-card--split" style="--span:7">
           <div class="cast-card__info">
-            <img class="cast-card__mark cast-card__mark--tile" src="assets/marks/wayneui.svg" width="56" height="56" alt="WayneUI mark: a rounded frame holding a solid form, with a gold tab on the lower edge">
+            <img class="cast-card__mark cast-card__mark--tile" src="assets/marks/wayneui.svg" width="56" height="56" alt="WayneUI logo: a rounded frame around a solid shape, with a gold tab on the lower edge">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://wayneui.apps.wayne.edu/">WayneUI</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">2.0</span>
               <span class="chip chip--joke">Contrast | AA</span>
             </p>
-            <p class="cast-card__line">The interface. Wayne State's design system, wired into the Vue front end and the Blade layouts.</p>
+            <p class="cast-card__line">Wayne State's design system. WELD uses it in the Vue front end and the Blade layouts.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
@@ -326,13 +326,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--split" style="--span:5">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/creed.png" width="56" height="56" alt="CREED mark: a stone arch whose gold keystone holds the other stones in place">
+            <img class="cast-card__mark" src="assets/marks/creed.png" width="56" height="56" alt="CREED logo: a stone arch with a gold keystone">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://creed.apps.wayne.edu/">CREED</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Volume | Eleven</span>
             </p>
-            <p class="cast-card__line">The rulebook: the written standards, and the <code>policy.json</code> of supported versions every other part reads.</p>
+            <p class="cast-card__line">The written standards, plus <code>policy.json</code> with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
@@ -347,13 +347,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--stack" style="--span:4">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/helmet.png" width="56" height="56" alt="HELMET mark: a white football helmet with a gold facemask">
+            <img class="cast-card__mark" src="assets/marks/helmet.png" width="56" height="56" alt="HELMET logo: a white football helmet with a gold facemask">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://helmet.apps.wayne.edu/">HELMET</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.2</span>
               <span class="chip chip--joke">Fit | Snug</span>
             </p>
-            <p class="cast-card__line">The safe runtime baseline: headers, sessions, proxies and <code>/up</code>.</p>
+            <p class="cast-card__line">In WELD it runs in the global middleware, so every response carries the security headers and CSP.</p>
           </div>
           <div class="term" data-term>
 <pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>helmet headers</span></span>
@@ -366,13 +366,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--stack" style="--span:4">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/sesame.png" width="56" height="56" alt="SESAME mark: an open door with a gold gap">
+            <img class="cast-card__mark" src="assets/marks/sesame.png" width="56" height="56" alt="SESAME logo: an open door with a gold gap">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://sesame.apps.wayne.edu/">SESAME</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.2</span>
               <span class="chip chip--joke">Says | Open</span>
             </p>
-            <p class="cast-card__line">Sign-in: CAS, Entra ID and the auth gateway.</p>
+            <p class="cast-card__line">Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.</p>
           </div>
           <div class="term" data-term>
 <pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>sesame login</span></span>
@@ -385,13 +385,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--stack" style="--span:4">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/proctor.png" width="56" height="56" alt="PROCTOR mark: a watchful eye with a gold square pupil">
+            <img class="cast-card__mark" src="assets/marks/proctor.png" width="56" height="56" alt="PROCTOR logo: an eye with a gold square pupil">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://proctor.apps.wayne.edu/">PROCTOR</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.2</span>
               <span class="chip chip--joke">Strictness | Kind</span>
             </p>
-            <p class="cast-card__line">The grader: one command that marks an app against CREED.</p>
+            <p class="cast-card__line">In WELD it's <code>composer proctor</code>. In CI, warnings pass and failures block.</p>
           </div>
           <div class="term" data-term>
 <pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>proctor check</span></span>
@@ -404,13 +404,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--split" style="--span:5">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/preflight.png" width="56" height="56" alt="Preflight mark: a runway with a gold centre line">
+            <img class="cast-card__mark" src="assets/marks/preflight.png" width="56" height="56" alt="Preflight logo: a runway with a gold centre line">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://preflight.apps.wayne.edu/">Preflight</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Checklist | Long</span>
             </p>
-            <p class="cast-card__line">The CI pipeline that runs the checks on every push, from GitLab CI/CD components.</p>
+            <p class="cast-card__line">GitLab CI/CD components. WELD's pipeline uses them to run the tests on PHP 8.3, 8.4 and 8.5, plus the audit.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
@@ -424,13 +424,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--split" style="--span:7">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/pinstripe.png" width="56" height="56" alt="Pinstripe mark: a striped necktie with a gold tie bar">
+            <img class="cast-card__mark" src="assets/marks/pinstripe.png" width="56" height="56" alt="Pinstripe logo: a striped necktie with a gold tie bar">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://pinstripe.apps.wayne.edu/">Pinstripe</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Creases | Sharp</span>
             </p>
-            <p class="cast-card__line">The code style: Pint, PHPStan level 8, ESLint and Prettier presets, pressed and ready.</p>
+            <p class="cast-card__line">The code style presets. WELD runs Pint and PHPStan at level 8 from a copy of Pinstripe's 0.1 Laravel presets.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
@@ -447,13 +447,13 @@ bin/weld.sh up
              inside it. Lines come from each project's README. -->
         <article class="cast-card cast-card--stack" style="--span:4">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/booster.png" width="56" height="56" alt="Booster mark: a syringe with fins, lifting off on a gold flame">
+            <img class="cast-card__mark" src="assets/marks/booster.png" width="56" height="56" alt="Booster logo: a syringe with rocket fins and a gold flame">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://booster.apps.wayne.edu/">Booster</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Sting | Mild</span>
             </p>
-            <p class="cast-card__line">Upgrades, one hop at a time: Rector rewrites the code, your tests sign off, a person merges.</p>
+            <p class="cast-card__line">Plans an upgrade as hops, like Laravel 10 to 11, and runs them one at a time with Rector. Your tests have to pass on the new PHP before the next hop starts.</p>
           </div>
           <div class="term" data-term>
 <pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>booster plan</span></span>
@@ -466,13 +466,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--stack" style="--span:4">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/rollcall.png" width="56" height="56" alt="Rollcall mark: an open register with gold ticks">
+            <img class="cast-card__mark" src="assets/marks/rollcall.png" width="56" height="56" alt="Rollcall logo: an open register with gold ticks">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://rollcall.apps.wayne.edu/">Rollcall</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Attendance | Taken</span>
             </p>
-            <p class="cast-card__line">The fleet scanner: every app answers “present”, with its PHP, framework and auth, read against the policy.</p>
+            <p class="cast-card__line">Every app answers “present”, with its PHP, Laravel and auth versions. Rollcall only reports. It never opens an issue or blocks a deploy.</p>
           </div>
           <div class="term" data-term>
 <pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>rollcall report</span></span>
@@ -485,13 +485,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--stack" style="--span:4">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/squire.png" width="56" height="56" alt="Squire mark: a satchel with a gold buckle">
+            <img class="cast-card__mark" src="assets/marks/squire.png" width="56" height="56" alt="Squire logo: a satchel with a gold buckle">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://squire.apps.wayne.edu/">Squire</a></h3>
             <p class="cast-card__chips">
-              <span class="chip chip--version">0.2</span>
+              <span class="chip chip--version">0.3</span>
               <span class="chip chip--joke">Armour | Carried</span>
             </p>
-            <p class="cast-card__line">The Citadel kit: build.sh, the release script, the health check, and local parity on the real images.</p>
+            <p class="cast-card__line">The deploy kit for Citadel: <code>build.sh</code>, a release script, a health check and local runs on the same images. This page deploys with it too.</p>
           </div>
           <div class="term" data-term>
 <pre class="term__body"><span class="term__cmd"><span class="t-dim">$ </span><span data-type>squire doctor</span></span>
@@ -504,13 +504,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--split" style="--span:7">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/drawbridge.png" width="56" height="56" alt="Drawbridge mark: a castle tower lowering its bridge on a gold chain">
+            <img class="cast-card__mark" src="assets/marks/drawbridge.png" width="56" height="56" alt="Drawbridge logo: a castle tower with its bridge down on a gold chain">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://drawbridge.apps.wayne.edu/">Drawbridge</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Moat | Full</span>
             </p>
-            <p class="cast-card__line">The sign-in gateway in front of the apps: one OpenID Connect client through Entra ID, so each app only checks one small signed token.</p>
+            <p class="cast-card__line">One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/drawbridge</p>
@@ -525,13 +525,13 @@ bin/weld.sh up
 
         <article class="cast-card cast-card--split" style="--span:5">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/advisor.png" width="56" height="56" alt="ADVISOR mark: a speech bubble holding a gold compass needle">
+            <img class="cast-card__mark" src="assets/marks/advisor.png" width="56" height="56" alt="ADVISOR logo: a speech bubble with a gold compass needle">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://advisor.apps.wayne.edu/">ADVISOR</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Office hours | Always</span>
             </p>
-            <p class="cast-card__line">The stack's own MCP server: read-only tools that tell your coding agent what applies to your app, and what to do next.</p>
+            <p class="cast-card__line">Ask it which PHP you can build on and it answers from <code>policy.json</code>, with the date. It's read-only in 0.1: it can't write files or run shell commands.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
@@ -547,13 +547,13 @@ bin/weld.sh up
              full width and the dark side of the oven. -->
         <article class="cast-card cast-card--split cast-card--sibling" style="--span:12">
           <div class="cast-card__info">
-            <img class="cast-card__mark" src="assets/marks/sourdough.png" width="56" height="56" alt="Sourdough mark: a starter jar with a gold band">
+            <img class="cast-card__mark" src="assets/marks/sourdough.png" width="56" height="56" alt="Sourdough logo: a starter jar with a gold band">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://sourdough.apps.wayne.edu/">Sourdough</a></h3>
             <p class="cast-card__chips">
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Rise | Daily</span>
             </p>
-            <p class="cast-card__line">Starters you feed. Pick Sourdough when you want a starter you shape yourself; pick WELD when you want the finished piece.</p>
+            <p class="cast-card__line"><code>sourdough new</code> makes a new app with SESAME, HELMET, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. Version 0.1 makes raw PHP apps only.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
@@ -587,7 +587,7 @@ bin/weld.sh up
     <div class="wsu-container">
       <div class="section__head">
         <h2 id="paths-title">Pick your path</h2>
-        <p>Three shapes, one stack. WELD is the Inertia/Vue shape, already joined; Sourdough bakes the others.</p>
+        <p>The stack has three app shapes. WELD is the Inertia and Vue one. Sourdough makes raw PHP today and will make Laravel with Blade later.</p>
       </div>
       <div class="paths">
 
@@ -598,7 +598,7 @@ bin/weld.sh up
         <article class="path-card">
           <p class="path-card__from">From Sourdough</p>
           <h3>Raw PHP</h3>
-          <p>No framework, no build: plain PHP on WayneUI's standalone path.</p>
+          <p>Plain PHP with no framework and no build step, using WayneUI's standalone files.</p>
           <code>composer global require waynestate/sourdough
 sourdough new my-app --raw</code>
         </article>
@@ -606,13 +606,13 @@ sourdough new my-app --raw</code>
         <article class="path-card">
           <p class="path-card__from">From Sourdough <span class="chip chip--soon">Coming soon</span></p>
           <h3>Laravel + Blade</h3>
-          <p>The classic WSU shape: Laravel with Blade views. Sourdough has the plan for it, but 0.1 doesn't bake it yet; it rises in a later release.</p>
+          <p>Laravel with Blade views, the classic WSU shape. Sourdough 0.1 prints the plan for it and stops, so there's no command to show here yet.</p>
         </article>
 
         <article class="path-card path-card--featured">
           <p class="path-card__from">This is WELD</p>
           <h3>Laravel + Inertia/Vue</h3>
-          <p>Inertia and Vue with every part already joined, the way WELD runs.</p>
+          <p>Laravel 13 with Inertia 2 and Vue 3. This is the shape WELD is, with the stack already installed.</p>
           <code>composer create-project waynestate/weld my-app</code>
         </article>
 
@@ -632,7 +632,7 @@ sourdough new my-app --raw</code>
       <div class="section__head">
         <p class="eyebrow">Hand it to your agent</p>
         <h2 id="agents-title">Job tickets</h2>
-        <p>Two tickets, ready for the coding agent you already use. Copy one, or run it straight in OpenCode, Claude Code, Codex or ChatGPT. Each one says what is already welded, what the agent may not touch, and to ask before it guesses.</p>
+        <p>Two prompts for whatever coding agent you use. Copy one, or open it in OpenCode, Claude Code, Codex or ChatGPT. Each tells the agent what's already set up and what it must leave alone, and both tell it to ask you before it guesses.</p>
       </div>
 
       <div class="agents">
@@ -642,7 +642,7 @@ sourdough new my-app --raw</code>
             <div>
               <p class="ar-prompt__kicker">Ticket W-1 · A new app</p>
               <h3 class="ar-prompt__title" id="prompt-get-started-title">Get started with WELD</h3>
-              <p class="ar-prompt__desc">Clone it, bring it up in Docker, run the doctor and the gate, and plan the rename that makes it yours.</p>
+              <p class="ar-prompt__desc">Gets a new app running in Docker, checks it, and plans the rename. It won't rename anything until you say so.</p>
             </div>
           </header>
           <pre class="ar-prompt__text"><code>You are a coding agent helping a Wayne State University developer start a new app from WELD: the Wayne State application stack welded into one Laravel app with Inertia and Vue. Sign-in (SESAME), security headers (HELMET), the standards check (PROCTOR) and CI are already joined. The job is to get it running and make it this developer's own.
@@ -674,7 +674,7 @@ Output: what you ran and what it said, the doctor report, then the rename plan a
             <div>
               <p class="ar-prompt__kicker">Ticket W-2 · Laravel, Inertia and Vue</p>
               <h3 class="ar-prompt__title" id="prompt-add-page-title">Add a signed-in page to a WELD app</h3>
-              <p class="ar-prompt__desc">One route behind SESAME, one Vue page in the app's layout, one test, and the gate run green.</p>
+              <p class="ar-prompt__desc">Adds a route behind SESAME, a Vue page in the app layout and a feature test, then runs the checks.</p>
             </div>
           </header>
           <pre class="ar-prompt__text"><code>You are a coding agent adding one signed-in page to an app built from WELD: the Wayne State application stack welded into one Laravel app with Inertia and Vue, at Wayne State University.
@@ -700,7 +700,7 @@ Constraints:
 Output: the files you changed, the gate's result, then your questions.</code></pre>
         </section>
 
-        <p class="agents__fine">The agent reads the same pages you do: <a href="llms.txt">llms.txt</a> lists them, <a href="llms-full.txt">llms-full.txt</a> holds them all in one file, and this page has a <a href="index.md" type="text/markdown">Markdown twin</a>. Nothing here phones home; the buttons only copy text or open the tool you picked. A good bead is a quiet one, and so is a good agent run.</p>
+        <p class="agents__fine">The agent reads the same pages you do: <a href="llms.txt">llms.txt</a> lists them, <a href="llms-full.txt">llms-full.txt</a> holds them all in one file, and this page has a <a href="index.md" type="text/markdown">Markdown twin</a>. Nothing here phones home. The buttons only copy text or open the tool you picked.</p>
       </div>
     </div>
   </section>

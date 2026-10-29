@@ -1,6 +1,6 @@
 # WELD
 
-> WELD is the front page of the Wayne State developer stack: one Laravel + Inertia/Vue app with every part already joined. Clone it, rename it, deploy it.
+> WELD is a Laravel 13 app with Inertia and Vue that comes with the rest of the Wayne State stack already set up: sign-in, security headers, the standards check, code style and CI. Start your app from it.
 
 **W**ired, **E**verything, **L**inked, **D**eployed. Many parts, one piece.
 
@@ -14,12 +14,12 @@ Every page below is Markdown. The HTML pages send the same Markdown to a client 
 
 ## Pages
 
-- [WELD: Many parts, one piece.](https://weld.apps.wayne.edu/index.md): WELD is the front page of the Wayne State developer stack: one Laravel + Inertia/Vue app with every part already joined. Clone it, rename it, deploy it.
+- [WELD: Many parts, one piece.](https://weld.apps.wayne.edu/index.md): WELD is a Laravel 13 app with Inertia and Vue that comes with the rest of the Wayne State stack already set up: sign-in, security headers, the standards check, code style and CI. Start your app from it.
 
 ## Prompts
 
-- [Get started with WELD](https://weld.apps.wayne.edu/#prompt-get-started): Clone it, bring it up in Docker, run the doctor and the gate, and plan the rename that makes it yours. The prompt itself is in https://weld.apps.wayne.edu/index.md.
-- [Add a signed-in page to a WELD app](https://weld.apps.wayne.edu/#prompt-add-page): One route behind SESAME, one Vue page in the app's layout, one test, and the gate run green. The prompt itself is in https://weld.apps.wayne.edu/index.md.
+- [Get started with WELD](https://weld.apps.wayne.edu/#prompt-get-started): Gets a new app running in Docker, checks it, and plans the rename. It won't rename anything until you say so. The prompt itself is in https://weld.apps.wayne.edu/index.md.
+- [Add a signed-in page to a WELD app](https://weld.apps.wayne.edu/#prompt-add-page): Adds a route behind SESAME, a Vue page in the app layout and a feature test, then runs the checks. The prompt itself is in https://weld.apps.wayne.edu/index.md.
 
 ## Source
 
