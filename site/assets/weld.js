@@ -460,8 +460,18 @@
   /* ---------------------------------------------------------------- 6. cast */
 
   if (motionOn()) {
+    // The seams under the three steps and the checks pipeline are laid down
+    // as they scroll into view, the way the journey's is.
+    var seams = Array.prototype.slice.call(document.querySelectorAll(".steps, .pipeline__stops"));
+    seams.forEach(function (seam) {
+      seam.classList.add("is-armed");
+    });
+    onceVisible(seams, 0.4, function (seam) {
+      seam.classList.add("is-welded");
+    });
+
     // Cards rise in a beat apart, row by row.
-    var cards = Array.prototype.slice.call(document.querySelectorAll(".cast-card, .bench-card, .path-card"));
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".cast-card, .bench-card, .path-card, .step, .choice, .pipeline__stop"));
     cards.forEach(function (card) {
       card.classList.add("reveal", "is-armed");
     });

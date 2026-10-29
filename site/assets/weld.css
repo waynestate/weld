@@ -942,6 +942,373 @@ body {
   overflow-wrap: break-word;
 }
 
+/* ------------------------------------------------ 6a. start here, chooser */
+
+/* The hero's second door: Sourdough, for every shape WELD is not. */
+.hero__alt {
+  max-width: 40rem;
+  margin: 1rem auto 0;
+  font-size: 0.9375rem;
+  line-height: var(--wsu-font-lineHeight-base);
+  color: var(--weld-cream-85);
+  text-wrap: pretty;
+}
+
+.hero__alt-link,
+.start__also a {
+  font-weight: var(--wsu-font-weight-bold);
+  color: var(--weld-cream);
+  text-decoration-color: var(--weld-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+.hero__alt-link:hover,
+.start__also a:hover {
+  color: var(--weld-gold);
+}
+
+.section--start {
+  padding-top: clamp(1rem, 3vw, 2rem);
+}
+
+.section__head .start__lead {
+  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--weld-cream);
+}
+
+/* Three steps on one seam. The cards are opaque, so the gold bead behind
+   them shows only in the gaps: the joints between the steps. */
+.steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 8%;
+  right: 8%;
+  top: 2.75rem;
+  height: 6px;
+  border-radius: 3px;
+  background:
+    radial-gradient(circle at 0 50%, rgba(255, 255, 255, 0.35) 0 2px, transparent 2.5px) 0 0 / 6px 100% repeat-x,
+    var(--weld-gold);
+}
+
+.step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  min-width: 0;
+  padding: 1.5rem;
+  background-color: var(--weld-cream);
+  border-radius: var(--wsu-radius-box);
+  box-shadow: var(--weld-shadow);
+  color: var(--weld-ink);
+}
+
+.step--key {
+  box-shadow: 0 0 0 3px var(--weld-gold), var(--weld-shadow);
+}
+
+.step__num {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-family: var(--wsu-font-family-mono);
+  font-weight: var(--wsu-font-weight-bold);
+  color: #09090b;
+  background-color: var(--weld-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--weld-cream), 0 6px 14px -6px rgba(2, 26, 22, 0.6);
+}
+
+.step__title {
+  margin: 0.25rem 0 0;
+  font-size: 1.375rem;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.02em;
+}
+
+.step__line {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: var(--wsu-font-lineHeight-base);
+  color: var(--weld-cream-muted);
+  text-wrap: pretty;
+}
+
+.step__line code,
+.pipeline code {
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.875em;
+  color: var(--weld-ink);
+}
+
+.step__code {
+  margin: auto 0 0;
+  padding: 0.75rem 1rem;
+  background-color: var(--weld-ink);
+  border-radius: var(--wsu-radius-field);
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--weld-term-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.start__also {
+  max-width: 46rem;
+  margin: clamp(1.75rem, 3vw, 2.5rem) auto 0;
+  text-align: center;
+  font-size: 1rem;
+  line-height: var(--wsu-font-lineHeight-base);
+  color: var(--weld-cream-85);
+  text-wrap: pretty;
+}
+
+.start__also code,
+.choice code {
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.875em;
+  padding: 0.1em 0.4em;
+  color: var(--weld-term-text);
+  background-color: var(--weld-ink);
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+
+/* The chooser: situations on the deep green, so they read as questions
+   rather than as more cast cards. */
+.choices {
+  display: grid;
+  /* Nine situations under the wide one: three by three on a desk, two
+     across on a tablet, one on a phone. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  min-width: 0;
+  padding: 1.25rem 1.375rem 1.375rem;
+  background-color: var(--weld-green-deep);
+  border: 1px solid var(--weld-cream-20);
+  border-radius: var(--wsu-radius-box);
+}
+
+.choice--wide {
+  grid-column: 1 / -1;
+  border-color: rgba(255, 204, 51, 0.55);
+}
+
+.choice__if {
+  margin: 0;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.8125rem;
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.04em;
+  color: var(--weld-gold);
+}
+
+.choice__if::before {
+  content: "if  ";
+  color: var(--weld-term-dim);
+}
+
+.choice__pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 0;
+}
+
+.choice__one {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  white-space: nowrap;
+}
+
+.choice__pick img {
+  width: 40px;
+  height: 40px;
+  border-radius: 18%;
+  box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.6);
+}
+
+.choice__pick .choice__tile {
+  padding: 6px;
+  background-color: var(--weld-tile);
+}
+
+.choice__name {
+  font-size: 1.375rem;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.02em;
+  color: var(--weld-cream);
+}
+
+a.choice__name {
+  text-decoration-color: var(--weld-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+a.choice__name:hover {
+  color: var(--weld-gold);
+}
+
+.choice__or {
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.875rem;
+  color: var(--weld-term-dim);
+}
+
+.choice__line {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: var(--wsu-font-lineHeight-base);
+  color: var(--weld-cream-85);
+  text-wrap: pretty;
+}
+
+/* The four check-shaped parts, as the one pipeline they are: four stations
+   on one gold seam, across from 720px and down below. */
+.pipeline {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  background-color: var(--weld-cream);
+  border-radius: var(--wsu-radius-box);
+  box-shadow: var(--weld-shadow);
+  color: var(--weld-ink);
+}
+
+.pipeline__title {
+  margin: 0;
+  font-size: clamp(1.375rem, 2.6vw, 1.75rem);
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.01em;
+  line-height: var(--wsu-font-lineHeight-tight);
+  text-align: center;
+}
+
+.pipeline__sum {
+  max-width: 40rem;
+  margin: 0.5rem auto 0;
+  font-size: 1.0625rem;
+  line-height: var(--wsu-font-lineHeight-base);
+  text-align: center;
+  color: var(--weld-cream-muted);
+  text-wrap: pretty;
+}
+
+.pipeline__stops {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The seam runs through the centres of the first and last marks. */
+.pipeline__stops::before {
+  content: "";
+  position: absolute;
+  left: 12.5%;
+  right: 12.5%;
+  top: 21px;
+  height: 6px;
+  border-radius: 3px;
+  background:
+    radial-gradient(circle at 0 50%, rgba(255, 255, 255, 0.35) 0 2px, transparent 2.5px) 0 0 / 6px 100% repeat-x,
+    var(--weld-gold);
+}
+
+.pipeline__stop {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+  text-align: center;
+}
+
+.pipeline__stop img {
+  width: 48px;
+  height: 48px;
+  border-radius: 18%;
+  box-shadow: 0 0 0 4px var(--weld-cream), 0 8px 16px -8px rgba(2, 26, 22, 0.55);
+}
+
+.pipeline__name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  margin: 0.5rem 0 0;
+  font-size: 1.25rem;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.02em;
+}
+
+.pipeline__name a {
+  color: inherit;
+  text-decoration-color: var(--weld-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.pipeline__role {
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--weld-cream-muted);
+}
+
+.pipeline__line {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--weld-cream-muted);
+  text-wrap: pretty;
+}
+
+.pipeline__fine {
+  margin: 1.5rem 0 0;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--weld-cream-muted);
+}
+
+.pipeline :focus-visible {
+  --weld-focus: var(--weld-ink);
+}
+
 .site-footer {
   margin-top: clamp(2rem, 5vw, 4rem);
   padding-block: 2.5rem;
@@ -1022,6 +1389,7 @@ body {
   }
 
   .hero__blurb,
+  .hero__alt,
   .quickstart {
     margin-inline: 0;
   }
@@ -1047,6 +1415,76 @@ body {
     grid-template-columns: minmax(0, 1fr);
     max-width: 32rem;
     margin-inline: auto;
+  }
+}
+
+/* Under 820px the three steps stack, and their seam runs down the left. */
+@media (max-width: 819px) {
+  .choices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+
+  .steps::before {
+    left: calc(1.5rem + 1.25rem - 3px);
+    right: auto;
+    top: 2rem;
+    bottom: 2rem;
+    width: 6px;
+    height: auto;
+    background:
+      radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.35) 0 2px, transparent 2.5px) 0 0 / 100% 6px repeat-y,
+      var(--weld-gold);
+  }
+}
+
+/* Under 720px the pipeline runs down the page too: mark on the seam, words
+   beside it. The chooser goes to one column. */
+@media (max-width: 719px) {
+  .choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pipeline__stops {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  .pipeline__stops::before {
+    left: 21px;
+    right: auto;
+    top: 24px;
+    bottom: 24px;
+    width: 6px;
+    height: auto;
+    background:
+      radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.35) 0 2px, transparent 2.5px) 0 0 / 100% 6px repeat-y,
+      var(--weld-gold);
+  }
+
+  .pipeline__stop {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    column-gap: 1rem;
+    align-items: start;
+    text-align: left;
+  }
+
+  .pipeline__stop img {
+    grid-row: span 2;
+  }
+
+  .pipeline__name {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.625rem;
+    margin-top: 0.5rem;
   }
 }
 
@@ -1273,6 +1711,7 @@ body {
   .motion .hero__tagline,
   .motion .hero__blurb,
   .motion .quickstart,
+  .motion .hero__alt,
   .motion .hero__cta {
     animation: rise 700ms var(--weld-ease-out) backwards;
   }
@@ -1281,6 +1720,7 @@ body {
   .motion .hero__tagline { animation-delay: 1150ms; }
   .motion .hero__blurb { animation-delay: 1250ms; }
   .motion .quickstart { animation-delay: 1350ms; }
+  .motion .hero__alt { animation-delay: 1400ms; }
   .motion .hero__cta { animation-delay: 1450ms; }
 
   @keyframes rise {
@@ -1527,7 +1967,8 @@ body {
   /* -------------------------------------------------------------- cast */
   .motion .cast-card,
   .motion .path-card,
-  .motion .bench-card {
+  .motion .bench-card,
+  .motion .step {
     transition: transform 450ms var(--weld-ease-out), box-shadow 450ms var(--weld-ease-out);
   }
 
@@ -1538,6 +1979,34 @@ body {
 
   .motion .cast-card__glow {
     transition: opacity 350ms ease-out;
+  }
+
+  /* The seams under the steps and the pipeline are laid down like a bead
+     when they scroll in: armed (hidden) by weld.js, then welded. */
+  .motion .steps.is-armed::before,
+  .motion .pipeline__stops.is-armed::before {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .motion .steps.is-armed.is-welded::before,
+  .motion .pipeline__stops.is-armed.is-welded::before {
+    transform: none;
+    transition: transform 1400ms var(--weld-ease-out) 250ms;
+  }
+
+  @media (max-width: 819px) {
+    .motion .steps.is-armed::before {
+      transform: scaleY(0);
+      transform-origin: center top;
+    }
+  }
+
+  @media (max-width: 719px) {
+    .motion .pipeline__stops.is-armed::before {
+      transform: scaleY(0);
+      transform-origin: center top;
+    }
   }
 
   /* Cards rise into place as they scroll in, a beat apart. */
@@ -1558,6 +2027,10 @@ body {
     .motion .path-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 28px 50px -20px rgba(2, 26, 22, 0.75);
+    }
+
+    .motion .step:hover {
+      transform: translateY(-4px);
     }
 
     .motion .path-card--featured:hover {
