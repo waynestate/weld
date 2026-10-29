@@ -117,10 +117,11 @@ Coolify and plain Docker, with Citadel for comparison.
 
 Maintainers: how to build, test and release this project, and where its data comes from, is in [MAINTAINING.md](MAINTAINING.md).
 
-`weld:doctor` strikes an arc across the whole setup and reports every joint: the PHP version, the
-app key, debug in production, secure session cookies, writable storage, the database and pending
-migrations. One line per check, PASS or WARN or FAIL; exit code 1 when anything FAILs, so it works
-as a gate. A good bead is a quiet one: all PASS and nothing to say.
+`weld:doctor` strikes an arc across the local setup and reports every joint: the app key,
+writable storage, the database and pending migrations. One line per check, PASS or WARN or FAIL;
+exit code 1 when anything FAILs, so it works as a gate. The standards checks (PHP version, debug
+in production, secure session cookies) belong to PROCTOR: run `composer proctor`, and the doctor
+report says so. A good bead is a quiet one: all PASS and nothing to say.
 
 - Windows (PowerShell): `.\bin\weld.ps1 doctor`
 - macOS / Linux: `bin/weld.sh doctor`

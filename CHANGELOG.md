@@ -4,6 +4,9 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- `php artisan weld:doctor`: local setup only: the app key, writable storage, the database and
+  pending migrations. The standards checks (PHP version, debug in production, secure session
+  cookies) belong to PROCTOR, and the report points at `composer proctor`.
 - Ziggy's route list leaves the inline `<script>` from `@routes` and moves into the Vite bundle: `composer ziggy`
   generates `resources/js/ziggy.js` (plus `ziggy.d.ts`), the app entry imports it and passes it to `ZiggyVue`, so
   `route()` works in Vue exactly as before while HELMET's strict CSP stays closed. A CI job regenerates the file and
