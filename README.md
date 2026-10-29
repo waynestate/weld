@@ -100,6 +100,9 @@ The same subcommands work on every OS:
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs |
 
+Deploying somewhere other than a laptop? [Running WELD off Citadel](docs/running-off-citadel.md) covers OpenShift,
+Coolify and plain Docker, with Citadel for comparison.
+
 ## Check your setup
 
 `weld:doctor` strikes an arc across the whole setup and reports every joint: the PHP version, the
