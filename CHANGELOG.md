@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: project names written as words except acronyms.
 - `npm run typecheck` (vue-tsc, no emit) joins the scripts, and it passes: the ten errors from the first run
   are fixed in the bullets below.
 - `site/assets/wayne-ui/marks/warrior-strong-reverse.svg` comes back from the WayneUI static bundle; the CSS
