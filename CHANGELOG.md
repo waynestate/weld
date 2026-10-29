@@ -4,6 +4,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+## 0.1.1 (2026-10-29)
+
 - Added: agent-ready site (prompt blocks, Markdown twins, llms.txt), from Squire's kit.
 - Fixed: stale capability claims in the site and docs.
 - Changed: project names written as words except acronyms.
