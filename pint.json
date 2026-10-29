@@ -5,6 +5,7 @@
         "storage",
         "public/build",
         "node_modules",
-        "vendor"
+        "vendor",
+        "deploy"
     ]
 }
