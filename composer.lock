@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "339950795b858539ebc753ad8eafd7df",
+    "content-hash": "926b719f277eff55b205549c50c91e89",
     "packages": [
         {
             "name": "brick/math",
@@ -9764,24 +9764,29 @@
         },
         {
             "name": "waynestate/proctor",
-            "version": "0.1.0",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/proctor.git",
-                "reference": "030045522dbafc1d5490e276c7d21966f2c72c27"
+                "reference": "88ebd260fca62d46162f9c9f3eb04a771a0b3986"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/proctor/zipball/030045522dbafc1d5490e276c7d21966f2c72c27",
-                "reference": "030045522dbafc1d5490e276c7d21966f2c72c27",
+                "url": "https://api.github.com/repos/waynestate/proctor/zipball/88ebd260fca62d46162f9c9f3eb04a771a0b3986",
+                "reference": "88ebd260fca62d46162f9c9f3eb04a771a0b3986",
                 "shasum": ""
             },
             "require": {
                 "composer/semver": "^3.4",
+                "nikic/php-parser": "^5.6",
                 "php": "^8.3",
-                "symfony/console": "^7.1"
+                "symfony/console": "^7.1",
+                "symfony/yaml": "^7.1"
             },
             "require-dev": {
+                "humbug/box": "4.7.1",
+                "laravel/pint": "^1.32",
+                "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^11.5"
             },
             "bin": [
@@ -9803,11 +9808,12 @@
                 }
             ],
             "description": "A framework-free PHP CLI that measures a PHP app against the version policy.",
+            "homepage": "https://proctor.apps.wayne.edu/",
             "support": {
                 "issues": "https://github.com/waynestate/proctor/issues",
-                "source": "https://github.com/waynestate/proctor/tree/0.1.0"
+                "source": "https://github.com/waynestate/proctor"
             },
-            "time": "2026-10-27T23:10:27+00:00"
+            "time": "2026-10-29T03:46:10+00:00"
         }
     ],
     "aliases": [],
