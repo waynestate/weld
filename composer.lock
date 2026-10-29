@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bcd552b547581a3750db6aba51f12cb",
+    "content-hash": "ee6ade1e93660bd673402cbddbfa7a74",
     "packages": [
         {
             "name": "brick/math",
@@ -510,6 +510,80 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "firebase/php-jwt",
+            "version": "v7.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/php-jwt.git",
+                "reference": "0501f5729b9e2448516674aff07c7d1727869b8e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/0501f5729b9e2448516674aff07c7d1727869b8e",
+                "reference": "0501f5729b9e2448516674aff07c7d1727869b8e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^7.4||^8.0",
+                "phpfastcache/phpfastcache": "^9.2",
+                "phpseclib/phpseclib": "~3.0",
+                "phpspec/prophecy-phpunit": "^2.2",
+                "phpunit/phpunit": "^9.5",
+                "psr/cache": "^2.0||^3.0",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0"
+            },
+            "suggest": {
+                "ext-sodium": "Support EdDSA (Ed25519) signatures",
+                "paragonie/sodium_compat": "Support EdDSA (Ed25519) signatures when libsodium is not present",
+                "phpseclib/phpseclib": "Support PS256 (RSASSA-PSS) signatures"
+            },
+            "type": "library",
+            "extra": {
+                "component": {
+                    "id": "jwt",
+                    "path": "Jwt",
+                    "entry": "README.md",
+                    "target": "googleapis/php-jwt.git"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Firebase\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "email": "neuman+pear@twilio.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "email": "anant@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/googleapis/php-jwt",
+            "keywords": [
+                "jwt",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/googleapis/php-jwt/issues",
+                "source": "https://github.com/googleapis/php-jwt/tree/v7.2.1"
+            },
+            "time": "2026-09-28T17:51:46+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -1549,6 +1623,79 @@
                 "source": "https://github.com/laravel/tinker/tree/v3.0.2"
             },
             "time": "2026-03-17T14:54:13+00:00"
+        },
+        {
+            "name": "lcobucci/jwt",
+            "version": "5.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lcobucci/jwt.git",
+                "reference": "482760068e5a55a9045feddb3e2fc3f878cbd577"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/482760068e5a55a9045feddb3e2fc3f878cbd577",
+                "reference": "482760068e5a55a9045feddb3e2fc3f878cbd577",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "ext-sodium": "*",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+                "psr/clock": "^1.0"
+            },
+            "require-dev": {
+                "infection/infection": "^0.29",
+                "lcobucci/clock": "^3.2",
+                "lcobucci/coding-standard": "^11.0",
+                "phpbench/phpbench": "^1.2",
+                "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan": "^1.10.7",
+                "phpstan/phpstan-deprecation-rules": "^1.1.3",
+                "phpstan/phpstan-phpunit": "^1.3.10",
+                "phpstan/phpstan-strict-rules": "^1.5.0",
+                "phpunit/phpunit": "^11.1"
+            },
+            "suggest": {
+                "lcobucci/clock": ">= 3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lcobucci\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Luís Cobucci",
+                    "email": "lcobucci@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to work with JSON Web Token and JSON Web Signature",
+            "keywords": [
+                "JWS",
+                "jwt"
+            ],
+            "support": {
+                "issues": "https://github.com/lcobucci/jwt/issues",
+                "source": "https://github.com/lcobucci/jwt/tree/5.6.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/lcobucci",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/lcobucci",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2026-10-10T09:42:14+00:00"
         },
         {
             "name": "league/commonmark",
@@ -7095,36 +7242,48 @@
         },
         {
             "name": "waynestate/sesame",
-            "version": "0.1.0",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/sesame.git",
-                "reference": "7c36e601846e0f1b09c60a37c8356d703c25fe0e"
+                "reference": "9d4d94c459ae54e6765b0149ed1225c2ff59c69d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/sesame/zipball/7c36e601846e0f1b09c60a37c8356d703c25fe0e",
-                "reference": "7c36e601846e0f1b09c60a37c8356d703c25fe0e",
+                "url": "https://api.github.com/repos/waynestate/sesame/zipball/9d4d94c459ae54e6765b0149ed1225c2ff59c69d",
+                "reference": "9d4d94c459ae54e6765b0149ed1225c2ff59c69d",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
+                "firebase/php-jwt": "^7.2",
+                "lcobucci/jwt": "^5.6",
                 "nyholm/psr7": "^1.8",
                 "nyholm/psr7-server": "^1.1",
                 "php": "^8.3",
                 "psr/clock": "^1.0",
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.0",
-                "psr/http-message": "^2.0"
+                "psr/http-message": "^2.0",
+                "psr/simple-cache": "^3.0",
+                "symfony/http-foundation": "^6.4 || ^7.4"
             },
             "require-dev": {
+                "guzzlehttp/guzzle": "^7.9 || ^8.0",
+                "laravel/pint": "^1.32",
+                "league/oauth2-client": "^2.9.1",
                 "orchestra/testbench": "^10.0 || ^11.0",
-                "phpunit/phpunit": "^11.5"
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/phpunit": "^11.5",
+                "waynestate/pinstripe": "^0.1"
             },
             "suggest": {
-                "guzzlehttp/guzzle": "A PSR-18 client for the cas driver",
+                "guzzlehttp/guzzle": "A PSR-18 client for the cas, oauth2 and oidc drivers",
                 "laravel/framework": "For the Laravel adapter",
-                "symfony/http-client": "A PSR-18 client for the cas driver"
+                "league/oauth2-client": "Required by the oidc driver (browser sign-in to Entra): the authorization code flow with PKCE and the token request",
+                "symfony/http-client": "A PSR-18 client for the cas, oauth2 and oidc drivers",
+                "waynestate/playbook": "WSU's shared values (CAS, Entra, gateway); private, git.wayne.edu"
             },
             "type": "library",
             "extra": {
@@ -7152,11 +7311,12 @@
                 }
             ],
             "description": "Wayne State's protocol-neutral auth library: it returns a verified identity and leaves the session to the app.",
+            "homepage": "https://sesame.apps.wayne.edu/",
             "support": {
                 "issues": "https://github.com/waynestate/sesame/issues",
-                "source": "https://github.com/waynestate/sesame/tree/0.1.0"
+                "source": "https://github.com/waynestate/sesame"
             },
-            "time": "2026-10-27T23:55:08+00:00"
+            "time": "2026-10-29T18:43:31+00:00"
         }
     ],
     "packages-dev": [
