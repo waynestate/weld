@@ -113,6 +113,8 @@ Coolify and plain Docker, with Citadel for comparison.
 
 ## Check your setup
 
+Maintainers: how to build, test and release this project, and where its data comes from, is in [MAINTAINING.md](MAINTAINING.md).
+
 `weld:doctor` strikes an arc across the whole setup and reports every joint: the PHP version, the
 app key, debug in production, secure session cookies, writable storage, the database and pending
 migrations. One line per check, PASS or WARN or FAIL; exit code 1 when anything FAILs, so it works
