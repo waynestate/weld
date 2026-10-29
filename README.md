@@ -76,8 +76,9 @@ What is on the bench today:
   GitLab and GitHub
 - `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.1 is on Packagist
   (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
-- HELMET appends its security headers and CSP middleware to the web group; the Vite build takes the per-request
-  nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays Laravel's built-in health route
+- HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline;
+  the Vite build takes the per-request nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays
+  Laravel's built-in health route
 - SESAME owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and
   CAS is an env change away
 - PROCTOR measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures

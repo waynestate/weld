@@ -5,9 +5,9 @@ namespace Tests\Feature;
 use Tests\TestCase;
 
 /**
- * HELMET appends its SecurityHeaders middleware to the web group, so every
- * web response carries the baseline headers. The values asserted here are
- * the contract from HELMET's README, "The headers" section.
+ * HELMET runs its SecurityHeaders middleware in the global chain, so every
+ * response carries the baseline headers, web routes included. The values
+ * asserted here are the contract from HELMET's README, "The headers" section.
  */
 class HelmetHeadersTest extends TestCase
 {
