@@ -1665,3 +1665,100 @@ li.journey__stop:has(:is(.part-link, .cast-card__link):hover) img { transform: t
 /* A cast card's info half sits flush against its edge and terminal, where an
    inset ring is lost, so the whole card takes WELD's gold ring instead. */
 .cast-card:has(.cast-card__link:focus-visible) { outline: 3px solid var(--weld-gold); outline-offset: 3px; }
+
+/* ------------------------------------------------------- agent-ready kit */
+/* Squire's agent-ready.css lays out the prompt blocks and the page menu; this
+   maps its tokens onto the shop floor. A prompt is a job ticket: a cream card
+   like the path cards, a gold bead laid across the top, and the prompt itself
+   on the same dark terminal the cast cards run their commands in. */
+:root {
+  --ar-bg: var(--weld-cream);
+  --ar-ink: var(--weld-ink);
+  --ar-muted: var(--weld-cream-muted);
+  --ar-rule: rgba(15, 31, 28, 0.18);
+  --ar-accent: var(--weld-green);
+  --ar-on-accent: var(--weld-cream);
+  --ar-focus: var(--weld-ink);
+  --ar-code-bg: var(--weld-ink);
+  --ar-code-ink: var(--weld-term-text);
+  --ar-term-bg: var(--weld-green-ink);
+  --ar-term-ink: var(--weld-term-text);
+  --ar-body: var(--wsu-font-family-body);
+  --ar-mono: var(--wsu-font-family-mono);
+  --ar-radius: var(--wsu-radius-box);
+  --ar-shadow: var(--weld-shadow);
+}
+
+.ar-prompt {
+  border: 0;
+  border-top: 5px solid var(--weld-gold);
+}
+.ar-prompt__kicker { color: var(--weld-green); font-weight: var(--wsu-font-weight-bold); }
+.ar-prompt__title { font-weight: var(--wsu-font-weight-black); letter-spacing: 0.01em; }
+/* The glyph sits on a green tile, the way every mark on this page does. */
+.ar-prompt__glyph {
+  color: var(--weld-gold);
+  background: var(--weld-tile);
+  border-color: var(--weld-green-deep);
+}
+.ar-prompt__text {
+  border: 1px solid rgba(255, 204, 51, 0.22);
+  border-left: 3px solid var(--weld-gold);
+  box-shadow: 0 18px 40px -28px rgba(2, 26, 22, 0.9);
+}
+.ar-prompt__more { color: var(--weld-green); }
+/* The primary button rests on a gold bead: press it and the bead takes the weight. */
+.ar-btn--primary { box-shadow: 0 3px 0 var(--weld-gold); }
+.ar-btn--primary:hover { background: var(--weld-green-deep); border-color: var(--weld-green-deep); box-shadow: 0 3px 0 var(--weld-gold); }
+.ar-chip[aria-expanded="true"] { border-color: var(--weld-ink); box-shadow: inset 0 -3px 0 var(--weld-gold); }
+.ar-cmd { border: 1px solid rgba(255, 204, 51, 0.35); }
+.ar-cmd .ar-btn { border-color: var(--weld-gold); color: var(--weld-gold); }
+.ar-cmd .ar-seg { border-color: var(--weld-cream-40); }
+.ar-cmd .ar-seg__btn[aria-pressed="true"] { background: var(--weld-gold); color: var(--weld-ink); }
+.ar-cmd :focus-visible { outline-color: var(--weld-gold); }
+@media (prefers-reduced-motion: no-preference) {
+  .motion .ar-btn--primary:active { transform: translateY(3px); box-shadow: 0 0 0 var(--weld-gold); }
+}
+
+/* The page menu, on the green under the hero buttons: gold label, cream links. */
+.hero__agent {
+  justify-content: center;
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+}
+.hero__agent .ar-page__label { color: var(--weld-gold); font-weight: var(--wsu-font-weight-bold); }
+.hero__agent .ar-page__list { justify-content: center; gap: 0 1.1rem; }
+.hero__agent .ar-page__link,
+.hero__agent .ar-page__btn { color: var(--weld-cream); text-decoration-color: var(--weld-gold); }
+.hero__agent .ar-page__link:hover,
+.hero__agent .ar-page__btn:hover { color: var(--weld-gold); }
+.hero__agent .ar-status { flex-basis: 100%; font-family: var(--wsu-font-family-mono); font-size: 0.8125rem; color: var(--weld-cream-85); }
+.hero__agent .ar-status:empty { display: none; }
+.hero__agent :focus-visible { outline-color: var(--weld-gold); }
+@media (min-width: 960px) {
+  .hero__agent,
+  .hero__agent .ar-page__list { justify-content: flex-start; }
+}
+
+/* The tickets, stacked full width: typed prose reads badly in narrow columns. */
+.agents {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 60rem;
+  margin-inline: auto;
+}
+.agents .ar-prompt:not(.ar-prompt--lead) { --ar-preview-lines: 7; }
+.agents__fine {
+  margin: 0.25rem 0 0;
+  max-width: 46rem;
+  font-size: 0.9375rem;
+  line-height: var(--wsu-font-lineHeight-base);
+  color: var(--weld-cream-85);
+}
+.agents__fine a { color: var(--weld-cream); text-decoration-color: var(--weld-gold); }
+.agents__fine a:hover { color: var(--weld-gold); }
+
+@media print {
+  .ar-prompt__actions, .ar-cmd, .ar-prompt__more, .hero__agent { display: none; }
+  .ar-prompt.is-collapsed .ar-prompt__text { max-height: none; -webkit-mask-image: none; mask-image: none; }
+}

@@ -58,8 +58,11 @@
             "@test",
             "@lint",
             "@analyse",
+            "@site:agent-ready-check",
             "@composer audit"
         ],
+        "site:agent-ready": "php bin/agent-ready.php",
+        "site:agent-ready-check": "php bin/agent-ready.php --check",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -79,6 +82,10 @@
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
         ]
+    },
+    "scripts-descriptions": {
+        "site:agent-ready": "Rewrite the Markdown twins, llms.txt, llms-full.txt, robots.txt and sitemap.xml in site/ (Squire's agent-ready kit).",
+        "site:agent-ready-check": "Fail when the agent-ready files are stale, a page lacks its Markdown link, a prompt drifts from the docs, or the kit was edited here."
     },
     "extra": {
         "laravel": {
