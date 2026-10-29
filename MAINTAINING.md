@@ -41,6 +41,8 @@ Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `ph
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run
 PROCTOR, Ziggy or the JS lint.
 
+Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer (SQUIRE kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.
+
 ## CI
 
 - **GitLab:** PREFLIGHT's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a
