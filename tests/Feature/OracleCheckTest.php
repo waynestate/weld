@@ -10,13 +10,17 @@ use Tests\TestCase;
 /**
  * oracle:check is a thin wire to Squire's shared check file: it runs
  * deploy/oracle-check.php, streams the plain-language lines, and returns
- * the check's exit code. Until a kit refresh puts the file in deploy/,
- * the command says so and exits 0, so nothing local can fail on Oracle.
+ * the check's exit code. If the file is ever missing from deploy/, the command says so and exits 0,
+ * so nothing local can fail on Oracle.
  */
 class OracleCheckTest extends TestCase
 {
     public function test_an_absent_check_file_prints_the_hint_and_exits_zero()
     {
+        $missing = sys_get_temp_dir().DIRECTORY_SEPARATOR.'weld-oracle-check-missing-'.uniqid();
+
+        $this->app->bind(OracleCheck::class, fn () => new StubOracleCheck($missing));
+
         $this->artisan('oracle:check')
             ->expectsOutput('The Oracle check file is not here yet. Run "vendor/bin/squire update" to get it.')
             ->assertExitCode(0);
