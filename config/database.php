@@ -112,6 +112,32 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        // Wired by yajra/laravel-oci8, dormant until the ORACLE_* settings in
+        // .env are filled in: with them empty, nothing ever connects.
+        'oracle' => [
+            'driver' => 'oracle',
+            'tns' => env('ORACLE_TNS', ''),
+            'host' => env('ORACLE_HOST', ''),
+            'port' => env('ORACLE_PORT', ''),
+            'database' => '',
+            'service_name' => env('ORACLE_SERVICE_NAME', ''),
+            'username' => env('ORACLE_USERNAME', ''),
+            'password' => env('ORACLE_PASSWORD', ''),
+            'charset' => 'AL32UTF8',
+            'prefix' => '',
+            'prefix_schema' => '',
+            'edition' => 'ora$base',
+            'server_version' => '11g',
+            'load_balance' => 'yes',
+            'connect_timeout' => '',
+            'retry_count' => '3',
+            'retry_delay' => '1',
+            'transport_connect_timeout' => '60',
+            'expire_time' => '0',
+            'dynamic' => [],
+            'max_name_len' => 30,
+        ],
+
     ],
 
     /*

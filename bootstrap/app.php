@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Support\OracleErrors;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Support\Facades\Log;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -28,5 +30,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // The common Oracle errors get one plain sentence in the log, on
+        // top of the normal report: what to check, never the raw message.
+        $exceptions->reportable(function (Throwable $e): void {
+            $sentence = OracleErrors::describe($e);
+
+            if ($sentence !== null) {
+                Log::error('[oracle] '.$sentence);
+            }
+        });
     })->create();

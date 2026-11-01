@@ -124,6 +124,37 @@ The same subcommands work on every OS:
 Deploying somewhere other than a laptop? [Running WELD off Citadel](docs/running-off-citadel.md) covers OpenShift,
 Coolify and plain Docker, with Citadel for comparison.
 
+## Oracle
+
+WELD speaks Oracle through `yajra/laravel-oci8`, and the wiring is already in: an `oracle` connection in
+`config/database.php`, a check command, and plain-language sentences for the common errors. Until you set the
+Oracle settings it stays dormant: nothing connects and nothing errors.
+
+Fill in one set of names in `.env` (the commented block in `.env.example`): `ORACLE_USERNAME`, `ORACLE_PASSWORD`,
+and either `ORACLE_TNS` (an Easy Connect string, `host:port/service`, or a full descriptor) or `ORACLE_HOST`,
+`ORACLE_PORT` and `ORACLE_SERVICE_NAME`. On a server, set them in the app's environment settings, never in a file
+in git.
+
+Check the settings and the connection in plain language, one line per finding:
+
+```
+php artisan oracle:check
+```
+
+The local `app` container runs the stock Composer image, which has no Oracle driver. When you need a real
+connection from your machine, the Oracle-ready image is opt-in through `compose.oracle.yaml`:
+
+```
+# Windows (PowerShell):
+$env:WELD_ORACLE_IMAGE = "the-oracle-ready-image"
+docker compose -f compose.yaml -f compose.oracle.yaml up
+# macOS / Linux:
+WELD_ORACLE_IMAGE=the-oracle-ready-image docker compose -f compose.yaml -f compose.oracle.yaml up
+```
+
+The overlay swaps only the app's image and passes the `ORACLE_*` settings through from `.env`; the ports stay
+bound to `127.0.0.1`. It fails closed when `WELD_ORACLE_IMAGE` is unset.
+
 ## Check your setup
 
 Maintainers: how to build, test and release this project, and where its data comes from, is in [MAINTAINING.md](MAINTAINING.md).

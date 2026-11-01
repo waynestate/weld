@@ -1,0 +1,15 @@
+# WELD's Oracle overlay: the same stack, but the app runs in an image that
+# has the Oracle driver (oci8). Use it with the base file:
+#
+#   WELD_ORACLE_IMAGE=... docker compose -f compose.yaml -f compose.oracle.yaml up
+#
+# WELD_ORACLE_IMAGE can live in .env instead of the shell, because Docker
+# Compose reads .env for variable substitution. The overlay fails closed
+# when it is unset, so a typo never boots the plain image by accident. Only
+# the app's image changes; the ORACLE_* settings come through from .env, and
+# the ports stay bound to 127.0.0.1 as in compose.yaml.
+
+services:
+  app:
+    image: ${WELD_ORACLE_IMAGE:?set WELD_ORACLE_IMAGE to the Oracle-ready image}
+    env_file: .env
