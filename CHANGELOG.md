@@ -6,6 +6,8 @@ Notable changes to WELD, newest first.
 
 - Changed: the deploy layer's Squire kit is refreshed to 0.3.3 (release options can now live in ./.env.squire).
 - Changed: the deploy layer's Squire kit is refreshed to 0.3.4 (the local .env.squire file is now git-ignored).
+- Changed: the deploy layer's Squire kit is refreshed to 0.4.0: deploy/oracle-check.php arrives, so `php artisan oracle:check` runs the real check, and release.sh runs it without failing the release.
+- Changed: the Oracle overlay docs name Squire's parity image, `squire/oracle-parity:8.3`.
 
 ## 0.1.1 (2026-10-29)
 

@@ -146,14 +146,17 @@ connection from your machine, the Oracle-ready image is opt-in through `compose.
 
 ```
 # Windows (PowerShell):
-$env:WELD_ORACLE_IMAGE = "the-oracle-ready-image"
+$env:WELD_ORACLE_IMAGE = "squire/oracle-parity:8.3"
 docker compose -f compose.yaml -f compose.oracle.yaml up
 # macOS / Linux:
-WELD_ORACLE_IMAGE=the-oracle-ready-image docker compose -f compose.yaml -f compose.oracle.yaml up
+WELD_ORACLE_IMAGE=squire/oracle-parity:8.3 docker compose -f compose.yaml -f compose.oracle.yaml up
 ```
 
 The overlay swaps only the app's image and passes the `ORACLE_*` settings through from `.env`; the ports stay
 bound to `127.0.0.1`. It fails closed when `WELD_ORACLE_IMAGE` is unset.
+
+`squire/oracle-parity:8.3` is the name Squire documents for its parity image; build it once with Squire's
+`scripts/oracle-image-build.sh --flavour parity --php 8.3` (the name is a placeholder until a registry is chosen).
 
 ## Check your setup
 
