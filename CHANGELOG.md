@@ -8,6 +8,8 @@ Notable changes to WELD, newest first.
 - Changed: the deploy layer's Squire kit is refreshed to 0.3.4 (the local .env.squire file is now git-ignored).
 - Changed: the deploy layer's Squire kit is refreshed to 0.4.0: deploy/oracle-check.php arrives, so `php artisan oracle:check` runs the real check, and release.sh runs it without failing the release.
 - Changed: the Oracle overlay docs name Squire's parity image, `squire/oracle-parity:8.3`.
+- Added: `StackIntegrationTest` pins HELMET's security headers on a signed-in dashboard, a 404 error page and `/up`; `ProctorCheckTest` runs PROCTOR against CREED's policy.json inside the test suite, which `composer ci` alone did not cover.
+- Added: README section "Clone it and rename": copy WELD, rename the composer name, APP_NAME, site title and git remote, regenerate the key and re-run the checks, for PowerShell and sh.
 
 ## 0.1.1 (2026-10-29)
 
