@@ -4,7 +4,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
-- Changed: the deploy layer's Squire kit is refreshed to 0.3.3 (release options can now live in ./.env.squire).
+- Added: `waynestate/advisor` joins `require-dev` at `^0.1`, and "Clone it and rename" gains one step: `php vendor/bin/advisor install --client=claude --write` writes `.mcp.json`, which is now git-ignored because a committed MCP config would run a program on whoever opens the project. Set `ADVISOR_ENABLED=1` in `.env` to switch the advisor on.
+- Changed: `bin/weld.ps1 up` and `bin/weld.sh up` write `.mcp.json` from ADVISOR inside the app container as part of the first-run setup (no PHP on the host PATH in the Docker path), with a `--no-advisor` opt-out on both scripts.
 - Changed: the deploy layer's Squire kit is refreshed to 0.3.4 (the local .env.squire file is now git-ignored).
 - Changed: the deploy layer's Squire kit is refreshed to 0.4.0: deploy/oracle-check.php arrives, so `php artisan oracle:check` runs the real check, and release.sh runs it without failing the release.
 - Changed: the Oracle overlay docs name Squire's parity image, `squire/oracle-parity:8.3`.

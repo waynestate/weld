@@ -33,6 +33,7 @@
         "nunomaduro/collision": "^8.6",
         "phpstan/extension-installer": "^1.4",
         "phpunit/phpunit": "^12.0",
+        "waynestate/advisor": "^0.1",
         "waynestate/creed": "^0.1",
         "waynestate/proctor": "^0.3"
     },
