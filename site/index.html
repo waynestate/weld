@@ -82,7 +82,7 @@
             <span class="copy-btn__label">Copy</span>
           </button>
         </div>
-        <p class="hero__alt">Need raw PHP instead? <a class="hero__alt-link" href="https://sourdough.apps.wayne.edu/">Sourdough</a> starts one with the same sign-in, headers and checks.</p>
+        <p class="hero__alt">Any other shape? <a class="hero__alt-link" href="https://sourdough.apps.wayne.edu/">Sourdough</a> starts raw PHP or Laravel with Blade, with the same sign-in, headers and checks.</p>
         <p class="hero__cta">
           <a class="wsu-btn wsu-btn--accent wsu-btn--lg" href="#start">Get started</a>
           <a class="hero__link" href="#chooser">Which piece do I need?</a>
@@ -139,7 +139,7 @@ bin/weld.sh up
         </li>
       </ol>
 
-      <p class="start__also">Not on Laravel and Vue? <a href="https://sourdough.apps.wayne.edu/">Sourdough</a> is the other starter. <code>sourdough new my-app --raw</code> makes a raw PHP app with SESAME, HELMET, PROCTOR and Preflight in place. Raw PHP is all it makes today; the Laravel shapes are still proofing.</p>
+      <p class="start__also"><a href="https://sourdough.apps.wayne.edu/">Sourdough</a> makes the other shapes: <code>sourdough new my-app</code> for raw PHP, <code>sourdough new my-app --laravel</code> for Laravel with Blade. WELD is the Inertia and Vue shape, ready-made.</p>
     </div>
   </section>
 
@@ -163,7 +163,7 @@ bin/weld.sh up
             <span class="choice__or">or</span>
             <span class="choice__one"><img src="assets/marks/sourdough.png" width="40" height="40" alt=""> <a class="choice__name" href="https://sourdough.apps.wayne.edu/">Sourdough</a></span>
           </p>
-          <p class="choice__line">Pick WELD for Laravel with Inertia and Vue, with everything already installed. Pick Sourdough for raw PHP, the only shape it makes today.</p>
+          <p class="choice__line">Pick WELD for Laravel with Inertia and Vue, ready-made. Pick Sourdough to start any other shape, or to shape one yourself.</p>
         </li>
         <li class="choice">
           <p class="choice__if">My raw PHP app just needs sign-in</p>
@@ -553,7 +553,7 @@ bin/weld.sh up
               <span class="chip chip--version">0.1</span>
               <span class="chip chip--joke">Rise | Daily</span>
             </p>
-            <p class="cast-card__line"><code>sourdough new</code> makes a new app with SESAME, HELMET, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. Version 0.1 makes raw PHP apps only.</p>
+            <p class="cast-card__line"><code>sourdough new</code> makes a new app with SESAME, HELMET, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. It makes raw PHP and Laravel with Blade today, and it is the starter for every shape.</p>
           </div>
           <div class="term" data-term>
             <p class="term__bar" aria-hidden="true">~/my-app</p>
@@ -587,14 +587,13 @@ bin/weld.sh up
     <div class="wsu-container">
       <div class="section__head">
         <h2 id="paths-title">Pick your path</h2>
-        <p>The stack has three app shapes. WELD is the Inertia and Vue one. Sourdough makes raw PHP today and will make Laravel with Blade later.</p>
+        <p>The stack has five app shapes. Sourdough bakes raw PHP and Laravel with Blade today. WELD is the Inertia and Vue one, built.</p>
       </div>
       <div class="paths">
 
-        <!-- Commands as documented in sourdough/README.md (0.1).
-             Only --raw generates in Sourdough 0.1; the Laravel shapes print
-             their plan and stop, so Blade says "coming soon" instead of
-             showing a command that would not work today. -->
+        <!-- Commands as documented in sourdough/README.md: --raw and --laravel
+             generate apps today. The Vue shapes (--vue) print their plan
+             and stop, so they stay a line below the cards, not a card. -->
         <article class="path-card">
           <p class="path-card__from">From Sourdough</p>
           <h3>Raw PHP</h3>
@@ -604,9 +603,10 @@ sourdough new my-app --raw</code>
         </article>
 
         <article class="path-card">
-          <p class="path-card__from">From Sourdough <span class="chip chip--soon">Coming soon</span></p>
+          <p class="path-card__from">From Sourdough</p>
           <h3>Laravel + Blade</h3>
-          <p>Laravel with Blade views, the classic WSU shape. Sourdough 0.1 prints the plan for it and stops, so there's no command to show here yet.</p>
+          <p>Laravel with Blade views, the classic WSU shape.</p>
+          <code>sourdough new my-app --laravel</code>
         </article>
 
         <article class="path-card path-card--featured">
@@ -615,6 +615,8 @@ sourdough new my-app --raw</code>
           <p>Laravel 13 with Inertia 2 and Vue 3. This is the shape WELD is, with the stack already installed.</p>
           <code>composer create-project waynestate/weld my-app</code>
         </article>
+
+        <p class="paths__planned">Also planned: raw PHP + Vue, Laravel + Blade + Vue islands (<code>--vue</code>); they print a plan today.</p>
 
       </div>
     </div>
@@ -659,7 +661,7 @@ Task:
 5. Propose what to rename to make it mine: APP_NAME in .env.example and the package name in composer.json. Do not change them yet.
 
 Constraints:
-- WELD is Laravel with Inertia and Vue. If I want raw PHP or Laravel with Blade, stop and point me at Sourdough: https://sourdough.apps.wayne.edu/llms.txt
+- WELD is Laravel with Inertia and Vue. If I want raw PHP or Laravel with Blade, stop and point me at Sourdough, the starter for every shape: https://sourdough.apps.wayne.edu/llms.txt
 - Sign-in is SESAME's, at /login and /logout, and its fake driver stands in locally. Never add password auth back.
 - Never commit .env, and never paste a secret into a prompt or a file.
 - Give separate commands for Windows (PowerShell), macOS and Linux wherever they differ.
