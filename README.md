@@ -49,7 +49,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-The `advisor install` line writes `.mcp.json`, the MCP config that points Claude Code at ADVISOR's server; the file is git-ignored, because a committed `.mcp.json` would run a program on whoever opens the project. Set `ADVISOR_ENABLED=1` in `.env` to switch the advisor on. Running WELD through Docker instead? PHP is not on your host PATH, so `bin/weld.ps1 up` and `bin/weld.sh up` run the same install inside the app container for you (skip it with `--no-advisor`); see ADVISOR's README for the details.
+The `advisor install` line writes `.mcp.json`, the MCP config that points Claude Code at ADVISOR's server; the file is git-ignored, because a committed `.mcp.json` would run a program on whoever opens the project. Set `ADVISOR_ENABLED=1` in `.env` to switch the advisor on. Running WELD through Docker instead? PHP is not on your host PATH, so `bin/weld.ps1 up` and `bin/weld.sh up` run the same install inside the app container for you (skip it with `--no-advisor`, or `-NoAdvisor` on Windows); see ADVISOR's README for the details.
 
 ## Clone it and rename
 

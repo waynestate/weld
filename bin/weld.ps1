@@ -4,13 +4,17 @@
 # and Vite run in Docker; PHP and Node live in the containers, so the host
 # only needs Docker. Linux and macOS have their own native path: bin/weld.sh.
 #
-# Usage: bin\weld.ps1 <up|down|test|doctor|logs> [--no-advisor]
+# Usage: bin\weld.ps1 <up|down|test|doctor|logs> [--no-advisor|-NoAdvisor]
 
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
     [string] $Command,
-    [switch] $NoAdvisor
+    [switch] $NoAdvisor,
+    # PowerShell binds -NoAdvisor to the switch above, but the documented
+    # --no-advisor form arrives here as a remaining argument, so catch it.
+    [Parameter(ValueFromRemainingArguments)]
+    [string[]] $Rest
 )
 
 $ErrorActionPreference = 'Stop'
@@ -21,8 +25,8 @@ function Show-Usage {
     Write-Host "Commands:"
     Write-Host "  up     Copy .env.example to .env if missing, install the PHP and"
     Write-Host "         Node dependencies in the containers, write .mcp.json from"
-    Write-Host "         ADVISOR (skip with --no-advisor), start the app and Vite,"
-    Write-Host "         generate the app key if needed, and migrate."
+    Write-Host "         ADVISOR (skip with --no-advisor or -NoAdvisor), start the"
+    Write-Host "         app and Vite, generate the app key if needed, and migrate."
     Write-Host "  down   Stop and remove the containers."
     Write-Host "  test   Run 'composer ci' in the app container."
     Write-Host "  doctor Run 'php artisan weld:doctor' in the app container."
@@ -39,6 +43,20 @@ function Invoke-Docker {
     & docker @Arguments
     if ($LASTEXITCODE -ne 0) {
         throw "docker $($Arguments -join ' ') failed with exit code $LASTEXITCODE"
+    }
+}
+
+# --no-advisor reaches us in $Rest (-NoAdvisor binds to the switch), so fold
+# it in here; anything else left over is a typo, and the script refuses it.
+foreach ($arg in $Rest) {
+    if ($arg -eq '--no-advisor') {
+        $NoAdvisor = $true
+    }
+    else {
+        Show-Usage
+        Write-Host ''
+        Write-Host "weld: unknown argument: $arg"
+        exit 2
     }
 }
 
