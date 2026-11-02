@@ -20,7 +20,7 @@ WELD is a Laravel 13 app with Inertia and Vue, and the rest of the stack is alre
 
 `$ composer create-project waynestate/weld my-app`
 
-Need raw PHP instead? [Sourdough](https://sourdough.apps.wayne.edu/) starts one with the same sign-in, headers and checks.
+Any other shape? [Sourdough](https://sourdough.apps.wayne.edu/) starts raw PHP or Laravel with Blade, with the same sign-in, headers and checks.
 
 [Get started](https://weld.apps.wayne.edu/#start) [Which piece do I need?](https://weld.apps.wayne.edu/#chooser) [Meet the cast](https://weld.apps.wayne.edu/#cast-title)
 
@@ -49,7 +49,7 @@ Yes, this is a lot of packages. Most of you can ignore that. Install WELD, run t
    composer ci
    ```
 
-Not on Laravel and Vue? [Sourdough](https://sourdough.apps.wayne.edu/) is the other starter. `sourdough new my-app --raw` makes a raw PHP app with SESAME, HELMET, PROCTOR and Preflight in place. Raw PHP is all it makes today; the Laravel shapes are still proofing.
+[Sourdough](https://sourdough.apps.wayne.edu/) makes the other shapes: `sourdough new my-app` for raw PHP, `sourdough new my-app --laravel` for Laravel with Blade. WELD is the Inertia and Vue shape, ready-made.
 
 Already have an app?
 
@@ -59,7 +59,7 @@ Most Wayne State apps are older than this stack. Some are raw PHP, some are Lara
 
 - I'm starting a new app
   WELD or [Sourdough](https://sourdough.apps.wayne.edu/)
-  Pick WELD for Laravel with Inertia and Vue, with everything already installed. Pick Sourdough for raw PHP, the only shape it makes today.
+  Pick WELD for Laravel with Inertia and Vue, ready-made. Pick Sourdough to start any other shape, or to shape one yourself.
 - My raw PHP app just needs sign-in
   [SESAME](https://sesame.apps.wayne.edu/)
   Adds CAS or Entra ID sign-in to a raw PHP or Laravel app. Your app keeps its own session.
@@ -322,7 +322,7 @@ $
 
 0.1 Rise | Daily
 
-`sourdough new` makes a new app with SESAME, HELMET, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. Version 0.1 makes raw PHP apps only.
+`sourdough new` makes a new app with SESAME, HELMET, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. It makes raw PHP and Laravel with Blade today, and it is the starter for every shape.
 
 ```
 $ sourdough new --raw
@@ -339,7 +339,7 @@ $
 
 ## Pick your path
 
-The stack has three app shapes. WELD is the Inertia and Vue one. Sourdough makes raw PHP today and will make Laravel with Blade later.
+The stack has five app shapes. Sourdough bakes raw PHP and Laravel with Blade today. WELD is the Inertia and Vue one, built.
 
 From Sourdough
 
@@ -349,11 +349,13 @@ Plain PHP with no framework and no build step, using WayneUI's standalone files.
 
 `composer global require waynestate/sourdough sourdough new my-app --raw`
 
-From Sourdough Coming soon
+From Sourdough
 
 ### Laravel + Blade
 
-Laravel with Blade views, the classic WSU shape. Sourdough 0.1 prints the plan for it and stops, so there's no command to show here yet.
+Laravel with Blade views, the classic WSU shape.
+
+`sourdough new my-app --laravel`
 
 This is WELD
 
@@ -362,6 +364,8 @@ This is WELD
 Laravel 13 with Inertia 2 and Vue 3. This is the shape WELD is, with the stack already installed.
 
 `composer create-project waynestate/weld my-app`
+
+Also planned: raw PHP + Vue, Laravel + Blade + Vue islands (`--vue`); they print a plan today.
 
 Hand it to your agent
 
@@ -390,7 +394,7 @@ Task:
 5. Propose what to rename to make it mine: APP_NAME in .env.example and the package name in composer.json. Do not change them yet.
 
 Constraints:
-- WELD is Laravel with Inertia and Vue. If I want raw PHP or Laravel with Blade, stop and point me at Sourdough: https://sourdough.apps.wayne.edu/llms.txt
+- WELD is Laravel with Inertia and Vue. If I want raw PHP or Laravel with Blade, stop and point me at Sourdough, the starter for every shape: https://sourdough.apps.wayne.edu/llms.txt
 - Sign-in is SESAME's, at /login and /logout, and its fake driver stands in locally. Never add password auth back.
 - Never commit .env, and never paste a secret into a prompt or a file.
 - Give separate commands for Windows (PowerShell), macOS and Linux wherever they differ.
