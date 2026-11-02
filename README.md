@@ -9,7 +9,7 @@ On Citadel it is served by the raw-PHP deploy layer in [`deploy/`](deploy/): a S
 <p>
   <img src="docs/readme/badges/php.svg" alt="php ^8.3">
   <img src="docs/readme/badges/laravel.svg" alt="laravel ^13.29">
-  <img src="docs/readme/badges/license.svg" alt="licence MIT">
+  <img src="docs/readme/badges/license.svg" alt="license MIT">
   <a href="https://github.com/waynestate/weld/actions/workflows/ci.yml"><img src="https://github.com/waynestate/weld/actions/workflows/ci.yml/badge.svg" alt="GitHub CI"></a>
 </p>
 

@@ -414,7 +414,7 @@ $ proctor check
 $
 ```
 
-![Preflight logo: a runway with a gold centre line](https://weld.apps.wayne.edu/assets/marks/preflight.png)
+![Preflight logo: a runway with a gold center line](https://weld.apps.wayne.edu/assets/marks/preflight.png)
 
 #### [Preflight](https://preflight.apps.wayne.edu/)
 
@@ -483,7 +483,7 @@ $
 
 #### [Squire](https://squire.apps.wayne.edu/)
 
-0.3 Armour | Carried
+0.3 Armor | Carried
 
 The deploy kit for Citadel: `build.sh`, a release script, a health check and local runs on the same images. This page deploys with it too.
 

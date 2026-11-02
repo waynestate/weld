@@ -28,7 +28,7 @@ no network) and is deterministic: same inputs, same outputs.
   (the bead cools to a still diagram under `prefers-reduced-motion`).
 - `docs/readme/gallery.jpg`: a contact sheet of three mobile crops.
 - `docs/readme/cast/*.png`: one 96×96 mark per stack part.
-- `docs/readme/badges/*.svg`: `php`, `licence` and `laravel`, generated
+- `docs/readme/badges/*.svg`: `php`, `license` and `laravel`, generated
   locally by `badge-maker` from `composer.json`.
 
 Every file must stay at or under 300 KB; the script prints each size and

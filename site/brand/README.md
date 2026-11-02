@@ -11,8 +11,8 @@ vector source to redraw from, and the raster is the mark.
 
 No sparks were drawn in the making of this mark; it was generated, not welded.
 
-## Colours
-| Role | Colour |
+## Colors
+| Role | Color |
 |---|---|
 | Tile | Wayne State green `#0C5449` |
 | Lens and pivot | Wayne State gold `#FFCC33` |
