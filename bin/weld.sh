@@ -4,7 +4,7 @@
 # The app and Vite run in Docker; PHP and Node live in the containers, so the
 # host only needs Docker. Windows has its own native path: bin/weld.ps1.
 #
-# Usage: bin/weld.sh <up|down|test|doctor|logs>
+# Usage: bin/weld.sh <up|down|test|doctor|logs> [--no-advisor]
 
 set -eu
 
@@ -16,15 +16,23 @@ usage() {
     echo ""
     echo "Commands:"
     echo "  up     Copy .env.example to .env if missing, install the PHP and"
-    echo "         Node dependencies in the containers, start the app and"
-    echo "         Vite, generate the app key if needed, and migrate."
+    echo "         Node dependencies in the containers, write .mcp.json from"
+    echo "         ADVISOR (skip with --no-advisor), start the app and Vite,"
+    echo "         generate the app key if needed, and migrate."
     echo "  down   Stop and remove the containers."
     echo "  test   Run 'composer ci' in the app container."
     echo "  doctor Run 'php artisan weld:doctor' in the app container."
     echo "  logs   Follow the container logs; Ctrl+C stops."
 }
 
-cmd="${1:-}"
+cmd=""
+no_advisor=0
+for arg in "$@"; do
+    case "$arg" in
+        --no-advisor) no_advisor=1 ;;
+        *) cmd="$arg" ;;
+    esac
+done
 
 case "$cmd" in
     up)
@@ -34,6 +42,10 @@ case "$cmd" in
         fi
         echo "weld: docker compose run --rm app composer install"
         docker compose run --rm app composer install
+        if [ "$no_advisor" -eq 0 ]; then
+            echo "weld: docker compose run --rm app php vendor/bin/advisor install --client=claude --write"
+            docker compose run --rm app php vendor/bin/advisor install --client=claude --write
+        fi
         echo "weld: docker compose run --rm vite npm ci"
         docker compose run --rm vite npm ci
         echo "weld: docker compose up -d"
