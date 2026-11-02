@@ -91,7 +91,7 @@ git remote set-url origin https://git.example.com/you/my-app.git
 
 Then re-run the checks the way CI does: `.\bin\weld.ps1 test` (or `bin/weld.sh test`), which runs `composer ci` in the container, plus `composer proctor` for the standards check. A photocopy is not a weld yet: when the checks pass under your name, the seam holds.
 
-Want a smaller starting point than a full Laravel app? `sourdough new` is the other route: today it generates a raw PHP app with SESAME, HELMET, PROCTOR and the Preflight components already in place, and the Laravel flavours are still on the way.
+Want a smaller starting point than a full Laravel app? Sourdough is the starter tool for every shape of Wayne State app: it makes raw PHP and Laravel with Blade apps today, and the Vue shapes are planned. WELD is the Inertia and Vue shape, already assembled and ready to clone, so you do not wait for the plan.
 
 ## What is welded in
 
@@ -221,7 +221,7 @@ Add `--json` to any of them for a machine-readable report.
 
 ## WELD and Sourdough
 
-Sourdough makes a new app in any of the stack's shapes: raw PHP, Laravel with Blade, Laravel with Inertia and Vue.
+Sourdough is the starter tool for every shape of Wayne State app. It makes raw PHP and Laravel with Blade today; the Vue shapes are planned.
 WELD is one of those shapes, Laravel with Inertia and Vue, with every part already joined and proved to work together.
 Pick Sourdough when you want a starter you shape yourself. Pick WELD when you want the finished piece.
 
