@@ -10,6 +10,7 @@ Notable changes to WELD, newest first.
 - Changed: the Oracle overlay docs name Squire's parity image, `squire/oracle-parity:8.3`.
 - Added: `StackIntegrationTest` pins HELMET's security headers on a signed-in dashboard, a 404 error page and `/up`; `ProctorCheckTest` runs PROCTOR against CREED's policy.json inside the test suite, which `composer ci` alone did not cover.
 - Added: README section "Clone it and rename": copy WELD, rename the composer name, APP_NAME, site title and git remote, regenerate the key and re-run the checks, for PowerShell and sh.
+- Changed: BEST_PRACTICES.md re-checked against the code on 2026-11-02: the Squire kit's Dockerfile, entrypoint and release script move W10, W12, W16 and W24 from `Not yet` to `Documented`, W8/W13/W22 sentences name the new deploy files, and the shifted line numbers in composer.json, .env.example and bootstrap/app.php are corrected.
 
 ## 0.1.1 (2026-10-29)
 
