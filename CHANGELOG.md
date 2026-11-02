@@ -5,6 +5,7 @@ Notable changes to WELD, newest first.
 ## Unreleased
 
 - Changed: the README and front page now say Sourdough is the starter tool for every shape of Wayne State app (raw PHP and Laravel with Blade today, the Vue shapes planned) and WELD is the Inertia and Vue shape, already assembled and ready to clone.
+- Changed: CI pulls its Docker Hub images through the GitLab Dependency Proxy (the group's CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX), so pipelines no longer hit Docker Hub's anonymous pull limit.
 - Added: `waynestate/advisor` joins `require-dev` at `^0.1`, and "Clone it and rename" gains one step: `php vendor/bin/advisor install --client=claude --write` writes `.mcp.json`, which is now git-ignored because a committed MCP config would run a program on whoever opens the project. Set `ADVISOR_ENABLED=1` in `.env` to switch the advisor on.
 - Changed: `bin/weld.ps1 up` and `bin/weld.sh up` write `.mcp.json` from ADVISOR inside the app container as part of the first-run setup (no PHP on the host PATH in the Docker path), with a `--no-advisor` opt-out on both scripts (`-NoAdvisor` on the PowerShell one).
 - Changed: the deploy layer's Squire kit is refreshed to 0.3.3 (release options can now live in ./.env.squire).

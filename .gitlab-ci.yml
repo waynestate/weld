@@ -2,11 +2,15 @@
 # Pinned to Preflight 0.1.0. Never use ~latest.
 # WELD requires PHP ^8.3, so the test matrix starts at 8.3.
 # composer ci is the contract: every check runs from the "ci" script in composer.json.
+# Docker Hub images go through the GitLab Dependency Proxy to avoid the anonymous pull limit.
 include:
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.1.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.1.2
     inputs:
       php_versions: ["8.3", "8.4", "8.5"]
+      image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/php:${PHP_VERSION}-cli-trixie"
   - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@0.1.0
+    inputs:
+      image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2@sha256:b6dcd72ca98fa19d0e5b8476de179859704891fad06dd9e0b96833d4c430a5fc"
   # The front page deploy layer (ADR-0017): PROCTOR checks deploy/ against CREED's policy.
   # allow_failure: current findings: unbounded dev-main constraints; CI files missing in deploy/.
   - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@0.1.0
@@ -14,9 +18,10 @@ include:
       working_dir: deploy
       proctor_command: vendor/bin/proctor check --policy=vendor/waynestate/creed/policy/policy.json --format=codequality
       allow_failure: true
+      image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/php:8.4-cli-trixie@sha256:9cf851bc2c1b37c3e59dfd677a3c3e56d485af5a47c93f629424bb039eafcb69"
 
 composer-ci:
-  image: composer:2.10.3
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3
   script:
     - composer install --no-interaction --no-progress --prefer-dist
     - composer ci
@@ -24,7 +29,7 @@ composer-ci:
 # PROCTOR measures WELD against the CREED version policy. Warnings are
 # allowed; failures block the pipeline.
 proctor-root:
-  image: composer:2.10.3
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3
   script:
     - composer install --no-interaction --no-progress --prefer-dist
     - composer proctor
@@ -33,7 +38,7 @@ proctor-root:
 # the committed resources/js/ziggy.* must match the routes. Regenerate and
 # fail on any diff.
 ziggy:
-  image: composer:2.10.3
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3
   script:
     - composer install --no-interaction --no-progress --prefer-dist
     - composer ziggy
