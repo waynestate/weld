@@ -89,7 +89,7 @@ git remote set-url origin https://git.example.com/you/my-app.git
 
 Then re-run the checks the way CI does: `.\bin\weld.ps1 test` (or `bin/weld.sh test`), which runs `composer ci` in the container, plus `composer proctor` for the standards check. A photocopy is not a weld yet: when the checks pass under your name, the seam holds.
 
-Prefer to shape a starter yourself? `sourdough new` is the other route: raw PHP, Laravel with Blade, or Laravel with Inertia and Vue, without the parts pre-joined.
+Want a smaller starting point than a full Laravel app? `sourdough new` is the other route: today it generates a raw PHP app with SESAME, HELMET, PROCTOR and the Preflight components already in place, and the Laravel flavours are still on the way.
 
 ### What is welded in
 
