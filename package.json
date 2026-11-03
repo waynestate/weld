@@ -6,9 +6,10 @@
         "build": "vite build",
         "build:ssr": "vite build && vite build --ssr",
         "dev": "vite",
+        "fix": "eslint . --fix",
         "format": "prettier --write resources/",
         "format:check": "prettier --check resources/",
-        "lint": "eslint . --fix",
+        "lint": "eslint .",
         "typecheck": "vue-tsc --noEmit"
     },
     "devDependencies": {

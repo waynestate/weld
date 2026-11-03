@@ -35,7 +35,7 @@ Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `ph
 |---|---|
 | PROCTOR against CREED's policy | `composer proctor` |
 | Ziggy routes are current | `composer ziggy`, then `git diff --exit-code resources/js/ziggy.*` |
-| JS lint and format | `npm run lint`, `npm run format:check` |
+| JS lint and format | `npm run lint` (pure check), `npm run fix` (apply fixes), `npm run format:check` |
 | Production assets | `npm run build` |
 
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run
