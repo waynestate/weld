@@ -27,6 +27,8 @@ class TrustedProxies
      * '' (set empty) -> []               (trust nothing)
      * '*'            -> '*'              (trust every proxy)
      * 'a, b'         -> ['a', 'b']       (trimmed, empties dropped)
+     *
+     * @return list<string>|string
      */
     public static function fromEnv(?string $value): array|string
     {

@@ -24,7 +24,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // is honored only for requests that really arrived over HTTPS. env() is
         // read directly because this closure runs before config is loaded;
         // unset falls back to Citadel's proxy, set-but-empty trusts nothing.
-        $middleware->trustProxies(at: TrustedProxies::fromEnv(env('TRUSTED_PROXIES')));
+        $raw = env('TRUSTED_PROXIES'); // @phpstan-ignore larastan.noEnvCallsOutsideOfConfig (closure runs before config is loaded)
+        // A bool-looking value such as true is not a valid proxy list, so fall back to the default.
+        $middleware->trustProxies(at: TrustedProxies::fromEnv(is_string($raw) ? $raw : null));
 
         $middleware->web(append: [
             HandleInertiaRequests::class,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Support\TrustedProxies;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 /**
@@ -49,6 +50,35 @@ class TrustedProxiesTest extends TestCase
 
         $response->assertRedirect('/login');
         $response->assertHeaderMissing('Strict-Transport-Security');
+    }
+
+    public function test_laravels_own_trust_honors_forwarded_proto(): void
+    {
+        $this->bootWithTrustedProxies('10.9.8.7');
+
+        Route::get('/__tp', fn () => response()->json(['secure' => request()->isSecure()]));
+
+        $trusted = $this->ip('10.9.8.7')
+            ->withHeaders(['X-Forwarded-Proto' => 'https'])
+            ->getJson('/__tp');
+
+        $trusted->assertOk();
+        $trusted->assertJson(['secure' => true]);
+
+        // Boot a fresh app for the second call. The test harness builds each
+        // request URL from the currently bound request, and the first call
+        // rebinds it to a secure one, so a relative URL here would inherit
+        // HTTPS=on and mask what is under test: proxy trust.
+        $this->bootWithTrustedProxies('10.9.8.7');
+
+        Route::get('/__tp', fn () => response()->json(['secure' => request()->isSecure()]));
+
+        $untrusted = $this->ip('10.9.8.8')
+            ->withHeaders(['X-Forwarded-Proto' => 'https'])
+            ->getJson('/__tp');
+
+        $untrusted->assertOk();
+        $untrusted->assertJson(['secure' => false]);
     }
 
     /**
