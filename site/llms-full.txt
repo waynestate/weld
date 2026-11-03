@@ -8,9 +8,9 @@ The README and the Markdown twin of every page, joined. The index is https://wel
 
 ## README
 
-Source: https://github.com/waynestate/weld/blob/HEAD/README.md
+Source: https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/README.md
 
-On Citadel it is served by the raw-PHP deploy layer in [`deploy/`](https://github.com/waynestate/weld/blob/HEAD/deploy/): a Squire kit whose front controller serves `site/` behind HELMET's security headers. For local development, keep serving `site/` directly.
+On Citadel it is served by the raw-PHP deploy layer in [`deploy/`](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/deploy/): a Squire kit whose front controller serves `site/` behind HELMET's security headers. For local development, keep serving `site/` directly.
 
 ## WELD
 
@@ -20,7 +20,11 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 hooked up: sign-in, security headers, checks, coding standards, CI and the WayneUI interface. Think of it as the
 Megazord, except it comes with a deploy script and nobody has to shout to make it combine.
 
-Development happens on Wayne State's GitLab; this repository is a release mirror. Changes land there first.
+### Where the code lives
+
+The canonical repository is on nougat: [enterprise-apps/weld](https://nougat.snu.gs/enterprise-apps/weld). git.wayne.edu and GitHub ([waynestate/weld](https://github.com/waynestate/weld)) are read-only mirrors of it.
+Open issues and merge requests on nougat, not on the mirrors.
+This moves to git.wayne.edu once it has CI runners. The weld is made on nougat; the mirrors only get the polished bead.
 
 **Not to be confused with:** `weld:doctor` checks local setup only; standards checks are PROCTOR's.
 
@@ -132,7 +136,7 @@ What is on the bench today:
   SESAME's
 - The license is MIT
 
-Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](https://github.com/waynestate/weld/blob/HEAD/BEST_PRACTICES.md).
+Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/BEST_PRACTICES.md).
 
 ### Run it locally
 
@@ -156,7 +160,7 @@ The same subcommands work on every OS:
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs |
 
-Deploying somewhere other than a laptop? [Running WELD off Citadel](https://github.com/waynestate/weld/blob/HEAD/docs/running-off-citadel.md) covers OpenShift,
+Deploying somewhere other than a laptop? [Running WELD off Citadel](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/docs/running-off-citadel.md) covers OpenShift,
 Coolify and plain Docker, with Citadel for comparison.
 
 ### Oracle
@@ -195,7 +199,7 @@ bound to `127.0.0.1`. It fails closed when `WELD_ORACLE_IMAGE` is unset.
 
 ### Check your setup
 
-Maintainers: how to build, test and release this project, and where its data comes from, is in [MAINTAINING.md](https://github.com/waynestate/weld/blob/HEAD/MAINTAINING.md).
+Maintainers: how to build, test and release this project, and where its data comes from, is in [MAINTAINING.md](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/MAINTAINING.md).
 
 `weld:doctor` strikes an arc across the local setup and reports every joint: the app key,
 writable storage, the database and pending migrations. One line per check, PASS or WARN or FAIL;
