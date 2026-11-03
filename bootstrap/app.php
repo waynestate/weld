@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Support\OracleErrors;
+use App\Support\TrustedProxies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,10 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // would bounce still lands on SESAME's door.
         $middleware->redirectGuestsTo('/login');
 
-        // Trust only the address HA-Proxy connects from, so X-Forwarded-Proto
-        // is honored only for requests that really arrived over HTTPS. A
-        // literal list, because this closure runs before config is loaded.
-        $middleware->trustProxies(at: ['172.18.0.1']);
+        // Trust only the proxies named in TRUSTED_PROXIES, so X-Forwarded-Proto
+        // is honored only for requests that really arrived over HTTPS. env() is
+        // read directly because this closure runs before config is loaded;
+        // unset falls back to Citadel's proxy, set-but-empty trusts nothing.
+        $middleware->trustProxies(at: TrustedProxies::fromEnv(env('TRUSTED_PROXIES')));
 
         $middleware->web(append: [
             HandleInertiaRequests::class,
