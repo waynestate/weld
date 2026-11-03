@@ -4,6 +4,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Fixed: TrustedProxiesTest no longer depends on a local .env file. The trustProxies() closure in bootstrap/app.php runs when the HTTP kernel resolves on the first request, after the test's app refresh has re-read .env into the process environment, so the .env that composer create-project writes clobbered the value the test set and one of the four tests failed. The helper now re-asserts TRUSTED_PROXIES after the refresh, so the suite is green with a .env present and without one.
+- Changed: the README and front page say Sourdough bakes four shapes today (raw PHP, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue) and only raw PHP with a Vue SPA is not available yet; the front page gains a card for the islands shape. WELD is the Inertia and Vue shape, already assembled with every part wired.
 - Changed: the front-page deploy layer pins HELMET ^0.3, PROCTOR ^0.4 and CREED ^0.1 (lock: HELMET 0.3.0, PROCTOR 0.4.0, CREED 0.1.6).
 - Changed: CI pins Preflight 0.1.4 (GitLab component includes and the GitHub reusable workflow at its tag commit); the deploy layer sets minimum-stability to stable.
 - Changed: HELMET moves to ^0.3 and PROCTOR to ^0.4 (lock: HELMET 0.3.0, PROCTOR 0.4.x, CREED 0.1.6, ADVISOR 0.1.5), so the newest PROCTOR checks run on WELD itself; an empty `HELMET_PROXIES=` now trusts nobody. Tests, style, analysis and PROCTOR pass unchanged.
