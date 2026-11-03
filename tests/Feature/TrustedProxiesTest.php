@@ -87,6 +87,30 @@ class TrustedProxiesTest extends TestCase
      */
     private function bootWithTrustedProxies(?string $value): void
     {
+        $this->setTrustedProxiesEnv($value);
+
+        $this->refreshApplication();
+
+        // The re-boot's Dotenv pass re-reads .env into the process-wide env
+        // sources and clobbers the value set above. That matters because the
+        // trustProxies() closure in bootstrap/app.php runs lazily, when the
+        // HTTP kernel resolves on the first request, and reads env() at that
+        // moment. Re-assert the value so a local .env cannot decide which
+        // proxies this test trusts.
+        $this->setTrustedProxiesEnv($value);
+
+        // HELMET detects HTTPS from its own proxy list, which the bare test
+        // container leaves empty. Point it at the same TRUSTED_PROXIES value
+        // so the HSTS header tracks the variable under test.
+        config(['helmet.proxies' => TrustedProxies::fromEnv($value)]);
+    }
+
+    /**
+     * Put (or remove) TRUSTED_PROXIES in every source env() reads: putenv,
+     * $_ENV and $_SERVER.
+     */
+    private function setTrustedProxiesEnv(?string $value): void
+    {
         putenv('TRUSTED_PROXIES');
         unset($_ENV['TRUSTED_PROXIES'], $_SERVER['TRUSTED_PROXIES']);
 
@@ -95,13 +119,6 @@ class TrustedProxiesTest extends TestCase
             $_ENV['TRUSTED_PROXIES'] = $value;
             $_SERVER['TRUSTED_PROXIES'] = $value;
         }
-
-        $this->refreshApplication();
-
-        // HELMET detects HTTPS from its own proxy list, which the bare test
-        // container leaves empty. Point it at the same TRUSTED_PROXIES value
-        // so the HSTS header tracks the variable under test.
-        config(['helmet.proxies' => TrustedProxies::fromEnv($value)]);
     }
 
     /**
