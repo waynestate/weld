@@ -4,6 +4,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: HELMET moves to ^0.3 and PROCTOR to ^0.4 (lock: HELMET 0.3.0, PROCTOR 0.4.x, CREED 0.1.6, ADVISOR 0.1.5), so the newest PROCTOR checks run on WELD itself; an empty `HELMET_PROXIES=` now trusts nobody. Tests, style, analysis and PROCTOR pass unchanged.
+
 ## 0.1.2 (2026-11-03)
 
 - Changed: SESAME moves from 0.2 to 0.4 (`^0.4`). It now logs sign-in events (`sesame.login`, `sesame.logout`, with a per sign-in `session_ref`; turn off with `SESAME_LOG=false`), re-reads the signed-in user when the resolver asks for it, and the gateway driver refuses an `at+jwt` access token. WELD itself needed no code change.
