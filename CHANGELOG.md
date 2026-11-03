@@ -17,6 +17,7 @@ Notable changes to WELD, newest first.
 - Added: `StackIntegrationTest` pins HELMET's security headers on a signed-in dashboard, a 404 error page and `/up`; `ProctorCheckTest` runs PROCTOR against CREED's policy.json inside the test suite, which `composer ci` alone did not cover.
 - Added: README section "Clone it and rename": copy WELD, rename the composer name, APP_NAME, site title and git remote, regenerate the key and re-run the checks, for PowerShell and sh.
 - Changed: BEST_PRACTICES.md re-checked against the code on 2026-11-02: the Squire kit's Dockerfile, entrypoint and release script move W10, W12, W16 and W24 from `Not yet` to `Documented`, W8/W13/W22 sentences name the new deploy files, and the shifted line numbers in composer.json, .env.example and bootstrap/app.php are corrected.
+- Added: the regen gate, which makes "WELD is the prebuilt Inertia shape" checkable: `bin/regen-check.php` compares a freshly generated Sourdough Inertia app (its `.sourdough/manifest.json`, path to SHA-256) with WELD file by file, skipping `.sourdough/product-files.json` entries and any `vendor` or `node_modules` path, and fails only on drift not already recorded in `.sourdough/regen-baseline.json` (a ratchet; `--write-baseline` records the current drift). The logic lives in `App\Support\RegenCheck` with unit tests, `composer regen-check` passes arguments through (not part of `ci`), and warning-only `regen-gate` jobs in both pipelines generate a fresh app from Sourdough's main and run the gate.
 
 ## 0.1.1 (2026-10-29)
 

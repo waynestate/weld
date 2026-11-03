@@ -41,14 +41,23 @@ Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `ph
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run
 PROCTOR, Ziggy or the JS lint.
 
+The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (`sourdough new <dir>
+--inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`).
+It skips the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path, and
+fails only on drift that is not already recorded in `.sourdough/regen-baseline.json`; `--write-baseline` records
+the current drift as accepted. It is not part of `composer ci`; CI runs it as a separate, warning-only job.
+
 Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer (Squire kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.
 
 ## CI
 
 - **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a
-  `proctor` job (warnings pass, failures block) and a `ziggy` drift job.
-- **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci`.
-- Green means all of those pass. JS lint is not in CI yet.
+  `proctor` job (warnings pass, failures block), a `ziggy` drift job and a `regen-gate` job (warning-only until
+  `.sourdough/regen-baseline.json` is filled in).
+- **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci` and runs the same
+  `regen-gate` check (`continue-on-error` until the baseline is filled in).
+- Green means all of those pass; the regen gate may warn while its baseline is being filled in. JS lint is not in
+  CI yet.
 
 ## Keeping the joints current
 
@@ -56,6 +65,9 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
   run all the checks above, and commit the lock file.
 - When Laravel, Inertia or Vue release, Booster's hops are the way to move; WELD is a good first test for them.
 - After route changes, regenerate Ziggy and commit the result.
+- When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in
+  Sourdough; if the drift is accepted as intended, record it with `--write-baseline` and commit
+  `.sourdough/regen-baseline.json`.
 
 ## Releasing
 
