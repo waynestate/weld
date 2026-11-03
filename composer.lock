@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b237b2671f5188547f01de03f03c462f",
+    "content-hash": "ad17af9f31738ce6e936621cfe60f475",
     "packages": [
         {
             "name": "brick/math",
@@ -7242,16 +7242,16 @@
         },
         {
             "name": "waynestate/sesame",
-            "version": "0.2.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/sesame.git",
-                "reference": "9d4d94c459ae54e6765b0149ed1225c2ff59c69d"
+                "reference": "4fe8157fa8870cca35357f983e1b653ecfb1735d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/sesame/zipball/9d4d94c459ae54e6765b0149ed1225c2ff59c69d",
-                "reference": "9d4d94c459ae54e6765b0149ed1225c2ff59c69d",
+                "url": "https://api.github.com/repos/waynestate/sesame/zipball/4fe8157fa8870cca35357f983e1b653ecfb1735d",
+                "reference": "4fe8157fa8870cca35357f983e1b653ecfb1735d",
                 "shasum": ""
             },
             "require": {
@@ -7265,6 +7265,7 @@
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^2.0",
+                "psr/log": "^3.0",
                 "psr/simple-cache": "^3.0",
                 "symfony/http-foundation": "^6.4 || ^7.4"
             },
@@ -7291,6 +7292,9 @@
                     "providers": [
                         "Waynestate\\Sesame\\Laravel\\SesameServiceProvider"
                     ]
+                },
+                "proctor": {
+                    "wayneui.copies": "fail"
                 }
             },
             "autoload": {
@@ -7313,10 +7317,10 @@
             "description": "Wayne State's protocol-neutral auth library: it returns a verified identity and leaves the session to the app.",
             "homepage": "https://sesame.apps.wayne.edu/",
             "support": {
-                "issues": "https://github.com/waynestate/sesame/issues",
-                "source": "https://github.com/waynestate/sesame"
+                "issues": "https://nougat.snu.gs/enterprise-apps/sesame/-/issues",
+                "source": "https://nougat.snu.gs/enterprise-apps/sesame"
             },
-            "time": "2026-10-29T18:43:31+00:00"
+            "time": "2026-11-03T15:57:27+00:00"
         },
         {
             "name": "yajra/laravel-oci8",

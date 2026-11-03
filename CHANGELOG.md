@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: SESAME moves from 0.2 to 0.4 (`^0.4`). It now logs sign-in events (`sesame.login`, `sesame.logout`, with a per sign-in `session_ref`; turn off with `SESAME_LOG=false`), re-reads the signed-in user when the resolver asks for it, and the gateway driver refuses an `at+jwt` access token. WELD itself needed no code change.
 - Fixed: the user menu gains a Sign out item on SESAME's logout route, the app bar branding drops the Laravel Starter Kit name and links (WELD logo text, waynestate/weld repository, weld.apps.wayne.edu documentation), .editorconfig covers compose.yaml and its variants, ExampleTest stops booting the framework, and UiBrandingTest pins the branding.
 - Changed: docs and package metadata name nougat as the canonical repository, with git.wayne.edu and GitHub as read-only mirrors, until git.wayne.edu has CI runners.
 - Changed: Laravel's trusted proxy list now comes from the TRUSTED_PROXIES environment variable (unset keeps Citadel's 172.18.0.1, set but empty trusts none, `*` trusts all), instead of a literal address. Citadel behaviour is unchanged.

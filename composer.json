@@ -21,7 +21,7 @@
         "laravel/tinker": "^3.0",
         "tightenco/ziggy": "^2.4",
         "waynestate/helmet": "^0.2",
-        "waynestate/sesame": "^0.2",
+        "waynestate/sesame": "^0.4",
         "yajra/laravel-oci8": "^13.14"
     },
     "require-dev": {
