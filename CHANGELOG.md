@@ -4,6 +4,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: the regeneration baseline shrinks from 66 to 62 known-drift paths now that Sourdough no longer ships `resources/js/app.js`, `welcome.blade.php` or a phantom `vite.config.js`, and the `.editorconfig` matches.
+
 - Fixed: `npm run lint` passes on the shipped code: the dead `badgeDir` constant leaves `scripts/readme-art/build.mjs`, and Squire's kit bytes (`site/assets/agent-ready.js`, `site/assets/stack-env.js`, with the unused `catch (e)` bindings and dead variables fixed in Squire's kit) are synced in, so the ESLint config no longer excludes them.
 - Changed: `npm run lint` is now a pure check (`eslint .`); a new `npm run fix` script runs `eslint . --fix`.
 - Fixed: TrustedProxiesTest no longer depends on a local .env file. The trustProxies() closure in bootstrap/app.php runs when the HTTP kernel resolves on the first request, after the test's app refresh has re-read .env into the process environment, so the .env that composer create-project writes clobbered the value the test set and one of the four tests failed. The helper now re-asserts TRUSTED_PROXIES after the refresh, so the suite is green with a .env present and without one.

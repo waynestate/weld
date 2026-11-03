@@ -1,5 +1,4 @@
 [
-    ".editorconfig",
     ".env.example",
     ".env.squire.example",
     ".gitattributes",
@@ -47,14 +46,12 @@
     "phpstan.neon",
     "phpunit.xml",
     "pint.json",
-    "resources/js/app.js",
     "resources/js/components/AppLogo.vue",
     "resources/js/components/UserMenuContent.vue",
     "resources/js/pages/Home.vue",
     "resources/js/types/index.d.ts",
     "resources/js/ziggy.d.ts",
     "resources/js/ziggy.js",
-    "resources/views/welcome.blade.php",
     "routes/web.php",
     "scripts/parity.ps1",
     "scripts/parity.sh",
@@ -63,6 +60,5 @@
     "storage/framework/cache/.gitignore",
     "storage/framework/cache/locks/.gitignore",
     "tests/Feature/ExampleTest.php",
-    "tests/Unit/ExampleTest.php",
-    "vite.config.js"
+    "tests/Unit/ExampleTest.php"
 ]
