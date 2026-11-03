@@ -15,9 +15,9 @@ so most of the upkeep is keeping the parts it joins current.
 
 ## Where it lives
 
-Development happens on Wayne State's GitLab. This GitHub repository is a read-only release mirror: `main` and tags are
-copied here automatically, and changes, issues and merge requests go to GitLab first. Nobody pushes to GitHub
-directly.
+Development happens on nougat, the canonical repository: [enterprise-apps/weld](https://nougat.snu.gs/enterprise-apps/weld).
+This GitHub repository and git.wayne.edu are read-only mirrors: `main` and tags are copied automatically. Changes,
+issues and merge requests go to nougat. Nobody pushes to the mirrors.
 
 ## Build and test
 
@@ -64,7 +64,7 @@ WELD has no tags yet. When it gets one:
 1. Move the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. All the checks above green locally, then both pipelines green for that commit.
 3. Run a secrets scan of the history and check that nothing internal (server names, people, IDs) is in the tree.
-4. Tag `X.Y.Z` (no `v`) on GitLab. The mirror carries the tag to GitHub.
+4. Tag `X.Y.Z` (no `v`) on nougat. The mirror carries the tag to GitHub.
 5. A release needs a maintainer's approval. Never move or delete a published tag.
 
 ## Running it elsewhere
