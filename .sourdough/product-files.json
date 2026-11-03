@@ -1,0 +1,19 @@
+[
+    "site/",
+    "docs/",
+    "deploy/",
+    "bin/",
+    "scripts/readme-art/",
+    "compose.yaml",
+    "compose.oracle.yaml",
+    "CHANGELOG.md",
+    "MAINTAINING.md",
+    "BEST_PRACTICES.md",
+    "LICENSE",
+    "README.md",
+    "agent-ready.json",
+    ".github/",
+    "composer.lock",
+    "package-lock.json",
+    ".env"
+]
