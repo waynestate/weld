@@ -6,6 +6,7 @@ Notable changes to WELD, newest first.
 
 - Changed: the front-page deploy layer pins HELMET ^0.3, PROCTOR ^0.4 and CREED ^0.1 (lock: HELMET 0.3.0, PROCTOR 0.4.0, CREED 0.1.6).
 - Changed: CI pins Preflight 0.1.4 (GitLab component includes and the GitHub reusable workflow at its tag commit); the deploy layer sets minimum-stability to stable.
+- Changed: HELMET moves to ^0.3 and PROCTOR to ^0.4 (lock: HELMET 0.3.0, PROCTOR 0.4.x, CREED 0.1.6, ADVISOR 0.1.5), so the newest PROCTOR checks run on WELD itself; an empty `HELMET_PROXIES=` now trusts nobody. Tests, style, analysis and PROCTOR pass unchanged.
 
 ## 0.1.2 (2026-11-03)
 
