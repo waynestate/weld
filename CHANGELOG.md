@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Fixed: the user menu gains a Sign out item on SESAME's logout route, the app bar branding drops the Laravel Starter Kit name and links (WELD logo text, waynestate/weld repository, weld.apps.wayne.edu documentation), .editorconfig covers compose.yaml and its variants, ExampleTest stops booting the framework, and UiBrandingTest pins the branding.
 - Changed: docs and package metadata name nougat as the canonical repository, with git.wayne.edu and GitHub as read-only mirrors, until git.wayne.edu has CI runners.
 - Changed: Laravel's trusted proxy list now comes from the TRUSTED_PROXIES environment variable (unset keeps Citadel's 172.18.0.1, set but empty trusts none, `*` trusts all), instead of a literal address. Citadel behaviour is unchanged.
 - Changed: the README and front page now say Sourdough is the starter tool for every shape of Wayne State app (raw PHP and Laravel with Blade today, the Vue shapes planned) and WELD is the Inertia and Vue shape, already assembled and ready to clone.

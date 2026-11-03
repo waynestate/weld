@@ -2,7 +2,7 @@
 import UserInfo from '@/components/UserInfo.vue';
 import type { User } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { Settings } from 'lucide-vue-next';
+import { LogOut, Settings } from 'lucide-vue-next';
 
 interface Props {
     user: User;
@@ -23,6 +23,12 @@ defineProps<Props>();
                 <Link :href="route('profile.edit')" class="user-menu__item">
                     <Settings class="wsu-icon" aria-hidden="true" />
                     Settings
+                </Link>
+            </li>
+            <li>
+                <Link :href="route('sesame.logout')" method="post" class="user-menu__item">
+                    <LogOut class="wsu-icon" aria-hidden="true" />
+                    Sign out
                 </Link>
             </li>
         </ul>
