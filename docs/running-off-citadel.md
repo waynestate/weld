@@ -12,6 +12,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 - HELMET (`^0.2`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and
   HELMET 0.2 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front
   proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range.
+  Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
 
 ## Common ground, every platform
 
@@ -43,7 +44,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Concern | How it works |
 |---|---|
 | Traffic | The OpenShift router fronts the route and forwards to the pod. |
-| Trusted proxies | `HELMET_PROXIES=<router address>`: trust the router only (W17). There is no `openshift` preset; setting one throws. |
+| Trusted proxies | `HELMET_PROXIES=<router address>`, and the same address in TRUSTED_PROXIES: trust the router only (W17). There is no `openshift` preset; setting one throws. |
 | Logs | `php://stderr`; read them with `oc logs`. |
 | Writable paths | `storage/`, `bootstrap/cache/`. |
 | User | OpenShift assigns a random UID in group 0 with capabilities dropped (W13), so make both writable paths group-owned and group-writable before the pod starts: `chgrp -R 0 storage bootstrap/cache && chmod -R g=u storage bootstrap/cache`. |
@@ -55,7 +56,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Concern | How it works |
 |---|---|
 | Traffic | Coolify's Traefik instance fronts the app and routes by domain. |
-| Trusted proxies | `HELMET_PROXIES=<Traefik container address>` (W17). There is no `coolify` preset; setting one throws. |
+| Trusted proxies | `HELMET_PROXIES=<Traefik container address>`, and the same address in TRUSTED_PROXIES (W17). There is no `coolify` preset; setting one throws. |
 | Logs | `php://stderr`; Coolify shows the container logs. |
 | Writable paths | `storage/`, `bootstrap/cache/`, on a persistent volume so they survive redeploys. |
 | User | Whatever the image declares; keep it non-root (W13). |
