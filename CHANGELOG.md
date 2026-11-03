@@ -4,6 +4,9 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: the front-page deploy layer pins HELMET ^0.3, PROCTOR ^0.4 and CREED ^0.1 (lock: HELMET 0.3.0, PROCTOR 0.4.0, CREED 0.1.6).
+- Changed: CI pins Preflight 0.1.4 (GitLab component includes and the GitHub reusable workflow at its tag commit); the deploy layer sets minimum-stability to stable.
+
 ## 0.1.2 (2026-11-03)
 
 - Changed: SESAME moves from 0.2 to 0.4 (`^0.4`). It now logs sign-in events (`sesame.login`, `sesame.logout`, with a per sign-in `session_ref`; turn off with `SESAME_LOG=false`), re-reads the signed-in user when the resolver asks for it, and the gateway driver refuses an `at+jwt` access token. WELD itself needed no code change.
