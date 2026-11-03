@@ -7,7 +7,18 @@ export default defineConfigWithVueTs(
     vue.configs['flat/essential'],
     vueTsConfigs.recommended,
     {
-        ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js'],
+        // Squire owns these two kit files (same bytes on every stack front page; agent-ready.js is
+        // hash-checked by bin/agent-ready.php). Their lint fixes belong in Squire's kit, not a local
+        // fork, so the app's lint leaves them alone until the sync brings the fixed bytes.
+        ignores: [
+            'vendor',
+            'node_modules',
+            'public',
+            'bootstrap/ssr',
+            'tailwind.config.js',
+            'site/assets/agent-ready.js',
+            'site/assets/stack-env.js',
+        ],
     },
     {
         rules: {
