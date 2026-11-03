@@ -1,5 +1,5 @@
-# The GitHub mirror's CI. Every check lives in the `ci` script in composer.json;
-# this file only says where and on which PHP versions to run it.
+# The GitHub mirror's CI. The ci job runs every check from the `ci` script in
+# composer.json; the regen gate checks WELD against a fresh Sourdough generation.
 name: CI
 
 on:
@@ -17,3 +17,26 @@ jobs:
     with:
       php-versions: '["8.3","8.4","8.5"]'
       ci-command: composer ci
+
+  # Is WELD still Sourdough's Inertia shape? Generate a fresh app from
+  # Sourdough's main and compare it with WELD by SHA-256. Failures are
+  # warnings until .sourdough/regen-baseline.json is filled in.
+  regen-gate:
+    name: Regen gate
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v3
+        with:
+          php-version: '8.3'
+      - name: Install WELD dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+      - name: Generate a fresh Sourdough Inertia app
+        run: |
+          git clone --depth 1 --branch main https://github.com/waynestate/sourdough.git /tmp/sourdough
+          cd /tmp/sourdough
+          composer install --no-interaction --no-progress --prefer-dist
+          php bin/sourdough new /tmp/regen --inertia --no-advisor --no-input
+      - name: Gate WELD against the fresh generation
+        run: php bin/regen-check.php --generated /tmp/regen
