@@ -13,7 +13,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Two login systems mean two session rules and two audit trails, and the kit's Fortify registers its routes automatically.
 
-**Stack:** `Documented`. SESAME is a dependency (`composer.json:23`), the starter kit's Fortify routes are removed, and `tests/Feature/AuthRoutesTest.php` fails if WELD grows its own auth routes. Target `Checked`: a PROCTOR check and a feature test over `php artisan route:list --json`.
+**Stack:** `Documented`. SESAME is a dependency (`composer.json`), the starter kit's Fortify routes are removed, and `tests/Feature/AuthRoutesTest.php` fails if WELD grows its own auth routes. Target `Checked`: a PROCTOR check and a feature test over `php artisan route:list --json`.
 
 ## W2. WayneUI is the only component source
 
@@ -21,7 +21,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** The stack's promise is one interface contract on every consumer path; a parallel component set breaks the accessibility gate.
 
-**Stack:** `Not yet`. The shadcn-vue components and their npm dependencies are gone, but WayneUI is not wired in: the Vue components carry `TODO(wayneui)` stand-ins (for example `resources/js/layouts/settings/Layout.vue:27` and `resources/js/pages/settings/Profile.vue:49`) because WELD does not load WayneUI's stylesheet yet, and the Tailwind theme (`tailwind.config.js`) plus `cn()`/`clsx`/`tailwind-merge` (`resources/js/lib/utils.ts`, `package.json`) remain. Target `Checked`: an ESLint rule (Pinstripe) bans imports from the kit's `components/ui` path, and a check fails when `components.json` exists.
+**Stack:** `Not yet`. The shadcn-vue components and their npm dependencies are gone, but WayneUI is not wired in: the Vue components carry `TODO(wayneui)` stand-ins (for example `resources/js/layouts/settings/Layout.vue` and `resources/js/pages/settings/Profile.vue`) because WELD does not load WayneUI's stylesheet yet, and the Tailwind theme (`tailwind.config.js`) plus `cn()`/`clsx`/`tailwind-merge` (`resources/js/lib/utils.ts`, `package.json`) remain. Target `Checked`: an ESLint rule (Pinstripe) bans imports from the kit's `components/ui` path, and a check fails when `components.json` exists.
 
 ## W3. Own the app code; take stack changes through `sourdough feed`
 
@@ -37,7 +37,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Inertia 3 removed all of these; code copied from older tutorials fails or half-works.
 
-**Stack:** `Not yet`. WELD is on Inertia 2, not 3: `composer.json:18` pins `inertiajs/inertia-laravel: ^2.0` and `package.json:27` pins `@inertiajs/vue3: ^2.0.0-beta.3`. The removed APIs are not used (no `axios` dependency, no `Inertia::lazy`, no `data-page`), so the migration is a version bump, not a rewrite. Target `Checked`: ESLint `no-restricted-imports` for `axios`, a grep check for `Inertia::lazy`, and Composer constraints.
+**Stack:** `Not yet`. WELD is on Inertia 2, not 3: `composer.json` pins `inertiajs/inertia-laravel: ^2.0` and `package.json` pins `@inertiajs/vue3: ^2.0.0-beta.3`. The removed APIs are not used (no `axios` dependency, no `Inertia::lazy`, no `data-page`), so the migration is a version bump, not a rewrite. Target `Checked`: ESLint `no-restricted-imports` for `axios`, a grep check for `Inertia::lazy`, and Composer constraints.
 
 ## W5. Commit `.ai/rules`; ignore what Boost regenerates
 
@@ -53,7 +53,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Sail's runtime images carry dev tooling and a bash-script CLI.
 
-**Stack:** `Documented`. `composer.json:31` keeps `laravel/sail` in `require-dev`, so it is a local tool, not a runtime dependency. Target `Checked`: PROCTOR flags `laravel/sail` outside `require-dev` and any `vendor/laravel/sail` path in a production Dockerfile.
+**Stack:** `Documented`. `composer.json` keeps `laravel/sail` in `require-dev`, so it is a local tool, not a runtime dependency. Target `Checked`: PROCTOR flags `laravel/sail` outside `require-dev` and any `vendor/laravel/sail` path in a production Dockerfile.
 
 ## W7. The supported dev path is Compose driven by native scripts, not Sail
 
@@ -69,7 +69,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** One build means one tested artifact, and the process types stay identical in code.
 
-**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`, a local mirror of the image Citadel generates), but it runs one process type only: `CMD ["apache2-foreground"]` (`deploy/.squire/Dockerfile:40`), with no worker or scheduler variant. Target `Checked`: Preflight portability boots the image with each command.
+**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`, a local mirror of the image Citadel generates), but it runs one process type only: `CMD ["apache2-foreground"]` (`deploy/.squire/Dockerfile`), with no worker or scheduler variant. Target `Checked`: Preflight portability boots the image with each command.
 
 ## How to read the tags
 

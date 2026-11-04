@@ -13,7 +13,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** It needs no extra service, and `--max-time` recycles memory.
 
-**Stack:** `Documented`. `.env.example:61` sets `QUEUE_CONNECTION=database`, `config/queue.php:16` defaults to it, and the jobs tables are migrated by `database/migrations/0001_01_01_000002_create_jobs_table.php:14`. No job classes exist yet, so the `#[Tries]`/`#[Timeout]`/`#[Backoff]` attributes are not in use. Target `Checked`: a test that every job class declares `#[Tries]` and `#[Timeout]`.
+**Stack:** `Documented`. `.env.example` sets `QUEUE_CONNECTION=database`, `config/queue.php` defaults to it, and the jobs tables are migrated by `database/migrations/0001_01_01_000002_create_jobs_table.php`. No job classes exist yet, so the `#[Tries]`/`#[Timeout]`/`#[Backoff]` attributes are not in use. Target `Checked`: a test that every job class declares `#[Tries]` and `#[Timeout]`.
 
 ## W19. Where no worker can run, run the queue from the scheduler
 
@@ -61,7 +61,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Parallel replicas race on schema changes.
 
-**Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:254`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh:25`) and the Quick Update post-script (`deploy/scripts/release.sh:7`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
+**Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh`) and the Quick Update post-script (`deploy/scripts/release.sh`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
 
 ## How to read the tags
 
