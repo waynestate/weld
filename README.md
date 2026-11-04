@@ -19,6 +19,12 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 hooked up: sign-in, security headers, checks, coding standards, CI and the WayneUI interface. Think of it as the
 Megazord, except it comes with a deploy script and nobody has to shout to make it combine.
 
+## Documentation
+
+The docs live at [site/docs/index.html](site/docs/index.html) and ship to https://weld.apps.wayne.edu/docs/. They are
+built from `docs/` by the shared docs builder (`composer docs`) and checked in `composer ci`, so the page you read is
+the page that ships: same source, same bead.
+
 ## Where the code lives
 
 The canonical repository is on nougat: [enterprise-apps/weld](https://nougat.snu.gs/enterprise-apps/weld). git.wayne.edu and GitHub ([waynestate/weld](https://github.com/waynestate/weld)) are read-only mirrors of it.

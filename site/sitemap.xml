@@ -2,4 +2,25 @@
 <!-- Written by Squire's agent-ready kit from the pages in the site folder; do not edit. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://weld.apps.wayne.edu/</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/changelog.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/contributing.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/app-structure.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/check-your-setup.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/container-contract.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/oracle.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/quick-start.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/regen-check.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/security.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/sourdough.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/install.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/reference/commands.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/reference/configuration.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/reference/status.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/running-off-citadel.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/troubleshooting.html</loc></url>
+  <url><loc>https://weld.apps.wayne.edu/docs/upgrading.html</loc></url>
 </urlset>
