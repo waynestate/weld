@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Added: a docs site (site/docs/) built by the shared docs builder from docs/, checked in composer ci.
 - Changed: the regeneration baseline shrinks from 66 to 62 known-drift paths now that Sourdough no longer ships `resources/js/app.js`, `welcome.blade.php` or a phantom `vite.config.js`, and the `.editorconfig` matches.
 
 - Fixed: `npm run lint` passes on the shipped code: the dead `badgeDir` constant leaves `scripts/readme-art/build.mjs`, and Squire's kit bytes (`site/assets/agent-ready.js`, `site/assets/stack-env.js`, with the unused `catch (e)` bindings and dead variables fixed in Squire's kit) are synced in, so the ESLint config no longer excludes them.

@@ -30,6 +30,7 @@
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.32",
         "laravel/sail": "^1.41",
+        "league/commonmark": "^2.10",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "phpstan/extension-installer": "^1.4",
@@ -64,10 +65,13 @@
             "@lint",
             "@analyse",
             "@site:agent-ready-check",
+            "@docs:check",
             "@composer audit"
         ],
         "site:agent-ready": "php bin/agent-ready.php",
         "site:agent-ready-check": "php bin/agent-ready.php --check",
+        "docs": "php bin/docs-site.php",
+        "docs:check": "php bin/docs-site.php --check",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -91,7 +95,9 @@
     "scripts-descriptions": {
         "regen-check": "Compare a freshly generated Sourdough Inertia app with WELD by SHA-256 and fail only on new drift versus .sourdough/regen-baseline.json. Pass --generated <dir> (and optionally --write-baseline) through.",
         "site:agent-ready": "Rewrite the Markdown twins, llms.txt, llms-full.txt, robots.txt and sitemap.xml in site/ (Squire's agent-ready kit).",
-        "site:agent-ready-check": "Fail when the agent-ready files are stale, a page lacks its Markdown link, a prompt drifts from the docs, or the kit was edited here."
+        "site:agent-ready-check": "Fail when the agent-ready files are stale, a page lacks its Markdown link, a prompt drifts from the docs, or the kit was edited here.",
+        "docs": "Write site/docs/ from docs/ with the shared docs builder, and generate docs/changelog.md from CHANGELOG.md.",
+        "docs:check": "Fail when the committed docs site is stale or the docs carry findings; writes nothing."
     },
     "extra": {
         "laravel": {

@@ -22,7 +22,7 @@ WELD is a Laravel 13 app with Inertia and Vue, and the rest of the stack is alre
 
 Any other shape? [Sourdough](https://sourdough.apps.wayne.edu/) starts four of the five, from raw PHP to Vue islands, with the same sign-in, headers and checks.
 
-[Get started](https://weld.apps.wayne.edu/#start) [Which piece do I need?](https://weld.apps.wayne.edu/#chooser) [Meet the cast](https://weld.apps.wayne.edu/#cast-title)
+[Get started](https://weld.apps.wayne.edu/#start) [Which piece do I need?](https://weld.apps.wayne.edu/#chooser) [Meet the cast](https://weld.apps.wayne.edu/#cast-title) [Docs](https://weld.apps.wayne.edu/docs/index.html)
 
 Start here
 

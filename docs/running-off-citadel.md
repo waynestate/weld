@@ -1,3 +1,8 @@
+---
+title: Running WELD off Citadel
+description: The per-platform contract for running WELD off Citadel: how traffic reaches the app, where logs go, what may be written, which user runs it, how the platform knows it is alive, and what to run after every deploy.
+---
+
 # Running WELD off Citadel
 
 WELD deploys on Citadel through Squire: one container per app, and builds run at release time inside the app

@@ -1,0 +1,116 @@
+{
+  "title": "WELD",
+  "tagline": "Many parts, one piece.",
+  "items": [
+    {
+      "title": "Getting started",
+      "items": [
+        {
+          "title": "Overview",
+          "path": "index"
+        },
+        {
+          "title": "Install",
+          "path": "install"
+        },
+        {
+          "title": "Quick start",
+          "path": "guides/quick-start"
+        }
+      ]
+    },
+    {
+      "title": "Guides",
+      "items": [
+        {
+          "title": "What is welded in",
+          "path": "guides/whats-welded-in"
+        },
+        {
+          "title": "Check your setup",
+          "path": "guides/check-your-setup"
+        },
+        {
+          "title": "Oracle",
+          "path": "guides/oracle"
+        },
+        {
+          "title": "WELD and Sourdough",
+          "path": "guides/sourdough"
+        },
+        {
+          "title": "Is WELD still Sourdough's shape?",
+          "path": "guides/regen-check"
+        },
+        {
+          "title": "Running WELD off Citadel",
+          "path": "running-off-citadel"
+        },
+        {
+          "title": "App structure",
+          "path": "guides/app-structure"
+        },
+        {
+          "title": "The container contract",
+          "path": "guides/container-contract"
+        },
+        {
+          "title": "Queues and scheduling",
+          "path": "guides/queues-and-scheduling"
+        },
+        {
+          "title": "Security",
+          "path": "guides/security"
+        },
+        {
+          "title": "Build and supply chain",
+          "path": "guides/build-and-supply-chain"
+        }
+      ]
+    },
+    {
+      "title": "Reference",
+      "items": [
+        {
+          "title": "Status",
+          "path": "reference/status"
+        },
+        {
+          "title": "Commands",
+          "path": "reference/commands"
+        },
+        {
+          "title": "Configuration",
+          "path": "reference/configuration"
+        }
+      ]
+    },
+    {
+      "title": "Troubleshooting",
+      "path": "troubleshooting"
+    },
+    {
+      "title": "Upgrading",
+      "path": "upgrading"
+    },
+    {
+      "title": "Contributing",
+      "path": "contributing"
+    },
+    {
+      "title": "Changelog",
+      "path": "changelog"
+    }
+  ],
+  "source": "https://nougat.snu.gs/enterprise-apps/weld",
+  "mirrors": [
+    {
+      "title": "git.wayne.edu",
+      "url": "https://git.wayne.edu/enterprise-apps/weld"
+    },
+    {
+      "title": "GitHub",
+      "url": "https://github.com/waynestate/weld"
+    }
+  ]
+}
