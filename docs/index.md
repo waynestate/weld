@@ -9,7 +9,7 @@ This page orients you to WELD: what it is, which path to pick first, and where t
 
 [![WELD's front page: the headline WELD, 'Wired, Everything, Linked, Deployed. Many parts, one piece.', the composer create-project command, and the welder's-helmet mark on a green tile.](readme/hero.jpg)](../index.html)
 
-# WELD
+**WELD**
 
 ![php ^8.3](readme/badges/php.svg) ![laravel ^13.29](readme/badges/laravel.svg) ![license MIT](readme/badges/license.svg)
 
