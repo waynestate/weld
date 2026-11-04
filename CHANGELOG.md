@@ -4,6 +4,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: CI pins the Preflight components to the 0.1.4 release SHA, so PROCTOR's preflight-pinned check passes.
+
 - Changed: the GitHub Actions in WELD's CI (`actions/checkout`, `shivammathur/setup-php`) are pinned to commit SHAs with the tag in a comment, so PROCTOR's `ci-pipelines-unpinned-uses` warning is gone; setup-php moves from the unpublished `@v3` to 2.40.0.
 
 - Changed: the regeneration baseline shrinks from 66 to 62 known-drift paths now that Sourdough no longer ships `resources/js/app.js`, `welcome.blade.php` or a phantom `vite.config.js`, and the `.editorconfig` matches.
