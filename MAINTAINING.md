@@ -39,7 +39,7 @@ Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `ph
 | Production assets | `npm run build` |
 
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run
-PROCTOR, Ziggy or the JS lint.
+PROCTOR, Ziggy or the JS lint. `composer test` is Pest, running the PHPUnit class tests and the Pest tests side by side.
 
 The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (`sourdough new <dir>
 --inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`).
