@@ -131,8 +131,8 @@ What is on the bench today:
 - `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
 - `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap
 - `.gitattributes` sets `* text=auto eol=lf`
-- `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on
-  GitLab and GitHub
+- `composer ci` is the CI contract: it runs validate, the tests with Pest, Pint, PHPStan level 8, the agent-ready check and audit, the
+  same command on GitLab and GitHub
 - `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.1 is on Packagist
   (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
 - HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline;
@@ -145,6 +145,10 @@ What is on the bench today:
 - The starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is
   SESAME's
 - The license is MIT
+
+**Testing.** Write new tests in Pest. Use an `it('...', function () { ... });` closure under `tests/Feature` or `tests/Unit`; the existing
+PHPUnit class tests keep working and are converted only when you touch them. `composer test` runs both, and `tests/Pest.php` binds the
+Feature tests to the Laravel app and a fresh database.
 
 Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](BEST_PRACTICES.md).
 

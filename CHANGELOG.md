@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: WELD adopts Pest 4 for new tests: the PHPUnit class tests run unchanged, `composer test` runs Pest over the whole suite, `tests/Pest.php` is configured, the example feature test is converted, and `pestphp/pest` is required at `^4` because Pest 5 needs PHP 8.4.
 - Changed: CI pins the Preflight components to the 0.1.4 release SHA, so PROCTOR's preflight-pinned check passes.
 
 - Changed: the GitHub Actions in WELD's CI (`actions/checkout`, `shivammathur/setup-php`) are pinned to commit SHAs with the tag in a comment, so PROCTOR's `ci-pipelines-unpinned-uses` warning is gone; setup-php moves from the unpublished `@v3` to 2.40.0.

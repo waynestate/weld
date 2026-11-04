@@ -60,5 +60,6 @@
     "storage/framework/cache/.gitignore",
     "storage/framework/cache/locks/.gitignore",
     "tests/Feature/ExampleTest.php",
+    "tests/Pest.php",
     "tests/Unit/ExampleTest.php"
 ]
