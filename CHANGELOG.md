@@ -4,6 +4,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: the docs pages wear the front page's look: the same header and main menu (Docs marked current), each page a cream sheet on the green field, commands on the quick start's terminal with its gold Copy button, the weld bead under every title, branded callouts and a derived dark mode. Motion only for readers who allow it. Sources: `docs/_header.html`, `docs/theme/weld.css`, the `theme` key in `docs/docs.json`.
+- Fixed: code on the front page's Sourdough card is cream, so it meets AA contrast on the deep green.
 - Changed: the front page header has a main nav that includes Docs.
 - Changed: the test APP_KEY is an obvious dummy (32 zero bytes), labeled test-only, and `App\Support\DummyAppKey` makes the app refuse it when `APP_ENV=production`; tests cover both.
 - Changed: the regen gate treats Squire kit files that WELD keeps under `deploy/` as relocated (not drift), and `oracle:check` finds the check file at the app root or under `deploy/`.

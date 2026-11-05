@@ -23,7 +23,9 @@ Megazord, except it comes with a deploy script and nobody has to shout to make i
 
 The docs live at [site/docs/index.html](site/docs/index.html) and ship to https://weld.apps.wayne.edu/docs/. They are
 built from `docs/` by the shared docs builder (`composer docs`) and checked in `composer ci`, so the page you read is
-the page that ships: same source, same bead.
+the page that ships: same source, same bead. The docs wear the front page's look: the header is
+`docs/_header.html` and the theme is `docs/theme/weld.css` (named in `docs/docs.json`). Change the look there, never
+in the builder's kit files (`site/assets/docs.css`, `site/assets/docs.js`).
 
 ## Where the code lives
 

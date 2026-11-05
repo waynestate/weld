@@ -111,6 +111,11 @@ WELD targets Citadel first. [Running WELD off Citadel](running-off-citadel.md) c
 
 The docs site is built from `docs/` by the shared docs builder (`composer docs`) and checked by `composer docs:check`. Sources live in `docs/`; the page you read is the page that ships: same source, same bead.
 
+The pages wear the front page's look. The header on every docs page is `docs/_header.html` (keep its links in step with
+the front page's main menu), and colors, type, callouts and motion live in `docs/theme/weld.css`; `docs/docs.json` names
+both under `theme`. Change the look there, never in the kit files (`site/assets/docs.css`, `site/assets/docs.js`), which
+the builder pins by hash.
+
 ## Related
 
 - [Running WELD off Citadel](running-off-citadel.md)

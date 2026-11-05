@@ -1,3 +1,7 @@
 {
+  "theme": {
+    "css": "theme/weld.css",
+    "header": "_header.html"
+  },
   "blocks": {}
 }

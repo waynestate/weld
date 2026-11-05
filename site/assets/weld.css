@@ -807,6 +807,11 @@ body {
   color: var(--weld-cream-85);
 }
 
+/* Code on the dark card takes the card's cream: ink on deep green failed AA. */
+.cast-card--sibling .cast-card__line code {
+  color: var(--weld-cream);
+}
+
 .cast-card--sibling .chip--version {
   color: var(--weld-ink);
   background-color: var(--weld-cream);

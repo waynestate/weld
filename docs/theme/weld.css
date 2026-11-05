@@ -1,0 +1,1119 @@
+/* ============================================================================
+   WELD docs theme (2026-11-05).
+
+   The docs pages stand on the front page's shop floor (site/assets/weld.css):
+   one WSU green field, cream text, one gold accent. The same header (helmet,
+   WELD, gold version chip, four doors) sits on top. Each page is a cream spec
+   sheet laid on the green, like the front page's step cards and pipeline
+   panel; the commands run on the same dark terminal as the quick start, with
+   the same gold Copy button, and every page title gets the hero's weld bead
+   under it. Nothing here was invented: every value is a front page token.
+
+   How it gets onto the pages: docs/docs.json "theme" names this file and
+   docs/_header.html. The docs builder copies this file to
+   site/docs/theme/weld.css and links it after the kit's docs.css, so the
+   --dk-* tokens and the rules below win without !important. The kit's docs.css
+   stays byte for byte Squire's. Change the look here, never in the kit.
+
+   The front page has no dark mode, so the dark set is derived: the field drops
+   to the brand's darkest green ink, the sheets turn deep green with cream
+   text, and gold takes over the links. Same shop, lights down.
+
+   File map: 1. tokens  2. frame  3. header and seam  4. sidebar and menu
+             5. the sheet (article)  6. terminals  7. callouts, tables
+             8. toc, pager, footer  9. dark  10. responsive
+             11. motion (no-preference only)  12. print
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- 1. tokens */
+
+:root {
+  /* The front page's palette (site/brand/README.md), under the same names. */
+  --weld-green: #0c5449;
+  --weld-green-deep: #073a32;
+  --weld-green-ink: #021a16;
+  --weld-gold: #ffcc33;
+  --weld-gold-bright: #ffd65c;
+  --weld-gold-hot: #fff1b8;
+  --weld-ember: #ff9f43;
+  --weld-cream: #fff4cc;
+  --weld-cream-85: rgba(255, 244, 204, 0.85);
+  --weld-cream-40: rgba(255, 244, 204, 0.4);
+  --weld-cream-20: rgba(255, 244, 204, 0.2);
+  --weld-ink: #0f1f1c;
+  --weld-term-text: #dce8e4;
+  --weld-term-dim: #8fa8a1;
+  --weld-cream-muted: #4f5d58;
+  --weld-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 18px 40px -18px rgba(2, 26, 22, 0.55);
+  --weld-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --weld-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* The bead: a gold line with the ripples a real bead has (the hero's seam). */
+  --weld-ripple-x: radial-gradient(circle at 0 50%, rgba(255, 255, 255, 0.35) 0 2px, transparent 2.5px) 0 0 / 6px 100% repeat-x;
+  --weld-ripple-y: radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.35) 0 2px, transparent 2.5px) 0 0 / 100% 6px repeat-y;
+
+  /* What changes between light and dark, named once. */
+  --weld-field: var(--weld-green);          /* the page ground */
+  --weld-panel: var(--weld-green-deep);     /* pager cards, menu, footer */
+  --weld-sheet: var(--weld-cream);          /* the article */
+  --weld-sheet-ink: var(--weld-ink);
+  --weld-sheet-muted: var(--weld-cream-muted);
+  --weld-sheet-link: var(--weld-green);
+  --weld-sheet-rule: rgba(15, 31, 28, 0.18);
+  --weld-sheet-tint: rgba(12, 84, 73, 0.07);   /* callouts, table heads */
+  --weld-sheet-code: rgba(12, 84, 73, 0.09);   /* inline code */
+  --weld-sheet-focus: var(--weld-ink);
+  --weld-slab-edge: var(--weld-ink);
+  --weld-header-h: 72px;
+
+  /* The kit's tokens, set from the palette above. The kit draws on the green
+     field; the sheet resets the ones it needs. */
+  --dk-bg: var(--weld-field);
+  --dk-ink: var(--weld-cream);
+  --dk-muted: var(--weld-cream-85);
+  --dk-rule: var(--weld-cream-20);
+  --dk-accent: var(--weld-gold);
+  --dk-on-accent: var(--weld-ink);
+  --dk-note: var(--weld-green);
+  --dk-tip: var(--weld-green);
+  --dk-warning: var(--weld-ink);
+  --dk-danger: var(--weld-ink);
+  --dk-code-bg: var(--weld-ink);
+  --dk-display: var(--wsu-font-family-body, Lato, Calibri, "Helvetica Neue", Arial, sans-serif);
+  --dk-mono: var(--wsu-font-family-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  --dk-radius: var(--wsu-radius-box, 0.75rem);
+  --dk-focus: var(--weld-gold);
+  --dk-focus-w: 3px;
+  --dk-focus-o: 2px;
+  --dk-sidebar: 15.5rem;
+  --dk-prose-max: 52rem;
+  --dk-gap: 1.75rem;
+
+  color-scheme: light;
+}
+
+/* ----------------------------------------------------------------- 2. frame */
+
+html {
+  background-color: var(--weld-field);
+  scroll-padding-top: 1rem;
+}
+
+body {
+  margin: 0;
+  font-family: var(--dk-display);
+  color: var(--weld-cream);
+  background-color: var(--weld-field);
+}
+
+/* Gold ring on the green field; a dark ring on the cream sheet, where gold
+   would disappear (the front page's rule). */
+:where(a, button, summary, [tabindex]):focus-visible {
+  outline: var(--dk-focus-w) solid var(--dk-focus);
+  outline-offset: var(--dk-focus-o);
+  border-radius: 4px;
+}
+
+/* ------------------------------------------------------ 3. header and seam */
+
+.site-header {
+  position: relative;
+  z-index: 20;
+  background-color: var(--weld-field);
+}
+
+.site-header__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-sizing: border-box;
+  max-width: 100rem;
+  min-height: var(--weld-header-h);
+  margin-inline: auto;
+  padding: 0.75rem var(--dk-gap);
+}
+
+.brand {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.brand img {
+  display: block;
+  border-radius: 7px;
+}
+
+.brand__name {
+  font-size: 1.125rem;
+  font-weight: var(--wsu-font-weight-black, 900);
+  letter-spacing: 0.12em;
+  color: var(--weld-cream);
+}
+
+.brand__version {
+  flex-shrink: 0;
+  font-family: var(--dk-mono);
+  font-size: var(--wsu-font-size-xs, 0.75rem);
+  font-weight: var(--wsu-font-weight-bold, 700);
+  color: var(--weld-ink);
+  background-color: var(--weld-gold);
+  border-radius: var(--wsu-radius-full, 9999rem);
+  padding: 0.125rem 0.625rem;
+}
+
+/* The main menu: cream links on the green, gold on hover, parked at the right
+   edge; on a phone it wraps instead of pushing the page sideways. */
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.125rem 1rem;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-weight: var(--wsu-font-weight-bold, 700);
+  color: var(--weld-cream);
+  text-decoration-color: var(--weld-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+.site-nav a:hover {
+  color: var(--weld-gold);
+}
+
+/* You are here: Docs, gold, on a laid bead instead of an underline. */
+.site-nav a[aria-current="page"] {
+  position: relative;
+  color: var(--weld-gold);
+  text-decoration: none;
+}
+
+.site-nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.35em;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--weld-ripple-x), var(--weld-gold);
+}
+
+/* ---------------------------------------------------- 4. sidebar and menu */
+
+.docs-layout {
+  gap: 1.5rem clamp(1.75rem, 1rem + 2.5vw, 3rem);
+  padding-block: 1.5rem 3rem;
+  padding-inline: var(--dk-gap);
+}
+
+/* Group labels are the front page's eyebrows: mono, gold, spaced caps. */
+.docs-nav__label {
+  margin: 1.5rem 0 0.4rem;
+  padding-inline: 0.75rem;
+  font-family: var(--dk-mono);
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-bold, 700);
+  letter-spacing: 0.08em;
+  color: var(--weld-gold);
+}
+
+/* Group lists are plain <ul> inside the kit's list: no bullets, no indent. */
+.docs-nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.docs-nav__group + li {
+  margin-top: 1.25rem;
+}
+
+.docs-nav a {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: var(--weld-cream);
+  border-radius: 6px;
+}
+
+.docs-nav a:hover {
+  color: var(--weld-gold);
+  background-color: rgba(7, 58, 50, 0.6);
+}
+
+/* The page you are on rides a short gold bead on the left. */
+.docs-nav a[aria-current="page"] {
+  font-weight: var(--wsu-font-weight-bold, 700);
+  color: var(--weld-cream);
+  background-color: var(--weld-panel);
+  box-shadow: inset 4px 0 0 var(--weld-gold);
+}
+
+.docs-menu summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  font-weight: var(--wsu-font-weight-bold, 700);
+  color: var(--weld-cream);
+  background-color: var(--weld-panel);
+  border: 1px solid var(--weld-cream-20);
+  border-radius: var(--dk-radius);
+  list-style: none;
+}
+
+.docs-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.docs-menu summary::after {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid var(--weld-gold);
+  border-bottom: 2px solid var(--weld-gold);
+  rotate: 45deg;
+  translate: 0 -2px;
+}
+
+.docs-menu[open] summary {
+  border-radius: var(--dk-radius) var(--dk-radius) 0 0;
+}
+
+.docs-menu[open] summary::after {
+  rotate: 225deg;
+  translate: 0 2px;
+}
+
+.docs-menu[open] > .docs-nav {
+  padding: 0.25rem 0.5rem 0.75rem;
+  background-color: var(--weld-panel);
+  border: 1px solid var(--weld-cream-20);
+  border-top: 0;
+  border-radius: 0 0 var(--dk-radius) var(--dk-radius);
+}
+
+.docs-menu .docs-nav a[aria-current="page"] {
+  background-color: rgba(255, 244, 204, 0.08);
+}
+
+/* -------------------------------------------------- 5. the sheet (article) */
+
+/* Each page is a cream sheet on the green, like the front page's step cards. */
+.docs-article {
+  box-sizing: border-box;
+  padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+  font-family: var(--dk-display);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--weld-sheet-ink);
+  background-color: var(--weld-sheet);
+  border-radius: var(--dk-radius);
+  box-shadow: var(--weld-shadow);
+  --dk-focus: var(--weld-sheet-focus);
+}
+
+.docs-article > :last-child {
+  margin-bottom: 0;
+}
+
+.docs-article h1,
+.docs-article h2,
+.docs-article h3,
+.docs-article h4 {
+  font-family: var(--dk-display);
+  font-weight: var(--wsu-font-weight-black, 900);
+  color: var(--weld-sheet-ink);
+  scroll-margin-top: 1.5rem;
+  text-wrap: balance;
+}
+
+/* The page title: section-head weight, and the hero's bead laid under it. */
+.docs-article h1 {
+  position: relative;
+  margin: 0 0 1.75rem;
+  padding-bottom: 1.1rem;
+  font-size: clamp(2.25rem, 1.7rem + 2.2vw, 3.25rem);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+.docs-article h1::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 5.5rem;
+  height: 6px;
+  border-radius: 3px;
+  background-image: radial-gradient(circle at 0 50%, rgba(255, 255, 255, 0.35) 0 2px, transparent 2.5px);
+  background-size: 6px 100%;
+  background-repeat: repeat-x;
+  background-color: var(--weld-gold);
+}
+
+/* Sections start at a joint: a dashed seam not yet welded, like the journey's
+   base line, then the heading. */
+.docs-article h2 {
+  margin: 3rem 0 0.85rem;
+  padding: 1.5rem 0 0;
+  font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  border: 0;
+  background-image: linear-gradient(90deg, var(--weld-sheet-rule) 50%, transparent 50%);
+  background-size: 8px 2px;
+  background-repeat: repeat-x;
+  background-position: 0 0;
+}
+
+.docs-article h3 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.3125rem;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+}
+
+.docs-article h4 {
+  margin: 1.5rem 0 0.4rem;
+  font-size: 1.0625rem;
+}
+
+/* Commands are case sensitive and mono: a little smaller in a heading. */
+.docs-article :is(h1, h2, h3) code {
+  font-size: 0.8em;
+}
+
+.docs-heading-link {
+  color: var(--weld-sheet-muted);
+  font-weight: var(--wsu-font-weight-bold, 700);
+}
+
+.docs-article a {
+  color: var(--weld-sheet-link);
+  font-weight: var(--wsu-font-weight-bold, 700);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+.docs-article a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.docs-article strong {
+  font-weight: var(--wsu-font-weight-black, 900);
+}
+
+.docs-article :is(ul, ol) {
+  margin: 0 0 1rem;
+  padding-inline-start: 1.4rem;
+}
+
+.docs-article li {
+  margin-block: 0.3rem;
+}
+
+.docs-article li::marker {
+  color: var(--weld-sheet-link);
+  font-weight: var(--wsu-font-weight-bold, 700);
+}
+
+.docs-article img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+/* WayneUI's base makes images blocks; badges in a line of prose sit inline. */
+.docs-article p img {
+  display: inline-block;
+}
+
+/* The art (hero shot, journey) carries its own green tile: round it to match. */
+.docs-article p > img:only-child,
+.docs-article p > a:only-child > img {
+  border-radius: var(--dk-radius);
+  box-shadow: 0 18px 40px -24px rgba(2, 26, 22, 0.7);
+}
+
+.docs-article hr {
+  margin-block: 2.5rem;
+  border: 0;
+  height: 2px;
+  background-image: linear-gradient(90deg, var(--weld-sheet-rule) 50%, transparent 50%);
+  background-size: 8px 2px;
+}
+
+/* Inline code reads as the front page's card code: mono ink, a faint green wash. */
+.docs-article code {
+  padding: 0.1em 0.35em;
+  font-family: var(--dk-mono);
+  font-size: 0.875em;
+  color: var(--weld-sheet-ink);
+  background-color: var(--weld-sheet-code);
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------ 6. terminals */
+
+/* What you type runs on the quick start's terminal: ink, pale text, the deep
+   shadow. Lines keep their shape, so a long one scrolls instead of wrapping. */
+.docs-article pre {
+  margin: 1.25rem 0 1.5rem;
+  padding: 1rem 1.25rem 1.1rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--weld-term-text);
+  background-color: var(--weld-ink);
+  border: 1px solid var(--weld-slab-edge);
+  border-radius: var(--dk-radius);
+  box-shadow: 0 18px 40px -24px rgba(2, 26, 22, 0.9);
+  tab-size: 4;
+  scrollbar-color: #3a514b transparent;
+}
+
+.docs-article pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border-radius: 0;
+  overflow-wrap: normal;
+}
+
+/* With docs.js the block sits in .docs-copy: the terminal moves to the wrapper
+   and the pre stops short of a gutter, so the button never covers a command. */
+.docs-copy {
+  margin: 1.25rem 0 1.5rem;
+  background-color: var(--weld-ink);
+  border: 1px solid var(--weld-slab-edge);
+  border-radius: var(--dk-radius);
+  box-shadow: 0 18px 40px -24px rgba(2, 26, 22, 0.9);
+  overflow: hidden;
+}
+
+.docs-copy > pre {
+  margin: 0;
+  margin-inline-end: 5.5rem;
+  padding-inline-end: 0.75rem;
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* The quick start's gold Copy button, hung in the terminal's corner. */
+.docs-copy__button {
+  top: 0;
+  right: 0;
+  min-width: 5.5rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  font-family: var(--dk-display);
+  font-size: 0.9375rem;
+  font-weight: var(--wsu-font-weight-bold, 700);
+  color: #09090b;
+  background-color: var(--weld-gold);
+  border: 0;
+  border-radius: 0 0 0 var(--wsu-radius-field, 0.375rem);
+}
+
+.docs-copy__button:hover {
+  color: #09090b;
+  background-color: var(--weld-gold-bright);
+  border-color: transparent;
+}
+
+.docs-copy__button:focus-visible {
+  outline: 3px solid var(--weld-ink);
+  outline-offset: -5px;
+  border-radius: 0 0 0 var(--wsu-radius-field, 0.375rem);
+}
+
+/* A block that scrolls sideways takes focus (docs.js): a gold ring inside. */
+.docs-article pre:focus-visible {
+  outline: 3px solid var(--weld-gold);
+  outline-offset: -4px;
+}
+
+/* ------------------------------------------------------ 7. callouts, tables */
+
+/* A callout is a note pinned to the sheet: a faint green wash with a bead down
+   its left edge and a mono label, like the front page's eyebrows. */
+.docs-callout,
+.docs-article blockquote {
+  position: relative;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem 1rem 1.6rem;
+  color: var(--weld-sheet-ink);
+  background-color: var(--weld-sheet-tint);
+  border: 0;
+  border-radius: var(--wsu-radius-field, 0.375rem);
+}
+
+.docs-callout::before,
+.docs-article blockquote::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  border-radius: var(--wsu-radius-field, 0.375rem) 0 0 var(--wsu-radius-field, 0.375rem);
+  background: var(--weld-ripple-y), var(--weld-green);
+}
+
+.docs-callout > :last-child,
+.docs-article blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.docs-callout__label {
+  margin: 0 0 0.35rem;
+  font-family: var(--dk-mono);
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-bold, 700);
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.docs-callout--note .docs-callout__label,
+.docs-callout--tip .docs-callout__label {
+  color: var(--weld-sheet-link);
+}
+
+/* Warnings get the hot gold: bead and a gold chip label, like the cast's
+   joke chips. Danger runs on the ember, the one warm accent. */
+.docs-callout--warning::before {
+  background: var(--weld-ripple-y), var(--weld-gold);
+}
+
+.docs-callout--danger::before {
+  background: var(--weld-ripple-y), var(--weld-ember);
+}
+
+.docs-callout--warning .docs-callout__label,
+.docs-callout--danger .docs-callout__label {
+  display: inline-block;
+  padding: 0.0625rem 0.55rem;
+  color: #09090b;
+  background-color: var(--weld-gold);
+  border-radius: var(--wsu-radius-full, 9999rem);
+}
+
+.docs-callout--danger .docs-callout__label {
+  background-color: var(--weld-ember);
+}
+
+.docs-callout code,
+.docs-article blockquote code {
+  background-color: rgba(12, 84, 73, 0.1);
+}
+
+.docs-table {
+  margin: 1.25rem 0 1.5rem;
+  border: 1px solid var(--weld-sheet-rule);
+  border-radius: var(--wsu-radius-field, 0.375rem);
+}
+
+.docs-article table {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* Table heads are the path cards' "From Sourdough" labels: mono, spaced caps. */
+.docs-article th {
+  font-family: var(--dk-mono);
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-bold, 700);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--weld-sheet-muted);
+  background-color: var(--weld-sheet-tint);
+}
+
+.docs-article th,
+.docs-article td {
+  padding: 0.6rem 0.9rem;
+  vertical-align: top;
+  border-bottom: 1px solid var(--weld-sheet-rule);
+}
+
+.docs-article tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* A command or key keeps its shape in a cell: the column sizes to it, and it
+   only breaks if it would spill out of the table. */
+.docs-article td code {
+  overflow-wrap: break-word;
+}
+
+/* ------------------------------------------------ 8. toc, pager, footer */
+
+.docs-toc__title {
+  font-family: var(--dk-mono);
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-bold, 700);
+  letter-spacing: 0.08em;
+  color: var(--weld-gold);
+}
+
+.docs-toc__list {
+  border-left: 2px solid var(--weld-cream-20);
+}
+
+/* Sub-entries carry only the --sub class, so name both. */
+.docs-toc :is(.docs-toc__item, .docs-toc__item--sub) a {
+  display: block;
+  padding: 0.25rem 0.75rem;
+  text-decoration: none;
+  margin-left: -2px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--weld-cream-85);
+  border-left: 2px solid transparent;
+}
+
+.docs-toc__item--sub a {
+  padding-left: 1.5rem;
+}
+
+.docs-toc :is(.docs-toc__item, .docs-toc__item--sub) a:hover {
+  color: var(--weld-gold);
+  border-left-color: var(--weld-gold);
+}
+
+/* Previous and Next are the chooser's cards: deep green, a cream hairline,
+   the gold mono label on top; the frame turns gold on hover. */
+.docs-pager {
+  margin-top: 1.5rem;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.docs-pager__link {
+  box-sizing: border-box;
+  flex: 1 1 0;
+  max-width: 22rem;
+  padding: 0.95rem 1.25rem 1.1rem;
+  color: var(--weld-cream);
+  background-color: var(--weld-panel);
+  border: 1px solid var(--weld-cream-20);
+  border-radius: var(--dk-radius);
+}
+
+.docs-pager__link--next {
+  margin-left: auto;
+}
+
+.docs-pager__link:hover {
+  border-color: rgba(255, 204, 51, 0.55);
+}
+
+.docs-pager__dir {
+  font-family: var(--dk-mono);
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-bold, 700);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--weld-gold);
+}
+
+.docs-pager__title {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.25rem;
+  font-weight: var(--wsu-font-weight-black, 900);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--weld-cream);
+  text-decoration: none;
+}
+
+.docs-pager__link:hover .docs-pager__title {
+  color: var(--weld-gold);
+}
+
+/* The front page's footer: full-bleed deep green, centered, the joke in gold. */
+.docs-footer {
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 2.5rem var(--dk-gap);
+  text-align: center;
+  font-size: var(--wsu-font-size-sm, 0.875rem);
+  color: var(--weld-cream-85);
+  background-color: var(--weld-panel);
+  border-top: 0;
+  box-shadow: 0 0 0 100vmax var(--weld-panel);
+  clip-path: inset(0 -100vmax);
+}
+
+.docs-footer::before {
+  content: "bugs > /dev/null (we wish)";
+  font-family: var(--dk-mono);
+  font-size: 0.9375rem;
+  color: var(--weld-gold);
+}
+
+.docs-footer > span:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 0.75rem;
+}
+
+.docs-footer a {
+  font-weight: var(--wsu-font-weight-bold, 700);
+  color: var(--weld-cream);
+  text-decoration-color: var(--weld-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+.docs-footer a:hover {
+  color: var(--weld-gold);
+}
+
+/* ---------------------------------------------------------------- 9. dark */
+
+/* Derived: the front page has no dark mode. The field drops to the darkest
+   green ink, the sheet turns deep green with cream text, gold takes the links,
+   and the terminals keep a hairline so they stay apart from the sheet. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --weld-field: var(--weld-green-ink);
+    --weld-panel: #0a2f29;
+    --weld-sheet: var(--weld-green-deep);
+    --weld-sheet-ink: var(--weld-cream);
+    --weld-sheet-muted: var(--weld-cream-85);
+    --weld-sheet-link: var(--weld-gold);
+    --weld-sheet-rule: rgba(255, 244, 204, 0.22);
+    --weld-sheet-tint: rgba(255, 244, 204, 0.06);
+    --weld-sheet-code: rgba(255, 244, 204, 0.1);
+    --weld-sheet-focus: var(--weld-gold);
+    --weld-slab-edge: var(--weld-cream-20);
+    --weld-shadow: 0 0 0 1px rgba(255, 244, 204, 0.08) inset, 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+
+    --dk-bg: var(--weld-field);
+    --dk-note: var(--weld-gold);
+    --dk-tip: var(--weld-gold);
+
+    color-scheme: dark;
+  }
+
+  :root:not([data-theme="light"]) .docs-callout::before,
+  :root:not([data-theme="light"]) .docs-article blockquote::before {
+    background: var(--weld-ripple-y), var(--weld-gold);
+  }
+
+  :root:not([data-theme="light"]) .docs-callout--danger::before {
+    background: var(--weld-ripple-y), var(--weld-ember);
+  }
+
+  :root:not([data-theme="light"]) .docs-callout code,
+  :root:not([data-theme="light"]) .docs-article blockquote code {
+    background-color: rgba(255, 244, 204, 0.12);
+  }
+}
+
+:root[data-theme="dark"] {
+  --weld-field: var(--weld-green-ink);
+  --weld-panel: #0a2f29;
+  --weld-sheet: var(--weld-green-deep);
+  --weld-sheet-ink: var(--weld-cream);
+  --weld-sheet-muted: var(--weld-cream-85);
+  --weld-sheet-link: var(--weld-gold);
+  --weld-sheet-rule: rgba(255, 244, 204, 0.22);
+  --weld-sheet-tint: rgba(255, 244, 204, 0.06);
+  --weld-sheet-code: rgba(255, 244, 204, 0.1);
+  --weld-sheet-focus: var(--weld-gold);
+  --weld-slab-edge: var(--weld-cream-20);
+  --weld-shadow: 0 0 0 1px rgba(255, 244, 204, 0.08) inset, 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+
+  --dk-bg: var(--weld-field);
+  --dk-note: var(--weld-gold);
+  --dk-tip: var(--weld-gold);
+
+  color-scheme: dark;
+}
+
+:root[data-theme="dark"] .docs-callout::before,
+:root[data-theme="dark"] .docs-article blockquote::before {
+  background: var(--weld-ripple-y), var(--weld-gold);
+}
+
+:root[data-theme="dark"] .docs-callout--danger::before {
+  background: var(--weld-ripple-y), var(--weld-ember);
+}
+
+:root[data-theme="dark"] .docs-callout code,
+:root[data-theme="dark"] .docs-article blockquote code {
+  background-color: rgba(255, 244, 204, 0.12);
+}
+
+/* --------------------------------------------------------- 10. responsive */
+
+@media (min-width: 760px) {
+  /* The header rides along at the top while the page scrolls. */
+  .site-header {
+    position: sticky;
+    top: 0;
+    box-shadow: 0 1px 0 var(--weld-cream-20);
+  }
+
+  html {
+    scroll-padding-top: calc(var(--weld-header-h) + 1rem);
+  }
+
+  .docs-article :is(h1, h2, h3, h4) {
+    scroll-margin-top: calc(var(--weld-header-h) + 1.25rem);
+  }
+
+  /* The sidebar rides under the header. */
+  .docs-nav--sidebar {
+    position: sticky;
+    top: calc(var(--weld-header-h) + 1.25rem);
+    max-height: calc(100vh - var(--weld-header-h) - 2.5rem);
+    overflow-y: auto;
+    padding-right: 0.25rem;
+    scrollbar-color: var(--weld-cream-20) transparent;
+  }
+
+  .docs-nav--sidebar > .docs-nav__list > li:first-child > .docs-nav__label {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .docs-layout--toc .docs-toc {
+    top: calc(var(--weld-header-h) + 1.25rem);
+    padding-top: 0.5rem;
+  }
+}
+
+/* Under 600px the header's links grow to 44px tall tap targets, as on the
+   front page. */
+@media (max-width: 599px) {
+  .site-nav a {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --dk-gap: 1rem;
+  }
+
+  .docs-layout {
+    padding-block-start: 0.5rem;
+  }
+
+  .docs-article {
+    padding: 1.25rem 1.1rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .docs-article pre {
+    font-size: 0.8125rem;
+  }
+
+  /* No room for a gutter: the button takes a band above the code, the way the
+     quick start keeps its whole command in view on a phone. */
+  .docs-copy > pre {
+    margin-inline-end: 0;
+    padding-block-start: 3.25rem;
+    padding-inline-end: 1.25rem;
+  }
+
+  .docs-pager {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .docs-pager__link {
+    max-width: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .brand {
+    gap: 0.5rem;
+  }
+
+  .brand__name {
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ------------------------------------------- 11. motion (no-preference) */
+
+/* Only for people who are happy with motion; everyone else gets the finished
+   weld, already cooled, nothing moving. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* The bead under the title is laid down left to right and cools from hot
+     to gold, once, as the page lands; a spark rides its tip. */
+  .docs-article h1::after {
+    animation:
+      weld-bead-draw 900ms linear 250ms backwards,
+      weld-bead-cool 1800ms ease-out 250ms backwards;
+  }
+
+  .docs-article h1::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 3px;
+    width: 14px;
+    height: 14px;
+    margin: 0 0 -7px -7px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff 0 22%, var(--weld-gold-hot) 38%, rgba(255, 204, 51, 0) 70%);
+    box-shadow: 0 0 14px 5px rgba(255, 204, 51, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    animation: weld-spark-run 900ms linear 250ms both;
+  }
+
+  /* The helmet tips its visor on hover, as the hero's does. */
+  .brand img {
+    transition: transform 500ms var(--weld-ease-spring);
+  }
+
+  .brand:hover img {
+    transform: rotate(-6deg) scale(1.06);
+  }
+
+  .site-nav a,
+  .docs-nav a,
+  .docs-toc a,
+  .docs-copy__button {
+    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
+  }
+
+  /* Cards lift a little on hover, like the front page's. */
+  .docs-pager__link {
+    transition: transform 450ms var(--weld-ease-out), border-color 200ms ease;
+  }
+
+  .docs-pager__link:hover {
+    transform: translateY(-3px);
+  }
+
+  /* A thin gold seam along the header that grows as you read, where the
+     browser can tie it to scroll natively (the front page's reading seam). */
+  @supports (animation-timeline: scroll()) {
+    @media (min-width: 760px) {
+      .site-header::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        height: 3px;
+        background-color: var(--weld-gold);
+        transform-origin: 0 50%;
+        animation: weld-seam-grow linear both;
+        animation-timeline: scroll(root);
+      }
+    }
+  }
+}
+
+@keyframes weld-bead-draw {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes weld-bead-cool {
+  from { background-color: var(--weld-gold-hot); }
+  to { background-color: var(--weld-gold); }
+}
+
+@keyframes weld-spark-run {
+  0% { opacity: 0; transform: translateX(0); }
+  6% { opacity: 1; }
+  94% { opacity: 1; transform: translateX(5.5rem); }
+  100% { opacity: 0; transform: translateX(5.5rem); }
+}
+
+@keyframes weld-seam-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* -------------------------------------------------------------- 12. print */
+
+@media print {
+  html,
+  body {
+    background: #ffffff;
+    color: #0f1f1c;
+  }
+
+  .site-header {
+    position: static;
+    box-shadow: none;
+    background: #ffffff;
+  }
+
+  .site-nav {
+    display: none;
+  }
+
+  .brand__name {
+    color: #0f1f1c;
+  }
+
+  .docs-article {
+    padding: 0;
+    box-shadow: none;
+    background: #ffffff;
+  }
+
+  .docs-article pre,
+  .docs-copy {
+    color: #0f1f1c;
+    background: #ffffff;
+    border-color: rgba(15, 31, 28, 0.3);
+    box-shadow: none;
+  }
+
+  .docs-copy > pre {
+    margin-inline-end: 0;
+    white-space: pre-wrap;
+  }
+
+  .docs-copy__button {
+    display: none;
+  }
+
+  .docs-footer {
+    color: #0f1f1c;
+    background: #ffffff;
+    box-shadow: none;
+    clip-path: none;
+  }
+}

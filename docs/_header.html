@@ -1,0 +1,22 @@
+<!--
+  The docs pages wear the front page's header (site/index.html): the helmet, WELD, the gold version chip and the same
+  main menu. The docs builder puts the header element below in place of its generic one on every page, rewrites the
+  relative links (written here as if from site/) to the page's depth, fills the version placeholder and marks the Docs
+  link aria-current. Styles: docs/theme/weld.css. Keep the links in step with the front page's site-nav, or the two
+  halves of the site come apart at the seam.
+-->
+<header class="site-header">
+  <div class="site-header__row">
+    <a class="brand" href="index.html">
+      <img src="brand/weld-avatar-256.png" width="32" height="32" alt="">
+      <span class="brand__name">WELD</span>
+    </a>
+    <span class="brand__version">{{version}}</span>
+    <nav class="site-nav" aria-label="Site">
+      <a href="index.html#start">Get started</a>
+      <a href="index.html#chooser">Pieces</a>
+      <a href="index.html#cast-title">Cast</a>
+      <a href="docs/index.html">Docs</a>
+    </nav>
+  </div>
+</header>
