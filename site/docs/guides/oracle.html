@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html" aria-current="page">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,36 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="oracle">Oracle<a class="docs-heading-link" aria-label="Link to this section" href="#oracle">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>Set up and check WELD's Oracle connection: the settings, the plain-language check, and the parity image for a real connection from your machine.</p>
+<h2 id="the-wiring">The wiring<a class="docs-heading-link" aria-label="Link to this section" href="#the-wiring">#</a></h2>
+<p>WELD speaks Oracle through <code>yajra/laravel-oci8</code>, and the wiring is already in: an <code>oracle</code> connection in <code>config/database.php</code>, a check command, and plain-language sentences for the common errors. Until you set the Oracle settings it stays dormant: nothing connects and nothing errors.</p>
+<h2 id="set-the-settings">Set the settings<a class="docs-heading-link" aria-label="Link to this section" href="#set-the-settings">#</a></h2>
+<p>Fill in one set of names in <code>.env</code> (the commented block in <code>.env.example</code>): <code>ORACLE_USERNAME</code>, <code>ORACLE_PASSWORD</code>, and either <code>ORACLE_TNS</code> (an Easy Connect string, <code>host:port/service</code>, or a full descriptor) or <code>ORACLE_HOST</code>, <code>ORACLE_PORT</code> and <code>ORACLE_SERVICE_NAME</code>. Leave them empty if your app does not use Oracle; nothing connects until they are set. On a server, set them in the app's environment settings, never in a file in git.</p>
+<h2 id="check-the-connection">Check the connection<a class="docs-heading-link" aria-label="Link to this section" href="#check-the-connection">#</a></h2>
+<p>Check the settings and the connection in plain language, one line per finding:</p>
+<pre><code>php artisan oracle:check
+</code></pre>
+<p><code>oracle:check</code> is a thin wire to Squire's shared check file: it runs <code>deploy/oracle-check.php</code> with the current environment, streams the plain-language lines straight through, and returns the check's exit code, 0 when Oracle is not configured or all passed and 1 when a problem was found. The check file promises to never print a setting value. WELD does not own the check; a kit refresh (<code>vendor/bin/squire update</code>) puts the file here. If the check file is not there yet, the command tells you to run <code>vendor/bin/squire update</code> to get it.</p>
+<h2 id="a-real-connection-from-your-machine">A real connection from your machine<a class="docs-heading-link" aria-label="Link to this section" href="#a-real-connection-from-your-machine">#</a></h2>
+<p>The local <code>app</code> container runs the stock Composer image, which has no Oracle driver. When you need a real connection from your machine, the Oracle-ready image is opt-in through <code>compose.oracle.yaml</code>:</p>
+<pre><code class="language-powershell">$env:WELD_ORACLE_IMAGE = &quot;squire/oracle-parity:8.3&quot;
+docker compose -f compose.yaml -f compose.oracle.yaml up
+</code></pre>
+<pre><code class="language-sh">WELD_ORACLE_IMAGE=squire/oracle-parity:8.3 docker compose -f compose.yaml -f compose.oracle.yaml up
+</code></pre>
+<p>The overlay swaps only the app's image and passes the <code>ORACLE_*</code> settings through from <code>.env</code>; the ports stay bound to <code>127.0.0.1</code>. It fails closed when <code>WELD_ORACLE_IMAGE</code> is unset.</p>
+<p><code>squire/oracle-parity:8.3</code> is the name Squire documents for its parity image; build it once with Squire's <code>scripts/oracle-image-build.sh --flavour parity --php 8.3</code> (the name is a placeholder until a registry is chosen).</p>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="whats-welded-in.html">What is welded in</a></li>
+<li><a href="check-your-setup.html">Check your setup</a></li>
+<li><a href="../running-off-citadel.html">Running WELD off Citadel</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/guides/check-your-setup.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Check your setup</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/guides/sourdough.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">WELD and Sourdough</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#the-wiring">The wiring</a></li><li class="docs-toc__item"><a href="#set-the-settings">Set the settings</a></li><li class="docs-toc__item"><a href="#check-the-connection">Check the connection</a></li><li class="docs-toc__item"><a href="#a-real-connection-from-your-machine">A real connection from your machine</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

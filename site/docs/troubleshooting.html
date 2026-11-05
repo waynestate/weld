@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../docs/index.html">Overview</a></li><li><a href="../docs/install.html">Install</a></li><li><a href="../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../docs/guides/oracle.html">Oracle</a></li><li><a href="../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../docs/guides/app-structure.html">App structure</a></li><li><a href="../docs/guides/container-contract.html">The container contract</a></li><li><a href="../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../docs/guides/security.html">Security</a></li><li><a href="../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../docs/reference/status.html">Status</a></li><li><a href="../docs/reference/commands.html">Commands</a></li><li><a href="../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../docs/troubleshooting.html" aria-current="page">Troubleshooting</a></li><li><a href="../docs/upgrading.html">Upgrading</a></li><li><a href="../docs/contributing.html">Contributing</a></li><li><a href="../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,49 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="troubleshooting">Troubleshooting<a class="docs-heading-link" aria-label="Link to this section" href="#troubleshooting">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>This page covers the failures that trip people up in WELD, with the cause of each, the fix, and a command to check that it holds again.</p>
+<h2 id="symptoms">Symptoms<a class="docs-heading-link" aria-label="Link to this section" href="#symptoms">#</a></h2>
+<p>Each entry follows the same shape: what you see, why it happens, how to fix it, and the command that proves it holds.</p>
+<h3 id="composer-ci-fails-because-the-docs-site-is-stale"><code>composer ci</code> fails because the docs site is stale<a class="docs-heading-link" aria-label="Link to this section" href="#composer-ci-fails-because-the-docs-site-is-stale">#</a></h3>
+<p><strong>Cause.</strong> The docs at <code>site/docs/</code> are built from <code>docs/</code> by the shared docs builder, and <code>composer ci</code> runs <code>composer docs:check</code>, which fails when the committed docs site is stale or the docs carry findings. Change a page in <code>docs/</code> or <code>CHANGELOG.md</code> without rebuilding, and the check fails.</p>
+<p><strong>Fix.</strong> Rebuild the site from the source and commit the output. Do not edit <code>site/</code> by hand; the builder writes it, so the page you read is the page that ships.</p>
+<pre><code>composer docs
+</code></pre>
+<p><code>composer docs</code> writes <code>site/docs/</code> from <code>docs/</code> and generates <code>docs/changelog.md</code> from <code>CHANGELOG.md</code>.</p>
+<p><strong>Check.</strong> Run the same check that <code>composer ci</code> runs; it writes nothing:</p>
+<pre><code>composer docs:check
+</code></pre>
+<h3 id="the-agent-ready-files-are-stale">The agent-ready files are stale<a class="docs-heading-link" aria-label="Link to this section" href="#the-agent-ready-files-are-stale">#</a></h3>
+<p><strong>Cause.</strong> The agent-ready site (prompt blocks, Markdown twins, llms.txt) comes from Squire's kit and is generated into <code>site/</code>. <code>composer ci</code> runs <code>composer site:agent-ready-check</code>, which fails when the agent-ready files are stale, a page lacks its Markdown link, a prompt drifts from the docs, or the kit was edited here.</p>
+<p><strong>Fix.</strong> Regenerate the files and commit the result:</p>
+<pre><code>composer site:agent-ready
+</code></pre>
+<p>That rewrites the Markdown twins, llms.txt, llms-full.txt, robots.txt and sitemap.xml in <code>site/</code>.</p>
+<p><strong>Check.</strong></p>
+<pre><code>composer site:agent-ready-check
+</code></pre>
+<h3 id="regen-check-reports-new-drift">regen-check reports new drift<a class="docs-heading-link" aria-label="Link to this section" href="#regen-check-reports-new-drift">#</a></h3>
+<p><strong>Cause.</strong> The regen gate compares a freshly generated Sourdough Inertia app with WELD file by file, from Sourdough's <code>.sourdough/manifest.json</code> (each path with its SHA-256). It skips the product files listed in <code>.sourdough/product-files.json</code> and any <code>vendor</code> or <code>node_modules</code> path, and reports each remaining path as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED (a Squire kit file WELD keeps byte-identical under <code>deploy/</code>). The gate is a ratchet: <code>.sourdough/regen-baseline.json</code> records the drift already known and accepted, and the check fails only on new drift, so a change in what Sourdough generates surfaces here.</p>
+<p><strong>Fix.</strong> Fix the drift here or upstream in Sourdough. If the drift is accepted as intended, record the current drift as accepted and commit <code>.sourdough/regen-baseline.json</code>:</p>
+<pre><code>php bin/regen-check.php --generated &lt;dir&gt; --write-baseline
+</code></pre>
+<aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>The regen gate is not part of <code>composer ci</code>. CI runs it as a separate, warning-only job, and the GitHub pipeline keeps it warning-only with <code>continue-on-error</code> until the baseline is filled in.</p></aside>
+<p><strong>Check.</strong> Re-run the check against your own generation; it passes once every path is IDENTICAL or already recorded in the baseline:</p>
+<pre><code>php bin/regen-check.php --generated &lt;dir&gt;
+</code></pre>
+<p>Through Composer the same check is <code>composer regen-check -- --generated &lt;dir&gt;</code>.</p>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="running-off-citadel.html">Running WELD off Citadel</a></li>
+<li><a href="guides/regen-check.html">Is WELD still Sourdough's shape?</a></li>
+<li><a href="guides/check-your-setup.html">Check your setup</a></li>
+<li><a href="changelog.html">Changelog</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../docs/reference/configuration.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Configuration</span></a><a class="docs-pager__link docs-pager__link--next" href="../docs/upgrading.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Upgrading</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#symptoms">Symptoms</a></li><li class="docs-toc__item--sub"><a href="#composer-ci-fails-because-the-docs-site-is-stale">composer ci fails because the docs site is stale</a></li><li class="docs-toc__item--sub"><a href="#the-agent-ready-files-are-stale">The agent-ready files are stale</a></li><li class="docs-toc__item--sub"><a href="#regen-check-reports-new-drift">regen-check reports new drift</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

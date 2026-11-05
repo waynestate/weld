@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html" aria-current="page">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,98 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="quick-start">Quick start<a class="docs-heading-link" aria-label="Link to this section" href="#quick-start">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>This page takes a fresh copy of WELD from a folder to a running, checked app on your machine.</p>
+<p>One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the
+containers, so the host needs neither.</p>
+<h2 id="steps">Steps<a class="docs-heading-link" aria-label="Link to this section" href="#steps">#</a></h2>
+<ol>
+<li>
+<p>Bring the stack up:</p>
+<pre><code class="language-powershell">.\bin\weld.ps1 up
+</code></pre>
+<pre><code class="language-sh">bin/weld.sh up
+</code></pre>
+<p>Expected: <code>up</code> copies <code>.env.example</code> to <code>.env</code> if it is missing, installs the PHP and Node dependencies in the
+containers, starts the app and Vite, generates the app key if it is not set, and runs the migrations.</p>
+</li>
+<li>
+<p>Open <a rel="noopener" href="http://localhost:8000">http://localhost:8000</a>. Expected: the app, served by the local stack.</p>
+</li>
+<li>
+<p>Run the doctor:</p>
+<pre><code class="language-powershell">.\bin\weld.ps1 doctor
+</code></pre>
+<pre><code class="language-sh">bin/weld.sh doctor
+</code></pre>
+<p>Expected: one line per check, PASS or WARN or FAIL; exit code 1 when anything FAILs. A good bead is a quiet one:
+all PASS and nothing to say.</p>
+</li>
+<li>
+<p>Run the checks:</p>
+<pre><code class="language-powershell">.\bin\weld.ps1 test
+</code></pre>
+<pre><code class="language-sh">bin/weld.sh test
+</code></pre>
+<p>Expected: <code>composer ci</code> runs in the app container: validate, tests, Pint, PHPStan level 8, the agent-ready check
+and audit.</p>
+</li>
+</ol>
+<h2 id="the-subcommands">The subcommands<a class="docs-heading-link" aria-label="Link to this section" href="#the-subcommands">#</a></h2>
+<p>The same subcommands work on every OS:</p>
+<div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>up</code></td>
+<td>Bring the whole stack up, as above</td>
+</tr>
+<tr>
+<td><code>down</code></td>
+<td>Stop and remove the containers</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>Run <code>composer ci</code> in the app container</td>
+</tr>
+<tr>
+<td><code>doctor</code></td>
+<td>Run <code>php artisan weld:doctor</code> in the app container</td>
+</tr>
+<tr>
+<td><code>logs</code></td>
+<td>Follow the container logs</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="what-you-built">What you built<a class="docs-heading-link" aria-label="Link to this section" href="#what-you-built">#</a></h2>
+<p>You have WELD running locally in Docker: the app and Vite in containers, <code>.env</code> copied from <code>.env.example</code>, the app key
+generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in,
+security headers, checks, coding standards, CI and the WayneUI interface already hooked up.</p>
+<h2 id="next-steps">Next steps<a class="docs-heading-link" aria-label="Link to this section" href="#next-steps">#</a></h2>
+<ul>
+<li>Make it yours: rename the four things that still say WELD (the composer name, the app name, the site title and the
+git remote), give the copy its own key, and re-run the checks.</li>
+<li><a href="check-your-setup.html">Check your setup</a>: what the doctor reports, joint by joint.</li>
+<li><a href="whats-welded-in.html">What is welded in</a>: the parts and what each does in the app.</li>
+<li><a href="../running-off-citadel.html">Running WELD off Citadel</a>: for when the destination is somewhere other than a laptop.</li>
+</ul>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="../index.html">Overview</a></li>
+<li><a href="../install.html">Install</a></li>
+<li><a href="check-your-setup.html">Check your setup</a></li>
+<li><a href="whats-welded-in.html">What is welded in</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/install.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Install</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/guides/whats-welded-in.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">What is welded in</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#steps">Steps</a></li><li class="docs-toc__item"><a href="#the-subcommands">The subcommands</a></li><li class="docs-toc__item"><a href="#what-you-built">What you built</a></li><li class="docs-toc__item"><a href="#next-steps">Next steps</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

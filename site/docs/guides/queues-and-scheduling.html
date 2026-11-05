@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html" aria-current="page">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,74 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="queues-and-scheduling">Queues and scheduling<a class="docs-heading-link" aria-label="Link to this section" href="#queues-and-scheduling">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>This page lists the queue and scheduling practices for WELD without Citadel workers, from the BEST_PRACTICES guide, with the tag that says whether the stack holds each one today.</p>
+<h2 id="w18-database-queue-by-default-the-worker-is-a-process-type">W18. Database queue by default; the worker is a process type<a class="docs-heading-link" aria-label="Link to this section" href="#w18-database-queue-by-default-the-worker-is-a-process-type">#</a></h2>
+<p><strong>Practice:</strong> <code>QUEUE_CONNECTION=database</code>; run <code>php artisan queue:work --max-time=3600 --tries=3</code> as the <code>worker</code> process where the platform allows one. Use <code>#[Tries]</code>, <code>#[Timeout]</code> and <code>#[Backoff]</code> on jobs.</p>
+<p><strong>Why:</strong> It needs no extra service, and <code>--max-time</code> recycles memory.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. <code>.env.example</code> sets <code>QUEUE_CONNECTION=database</code>, <code>config/queue.php</code> defaults to it, and the jobs tables are migrated by <code>database/migrations/0001_01_01_000002_create_jobs_table.php</code>. No job classes exist yet, so the <code>#[Tries]</code>/<code>#[Timeout]</code>/<code>#[Backoff]</code> attributes are not in use. Target <code>Checked</code>: a test that every job class declares <code>#[Tries]</code> and <code>#[Timeout]</code>.</p>
+<h2 id="w19-where-no-worker-can-run-run-the-queue-from-the-scheduler">W19. Where no worker can run, run the queue from the scheduler<a class="docs-heading-link" aria-label="Link to this section" href="#w19-where-no-worker-can-run-run-the-queue-from-the-scheduler">#</a></h2>
+<p><strong>Practice:</strong> On Citadel (no queue workers), schedule <code>queue:work --stop-when-empty --max-time=50 --tries=3</code> every minute with <code>withoutOverlapping</code> and a short expiry. Select it with <code>WELD_QUEUE_MODE=scheduled</code>.</p>
+<p><strong>Why:</strong> <code>--stop-when-empty</code> is documented for Docker use (&quot;shutdown the container after the queue is empty&quot;), and the scheduler is the one cron entry Citadel can run. This exact pattern is an inference, not a documented recipe.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. <code>routes/console.php</code> has no scheduler entries yet (only the <code>inspire</code> command). Target <code>Checked</code>: a test that <code>schedule:list</code> shows the entry under the <code>citadel</code> preset and not under the others.</p>
+<h2 id="w20-timeout-below-retry-after">W20. Timeout below <code>retry_after</code><a class="docs-heading-link" aria-label="Link to this section" href="#w20-timeout-below-retry-after">#</a></h2>
+<p><strong>Practice:</strong> Set each job timeout lower than the connection's <code>retry_after</code>. Timeouts need the PCNTL extension.</p>
+<p><strong>Why:</strong> Otherwise the job is attempted again before it has finished.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. No job classes exist yet. Target <code>Checked</code>: a config test comparing the two values; the image installs <code>pcntl</code>.</p>
+<h2 id="w21-one-scheduler-entry-one-run-per-task">W21. One scheduler entry; one run per task<a class="docs-heading-link" aria-label="Link to this section" href="#w21-one-scheduler-entry-one-run-per-task">#</a></h2>
+<p><strong>Practice:</strong> Run <code>php artisan schedule:run</code> every minute (cron, or a CronJob), or <code>schedule:work</code> for a single long-lived container. With more than one scheduler, mark tasks <code>onOneServer()</code> (shared cache) and name closures.</p>
+<p><strong>Why:</strong> Three schedulers run a nightly report three times.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. <code>routes/console.php</code> has no scheduler entries yet. Target <code>Checked</code>: a test fails on any scheduled closure without <code>-&gt;name()</code>.</p>
+<h2 id="w22-interrupt-and-restart-long-lived-processes-at-deploy">W22. Interrupt and restart long-lived processes at deploy<a class="docs-heading-link" aria-label="Link to this section" href="#w22-interrupt-and-restart-long-lived-processes-at-deploy">#</a></h2>
+<p><strong>Practice:</strong> After a release run <code>php artisan queue:restart</code> (or <code>php artisan reload</code>), and <code>schedule:interrupt</code> when sub-minute tasks exist.</p>
+<p><strong>Why:</strong> Workers and a minute-long <code>schedule:run</code> keep the old code until they exit.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. The release script now exists (<code>deploy/scripts/release.sh</code>) but runs none of <code>queue:restart</code>, <code>reload</code> or <code>schedule:interrupt</code>. Target <code>Checked</code>: the release script lists the three commands; PROCTOR checks the file.</p>
+<h2 id="w23-make-a-silent-scheduler-visible">W23. Make a silent scheduler visible<a class="docs-heading-link" aria-label="Link to this section" href="#w23-make-a-silent-scheduler-visible">#</a></h2>
+<p><strong>Practice:</strong> Record a heartbeat on every scheduler minute and fail <code>/ready</code> (not <code>/up</code>) when it is older than a few minutes. Export the age as a Prometheus gauge (off by default).</p>
+<p><strong>Why:</strong> With no worker supervisor, a stopped scheduler is otherwise invisible.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. There is no scheduler and no <code>/ready</code> endpoint yet. Target <code>Checked</code>: a test advances a fake clock and asserts <code>/ready</code> fails.</p>
+<h2 id="w24-run-migrations-exactly-once-per-release">W24. Run migrations exactly once per release<a class="docs-heading-link" aria-label="Link to this section" href="#w24-run-migrations-exactly-once-per-release">#</a></h2>
+<p><strong>Practice:</strong> Use a Job, a pre-deploy hook (Coolify &quot;Pre-deployment Command&quot;), or <code>migrate --isolated</code>. Never run <code>migrate</code> in a per-replica entrypoint.</p>
+<p><strong>Why:</strong> Parallel replicas race on schema changes.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. The release step runs <code>php artisan migrate --force</code> (<code>deploy/scripts/release.sh</code>) once per release, from the first-release hook (<code>deploy/deployments/001-first-release.sh</code>) and the Quick Update post-script (<code>deploy/scripts/release.sh</code>); the entrypoint itself runs no artisan commands (<code>deploy/.squire/fallback/citadel-apache-entrypoint</code>). Target <code>Checked</code>: PROCTOR flags <code>migrate</code> in an entrypoint.</p>
+<h2 id="how-to-read-the-tags">How to read the tags<a class="docs-heading-link" aria-label="Link to this section" href="#how-to-read-the-tags">#</a></h2>
+<p>Each practice ends with exactly one tag.</p>
+<div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enforced</code></td>
+<td>WELD's code does it or refuses to run without it, and a test covers it.</td>
+</tr>
+<tr>
+<td><code>Checked</code></td>
+<td>PROCTOR or CI warns or fails.</td>
+</tr>
+<tr>
+<td><code>Documented</code></td>
+<td>Written down in the README or a config file, with no check behind it.</td>
+</tr>
+<tr>
+<td><code>Not yet</code></td>
+<td>A gap.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="./app-structure.html">App structure</a></li>
+<li><a href="./container-contract.html">The container contract</a></li>
+<li><a href="../running-off-citadel.html">Running WELD off Citadel</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/guides/container-contract.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">The container contract</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/guides/security.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Security</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#w18-database-queue-by-default-the-worker-is-a-process-type">W18. Database queue by default; the worker is a process type</a></li><li class="docs-toc__item"><a href="#w19-where-no-worker-can-run-run-the-queue-from-the-scheduler">W19. Where no worker can run, run the queue from the scheduler</a></li><li class="docs-toc__item"><a href="#w20-timeout-below-retry-after">W20. Timeout below retry_after</a></li><li class="docs-toc__item"><a href="#w21-one-scheduler-entry-one-run-per-task">W21. One scheduler entry; one run per task</a></li><li class="docs-toc__item"><a href="#w22-interrupt-and-restart-long-lived-processes-at-deploy">W22. Interrupt and restart long-lived processes at deploy</a></li><li class="docs-toc__item"><a href="#w23-make-a-silent-scheduler-visible">W23. Make a silent scheduler visible</a></li><li class="docs-toc__item"><a href="#w24-run-migrations-exactly-once-per-release">W24. Run migrations exactly once per release</a></li><li class="docs-toc__item"><a href="#how-to-read-the-tags">How to read the tags</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

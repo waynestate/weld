@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/configuration.html" aria-current="page">Configuration</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,354 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="configuration">Configuration<a class="docs-heading-link" aria-label="Link to this section" href="#configuration">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>This page lists every environment variable a WELD app reads, its default from <code>.env.example</code>, and what the sources say about it.</p>
+<h2 id="environment-variables">Environment variables<a class="docs-heading-link" aria-label="Link to this section" href="#environment-variables">#</a></h2>
+<div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>APP_NAME</code></td>
+<td><code>WELD</code></td>
+<td>Renamed when you clone and rename; <code>VITE_APP_NAME</code> follows it through <code>${APP_NAME}</code>.</td>
+</tr>
+<tr>
+<td><code>APP_ENV</code></td>
+<td><code>local</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>APP_KEY</code></td>
+<td><code>(empty)</code></td>
+<td>Generate it with <code>php artisan key:generate</code>; <code>weld:doctor</code> checks the app key.</td>
+</tr>
+<tr>
+<td><code>APP_DEBUG</code></td>
+<td><code>true</code></td>
+<td>The local default; keep <code>APP_DEBUG=false</code> in production (W26).</td>
+</tr>
+<tr>
+<td><code>APP_URL</code></td>
+<td><code>http://localhost</code></td>
+<td>Set it to the real host (W17); Laravel trusts subdomains of <code>APP_URL</code> unless <code>subdomains: false</code>.</td>
+</tr>
+<tr>
+<td><code>APP_LOCALE</code></td>
+<td><code>en</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>APP_FALLBACK_LOCALE</code></td>
+<td><code>en</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>APP_FAKER_LOCALE</code></td>
+<td><code>en_US</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>APP_MAINTENANCE_DRIVER</code></td>
+<td><code>file</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>APP_MAINTENANCE_STORE</code></td>
+<td><code>database (commented out)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>PHP_CLI_SERVER_WORKERS</code></td>
+<td><code>4</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>BCRYPT_ROUNDS</code></td>
+<td><code>12</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>LOG_CHANNEL</code></td>
+<td><code>stderr</code></td>
+<td>Everything goes to <code>php://stderr</code>; nothing under <code>storage/logs</code> (W14).</td>
+</tr>
+<tr>
+<td><code>LOG_STACK</code></td>
+<td><code>single</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>LOG_DEPRECATIONS_CHANNEL</code></td>
+<td><code>null</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>LOG_LEVEL</code></td>
+<td><code>debug</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DB_CONNECTION</code></td>
+<td><code>sqlite</code></td>
+<td>Local development uses SQLite.</td>
+</tr>
+<tr>
+<td><code>DB_HOST</code></td>
+<td><code>127.0.0.1 (commented out)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DB_PORT</code></td>
+<td><code>3306 (commented out)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DB_DATABASE</code></td>
+<td><code>laravel (commented out)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DB_USERNAME</code></td>
+<td><code>root (commented out)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>DB_PASSWORD</code></td>
+<td><code>(empty, commented out)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ORACLE_USERNAME</code></td>
+<td><code>(empty, commented out)</code></td>
+<td>Leave empty if the app does not use Oracle; nothing connects until set. On a server, set it in the app's environment settings, never in a file in git.</td>
+</tr>
+<tr>
+<td><code>ORACLE_PASSWORD</code></td>
+<td><code>(empty, commented out)</code></td>
+<td>As <code>ORACLE_USERNAME</code>; on a server, set it in the app's environment settings, never in a file in git.</td>
+</tr>
+<tr>
+<td><code>ORACLE_TNS</code></td>
+<td><code>(empty, commented out)</code></td>
+<td>An Easy Connect string (<code>host:port/service</code>) or a full descriptor; set this or the host, port and service trio.</td>
+</tr>
+<tr>
+<td><code>ORACLE_HOST</code></td>
+<td><code>(empty, commented out)</code></td>
+<td>Set with <code>ORACLE_PORT</code> and <code>ORACLE_SERVICE_NAME</code> as the alternative to <code>ORACLE_TNS</code>.</td>
+</tr>
+<tr>
+<td><code>ORACLE_PORT</code></td>
+<td><code>(empty, commented out)</code></td>
+<td>Part of the host, port and service alternative to <code>ORACLE_TNS</code>.</td>
+</tr>
+<tr>
+<td><code>ORACLE_SERVICE_NAME</code></td>
+<td><code>(empty, commented out)</code></td>
+<td>Part of the host, port and service alternative to <code>ORACLE_TNS</code>.</td>
+</tr>
+<tr>
+<td><code>SESSION_DRIVER</code></td>
+<td><code>database</code></td>
+<td>A shared store, even for one replica (W15).</td>
+</tr>
+<tr>
+<td><code>SESSION_LIFETIME</code></td>
+<td><code>120</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SESSION_ENCRYPT</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SESSION_PATH</code></td>
+<td><code>/</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SESSION_DOMAIN</code></td>
+<td><code>null</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>TRUSTED_PROXIES</code></td>
+<td><code>172.18.0.1</code></td>
+<td>Which proxies Laravel trusts for <code>X-Forwarded-Proto</code> and the client address. Unset keeps <code>172.18.0.1</code> (Citadel's proxy); set but empty trusts none; <code>*</code> trusts every proxy; or a comma-separated list of IPs and CIDR ranges. Off Citadel, set your own proxy here and put the same list in <code>HELMET_PROXIES</code>.</td>
+</tr>
+<tr>
+<td><code>HELMET_PROXIES</code></td>
+<td><code>172.18.0.1</code></td>
+<td>The address HA-Proxy connects from; the same list as <code>trustProxies</code> in <code>bootstrap/app.php</code>. Empty trusts nothing. A platform preset fills the list instead; when both are set, <code>HELMET_PROXIES</code> wins, and an unknown preset name throws at boot.</td>
+</tr>
+<tr>
+<td><code>HELMET_PRESET</code></td>
+<td><code>citadel (commented out)</code></td>
+<td>Picks a platform preset; HELMET ships two, <code>citadel</code> and <code>docker</code>. An unknown preset name throws at boot. When both it and <code>HELMET_PROXIES</code> are set, <code>HELMET_PROXIES</code> wins.</td>
+</tr>
+<tr>
+<td><code>SESAME_DRIVER</code></td>
+<td><code>fake</code></td>
+<td>SESAME owns sign-in. <code>fake</code> signs in locally without an identity provider and refuses to boot outside development environments; production sets <code>SESAME_DRIVER=cas</code> plus <code>SESAME_CAS_BASE_URL</code>.</td>
+</tr>
+<tr>
+<td><code>SESAME_FAKE_USERNAME</code></td>
+<td><code>jdoe</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SESAME_CAS_BASE_URL</code></td>
+<td><code>(empty, commented out)</code></td>
+<td>Set with <code>SESAME_DRIVER=cas</code> in production.</td>
+</tr>
+<tr>
+<td><code>SESAME_CAS_SERVICE_URL</code></td>
+<td><code>(empty, commented out)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>BROADCAST_CONNECTION</code></td>
+<td><code>log</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>FILESYSTEM_DISK</code></td>
+<td><code>local</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>QUEUE_CONNECTION</code></td>
+<td><code>database</code></td>
+<td>Run the queue worker where the platform allows one (W18).</td>
+</tr>
+<tr>
+<td><code>CACHE_STORE</code></td>
+<td><code>database</code></td>
+<td>A shared cache, even for one replica (W15).</td>
+</tr>
+<tr>
+<td><code>CACHE_PREFIX</code></td>
+<td><code>(empty, commented out)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MEMCACHED_HOST</code></td>
+<td><code>127.0.0.1</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>REDIS_CLIENT</code></td>
+<td><code>phpredis</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>REDIS_HOST</code></td>
+<td><code>127.0.0.1</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>REDIS_PASSWORD</code></td>
+<td><code>null</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>REDIS_PORT</code></td>
+<td><code>6379</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MAIL_MAILER</code></td>
+<td><code>log</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MAIL_SCHEME</code></td>
+<td><code>null</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MAIL_HOST</code></td>
+<td><code>127.0.0.1</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MAIL_PORT</code></td>
+<td><code>2525</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MAIL_USERNAME</code></td>
+<td><code>null</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MAIL_PASSWORD</code></td>
+<td><code>null</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MAIL_FROM_ADDRESS</code></td>
+<td><code>hello@example.com</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>MAIL_FROM_NAME</code></td>
+<td><code>${APP_NAME}</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AWS_ACCESS_KEY_ID</code></td>
+<td><code>(empty)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AWS_SECRET_ACCESS_KEY</code></td>
+<td><code>(empty)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AWS_DEFAULT_REGION</code></td>
+<td><code>us-east-1</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AWS_BUCKET</code></td>
+<td><code>(empty)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AWS_USE_PATH_STYLE_ENDPOINT</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>VITE_APP_NAME</code></td>
+<td><code>${APP_NAME}</code></td>
+<td>Follows <code>APP_NAME</code> through <code>${APP_NAME}</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="trusted-proxies-and-helmet-preset">Trusted proxies and HELMET_PRESET<a class="docs-heading-link" aria-label="Link to this section" href="#trusted-proxies-and-helmet-preset">#</a></h2>
+<p>HELMET owns the trusted proxies (W17, <code>Enforced</code> by HELMET 0.2): it trusts only the preset or listed proxies and drops <code>X-Forwarded-Port</code>. Pick a platform preset with <code>HELMET_PRESET</code>; HELMET 0.2 ships two, <code>citadel</code> and <code>docker</code>, and an unknown preset name throws at boot. On other platforms, list the front proxy's address in <code>HELMET_PROXIES</code> (it wins over <code>HELMET_PRESET</code>), and never trust a whole private range. Do not paste <code>trustProxies(at: '*')</code> from tutorials: an app that trusts all proxies lets a client forge <code>X-Forwarded-*</code> and the host used in callbacks. Laravel's own proxy list has its own variable; set <code>TRUSTED_PROXIES</code> to the same address (unset means Citadel's <code>172.18.0.1</code>). In WELD today, trusted proxies are a literal list in <code>bootstrap/app.php</code>.</p>
+<h2 id="keep-env-out-of-version-control">Keep .env out of version control<a class="docs-heading-link" aria-label="Link to this section" href="#keep-env-out-of-version-control">#</a></h2>
+<aside class="docs-callout docs-callout--warning" role="note"><p class="docs-callout__label">Warning</p><p><code>.env</code> never goes into version control. On a server, set values in the app's environment settings, never in a file in git.</p></aside>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="../guides/security.html">Security</a></li>
+<li><a href="../guides/build-and-supply-chain.html">Build and supply chain</a></li>
+<li><a href="../running-off-citadel.html">Running WELD off Citadel</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/reference/commands.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Commands</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/troubleshooting.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Troubleshooting</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#environment-variables">Environment variables</a></li><li class="docs-toc__item"><a href="#trusted-proxies-and-helmet-preset">Trusted proxies and HELMET_PRESET</a></li><li class="docs-toc__item"><a href="#keep-env-out-of-version-control">Keep .env out of version control</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

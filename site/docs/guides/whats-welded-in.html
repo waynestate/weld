@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html" aria-current="page">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,78 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="what-is-welded-in">What is welded in<a class="docs-heading-link" aria-label="Link to this section" href="#what-is-welded-in">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>This page lists the parts welded into WELD, what each one does in the app, and what is on the bench today.</p>
+<h2 id="the-parts">The parts<a class="docs-heading-link" aria-label="Link to this section" href="#the-parts">#</a></h2>
+<div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Part</th>
+<th>What it does in WELD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WayneUI</td>
+<td>The interface: Wayne State's design system, wired into the Vue front end and Blade layouts</td>
+</tr>
+<tr>
+<td>CREED</td>
+<td>The written standards and <code>policy.json</code>: supported PHP, Laravel and Node versions</td>
+</tr>
+<tr>
+<td>Pinstripe</td>
+<td>The coding standard: Pint, PHPStan level 8, ESLint and Prettier</td>
+</tr>
+<tr>
+<td>Preflight</td>
+<td>The CI pipeline, from GitLab CI/CD components</td>
+</tr>
+<tr>
+<td>PROCTOR</td>
+<td>The checks, run in CI and as the deploy gate</td>
+</tr>
+<tr>
+<td>SESAME</td>
+<td>Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions</td>
+</tr>
+<tr>
+<td>HELMET</td>
+<td>The baseline runtime: security headers and CSP, sessions, trusted proxies, <code>/up</code></td>
+</tr>
+<tr>
+<td>Ziggy</td>
+<td>Route names as URLs: the route list ships inside the Vite bundle, so <code>route()</code> works in Vue without an inline script</td>
+</tr>
+</tbody>
+</table></div>
+<p><img src="../readme/journey.svg" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys." /></p>
+<p>One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.</p>
+<h2 id="what-is-on-the-bench-today">What is on the bench today<a class="docs-heading-link" aria-label="Link to this section" href="#what-is-on-the-bench-today">#</a></h2>
+<p>HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is on Packagist too and gets welded on in turn.</p>
+<ul>
+<li><code>composer.json</code> is <code>waynestate/weld</code>, requires PHP <code>^8.3</code>, and the lock file resolves for 8.3.0</li>
+<li><code>.env.example</code> sets <code>APP_NAME=WELD</code>, <code>LOG_CHANNEL=stderr</code> and <code>SESSION_DRIVER=database</code></li>
+<li><code>Schema::defaultStringLength(191)</code> keeps index keys under Citadel's MySQL 5.6 767-byte cap</li>
+<li><code>.gitattributes</code> sets <code>* text=auto eol=lf</code></li>
+<li><code>composer ci</code> is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on GitLab and GitHub</li>
+<li><code>pint.json</code> and <code>phpstan.neon</code> still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.1 is on Packagist (tagged), and they switch to <code>includes: vendor/waynestate/pinstripe/...</code> when WELD requires it</li>
+<li>HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies are a literal list in <code>bootstrap/app.php</code>; <code>/up</code> stays Laravel's built-in health route</li>
+<li>SESAME owns sign-in at <code>/login</code> and <code>/logout</code>; the fake driver stands in for the identity provider locally, and CAS is an env change away</li>
+<li>PROCTOR measures WELD against CREED's <code>policy.json</code> as a CI job (<code>composer proctor</code>): warnings pass, failures block</li>
+<li>The starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's</li>
+<li>The license is MIT</li>
+</ul>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="check-your-setup.html">Check your setup</a></li>
+<li><a href="oracle.html">Oracle</a></li>
+<li><a href="../running-off-citadel.html">Running WELD off Citadel</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/guides/quick-start.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Quick start</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/guides/check-your-setup.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Check your setup</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#the-parts">The parts</a></li><li class="docs-toc__item"><a href="#what-is-on-the-bench-today">What is on the bench today</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

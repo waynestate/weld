@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html" aria-current="page">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,82 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="the-container-contract">The container contract<a class="docs-heading-link" aria-label="Link to this section" href="#the-container-contract">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>This page lists the container contract practices for WELD, from the BEST_PRACTICES guide, with the tag that says whether the stack holds each one today.</p>
+<h2 id="w9-config-comes-from-the-environment-only">W9. Config comes from the environment only<a class="docs-heading-link" aria-label="Link to this section" href="#w9-config-comes-from-the-environment-only">#</a></h2>
+<p><strong>Practice:</strong> No <code>.env</code> in the image. Call <code>env()</code> only inside <code>config/*.php</code>.</p>
+<p><strong>Why:</strong> After <code>config:cache</code> the <code>.env</code> file is not loaded and <code>env()</code> returns <code>null</code> elsewhere.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. Every <code>env()</code> call in the app is inside <code>config/*.php</code>; none is in <code>app/</code> or <code>routes/</code>. The one exception is <code>bootstrap/app.php</code>, which reads <code>TRUSTED_PROXIES</code> with <code>env()</code> because that closure runs before config loads (it carries a PHPStan ignore). Target <code>Checked</code>: Pinstripe/PROCTOR ban <code>env(</code> outside <code>config/</code>; the portability job boots without <code>.env</code>.</p>
+<h2 id="w10-config-cache-runs-at-container-start-never-at-image-build">W10. <code>config:cache</code> runs at container start, never at image build<a class="docs-heading-link" aria-label="Link to this section" href="#w10-config-cache-runs-at-container-start-never-at-image-build">#</a></h2>
+<p><strong>Practice:</strong> Build time may run <code>route:cache</code>, <code>view:cache</code>, <code>event:cache</code>. <code>php artisan optimize</code> at start is acceptable if the build did not freeze config.</p>
+<p><strong>Why:</strong> A build-time <code>config:cache</code> freezes the build machine's environment into the image.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. The image build runs no artisan commands: <code>deploy/build.sh</code> fails if app source is present at build time, and the release step runs <code>php artisan optimize</code> once the environment is in place (<code>deploy/scripts/release.sh</code>, on by default, off with <code>SQUIRE_ARTISAN_OPTIMIZE=0</code>), so config is cached at deploy, never at build. Target <code>Checked</code>: PROCTOR scans the Dockerfile.</p>
+<h2 id="w11-up-is-the-liveness-endpoint-and-it-never-checks-the-database">W11. <code>/up</code> is the liveness endpoint, and it never checks the database<a class="docs-heading-link" aria-label="Link to this section" href="#w11-up-is-the-liveness-endpoint-and-it-never-checks-the-database">#</a></h2>
+<p><strong>Practice:</strong> Keep Laravel's <code>/up</code> (200 when the app boots). It must answer for any <code>Host</code>, over plain HTTP, before trusted hosts, redirects, sessions, CSP and auth. Put database and cache checks on a separate <code>/ready</code> endpoint, through the <code>DiagnosingHealth</code> event or a package.</p>
+<p><strong>Why:</strong> A database blip must not make the orchestrator kill every web container.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. <code>bootstrap/app.php</code> sets the health route to <code>/up</code>, which answers 200 when the framework boots and touches no database. The <code>/ready</code> endpoint is not built yet. Target <code>Checked</code>: the portability job requests <code>/up</code> with <code>Host: 10.1.2.3:8080</code> and no forwarded headers, and again with the database stopped.</p>
+<h2 id="w12-image-health-check-matches-the-platform">W12. Image health check matches the platform<a class="docs-heading-link" aria-label="Link to this section" href="#w12-image-health-check-matches-the-platform">#</a></h2>
+<p><strong>Practice:</strong> Put a <code>HEALTHCHECK</code> in the Dockerfile that calls <code>/up</code> with a tool the image has (<code>curl</code> or <code>wget</code>). On Coolify a Dockerfile <code>HEALTHCHECK</code> takes precedence over the dashboard check, and a dashboard check needs <code>curl</code> or <code>wget</code> inside the container.</p>
+<p><strong>Why:</strong> Traefik will not route to an unhealthy container, and a missing tool makes a healthy app look dead.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. The Dockerfile carries a <code>HEALTHCHECK</code> (<code>deploy/.squire/Dockerfile</code>) whose script asks the local web server for <code>/up</code> by default and reads no database (<code>deploy/health.php</code>, <code>deploy/health.php</code>). Target <code>Checked</code>: Preflight portability runs <code>docker inspect</code> for a health status of <code>healthy</code>.</p>
+<h2 id="w13-non-root-arbitrary-uid-in-group-0-listen-on-8080">W13. Non-root, arbitrary UID in group 0, listen on 8080<a class="docs-heading-link" aria-label="Link to this section" href="#w13-non-root-arbitrary-uid-in-group-0-listen-on-8080">#</a></h2>
+<p><strong>Practice:</strong> Declare a non-root <code>USER</code>. Make writable paths group 0 and group-writable (<code>chgrp -R 0</code>, <code>chmod -R g=u</code>) for <code>storage/</code> and <code>bootstrap/cache/</code>. Do not depend on a <code>www-data</code> entry. Honor <code>PORT</code>.</p>
+<p><strong>Why:</strong> OpenShift runs a random UID in group 0 with all capabilities dropped.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. A Dockerfile now exists (<code>deploy/.squire/Dockerfile</code>), but it is the Citadel Apache image: it declares no <code>USER</code>, the vhost listens on 80 (<code>deploy/.squire/vhost.conf</code>) and the fallback base exposes 80 (<code>deploy/.squire/base-fallback.Dockerfile</code>), so the non-root, group-0, 8080 contract is not held. Target <code>Checked</code>: Preflight portability starts the image with a UID that has no <code>/etc/passwd</code> entry, <code>cap_drop: ALL</code>, <code>no-new-privileges</code> and a read-only root filesystem.</p>
+<h2 id="w14-logs-go-to-stderr-the-app-writes-only-where-it-may">W14. Logs go to stderr; the app writes only where it may<a class="docs-heading-link" aria-label="Link to this section" href="#w14-logs-go-to-stderr-the-app-writes-only-where-it-may">#</a></h2>
+<p><strong>Practice:</strong> Set <code>LOG_CHANNEL=stderr</code>. Nothing under <code>storage/logs</code>. Writes go to <code>storage/</code>, <code>bootstrap/cache/</code>, <code>/tmp</code> and declared volumes. Uploads go to object storage.</p>
+<p><strong>Why:</strong> Platforms collect stdout/stderr; local files vanish with the container.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. <code>.env.example</code> sets <code>LOG_CHANNEL=stderr</code>. Target <code>Checked</code>: the portability job fails when <code>storage/logs</code> is non-empty.</p>
+<h2 id="w15-sessions-and-cache-live-in-a-shared-store">W15. Sessions and cache live in a shared store<a class="docs-heading-link" aria-label="Link to this section" href="#w15-sessions-and-cache-live-in-a-shared-store">#</a></h2>
+<p><strong>Practice:</strong> Use <code>SESSION_DRIVER=database</code> (or Redis) and a shared cache, even for one replica. Every host overlaps old and new containers during a deploy.</p>
+<p><strong>Why:</strong> A login must survive a hop between replicas.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. <code>.env.example</code> sets <code>SESSION_DRIVER=database</code> and <code>.env.example</code> sets <code>CACHE_STORE=database</code>; <code>config/session.php</code> and <code>config/cache.php</code> default to the same. Target <code>Checked</code>: the portability job logs in on replica A and reads the session on replica B.</p>
+<h2 id="w16-stop-cleanly-on-sigterm">W16. Stop cleanly on SIGTERM<a class="docs-heading-link" aria-label="Link to this section" href="#w16-stop-cleanly-on-sigterm">#</a></h2>
+<p><strong>Practice:</strong> Run PHP as PID 1 under a small init, or an entrypoint that <code>exec</code>s the server. Queue workers finish the current job on <code>SIGTERM</code>. Set the platform's grace period above the longest job <code>#[Timeout]</code>.</p>
+<p><strong>Why:</strong> A hard kill mid-job double-runs it after <code>retry_after</code>.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. The entrypoint replaces the shell with the server (<code>deploy/.squire/fallback/citadel-apache-entrypoint</code>), so <code>SIGTERM</code> reaches the foreground process directly; no queue worker process type exists yet, and the grace period is a platform setting. Target <code>Checked</code>: the portability job sends <code>SIGTERM</code> and requires exit 0 within the grace period.</p>
+<h2 id="w17-trust-proxies-by-preset-never">W17. Trust proxies by preset, never <code>*</code><a class="docs-heading-link" aria-label="Link to this section" href="#w17-trust-proxies-by-preset-never">#</a></h2>
+<p><strong>Practice:</strong> Select a HELMET preset (<code>citadel</code> or <code>docker</code>), or list the front proxy in <code>HELMET_PROXIES</code> on other platforms. Do not paste <code>trustProxies(at: '*')</code> from tutorials. Set <code>APP_URL</code> and trusted hosts; Laravel trusts subdomains of <code>APP_URL</code> unless <code>subdomains: false</code>.</p>
+<p><strong>Why:</strong> An app that trusts all proxies lets a client forge <code>X-Forwarded-*</code> and the host used in callbacks.</p>
+<p><strong>Stack:</strong> <code>Enforced</code> by HELMET 0.3 (required <code>^0.3</code>): it trusts only the preset or listed proxies and drops <code>X-Forwarded-Port</code>. Target <code>Checked</code>: a portability probe sends forged <code>X-Forwarded-Host</code> and <code>-Proto</code> from an untrusted peer.</p>
+<h2 id="how-to-read-the-tags">How to read the tags<a class="docs-heading-link" aria-label="Link to this section" href="#how-to-read-the-tags">#</a></h2>
+<p>Each practice ends with exactly one tag.</p>
+<div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enforced</code></td>
+<td>WELD's code does it or refuses to run without it, and a test covers it.</td>
+</tr>
+<tr>
+<td><code>Checked</code></td>
+<td>PROCTOR or CI warns or fails.</td>
+</tr>
+<tr>
+<td><code>Documented</code></td>
+<td>Written down in the README or a config file, with no check behind it.</td>
+</tr>
+<tr>
+<td><code>Not yet</code></td>
+<td>A gap.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="./app-structure.html">App structure</a></li>
+<li><a href="./queues-and-scheduling.html">Queues and scheduling</a></li>
+<li><a href="../running-off-citadel.html">Running WELD off Citadel</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/guides/app-structure.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">App structure</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/guides/queues-and-scheduling.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Queues and scheduling</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#w9-config-comes-from-the-environment-only">W9. Config comes from the environment only</a></li><li class="docs-toc__item"><a href="#w10-config-cache-runs-at-container-start-never-at-image-build">W10. config:cache runs at container start, never at image build</a></li><li class="docs-toc__item"><a href="#w11-up-is-the-liveness-endpoint-and-it-never-checks-the-database">W11. /up is the liveness endpoint, and it never checks the database</a></li><li class="docs-toc__item"><a href="#w12-image-health-check-matches-the-platform">W12. Image health check matches the platform</a></li><li class="docs-toc__item"><a href="#w13-non-root-arbitrary-uid-in-group-0-listen-on-8080">W13. Non-root, arbitrary UID in group 0, listen on 8080</a></li><li class="docs-toc__item"><a href="#w14-logs-go-to-stderr-the-app-writes-only-where-it-may">W14. Logs go to stderr; the app writes only where it may</a></li><li class="docs-toc__item"><a href="#w15-sessions-and-cache-live-in-a-shared-store">W15. Sessions and cache live in a shared store</a></li><li class="docs-toc__item"><a href="#w16-stop-cleanly-on-sigterm">W16. Stop cleanly on SIGTERM</a></li><li class="docs-toc__item"><a href="#w17-trust-proxies-by-preset-never">W17. Trust proxies by preset, never *</a></li><li class="docs-toc__item"><a href="#how-to-read-the-tags">How to read the tags</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

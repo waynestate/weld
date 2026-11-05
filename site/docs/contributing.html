@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../docs/index.html">Overview</a></li><li><a href="../docs/install.html">Install</a></li><li><a href="../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../docs/guides/oracle.html">Oracle</a></li><li><a href="../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../docs/guides/app-structure.html">App structure</a></li><li><a href="../docs/guides/container-contract.html">The container contract</a></li><li><a href="../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../docs/guides/security.html">Security</a></li><li><a href="../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../docs/reference/status.html">Status</a></li><li><a href="../docs/reference/commands.html">Commands</a></li><li><a href="../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../docs/upgrading.html">Upgrading</a></li><li><a href="../docs/contributing.html" aria-current="page">Contributing</a></li><li><a href="../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,101 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="contributing">Contributing<a class="docs-heading-link" aria-label="Link to this section" href="#contributing">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>This page tells you how to build, test, keep current and release WELD, and where each piece of work belongs.</p>
+<h2 id="where-it-lives">Where it lives<a class="docs-heading-link" aria-label="Link to this section" href="#where-it-lives">#</a></h2>
+<p>Development happens on nougat, the canonical repository: <a rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">enterprise-apps/weld</a>. The GitHub repository and git.wayne.edu are read-only mirrors: <code>main</code> and tags are copied automatically. Changes, issues and merge requests go to nougat. Nobody pushes to the mirrors.</p>
+<aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>This moves to git.wayne.edu once it has CI runners. The weld is made on nougat; the mirrors only get the polished bead.</p></aside>
+<h2 id="build-and-test">Build and test<a class="docs-heading-link" aria-label="Link to this section" href="#build-and-test">#</a></h2>
+<p>The Docker path installs, migrates and serves in one command:</p>
+<pre><code class="language-sh">bin/weld.sh up
+</code></pre>
+<pre><code class="language-powershell">.\bin\weld.ps1 up
+</code></pre>
+<p>All checks run <code>composer ci</code> in the container:</p>
+<pre><code class="language-sh">bin/weld.sh test
+</code></pre>
+<pre><code class="language-powershell">.\bin\weld.ps1 test
+</code></pre>
+<p>Check your setup:</p>
+<pre><code class="language-sh">bin/weld.sh doctor
+</code></pre>
+<pre><code class="language-powershell">.\bin\weld.ps1 doctor
+</code></pre>
+<p>Logs and stop:</p>
+<pre><code class="language-sh">bin/weld.sh logs
+bin/weld.sh down
+</code></pre>
+<pre><code class="language-powershell">.\bin\weld.ps1 logs
+.\bin\weld.ps1 down
+</code></pre>
+<p>Without Docker: run <code>composer install</code>, <code>npm ci</code>, copy <code>.env.example</code> to <code>.env</code>, <code>php artisan key:generate</code>, then <code>composer ci</code>.</p>
+<h3 id="other-checks">Other checks<a class="docs-heading-link" aria-label="Link to this section" href="#other-checks">#</a></h3>
+<div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PROCTOR against CREED's policy</td>
+<td><code>composer proctor</code></td>
+</tr>
+<tr>
+<td>Ziggy routes are current</td>
+<td><code>composer ziggy</code>, then <code>git diff --exit-code resources/js/ziggy.*</code></td>
+</tr>
+<tr>
+<td>JS lint and format</td>
+<td><code>npm run lint</code> (pure check), <code>npm run fix</code> (apply fixes), <code>npm run format:check</code></td>
+</tr>
+<tr>
+<td>Production assets</td>
+<td><code>npm run build</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>composer ci</code> runs <code>composer validate --strict</code>, the tests, Pint, PHPStan and <code>composer audit</code>. It does not run PROCTOR, Ziggy or the JS lint.</p>
+<p>The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (<code>sourdough new &lt;dir&gt; --inertia</code>), then <code>php bin/regen-check.php --generated &lt;dir&gt;</code> (or <code>composer regen-check -- --generated &lt;dir&gt;</code>). It skips the product files listed in <code>.sourdough/product-files.json</code> and any <code>vendor</code> or <code>node_modules</code> path, and fails only on drift that is not already recorded in <code>.sourdough/regen-baseline.json</code>; <code>--write-baseline</code> records the current drift as accepted. It is not part of <code>composer ci</code>; CI runs it as a separate, warning-only job.</p>
+<p>Pint skips <code>deploy/</code>. That folder is the stack's shared front-page deploy layer (Squire kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.</p>
+<h2 id="ci">CI<a class="docs-heading-link" aria-label="Link to this section" href="#ci">#</a></h2>
+<ul>
+<li><strong>GitLab:</strong> Preflight's <code>php-test</code> (PHP 8.3, 8.4, 8.5) and <code>composer-audit</code> components, a <code>composer-ci</code> job, a <code>proctor</code> job (warnings pass, failures block), a <code>ziggy</code> drift job and a <code>regen-gate</code> job (warning-only until <code>.sourdough/regen-baseline.json</code> is filled in).</li>
+<li><strong>GitHub:</strong> <code>.github/workflows/ci.yml</code> calls Preflight's reusable workflow with <code>composer ci</code> and runs the same <code>regen-gate</code> check (<code>continue-on-error</code> until the baseline is filled in).</li>
+</ul>
+<p>Green means all of those pass; the regen gate may warn while its baseline is being filled in. JS lint is not in CI yet.</p>
+<h2 id="keeping-the-joints-current">Keeping the joints current<a class="docs-heading-link" aria-label="Link to this section" href="#keeping-the-joints-current">#</a></h2>
+<ul>
+<li>When HELMET, SESAME, CREED or PROCTOR release, raise the constraint here (<code>composer require waynestate/&lt;part&gt;:^0.x</code>), run all the checks above, and commit the lock file.</li>
+<li>When Laravel, Inertia or Vue release, Booster's hops are the way to move; WELD is a good first test for them.</li>
+<li>After route changes, regenerate Ziggy and commit the result.</li>
+<li>When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in Sourdough; if the drift is accepted as intended, record it with <code>--write-baseline</code> and commit <code>.sourdough/regen-baseline.json</code>.</li>
+</ul>
+<h2 id="releasing">Releasing<a class="docs-heading-link" aria-label="Link to this section" href="#releasing">#</a></h2>
+<p>WELD has no tags yet. When it gets one:</p>
+<ol>
+<li>Move the lines under <code>## Unreleased</code> in <code>CHANGELOG.md</code> to a new <code>## X.Y.Z (YYYY-MM-DD)</code> heading.</li>
+<li>All the checks above green locally, then both pipelines green for that commit.</li>
+<li>Run a secrets scan of the history and check that nothing internal (server names, people, IDs) is in the tree.</li>
+<li>Tag <code>X.Y.Z</code> (no <code>v</code>) on nougat. The mirror carries the tag to GitHub.</li>
+<li>A release needs a maintainer's approval. Never move or delete a published tag.</li>
+</ol>
+<h2 id="running-it-elsewhere">Running it elsewhere<a class="docs-heading-link" aria-label="Link to this section" href="#running-it-elsewhere">#</a></h2>
+<p>WELD targets Citadel first. <a href="running-off-citadel.html">Running WELD off Citadel</a> covers OpenShift, Coolify and plain Docker, with Citadel for comparison.</p>
+<h2 id="the-front-page">The front page<a class="docs-heading-link" aria-label="Link to this section" href="#the-front-page">#</a></h2>
+<p><code>site/</code> is the stack's front page, for <code>https://weld.apps.wayne.edu/</code> on Citadel, served through a small raw-PHP <code>deploy/</code> layer generated with Squire (separate from the WELD app itself).</p>
+<h2 id="the-docs-site">The docs site<a class="docs-heading-link" aria-label="Link to this section" href="#the-docs-site">#</a></h2>
+<p>The docs site is built from <code>docs/</code> by the shared docs builder (<code>composer docs</code>) and checked by <code>composer docs:check</code>. Sources live in <code>docs/</code>; the page you read is the page that ships: same source, same bead.</p>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="running-off-citadel.html">Running WELD off Citadel</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../docs/upgrading.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Upgrading</span></a><a class="docs-pager__link docs-pager__link--next" href="../docs/changelog.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Changelog</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#where-it-lives">Where it lives</a></li><li class="docs-toc__item"><a href="#build-and-test">Build and test</a></li><li class="docs-toc__item--sub"><a href="#other-checks">Other checks</a></li><li class="docs-toc__item"><a href="#ci">CI</a></li><li class="docs-toc__item"><a href="#keeping-the-joints-current">Keeping the joints current</a></li><li class="docs-toc__item"><a href="#releasing">Releasing</a></li><li class="docs-toc__item"><a href="#running-it-elsewhere">Running it elsewhere</a></li><li class="docs-toc__item"><a href="#the-front-page">The front page</a></li><li class="docs-toc__item"><a href="#the-docs-site">The docs site</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

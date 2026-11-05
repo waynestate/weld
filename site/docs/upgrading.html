@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../docs/index.html">Overview</a></li><li><a href="../docs/install.html">Install</a></li><li><a href="../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../docs/guides/oracle.html">Oracle</a></li><li><a href="../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../docs/guides/app-structure.html">App structure</a></li><li><a href="../docs/guides/container-contract.html">The container contract</a></li><li><a href="../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../docs/guides/security.html">Security</a></li><li><a href="../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../docs/reference/status.html">Status</a></li><li><a href="../docs/reference/commands.html">Commands</a></li><li><a href="../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../docs/upgrading.html" aria-current="page">Upgrading</a></li><li><a href="../docs/contributing.html">Contributing</a></li><li><a href="../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,52 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="upgrading">Upgrading<a class="docs-heading-link" aria-label="Link to this section" href="#upgrading">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>This page shows how to keep a WELD app current: how to take stack changes, how to read the CHANGELOG, what a release does, and whether any released version breaks your app.</p>
+<h2 id="take-stack-changes">Take stack changes<a class="docs-heading-link" aria-label="Link to this section" href="#take-stack-changes">#</a></h2>
+<p>WELD owns its app code. The wiring files are marked and refreshed by <code>sourdough feed</code>, not hand-edited, so the app does not fork from the stack. Sourdough is not a dependency yet, so there is no feed to run today; the target is for WELD's CI to run <code>sourdough feed</code> against each stack release and fail on drift.</p>
+<p>When HELMET, SESAME, CREED or PROCTOR releases, raise the constraint here, run all the checks, and commit the lock file:</p>
+<pre><code class="language-sh">composer require waynestate/&lt;part&gt;:^0.x
+bin/weld.sh test
+</code></pre>
+<pre><code class="language-powershell">composer require waynestate/&lt;part&gt;:^0.x
+.\bin\weld.ps1 test
+</code></pre>
+<p><code>&lt;part&gt;</code> is the lowercase package name: <code>helmet</code>, <code>sesame</code>, <code>creed</code> or <code>proctor</code>.</p>
+<p>When Laravel, Inertia or Vue release, Booster's hops are the way to move; WELD is a good first test for them.</p>
+<p>After route changes, regenerate Ziggy and commit the result:</p>
+<pre><code class="language-sh">composer ziggy
+git diff --exit-code resources/js/ziggy.*
+</code></pre>
+<p>When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in Sourdough; if the drift is accepted as intended, record it with <code>--write-baseline</code> and commit <code>.sourdough/regen-baseline.json</code>.</p>
+<h2 id="read-the-changelog">Read the CHANGELOG<a class="docs-heading-link" aria-label="Link to this section" href="#read-the-changelog">#</a></h2>
+<p>The CHANGELOG lists notable changes to WELD, newest first. Pending work sits under <code>## Unreleased</code>; each released version sits under a <code>## X.Y.Z (YYYY-MM-DD)</code> heading. To find what moved, read the entries between your current version and the one you are moving to.</p>
+<h2 id="what-a-release-does">What a release does<a class="docs-heading-link" aria-label="Link to this section" href="#what-a-release-does">#</a></h2>
+<p>WELD is tagged (0.1.0 through 0.1.2 so far). A release:</p>
+<ol>
+<li>Moves the lines under <code>## Unreleased</code> in <code>CHANGELOG.md</code> to a new <code>## X.Y.Z (YYYY-MM-DD)</code> heading.</li>
+<li>Needs all the checks green locally, then both pipelines green for that commit.</li>
+<li>Runs a secrets scan of the history and checks that nothing internal (server names, people, IDs) is in the tree.</li>
+<li>Tags <code>X.Y.Z</code> (no <code>v</code>) on nougat; the mirror carries the tag to GitHub.</li>
+<li>Needs a maintainer's approval. Never move or delete a published tag.</li>
+</ol>
+<h2 id="breaking-changes">Breaking changes<a class="docs-heading-link" aria-label="Link to this section" href="#breaking-changes">#</a></h2>
+<p>No released version (0.1.0, 0.1.1, 0.1.2) carries a breaking change yet, so upgrading is just taking in the new release:</p>
+<pre><code class="language-sh">composer require waynestate/&lt;part&gt;:^0.x
+</code></pre>
+<p>Then run all the checks and commit the lock file.</p>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="install.html">Install</a></li>
+<li><a href="running-off-citadel.html">Running WELD off Citadel</a></li>
+<li><a href="guides/check-your-setup.html">Check your setup</a></li>
+<li><a href="changelog.html">Changelog</a></li>
+<li><a href="contributing.html">Contributing</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../docs/troubleshooting.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Troubleshooting</span></a><a class="docs-pager__link docs-pager__link--next" href="../docs/contributing.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Contributing</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#take-stack-changes">Take stack changes</a></li><li class="docs-toc__item"><a href="#read-the-changelog">Read the CHANGELOG</a></li><li class="docs-toc__item"><a href="#what-a-release-does">What a release does</a></li><li class="docs-toc__item"><a href="#breaking-changes">Breaking changes</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html" aria-current="page">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,37 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="check-your-setup">Check your setup<a class="docs-heading-link" aria-label="Link to this section" href="#check-your-setup">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>Use <code>weld:doctor</code> to strike an arc across the local setup and see, one line per check, whether every joint holds.</p>
+<h2 id="what-it-checks">What it checks<a class="docs-heading-link" aria-label="Link to this section" href="#what-it-checks">#</a></h2>
+<p><code>weld:doctor</code> strikes an arc across the local setup and reports every joint: the app key, writable storage, the database and pending migrations. One line per check, PASS or WARN or FAIL. The checks, by name:</p>
+<ul>
+<li><code>app-key</code>: PASS when <code>APP_KEY</code> is set; FAIL when it is empty, with a pointer to <code>php artisan key:generate</code>.</li>
+<li><code>storage-writable</code>: PASS when <code>storage</code> and <code>bootstrap/cache</code> are both writable; FAIL when either is missing or not writable.</li>
+<li><code>database</code>: PASS when the connection is up; FAIL names the exception class only, never the DSN, host or password.</li>
+<li><code>migrations</code>: PASS when there are no pending migrations; WARN when some are pending (it lists them) or when it could not inspect them.</li>
+</ul>
+<h2 id="run-it">Run it<a class="docs-heading-link" aria-label="Link to this section" href="#run-it">#</a></h2>
+<p>Run it through the OS scripts or straight to the container:</p>
+<pre><code class="language-powershell">.\bin\weld.ps1 doctor
+</code></pre>
+<pre><code class="language-sh">bin/weld.sh doctor
+</code></pre>
+<pre><code class="language-sh">docker compose run --rm app php artisan weld:doctor
+</code></pre>
+<h2 id="read-the-report">Read the report<a class="docs-heading-link" aria-label="Link to this section" href="#read-the-report">#</a></h2>
+<p>Each check prints one line: PASS, WARN or FAIL. The exit code is 1 when anything FAILs and 0 otherwise, so it works as a gate. Add <code>--json</code> to any of them for a machine-readable report. A good bead is a quiet one: all PASS and nothing to say.</p>
+<aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>The standards checks (PHP version, debug in production, secure session cookies) belong to PROCTOR: run <code>composer proctor</code>, and the doctor report says so.</p></aside>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="whats-welded-in.html">What is welded in</a></li>
+<li><a href="oracle.html">Oracle</a></li>
+<li><a href="../running-off-citadel.html">Running WELD off Citadel</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/guides/whats-welded-in.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">What is welded in</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/guides/oracle.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Oracle</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#what-it-checks">What it checks</a></li><li class="docs-toc__item"><a href="#run-it">Run it</a></li><li class="docs-toc__item"><a href="#read-the-report">Read the report</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

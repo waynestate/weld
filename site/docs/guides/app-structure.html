@@ -18,7 +18,7 @@
   <a class="docs-header__brand" href="../../docs/index.html">WELD</a>
   <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../../index.html">Back to WELD</a></span>
 </header>
-<div class="docs-layout">
+<div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html" aria-current="page">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -27,11 +27,78 @@
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="app-structure">App structure<a class="docs-heading-link" aria-label="Link to this section" href="#app-structure">#</a></h1>
-<p>STUB: this page is written in a later batch.</p>
+<p>This page lists the app structure practices for WELD, from the BEST_PRACTICES guide, with the tag that says whether the stack holds each one today.</p>
+<h2 id="w1-one-owner-of-authentication-sesame">W1. One owner of authentication: SESAME<a class="docs-heading-link" aria-label="Link to this section" href="#w1-one-owner-of-authentication-sesame">#</a></h2>
+<p><strong>Practice:</strong> Remove the Laravel starter kit's Fortify routes and actions (<code>/login</code>, <code>/register</code>, <code>/forgot-password</code>, 2FA). SESAME's <code>findOrImportUser(Identity)</code> is the only way in.</p>
+<p><strong>Why:</strong> Two login systems mean two session rules and two audit trails, and the kit's Fortify registers its routes automatically.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. SESAME is a dependency (<code>composer.json</code>), the starter kit's Fortify routes are removed, and <code>tests/Feature/AuthRoutesTest.php</code> fails if WELD grows its own auth routes. Target <code>Checked</code>: a PROCTOR check and a feature test over <code>php artisan route:list --json</code>.</p>
+<h2 id="w2-wayneui-is-the-only-component-source">W2. WayneUI is the only component source<a class="docs-heading-link" aria-label="Link to this section" href="#w2-wayneui-is-the-only-component-source">#</a></h2>
+<p><strong>Practice:</strong> Pages use WayneUI components and tokens. Do not keep the kit's shadcn-vue components or Tailwind theme as a second design system.</p>
+<p><strong>Why:</strong> The stack's promise is one interface contract on every consumer path; a parallel component set breaks the accessibility gate.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. The shadcn-vue components and their npm dependencies are gone, but WayneUI is not wired in: the Vue components carry <code>TODO(wayneui)</code> stand-ins (for example <code>resources/js/layouts/settings/Layout.vue</code> and <code>resources/js/pages/settings/Profile.vue</code>) because WELD does not load WayneUI's stylesheet yet, and the Tailwind theme (<code>tailwind.config.js</code>) plus <code>cn()</code>/<code>clsx</code>/<code>tailwind-merge</code> (<code>resources/js/lib/utils.ts</code>, <code>package.json</code>) remain. Target <code>Checked</code>: an ESLint rule (Pinstripe) bans imports from the kit's <code>components/ui</code> path, and a check fails when <code>components.json</code> exists.</p>
+<h2 id="w3-own-the-app-code-take-stack-changes-through-sourdough-feed">W3. Own the app code; take stack changes through <code>sourdough feed</code><a class="docs-heading-link" aria-label="Link to this section" href="#w3-own-the-app-code-take-stack-changes-through-sourdough-feed">#</a></h2>
+<p><strong>Practice:</strong> The kit gives you the code (&quot;full ownership&quot;), with no kit upgrade path. WELD's wiring files are marked and refreshed by <code>sourdough feed</code>, not hand-edited.</p>
+<p><strong>Why:</strong> Without a feed the app forks from the stack on day one and never gets fixes.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. Sourdough is not a dependency yet, so there is no feed to run. Target <code>Checked</code>: WELD's CI runs <code>sourdough feed</code> against each stack release and fails on drift.</p>
+<h2 id="w4-inertia-3-only-migrate-off-the-removed-apis">W4. Inertia 3 only; migrate off the removed APIs<a class="docs-heading-link" aria-label="Link to this section" href="#w4-inertia-3-only-migrate-off-the-removed-apis">#</a></h2>
+<p><strong>Practice:</strong> Use <code>@inertiajs/vue3</code> ^3 and <code>inertiajs/inertia-laravel</code> ^3. Do not import Axios, call <code>Inertia::lazy()</code> (use <code>Inertia::optional()</code>), read <code>data-page</code>, or <code>require()</code> Inertia packages.</p>
+<p><strong>Why:</strong> Inertia 3 removed all of these; code copied from older tutorials fails or half-works.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. WELD is on Inertia 2, not 3: <code>composer.json</code> pins <code>inertiajs/inertia-laravel: ^2.0</code> and <code>package.json</code> pins <code>@inertiajs/vue3: ^2.0.0-beta.3</code>. The removed APIs are not used (no <code>axios</code> dependency, no <code>Inertia::lazy</code>, no <code>data-page</code>), so the migration is a version bump, not a rewrite. Target <code>Checked</code>: ESLint <code>no-restricted-imports</code> for <code>axios</code>, a grep check for <code>Inertia::lazy</code>, and Composer constraints.</p>
+<h2 id="w5-commit-ai-rules-ignore-what-boost-regenerates">W5. Commit <code>.ai/rules</code>; ignore what Boost regenerates<a class="docs-heading-link" aria-label="Link to this section" href="#w5-commit-ai-rules-ignore-what-boost-regenerates">#</a></h2>
+<p><strong>Practice:</strong> Laravel Boost is a <code>require-dev</code> package. Commit <code>.ai/rules/</code> (project rules). Ignore <code>.mcp.json</code>, <code>boost.json</code> and the generated block of <code>CLAUDE.md</code>/<code>AGENTS.md</code>. WELD's own conventions go in <code>.ai/guidelines/</code> and each stack package may ship <code>resources/boost/guidelines/core.blade.php</code> and <code>resources/boost/skills/*/SKILL.md</code>.</p>
+<p><strong>Why:</strong> Rules are shared team memory; generated files change with every <code>boost:update</code>.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. Boost is not a dependency and there is no <code>.ai/</code> directory yet. Target <code>Checked</code>: PROCTOR confirms the <code>.gitignore</code> entries and that <code>.ai/rules/</code> exists.</p>
+<h2 id="w6-sail-is-local-development-only">W6. Sail is local development only<a class="docs-heading-link" aria-label="Link to this section" href="#w6-sail-is-local-development-only">#</a></h2>
+<p><strong>Practice:</strong> Sail's own description is &quot;Laravel's default Docker development environment&quot;. It is not a production image and WELD never deploys it.</p>
+<p><strong>Why:</strong> Sail's runtime images carry dev tooling and a bash-script CLI.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. <code>composer.json</code> keeps <code>laravel/sail</code> in <code>require-dev</code>, so it is a local tool, not a runtime dependency. Target <code>Checked</code>: PROCTOR flags <code>laravel/sail</code> outside <code>require-dev</code> and any <code>vendor/laravel/sail</code> path in a production Dockerfile.</p>
+<h2 id="w7-the-supported-dev-path-is-compose-driven-by-native-scripts-not-sail">W7. The supported dev path is Compose driven by native scripts, not Sail<a class="docs-heading-link" aria-label="Link to this section" href="#w7-the-supported-dev-path-is-compose-driven-by-native-scripts-not-sail">#</a></h2>
+<p><strong>Practice:</strong> Sail runs on Windows &quot;via WSL2&quot;. The stack rule is that Windows needs no bash and no WSL. Ship <code>weld.ps1</code> and <code>weld.sh</code> (or one PHP command) over a plain <code>compose.yaml</code>; Sail stays an unsupported convenience.</p>
+<p><strong>Why:</strong> Every developer OS gets its own native path.</p>
+<p><strong>Stack:</strong> <code>Documented</code>. <code>compose.yaml</code> and the <code>bin/weld.ps1</code> / <code>bin/weld.sh</code> pair exist. Target <code>Checked</code>: a pair-parity test.</p>
+<h2 id="w8-one-image-several-process-types">W8. One image, several process types<a class="docs-heading-link" aria-label="Link to this section" href="#w8-one-image-several-process-types">#</a></h2>
+<p><strong>Practice:</strong> Build one image. Run it as <code>web</code>, <code>worker</code> and <code>scheduler</code> by changing the command only (plus <code>ssr</code> when Inertia SSR is on). On Compose these are services; on OpenShift a Deployment, a Deployment and a CronJob.</p>
+<p><strong>Why:</strong> One build means one tested artifact, and the process types stay identical in code.</p>
+<p><strong>Stack:</strong> <code>Not yet</code>. A Dockerfile now exists (<code>deploy/.squire/Dockerfile</code>, a local mirror of the image Citadel generates), but it runs one process type only: <code>CMD [&quot;apache2-foreground&quot;]</code> (<code>deploy/.squire/Dockerfile</code>), with no worker or scheduler variant. Target <code>Checked</code>: Preflight portability boots the image with each command.</p>
+<h2 id="how-to-read-the-tags">How to read the tags<a class="docs-heading-link" aria-label="Link to this section" href="#how-to-read-the-tags">#</a></h2>
+<p>Each practice ends with exactly one tag.</p>
+<div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enforced</code></td>
+<td>WELD's code does it or refuses to run without it, and a test covers it.</td>
+</tr>
+<tr>
+<td><code>Checked</code></td>
+<td>PROCTOR or CI warns or fails.</td>
+</tr>
+<tr>
+<td><code>Documented</code></td>
+<td>Written down in the README or a config file, with no check behind it.</td>
+</tr>
+<tr>
+<td><code>Not yet</code></td>
+<td>A gap.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<ul>
+<li><a href="./container-contract.html">The container contract</a></li>
+<li><a href="./queues-and-scheduling.html">Queues and scheduling</a></li>
+<li><a href="../running-off-citadel.html">Running WELD off Citadel</a></li>
+</ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/running-off-citadel.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Running WELD off Citadel</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/guides/container-contract.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">The container contract</span></a></nav>
   </div>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#w1-one-owner-of-authentication-sesame">W1. One owner of authentication: SESAME</a></li><li class="docs-toc__item"><a href="#w2-wayneui-is-the-only-component-source">W2. WayneUI is the only component source</a></li><li class="docs-toc__item"><a href="#w3-own-the-app-code-take-stack-changes-through-sourdough-feed">W3. Own the app code; take stack changes through sourdough feed</a></li><li class="docs-toc__item"><a href="#w4-inertia-3-only-migrate-off-the-removed-apis">W4. Inertia 3 only; migrate off the removed APIs</a></li><li class="docs-toc__item"><a href="#w5-commit-ai-rules-ignore-what-boost-regenerates">W5. Commit .ai/rules; ignore what Boost regenerates</a></li><li class="docs-toc__item"><a href="#w6-sail-is-local-development-only">W6. Sail is local development only</a></li><li class="docs-toc__item"><a href="#w7-the-supported-dev-path-is-compose-driven-by-native-scripts-not-sail">W7. The supported dev path is Compose driven by native scripts, not Sail</a></li><li class="docs-toc__item"><a href="#w8-one-image-several-process-types">W8. One image, several process types</a></li><li class="docs-toc__item"><a href="#how-to-read-the-tags">How to read the tags</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

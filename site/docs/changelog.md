@@ -12,6 +12,10 @@ Notable changes to WELD, newest first.
 
 ## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the test APP_KEY is an obvious dummy (32 zero bytes), labeled test-only, and `App\Support\DummyAppKey` makes the app refuse it when `APP_ENV=production`; tests cover both.
+- Changed: the regen gate treats Squire kit files that WELD keeps under `deploy/` as relocated (not drift), and `oracle:check` finds the check file at the app root or under `deploy/`.
+- Changed: WELD adopts Pest 4 for new tests: the PHPUnit class tests run unchanged, `composer test` runs Pest over the whole suite, `tests/Pest.php` is configured, the example feature test is converted, and `pestphp/pest` is required at `^4` because Pest 5 needs PHP 8.4.
+- Changed: CI pins the Preflight components to the 0.1.4 release SHA, so PROCTOR's preflight-pinned check passes.
 - Changed: the GitHub Actions in WELD's CI (`actions/checkout`, `shivammathur/setup-php`) are pinned to commit SHAs with the tag in a comment, so PROCTOR's `ci-pipelines-unpinned-uses` warning is gone; setup-php moves from the unpublished `@v3` to 2.40.0.
 - Added: a docs site (site/docs/) built by the shared docs builder from docs/, checked in composer ci.
 - Changed: the regeneration baseline shrinks from 66 to 62 known-drift paths now that Sourdough no longer ships `resources/js/app.js`, `welcome.blade.php` or a phantom `vite.config.js`, and the `.editorconfig` matches.

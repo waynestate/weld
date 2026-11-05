@@ -13,7 +13,7 @@ it('refuses to boot production with the dummy key', function () {
 
     try {
         expect(fn () => (new AppServiceProvider($this->app))->boot())
-            ->toThrow(\RuntimeException::class, 'APP_KEY is the dummy test key. Run php artisan key:generate and set a real APP_KEY.');
+            ->toThrow(RuntimeException::class, 'APP_KEY is the dummy test key. Run php artisan key:generate and set a real APP_KEY.');
     } finally {
         $this->app['env'] = 'testing';
     }
