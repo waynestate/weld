@@ -5,6 +5,8 @@ description: All notable changes to this project.
 
 <!-- Generated from CHANGELOG.md by bin/docs-site.php. Edit CHANGELOG.md, not this file. -->
 
+# Changelog
+
 Notable changes to WELD, newest first.
 
 ## Unreleased

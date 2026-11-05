@@ -49,12 +49,12 @@
 </ul>
 <h2 id="run-it">Run it<a class="docs-heading-link" aria-label="Link to this section" href="#run-it">#</a></h2>
 <p>Run it through the OS scripts or straight to the container:</p>
-<pre><code class="language-powershell">.\bin\weld.ps1 doctor
-</code></pre>
-<pre><code class="language-sh">bin/weld.sh doctor
-</code></pre>
-<pre><code class="language-sh">docker compose run --rm app php artisan weld:doctor
-</code></pre>
+<div class="docs-tabs" data-tabs="powershell|macos / linux|container"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 doctor
+</code></pre></div>
+<div class="docs-tabs__panel" data-tab-label="macOS / Linux"><p class="docs-tabs__label">macOS / Linux</p><pre><code class="language-sh">bin/weld.sh doctor
+</code></pre></div>
+<div class="docs-tabs__panel" data-tab-label="Container"><p class="docs-tabs__label">Container</p><pre><code class="language-sh">docker compose run --rm app php artisan weld:doctor
+</code></pre></div></div>
 <h2 id="read-the-report">Read the report<a class="docs-heading-link" aria-label="Link to this section" href="#read-the-report">#</a></h2>
 <p>Each check prints one line: PASS, WARN or FAIL. The exit code is 1 when anything FAILs and 0 otherwise, so it works as a gate. Add <code>--json</code> to any of them for a machine-readable report. A good bead is a quiet one: all PASS and nothing to say.</p>
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>The standards checks (PHP version, debug in production, secure session cookies) belong to PROCTOR: run <code>composer proctor</code>, and the doctor report says so.</p></aside>

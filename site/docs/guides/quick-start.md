@@ -15,26 +15,32 @@ One command strikes the spark; the containers do the welding. Docker is the only
 ## Steps[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#steps)
 
 1. Bring the stack up:
+   PowerShell
    ```powershell
    .\bin\weld.ps1 up
    ```
+   macOS / Linux
    ```sh
    bin/weld.sh up
    ```
    Expected: `up` copies `.env.example` to `.env` if it is missing, installs the PHP and Node dependencies in the containers, starts the app and Vite, generates the app key if it is not set, and runs the migrations.
 2. Open [http://localhost:8000](http://localhost:8000). Expected: the app, served by the local stack.
 3. Run the doctor:
+   PowerShell
    ```powershell
    .\bin\weld.ps1 doctor
    ```
+   macOS / Linux
    ```sh
    bin/weld.sh doctor
    ```
    Expected: one line per check, PASS or WARN or FAIL; exit code 1 when anything FAILs. A good bead is a quiet one: all PASS and nothing to say.
 4. Run the checks:
+   PowerShell
    ```powershell
    .\bin\weld.ps1 test
    ```
+   macOS / Linux
    ```sh
    bin/weld.sh test
    ```

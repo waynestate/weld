@@ -32,10 +32,14 @@ php artisan oracle:check
 
 The local `app` container runs the stock Composer image, which has no Oracle driver. When you need a real connection from your machine, the Oracle-ready image is opt-in through `compose.oracle.yaml`:
 
+PowerShell
+
 ```powershell
 $env:WELD_ORACLE_IMAGE = "squire/oracle-parity:8.3"
 docker compose -f compose.yaml -f compose.oracle.yaml up
 ```
+
+macOS / Linux
 
 ```sh
 WELD_ORACLE_IMAGE=squire/oracle-parity:8.3 docker compose -f compose.yaml -f compose.oracle.yaml up

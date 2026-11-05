@@ -23,13 +23,19 @@ Use `weld:doctor` to strike an arc across the local setup and see, one line per 
 
 Run it through the OS scripts or straight to the container:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 doctor
 ```
 
+macOS / Linux
+
 ```sh
 bin/weld.sh doctor
 ```
+
+Container
 
 ```sh
 docker compose run --rm app php artisan weld:doctor

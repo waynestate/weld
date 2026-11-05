@@ -6,7 +6,7 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Changelog | WELD docs
+# Changelog[#](https://weld.apps.wayne.edu/docs/changelog.html#changelog)
 
 Notable changes to WELD, newest first.
 
