@@ -42,7 +42,7 @@ The CHANGELOG lists notable changes to WELD, newest first. Pending work sits und
 
 ## What a release does
 
-WELD has no tags yet. When it gets one, a release:
+WELD is tagged (0.1.0 through 0.1.2 so far). A release:
 
 1. Moves the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. Needs all the checks green locally, then both pipelines green for that commit.
