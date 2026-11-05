@@ -1,11 +1,10 @@
 <?php
 
 use App\Support\DummyAppKey;
-use RuntimeException;
 
 it('refuses the dummy key in production', function () {
     expect(fn () => DummyAppKey::refuseIn('production', DummyAppKey::VALUE))
-        ->toThrow(RuntimeException::class, 'APP_KEY is the dummy test key. Run php artisan key:generate and set a real APP_KEY.');
+        ->toThrow(\RuntimeException::class, 'APP_KEY is the dummy test key. Run php artisan key:generate and set a real APP_KEY.');
 });
 
 it('allows the dummy key while testing and locally', function () {
