@@ -112,6 +112,40 @@ body {
   padding: 0.125rem 0.625rem;
 }
 
+/* The main menu: the page's four doors, in the header after the version.
+   Cream links on the green field, gold on hover, the page's gold focus
+   ring. The auto margin parks it at the right edge; on a phone it wraps
+   onto its own lines instead of pushing the page sideways. */
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.125rem 1rem;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-weight: var(--wsu-font-weight-bold);
+  color: var(--weld-cream);
+  text-decoration-color: var(--weld-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+.site-nav a:hover {
+  color: var(--weld-gold);
+}
+
+.site-nav a:focus-visible {
+  outline: 3px solid var(--weld-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* A thin gold seam along the top of the window that grows as you read. Only
    where the browser can tie it to scroll natively; otherwise it is absent. */
 .seam-progress {
@@ -1582,6 +1616,13 @@ a.choice__name:hover {
 
   .bench {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Under 600px the nav links grow to 44px tall tap targets. */
+@media (max-width: 599px) {
+  .site-nav a {
+    min-height: 44px;
   }
 }
 
