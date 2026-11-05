@@ -22,9 +22,13 @@ This moves to git.wayne.edu once it has CI runners. The weld is made on nougat; 
 
 The Docker path installs, migrates and serves in one command:
 
+sh
+
 ```sh
 bin/weld.sh up
 ```
+
+PowerShell
 
 ```powershell
 .\bin\weld.ps1 up
@@ -32,9 +36,13 @@ bin/weld.sh up
 
 All checks run `composer ci` in the container:
 
+sh
+
 ```sh
 bin/weld.sh test
 ```
+
+PowerShell
 
 ```powershell
 .\bin\weld.ps1 test
@@ -42,9 +50,13 @@ bin/weld.sh test
 
 Check your setup:
 
+sh
+
 ```sh
 bin/weld.sh doctor
 ```
+
+PowerShell
 
 ```powershell
 .\bin\weld.ps1 doctor
@@ -52,10 +64,14 @@ bin/weld.sh doctor
 
 Logs and stop:
 
+sh
+
 ```sh
 bin/weld.sh logs
 bin/weld.sh down
 ```
+
+PowerShell
 
 ```powershell
 .\bin\weld.ps1 logs
@@ -114,6 +130,8 @@ WELD targets Citadel first. [Running WELD off Citadel](https://weld.apps.wayne.e
 ## The docs site[#](https://weld.apps.wayne.edu/docs/contributing.html#the-docs-site)
 
 The docs site is built from `docs/` by the shared docs builder (`composer docs`) and checked by `composer docs:check`. Sources live in `docs/`; the page you read is the page that ships: same source, same bead.
+
+The pages wear the front page's look. The header on every docs page is `docs/_header.html` (keep its links in step with the front page's main menu), and colors, type, callouts and motion live in `docs/theme/weld.css`; `docs/docs.json` names both under `theme`. Change the look there, never in the kit files (`site/assets/docs.css`, `site/assets/docs.js`), which the builder pins by hash.
 
 ## Related[#](https://weld.apps.wayne.edu/docs/contributing.html#related)
 

@@ -24,7 +24,9 @@ Megazord, except it comes with a deploy script and nobody has to shout to make i
 
 The docs live at [site/docs/index.html](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/site/docs/index.html) and ship to https://weld.apps.wayne.edu/docs/. They are
 built from `docs/` by the shared docs builder (`composer docs`) and checked in `composer ci`, so the page you read is
-the page that ships: same source, same bead.
+the page that ships: same source, same bead. The docs wear the front page's look: the header is
+`docs/_header.html` and the theme is `docs/theme/weld.css` (named in `docs/docs.json`). Change the look there, never
+in the builder's kit files (`site/assets/docs.css`, `site/assets/docs.js`).
 
 ### Where the code lives
 
@@ -701,6 +703,8 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the docs pages wear the front page's look: the same header and main menu (Docs marked current), each page a cream sheet on the green field, commands on the quick start's terminal with its gold Copy button, the weld bead under every title, branded callouts and a derived dark mode. Motion only for readers who allow it. Sources: `docs/_header.html`, `docs/theme/weld.css`, the `theme` key in `docs/docs.json`.
+- Fixed: code on the front page's Sourdough card is cream, so it meets AA contrast on the deep green.
 - Changed: the front page header has a main nav that includes Docs.
 - Changed: the test APP_KEY is an obvious dummy (32 zero bytes), labeled test-only, and `App\Support\DummyAppKey` makes the app refuse it when `APP_ENV=production`; tests cover both.
 - Changed: the regen gate treats Squire kit files that WELD keeps under `deploy/` as relocated (not drift), and `oracle:check` finds the check file at the app root or under `deploy/`.
@@ -788,9 +792,13 @@ This moves to git.wayne.edu once it has CI runners. The weld is made on nougat; 
 
 The Docker path installs, migrates and serves in one command:
 
+sh
+
 ```sh
 bin/weld.sh up
 ```
+
+PowerShell
 
 ```powershell
 .\bin\weld.ps1 up
@@ -798,9 +806,13 @@ bin/weld.sh up
 
 All checks run `composer ci` in the container:
 
+sh
+
 ```sh
 bin/weld.sh test
 ```
+
+PowerShell
 
 ```powershell
 .\bin\weld.ps1 test
@@ -808,9 +820,13 @@ bin/weld.sh test
 
 Check your setup:
 
+sh
+
 ```sh
 bin/weld.sh doctor
 ```
+
+PowerShell
 
 ```powershell
 .\bin\weld.ps1 doctor
@@ -818,10 +834,14 @@ bin/weld.sh doctor
 
 Logs and stop:
 
+sh
+
 ```sh
 bin/weld.sh logs
 bin/weld.sh down
 ```
+
+PowerShell
 
 ```powershell
 .\bin\weld.ps1 logs
@@ -880,6 +900,8 @@ WELD targets Citadel first. [Running WELD off Citadel](https://weld.apps.wayne.e
 ### The docs site[#](https://weld.apps.wayne.edu/docs/contributing.html#the-docs-site)
 
 The docs site is built from `docs/` by the shared docs builder (`composer docs`) and checked by `composer docs:check`. Sources live in `docs/`; the page you read is the page that ships: same source, same bead.
+
+The pages wear the front page's look. The header on every docs page is `docs/_header.html` (keep its links in step with the front page's main menu), and colors, type, callouts and motion live in `docs/theme/weld.css`; `docs/docs.json` names both under `theme`. Change the look there, never in the kit files (`site/assets/docs.css`, `site/assets/docs.js`), which the builder pins by hash.
 
 ### Related[#](https://weld.apps.wayne.edu/docs/contributing.html#related)
 
@@ -1660,9 +1682,13 @@ Tip
 
 Bring the whole stack up:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 up
 ```
+
+sh
 
 ```sh
 bin/weld.sh up
@@ -1670,9 +1696,13 @@ bin/weld.sh up
 
 Run the full check suite in the app container:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 test
 ```
+
+sh
 
 ```sh
 bin/weld.sh test
@@ -1680,9 +1710,13 @@ bin/weld.sh test
 
 Check your setup:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 doctor
 ```
+
+sh
 
 ```sh
 bin/weld.sh doctor
@@ -1690,9 +1724,13 @@ bin/weld.sh doctor
 
 Follow the container logs:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 logs
 ```
+
+sh
 
 ```sh
 bin/weld.sh logs
@@ -1700,9 +1738,13 @@ bin/weld.sh logs
 
 Stop and remove the containers:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 down
 ```
+
+sh
 
 ```sh
 bin/weld.sh down
@@ -1733,13 +1775,19 @@ bin/weld.sh down
 
 Add `--json` to any of these for a machine-readable report. Run it through the `doctor` subcommand above, or straight to the container:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 doctor
 ```
 
+sh
+
 ```sh
 bin/weld.sh doctor
 ```
+
+Docker
 
 ```sh
 docker compose run --rm app php artisan weld:doctor
@@ -2081,10 +2129,14 @@ WELD owns its app code. The wiring files are marked and refreshed by `sourdough 
 
 When HELMET, SESAME, CREED or PROCTOR releases, raise the constraint here, run all the checks, and commit the lock file:
 
+sh
+
 ```sh
 composer require waynestate/<part>:^0.x
 bin/weld.sh test
 ```
+
+PowerShell
 
 ```powershell
 composer require waynestate/<part>:^0.x

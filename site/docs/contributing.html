@@ -9,16 +9,27 @@
 <meta name="docs-version" content="0.1.2">
 <link rel="stylesheet" href="../assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="../assets/docs.css">
+<link rel="stylesheet" href="../docs/theme/weld.css">
 <link rel="alternate" type="text/markdown" href="contributing.md">
 <script src="../assets/docs.js" defer></script>
 </head>
 <body>
 <a class="wsu-skip-link" href="#main">Skip to content</a>
-<header class="docs-header">
-  <a class="docs-header__brand" href="../docs/index.html">WELD</a>
-  <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../index.html">Back to WELD</a></span>
-</header>
-<div class="docs-layout docs-layout--toc">
+<header class="site-header">
+  <div class="site-header__row">
+    <a class="brand" href="../index.html">
+      <img src="../brand/weld-avatar-256.png" width="32" height="32" alt="">
+      <span class="brand__name">WELD</span>
+    </a>
+    <span class="brand__version">0.1.2</span>
+    <nav class="site-nav" aria-label="Site">
+      <a href="../index.html#start">Get started</a>
+      <a href="../index.html#chooser">Pieces</a>
+      <a href="../index.html#cast-title">Cast</a>
+      <a href="../docs/index.html" aria-current="page">Docs</a>
+    </nav>
+  </div>
+</header><div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../docs/index.html">Overview</a></li><li><a href="../docs/install.html">Install</a></li><li><a href="../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../docs/guides/oracle.html">Oracle</a></li><li><a href="../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../docs/guides/app-structure.html">App structure</a></li><li><a href="../docs/guides/container-contract.html">The container contract</a></li><li><a href="../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../docs/guides/security.html">Security</a></li><li><a href="../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../docs/reference/status.html">Status</a></li><li><a href="../docs/reference/commands.html">Commands</a></li><li><a href="../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../docs/upgrading.html">Upgrading</a></li><li><a href="../docs/contributing.html" aria-current="page">Contributing</a></li><li><a href="../docs/changelog.html">Changelog</a></li></ul></nav>
@@ -33,27 +44,27 @@
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>This moves to git.wayne.edu once it has CI runners. The weld is made on nougat; the mirrors only get the polished bead.</p></aside>
 <h2 id="build-and-test">Build and test<a class="docs-heading-link" aria-label="Link to this section" href="#build-and-test">#</a></h2>
 <p>The Docker path installs, migrates and serves in one command:</p>
-<pre><code class="language-sh">bin/weld.sh up
-</code></pre>
-<pre><code class="language-powershell">.\bin\weld.ps1 up
-</code></pre>
+<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh up
+</code></pre></div>
+<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 up
+</code></pre></div></div>
 <p>All checks run <code>composer ci</code> in the container:</p>
-<pre><code class="language-sh">bin/weld.sh test
-</code></pre>
-<pre><code class="language-powershell">.\bin\weld.ps1 test
-</code></pre>
+<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh test
+</code></pre></div>
+<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 test
+</code></pre></div></div>
 <p>Check your setup:</p>
-<pre><code class="language-sh">bin/weld.sh doctor
-</code></pre>
-<pre><code class="language-powershell">.\bin\weld.ps1 doctor
-</code></pre>
+<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh doctor
+</code></pre></div>
+<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 doctor
+</code></pre></div></div>
 <p>Logs and stop:</p>
-<pre><code class="language-sh">bin/weld.sh logs
+<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh logs
 bin/weld.sh down
-</code></pre>
-<pre><code class="language-powershell">.\bin\weld.ps1 logs
+</code></pre></div>
+<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 logs
 .\bin\weld.ps1 down
-</code></pre>
+</code></pre></div></div>
 <p>Without Docker: run <code>composer install</code>, <code>npm ci</code>, copy <code>.env.example</code> to <code>.env</code>, <code>php artisan key:generate</code>, then <code>composer ci</code>.</p>
 <h3 id="other-checks">Other checks<a class="docs-heading-link" aria-label="Link to this section" href="#other-checks">#</a></h3>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
@@ -113,6 +124,10 @@ bin/weld.sh down
 <p><code>site/</code> is the stack's front page, for <code>https://weld.apps.wayne.edu/</code> on Citadel, served through a small raw-PHP <code>deploy/</code> layer generated with Squire (separate from the WELD app itself).</p>
 <h2 id="the-docs-site">The docs site<a class="docs-heading-link" aria-label="Link to this section" href="#the-docs-site">#</a></h2>
 <p>The docs site is built from <code>docs/</code> by the shared docs builder (<code>composer docs</code>) and checked by <code>composer docs:check</code>. Sources live in <code>docs/</code>; the page you read is the page that ships: same source, same bead.</p>
+<p>The pages wear the front page's look. The header on every docs page is <code>docs/_header.html</code> (keep its links in step with
+the front page's main menu), and colors, type, callouts and motion live in <code>docs/theme/weld.css</code>; <code>docs/docs.json</code> names
+both under <code>theme</code>. Change the look there, never in the kit files (<code>site/assets/docs.css</code>, <code>site/assets/docs.js</code>), which
+the builder pins by hash.</p>
 <h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
 <ul>
 <li><a href="running-off-citadel.html">Running WELD off Citadel</a></li>
@@ -121,7 +136,7 @@ bin/weld.sh down
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../docs/upgrading.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Upgrading</span></a><a class="docs-pager__link docs-pager__link--next" href="../docs/changelog.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Changelog</span></a></nav>
   </div>
-  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#where-it-lives">Where it lives</a></li><li class="docs-toc__item"><a href="#build-and-test">Build and test</a></li><li class="docs-toc__item--sub"><a href="#other-checks">Other checks</a></li><li class="docs-toc__item"><a href="#ci">CI</a></li><li class="docs-toc__item"><a href="#keeping-the-joints-current">Keeping the joints current</a></li><li class="docs-toc__item"><a href="#releasing">Releasing</a></li><li class="docs-toc__item"><a href="#running-it-elsewhere">Running it elsewhere</a></li><li class="docs-toc__item"><a href="#the-front-page">The front page</a></li><li class="docs-toc__item"><a href="#the-docs-site">The docs site</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#where-it-lives">Where it lives</a></li><li class="docs-toc__item"><a href="#build-and-test">Build and test</a></li><li class="docs-toc__item docs-toc__item--sub"><a href="#other-checks">Other checks</a></li><li class="docs-toc__item"><a href="#ci">CI</a></li><li class="docs-toc__item"><a href="#keeping-the-joints-current">Keeping the joints current</a></li><li class="docs-toc__item"><a href="#releasing">Releasing</a></li><li class="docs-toc__item"><a href="#running-it-elsewhere">Running it elsewhere</a></li><li class="docs-toc__item"><a href="#the-front-page">The front page</a></li><li class="docs-toc__item"><a href="#the-docs-site">The docs site</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.2</span></span>

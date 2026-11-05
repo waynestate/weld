@@ -28,9 +28,13 @@ Tip
 
 Bring the whole stack up:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 up
 ```
+
+sh
 
 ```sh
 bin/weld.sh up
@@ -38,9 +42,13 @@ bin/weld.sh up
 
 Run the full check suite in the app container:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 test
 ```
+
+sh
 
 ```sh
 bin/weld.sh test
@@ -48,9 +56,13 @@ bin/weld.sh test
 
 Check your setup:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 doctor
 ```
+
+sh
 
 ```sh
 bin/weld.sh doctor
@@ -58,9 +70,13 @@ bin/weld.sh doctor
 
 Follow the container logs:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 logs
 ```
+
+sh
 
 ```sh
 bin/weld.sh logs
@@ -68,9 +84,13 @@ bin/weld.sh logs
 
 Stop and remove the containers:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 down
 ```
+
+sh
 
 ```sh
 bin/weld.sh down
@@ -101,13 +121,19 @@ bin/weld.sh down
 
 Add `--json` to any of these for a machine-readable report. Run it through the `doctor` subcommand above, or straight to the container:
 
+PowerShell
+
 ```powershell
 .\bin\weld.ps1 doctor
 ```
 
+sh
+
 ```sh
 bin/weld.sh doctor
 ```
+
+Docker
 
 ```sh
 docker compose run --rm app php artisan weld:doctor

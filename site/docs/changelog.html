@@ -9,16 +9,27 @@
 <meta name="docs-version" content="0.1.2">
 <link rel="stylesheet" href="../assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="../assets/docs.css">
+<link rel="stylesheet" href="../docs/theme/weld.css">
 <link rel="alternate" type="text/markdown" href="changelog.md">
 <script src="../assets/docs.js" defer></script>
 </head>
 <body>
 <a class="wsu-skip-link" href="#main">Skip to content</a>
-<header class="docs-header">
-  <a class="docs-header__brand" href="../docs/index.html">WELD</a>
-  <span><a class="docs-header__home" rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> <a class="docs-header__home" href="../index.html">Back to WELD</a></span>
-</header>
-<div class="docs-layout docs-layout--toc">
+<header class="site-header">
+  <div class="site-header__row">
+    <a class="brand" href="../index.html">
+      <img src="../brand/weld-avatar-256.png" width="32" height="32" alt="">
+      <span class="brand__name">WELD</span>
+    </a>
+    <span class="brand__version">0.1.2</span>
+    <nav class="site-nav" aria-label="Site">
+      <a href="../index.html#start">Get started</a>
+      <a href="../index.html#chooser">Pieces</a>
+      <a href="../index.html#cast-title">Cast</a>
+      <a href="../docs/index.html" aria-current="page">Docs</a>
+    </nav>
+  </div>
+</header><div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
     <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../docs/index.html">Overview</a></li><li><a href="../docs/install.html">Install</a></li><li><a href="../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../docs/guides/oracle.html">Oracle</a></li><li><a href="../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../docs/guides/app-structure.html">App structure</a></li><li><a href="../docs/guides/container-contract.html">The container contract</a></li><li><a href="../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../docs/guides/security.html">Security</a></li><li><a href="../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../docs/reference/status.html">Status</a></li><li><a href="../docs/reference/commands.html">Commands</a></li><li><a href="../docs/reference/configuration.html">Configuration</a></li></ul></li><li><a href="../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../docs/upgrading.html">Upgrading</a></li><li><a href="../docs/contributing.html">Contributing</a></li><li><a href="../docs/changelog.html" aria-current="page">Changelog</a></li></ul></nav>
@@ -30,6 +41,12 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased">Unreleased<a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></h2>
 <ul>
+<li>
+<p>Changed: the docs pages wear the front page's look: the same header and main menu (Docs marked current), each page a cream sheet on the green field, commands on the quick start's terminal with its gold Copy button, the weld bead under every title, branded callouts and a derived dark mode. Motion only for readers who allow it. Sources: <code>docs/_header.html</code>, <code>docs/theme/weld.css</code>, the <code>theme</code> key in <code>docs/docs.json</code>.</p>
+</li>
+<li>
+<p>Fixed: code on the front page's Sourdough card is cream, so it meets AA contrast on the deep green.</p>
+</li>
 <li>
 <p>Changed: the front page header has a main nav that includes Docs.</p>
 </li>

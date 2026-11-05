@@ -16,10 +16,14 @@ WELD owns its app code. The wiring files are marked and refreshed by `sourdough 
 
 When HELMET, SESAME, CREED or PROCTOR releases, raise the constraint here, run all the checks, and commit the lock file:
 
+sh
+
 ```sh
 composer require waynestate/<part>:^0.x
 bin/weld.sh test
 ```
+
+PowerShell
 
 ```powershell
 composer require waynestate/<part>:^0.x
