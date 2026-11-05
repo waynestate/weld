@@ -361,7 +361,7 @@ From Sourdough
 
 ### Laravel + Blade + Vue islands
 
-Laravel with Blade views, and a little Vue where a page needs behaviour.
+Laravel with Blade views, and a little Vue where a page needs behavior.
 
 `sourdough new my-app --laravel --vue`
 
