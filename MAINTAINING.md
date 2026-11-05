@@ -40,6 +40,7 @@ Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `ph
 
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run
 PROCTOR, Ziggy or the JS lint. `composer test` is Pest, running the PHPUnit class tests and the Pest tests side by side.
+The suite boots on a fixed dummy `APP_KEY` set in `phpunit.xml`; `App\Support\DummyAppKey` refuses that value when the app runs in production.
 
 The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (`sourdough new <dir>
 --inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`).

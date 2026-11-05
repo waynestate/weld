@@ -18,8 +18,8 @@
         </include>
     </source>
     <php>
-        <!-- Test-only key so the suite boots without a .env (composer ci runs in a bare container). -->
-        <env name="APP_KEY" value="base64:8Q76tKu3LTId08kD7bmlNzWlG35usUM2mKynwdPKXss="/>
+        <!-- Dummy, test-only key (32 zero bytes). It exists so the suite boots without a .env in a bare container. Production refuses it (App\Support\DummyAppKey). -->
+        <env name="APP_KEY" value="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="/>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
