@@ -46,7 +46,8 @@ The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a f
 --inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`).
 It skips the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path, and
 fails only on drift that is not already recorded in `.sourdough/regen-baseline.json`; `--write-baseline` records
-the current drift as accepted. It is not part of `composer ci`; CI runs it as a separate, warning-only job.
+the current drift as accepted. Its per-file statuses are IDENTICAL, DIFFERS, MISSING_IN_WELD and RELOCATED. It is
+not part of `composer ci`; CI runs it as a separate, warning-only job.
 
 Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer (Squire kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.
 

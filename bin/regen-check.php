@@ -91,6 +91,11 @@ try {
 }
 
 foreach ($gate['report'] as $line) {
+    // RELOCATED is expected placement (WELD keeps the kit file under
+    // deploy/), not drift: print it like IDENTICAL and say where it moved.
+    if (str_starts_with($line, RegenCheck::STATUS_RELOCATED.' ')) {
+        $line .= ' (relocated under deploy/)';
+    }
     fwrite(STDOUT, $line."\n");
 }
 fflush(STDOUT);

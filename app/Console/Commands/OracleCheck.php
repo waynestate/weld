@@ -6,11 +6,13 @@ use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
 /**
- * A thin wire to Squire's shared check file: it runs deploy/oracle-check.php
- * with the current environment, streams the plain-language lines straight
+ * A thin wire to Squire's shared check file: it runs oracle-check.php with
+ * the current environment, streams the plain-language lines straight
  * through, and returns the check's exit code (0 when Oracle is not
- * configured or all passed, 1 when a problem was found). WELD does not own
- * the check; a kit refresh (vendor/bin/squire update) puts the file here.
+ * configured or all passed, 1 when a problem was found). The check lives at
+ * the app root in a plain Squire layout and under deploy/ in WELD; this
+ * command finds either. WELD does not own the check; a kit refresh
+ * (vendor/bin/squire update) puts the file where the layout keeps it.
  */
 class OracleCheck extends Command
 {
@@ -41,11 +43,19 @@ class OracleCheck extends Command
     }
 
     /**
-     * Where Squire keeps the check file. Tests override this to point a
-     * stub script in a temp directory in its place.
+     * Where Squire keeps the check file: the app root in a plain Squire
+     * layout, deploy/ in WELD. The first existing copy wins; when neither
+     * exists the deploy/ path is returned so the "not here yet" hint stays
+     * the same. Tests override this to point a stub script in a temp
+     * directory in its place.
      */
     protected function checkScriptPath(): string
     {
+        $root = base_path('oracle-check.php');
+        if (is_file($root)) {
+            return $root;
+        }
+
         return base_path('deploy/oracle-check.php');
     }
 }

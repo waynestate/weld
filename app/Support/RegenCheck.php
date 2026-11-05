@@ -21,7 +21,9 @@ final class RegenCheckError extends \RuntimeException {}
  * .sourdough/product-files.json as exact paths or dir/ prefixes) and every
  * path with a vendor or node_modules segment at any depth, and reports each
  * remaining path as IDENTICAL, DIFFERS (the WELD file exists with another
- * SHA-256) or MISSING_IN_WELD.
+ * SHA-256), MISSING_IN_WELD or RELOCATED (the root file is absent from WELD
+ * but deploy/ holds a byte-identical copy, as WELD does for Squire's kit
+ * files).
  *
  * The baseline (.sourdough/regen-baseline.json) records the drift already
  * known and accepted: a sorted list of paths. The gate fails only on NEW
@@ -35,6 +37,8 @@ final class RegenCheck
     public const STATUS_DIFFERS = 'DIFFERS';
 
     public const STATUS_MISSING_IN_WELD = 'MISSING_IN_WELD';
+
+    public const STATUS_RELOCATED = 'RELOCATED';
 
     /** @var list<string> folder names ignored at any depth */
     private const IGNORED_SEGMENTS = ['vendor', 'node_modules'];
@@ -245,6 +249,15 @@ final class RegenCheck
     {
         $weldPath = $this->weldDir.'/'.$path;
         if (! is_file($weldPath)) {
+            // WELD keeps Squire's kit files under deploy/: a byte-identical
+            // copy there is expected placement, not drift. A changed copy is
+            // real drift and stays MISSING_IN_WELD.
+            $deployPath = $this->weldDir.'/deploy/'.$path;
+            if (is_file($deployPath)
+                && hash('sha256', (string) file_get_contents($deployPath)) === $sha) {
+                return self::STATUS_RELOCATED;
+            }
+
             return self::STATUS_MISSING_IN_WELD;
         }
         $actual = hash('sha256', (string) file_get_contents($weldPath));

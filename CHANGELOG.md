@@ -5,6 +5,7 @@ Notable changes to WELD, newest first.
 ## Unreleased
 
 - Changed: the test APP_KEY is an obvious dummy (32 zero bytes), labeled test-only, and `App\Support\DummyAppKey` makes the app refuse it when `APP_ENV=production`; tests cover both.
+- Changed: the regen gate treats Squire kit files that WELD keeps under `deploy/` as relocated (not drift), and `oracle:check` finds the check file at the app root or under `deploy/`.
 - Changed: WELD adopts Pest 4 for new tests: the PHPUnit class tests run unchanged, `composer test` runs Pest over the whole suite, `tests/Pest.php` is configured, the example feature test is converted, and `pestphp/pest` is required at `^4` because Pest 5 needs PHP 8.4.
 - Changed: CI pins the Preflight components to the 0.1.4 release SHA, so PROCTOR's preflight-pinned check passes.
 
