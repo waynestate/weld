@@ -244,7 +244,11 @@ Pick Sourdough when you want a starter you shape yourself. Pick WELD when you wa
 Sourdough writes a manifest of every file it generates (`.sourdough/manifest.json`: each path with its SHA-256).
 `bin/regen-check.php` compares that manifest with WELD file by file, skipping the product files WELD adds on top
 (listed in `.sourdough/product-files.json`) and any path with a `vendor` or `node_modules` segment. Each remaining
-path is reported as IDENTICAL, DIFFERS or MISSING_IN_WELD.
+path is reported as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED.
+
+Sourdough keeps Squire's deploy kit at the app root, and WELD keeps it under `deploy/`; the gate reports those
+files as relocated, not drift, when the `deploy/` copy is byte-identical. `php artisan oracle:check` finds the
+check file in either place.
 
 The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check
 fails only on new drift. CI runs it against a fresh `sourdough new --inertia` generation from Sourdough's main;
