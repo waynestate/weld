@@ -10,8 +10,6 @@ The README and the Markdown twin of every page, joined. The index is https://wel
 
 Source: https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/README.md
 
-On Citadel it is served by the raw-PHP deploy layer in [`deploy/`](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/deploy/): a Squire kit whose front controller serves `site/` behind HELMET's security headers. For local development, keep serving `site/` directly.
-
 ## WELD
 
 **W**ired, **E**verything, **L**inked, **D**eployed. Many parts, one piece.
@@ -28,6 +26,9 @@ the page that ships: same source, same bead. The docs wear the front page's look
 `docs/_header.html` and the theme is `docs/theme/weld.css` (named in `docs/docs.json`). Change the look there, never
 in the builder's kit files (`site/assets/docs.css`, `site/assets/docs.js`). In dark mode the docs are the shop after
 hours: steel, cream type and gold, with green kept for the helmet and the footer, not a green wallpaper.
+
+On Citadel the front page and docs are served by the raw-PHP deploy layer in [`deploy/`](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/deploy/): a Squire kit whose
+front controller serves `site/` behind HELMET's security headers. For local development, keep serving `site/` directly.
 
 ### Where the code lives
 
@@ -47,6 +48,10 @@ composer create-project waynestate/weld my-app
 cd my-app
 npm ci
 ```
+
+`create-project` installs the newest tagged release, and `main` can be ahead of it (the [CHANGELOG](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/CHANGELOG.md)
+lists what is unreleased). On 2026-11-06 the newest tag, 0.1.2, was from before WayneUI drew the app; clone when
+you want `main`.
 
 Or clone it, if you want the history too, and it is yours to rename:
 
@@ -176,6 +181,11 @@ The same subcommands work on every OS:
 
 Deploying somewhere other than a laptop? [Running WELD off Citadel](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/docs/running-off-citadel.md) covers OpenShift,
 Coolify and plain Docker, with Citadel for comparison.
+
+Does it hold? [Proof](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/docs/reference/proof.md) is the bend test: on 2026-11-06 a new app went from an empty folder to
+a signed-in WayneUI dashboard in about four and a half minutes and to every CI gate green in about eight, with 0
+accessibility violations in 16 page checks, and one small Wayne State app was ported onto it. The run found a blank
+first page and a Windows `up` that emptied the local database; both are fixed, and the open findings are listed there.
 
 ### Oracle
 
@@ -704,6 +714,12 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Added: a Proof page (Reference, `docs/reference/proof.md`). On 2026-11-06 a new app was made from an empty folder both documented ways, every gate WELD ships was run locally and timed, an axe-core accessibility gate checked four pages at two widths in light and dark (0 violations), and one small Wayne State app was ported onto a fresh clone. It lists what held, what broke, and what it does not prove.
+- Fixed: the first page after `up` was blank. The Vite container ran `vite --host`, so `public/hot` said `http://[::]:5173`, which the browser cannot reach; `compose.yaml` now runs `npm run dev` with `LARAVEL_SAIL: '1'`, and the plugin writes `http://localhost:5173`. `tests/Unit/LocalStackTest.php` holds it.
+- Fixed: on Windows every second `bin\weld.ps1 up` emptied the local SQLite database (`New-Item -Force` truncates an existing file). It now creates the file only when it is missing; the same test holds it, and the macOS and Linux script, which uses `touch`, is pinned too.
+- Changed: Install and the README say that `composer create-project` installs the newest tag, which can trail `main`; Troubleshooting covers the blank page, a new page Vite cannot find on Windows (restart Vite), and the emptied database.
+- Changed: the README's note about the Citadel deploy layer moves from above the title into Documentation.
+- Security: the front-page deploy layer moves to Symfony 7.4.23 (symfony/http-foundation and symfony/yaml advisories, including CVE-2026-118514).
 - Changed: dark docs are the shop after hours instead of a green wallpaper: a steel field and steel-plate pages with cream type and gold links, green kept for the helmet and the footer band. The theme now restates every kit dark token, so WayneUI's dark green surface no longer leaks in. Numbered steps sit on gold discs along a dashed seam, as on the front page; each page title lands hot and cools; a pager card runs a bead along its top on hover or focus (motion only under `prefers-reduced-motion: no-preference`). Wide tables keep a readable notes column and show a shade at the edge that scrolls.
 - Fixed: on a phone the header (front page and docs) takes two rows, so the version chip no longer rides over the WELD name.
 - Changed: WayneUI draws the app. `@waynestate/wayne-ui-css` and `@waynestate/wayne-ui-vue` 2.0.8 are npm dependencies pinned exactly (the lock's sha512 integrity is the checksum), `resources/css/app.css` imports WayneUI's layered stylesheet, and every page wears its components: the app bar with the shield and the theme toggle, the sidebar that becomes a focus-trapping drawer on phones, breadcrumbs, cards, fields, the delete-account dialog and the footer. The welcome page is new: the WELD wordmark over a gold seam that draws itself once, and the six stops of a request lighting up along it (still and finished with reduced motion). All 14 `TODO(wayneui)` stand-ins are resolved.
@@ -1645,6 +1661,10 @@ cd my-app
 npm ci
 ```
 
+Note
+
+`create-project` installs the newest tagged release, and `main` can be ahead of it: the [Changelog](https://weld.apps.wayne.edu/docs/changelog.html) lists what is unreleased. On 2026-11-06 the newest tag, 0.1.2, was from before WayneUI drew the app (see [Proof](https://weld.apps.wayne.edu/docs/reference/proof.html)). Clone when you want `main`.
+
 Or clone it, if you want the history too, and it is yours to rename:
 
 ```sh
@@ -1945,6 +1965,147 @@ Warning
 
 ---
 
+Source: https://weld.apps.wayne.edu/docs/reference/proof.html
+
+## Proof[#](https://weld.apps.wayne.edu/docs/reference/proof.html#proof)
+
+This page says how WELD was proven on 2026-11-06: a new app made from a clean folder the way this site tells you to, every gate WELD ships run against it, and one small Wayne State app ported onto it. It lists what held, what broke, what was fixed that night, and what it does not prove yet. Next, see the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html) for the steps the run followed and [Troubleshooting](https://weld.apps.wayne.edu/docs/troubleshooting.html) for the fixes it produced.
+
+Welders prove a joint with a bend test: cut a strip across the seam, bend it double, and look for cracks. WELD's promise is that a Wayne State developer gets a full, working, accessible app quickly with the whole stack already joined. So the strip was a brand-new app, and the bending was done by a stopwatch, the app's own gates and a browser.
+
+### What ran[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-ran)
+
+One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html) says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.
+
+1. **The `create-project` path** from [Install](https://weld.apps.wayne.edu/docs/install.html): `composer create-project waynestate/weld` (run in the `composer:2.10.3` image, since the host has no Composer), `npm ci`, then `bin\weld.ps1 up` and `test`.
+2. **The clone path** from the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html): `git clone` from the GitHub mirror at `main` (`6da94b9`), `bin\weld.ps1 up`, then the pages in a browser and every gate WELD ships, run locally the way its CI runs them:
+   - `bin\weld.ps1 doctor` and `bin\weld.ps1 test` (`composer ci`: validate, Pest, Pint, PHPStan level 8, the agent-ready and docs checks, audit);
+   - `composer proctor` against CREED's policy, the `proctor-root` CI job;
+   - the `frontend` CI job: ESLint, Prettier, vue-tsc and the Vite build;
+   - the `ziggy` CI job: regenerate the route list and fail on any diff;
+   - the regen gate: a fresh `sourdough new --inertia` compared with WELD file by file;
+   - an accessibility gate: axe-core with the WCAG 2.0, 2.1 and 2.2 A and AA rules on the welcome page, the dashboard and both settings pages, signed in through SESAME's fake driver, at desktop and phone width, light and dark, with reduced motion on (16 page checks).
+3. **A port** onto the fresh clone: one small app from the stack's proof corpus, below.
+
+### Results[#](https://weld.apps.wayne.edu/docs/reference/proof.html#results)
+
+The clone path, the one the Quick start teaches:
+
+| Step | Time | Result |
+| --- | --- | --- |
+| `git clone` | 2 s | `main` at `6da94b9` |
+| `bin\weld.ps1 up`, first time | 238 s | Up: Composer and npm installs, the app and Vite started, key generated, migrations run |
+| Open `http://localhost:8000` |  | **Blank page.** Only HELMET's `local` ribbon drew. Fixed the same night, below |
+| The pages, after the fix | 10 to 20 s for the first load, then instant | Welcome, dashboard, profile and appearance all drawn by WayneUI; SESAME's fake driver signed in as the fake user |
+| `bin\weld.ps1 doctor` | 6 s | 4 PASS: app key, storage, database, migrations |
+| `bin\weld.ps1 test` (`composer ci`) | 153 s | Pass: 85 tests (2 marked risky), Pint, PHPStan level 8, docs and agent-ready current, no advisories |
+| `composer proctor` | 6 s | Pass, 1 warning (the PHP 8.3 floor is in security-only support) |
+| `frontend` job | 72 s | Pass |
+| `ziggy` job | 7 s | Pass: the committed route list matches |
+| Regen gate | 15 s | Fails with 3 paths of new drift; CI runs it warning-only. Below |
+| Accessibility gate | 65 s | **0 violations** in 16 page checks; 26 to 29 rules passed on each page |
+| A second `bin\weld.ps1 up` | 188 s | **Emptied the local database.** Fixed the same night, below |
+
+From an empty folder to a signed-in WayneUI dashboard took about four and a half minutes of machine time once the blank page was fixed, and to every gate green about eight. Your network and disk will move both numbers; the shape will not change much, because the first `up` is mostly Composer and npm downloading.
+
+The `create-project` path:
+
+| Step | Time | Result |
+| --- | --- | --- |
+| `composer create-project waynestate/weld` | 156 s | Installed **0.1.2**, the newest tag (2026-11-03): 67 commits behind `main`, from before WayneUI drew the app |
+| `npm ci` | 14 s | Pass |
+| `bin\weld.ps1 up` | 159 s | Up; the same blank page |
+| `bin\weld.ps1 test` |  | **Fails.** PROCTOR's `composer-audit` check found 7 advisories in Symfony components locked in 0.1.2, published after the tag, and one trusted-proxy test failed. `main` passes both |
+
+That is PROCTOR doing its job on a three-day-old lock: the gate caught advisories nobody had to go looking for. It is also a reason not to start from 0.1.2. Until the next release is tagged, start from a clone.
+
+### WayneUI in the pages[#](https://weld.apps.wayne.edu/docs/reference/proof.html#wayneui-in-the-pages)
+
+After the fix, every page of the new app was WayneUI's: the app bar with the shield and the theme switch, the sidebar that turns into a drawer on a phone, breadcrumbs, cards, the form fields and the footer, in light and dark. Tab moved through the bar with a visible gold focus ring. The axe gate, run with reduced motion on, found nothing to report on any page, at either width, in either scheme.
+
+### A port: one small app onto WELD[#](https://weld.apps.wayne.edu/docs/reference/proof.html#a-port-one-small-app-onto-weld)
+
+The second workload asked a plainer question: how much of a real app's work is left once WELD has done its part? The app was the smallest useful one in the stack's proof corpus: a read-only JSON feed, about 100 lines of raw PHP with no framework, one Oracle query and two optional filters, with its own error shape for bad input.
+
+On the fresh clone it became:
+
+- a controller that keeps the old contract exactly: the same query string, the same validation and the same `{"message", "error": true}` body with a 400 for bad input, the same row keys, and nulls turned into empty strings as the old feed did;
+- a `ProgramSource` interface with a fake source of made-up rows for local work and tests, and an Oracle source that runs the old query, kept outside the repository, on WELD's `oracle` connection;
+- a new page drawn by WayneUI that reads the same JSON: a filter card with a native select and a text field, and WayneUI's sortable data table with a caption;
+- nine Pest tests for the contract.
+
+| What | Result |
+| --- | --- |
+| Size | 369 lines added across 16 files, including the tests and the regenerated route list |
+| Time | 11 minutes 20 seconds of wall clock for the agent that wrote it, from first file to last check; a person new to Laravel will take longer |
+| `composer ci` | Pass first time apart from formatting: Pint fixed 2 style issues, Prettier 1 file. PHPStan level 8 passed the new code as written |
+| `composer proctor` | Pass, the same single warning |
+| `frontend` job | Pass after Prettier |
+| Accessibility gate on the new page | 0 violations at both widths and both schemes; 31 to 32 rules passed |
+
+What WELD supplied without a line of the port's own: sign-in in front of the page, HELMET's security headers on every response (the JSON included), the database connection for the real query, WayneUI for every pixel, and the gates that judged the result.
+
+Two honest differences from the old app. A POST now gets Laravel's own 405 body instead of the old JSON one. And the Oracle source was never run: the proof never connects to Oracle or Banner, so the real query is only shown to be wired, not to work.
+
+### What it caught in WELD[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-it-caught-in-weld)
+
+A run that only finds praise was not looking hard enough. This one found these, and every finding is about WELD, not the ported app:
+
+- **Fixed: a blank page on the first open.** The Vite container ran `vite --host`, so Laravel's Vite plugin wrote the address it listened on, `http://[::]:5173`, into `public/hot`, and every page asked the browser to load its scripts from an address it cannot reach. `compose.yaml` now sets `LARAVEL_SAIL=1` instead, which makes the plugin listen on all addresses in the container and hand the browser `http://localhost:5173`. Checked by `tests/Unit/LocalStackTest.php` and by the pages rendering on the next run.
+- **Fixed: every second `up` on Windows emptied the local database.** `bin\weld.ps1 up` created the SQLite file with `New-Item -Force`, which truncates a file that already exists. One signed-in user before the second `up`, none after. It now creates the file only when it is missing (macOS and Linux used `touch` and were never affected). Checked by the same test and by a later `up` with the fix, which kept the user.
+- **Open: `create-project` installs 0.1.2.** The newest tag is from before WayneUI drew the app, and its locked Symfony components now carry advisories. A new tag fixes it; until then, clone.
+- **Open: a new page on Windows says "Page not found".** Docker Desktop passes edits to existing files into the Vite container, but not new files, so Inertia cannot find a page added after `up` until Vite restarts: `docker compose restart vite`. Polling would see new files, but it took 21 seconds to notice a save and kept the Vite container at about a third of one CPU, so it is not the default. See [Troubleshooting](https://weld.apps.wayne.edu/docs/troubleshooting.html).
+- **Open: the regen gate.** Run by hand, today's Sourdough stops before generating, at its check for read access to Playbook, a private package; in CI that check is skipped and the app is generated with Playbook wired, which WELD does not require. With CI set, the gate reported 3 paths of new drift on top of the recorded baseline. The gate is warning-only, so CI stays green; the drift needs a decision in Sourdough or in the baseline.
+- **Open: a warm `up` still reinstalls.** The second `up` took 188 seconds because it runs `composer install`, ADVISOR's install and a full `npm ci` again. It is correct, just slow; a faster path for an app that is already up is worth having.
+- **Open, small: Sign in lands on the welcome page.** SESAME signs the user in and returns them to `/`, where the button now reads Open the dashboard. One more click than it needs.
+
+### What this does not prove[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-this-does-not-prove)
+
+- Only Windows ran. `bin/weld.sh` on macOS and Linux was not exercised, apart from reading that it creates the SQLite file with `touch`.
+- Nothing was deployed. Citadel, Squire's release script and the container contract are proven elsewhere, not here.
+- SESAME ran its fake driver only; CAS and Entra ID were not part of this run.
+- No real data, Oracle or Banner. The port's real query was never executed.
+- One port of one small app is a sample of one. A larger app, with forms that write, would take longer and find more.
+- The timings are from one machine on one night. Treat them as the shape, not a promise.
+
+### Run it yourself[#](https://weld.apps.wayne.edu/docs/reference/proof.html#run-it-yourself)
+
+The same bend test on your machine, from an empty folder:
+
+Windows
+
+```powershell
+git clone https://github.com/waynestate/weld.git my-app
+cd my-app
+.\bin\weld.ps1 up
+.\bin\weld.ps1 doctor
+.\bin\weld.ps1 test
+docker compose run --rm app composer proctor
+```
+
+macOS / Linux
+
+```sh
+git clone https://github.com/waynestate/weld.git my-app
+cd my-app
+bin/weld.sh up
+bin/weld.sh doctor
+bin/weld.sh test
+docker compose run --rm app composer proctor
+```
+
+Then open [http://localhost:8000](http://localhost:8000), sign in, and run `bin\weld.ps1 up` (or `bin/weld.sh up`) a second time: your data should still be there.
+
+### Related[#](https://weld.apps.wayne.edu/docs/reference/proof.html#related)
+
+- [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html)
+- [Install](https://weld.apps.wayne.edu/docs/install.html)
+- [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
+- [Status](https://weld.apps.wayne.edu/docs/reference/status.html)
+- [Troubleshooting](https://weld.apps.wayne.edu/docs/troubleshooting.html)
+
+---
+
 Source: https://weld.apps.wayne.edu/docs/reference/status.html
 
 ## Status[#](https://weld.apps.wayne.edu/docs/reference/status.html#status)
@@ -2076,6 +2237,44 @@ This page covers the failures that trip people up in WELD, with the cause of eac
 ### Symptoms[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#symptoms)
 
 Each entry follows the same shape: what you see, why it happens, how to fix it, and the command that proves it holds.
+
+#### The page is blank except the `local` ribbon[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-page-is-blank-except-the-local-ribbon)
+
+**Cause.** The page's scripts come from the Vite dev server, at the address Laravel's Vite plugin writes into `public/hot`. Copies of WELD from before 2026-11-06 ran `vite --host` in the container, so the plugin wrote the address it listened on, `http://[::]:5173`, which the browser cannot reach. On any copy, the very first load after `up` also waits while Vite compiles every module for the first time, which takes 10 to 20 seconds on a Windows bind mount.
+
+**Fix.** Take the current `compose.yaml` (its `vite` service runs `npm run dev` with `LARAVEL_SAIL: '1'`), restart Vite, and give the first load a moment:
+
+```
+docker compose up -d vite
+```
+
+**Check.** `public/hot` names an address your browser can open:
+
+```
+docker compose exec vite cat public/hot
+```
+
+Expected: `http://localhost:5173`.
+
+#### A new page says "Page not found" (Windows)[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#a-new-page-says-page-not-found-windows)
+
+**Cause.** Docker Desktop on Windows passes edits to existing files into the Vite container, but not new files. Vite builds the list of pages when it starts, so a page added after `up` is missing from it, and Inertia throws `Page not found: ./pages/YourPage.vue` in the browser console.
+
+**Fix.** Restart Vite after adding a page:
+
+```
+docker compose restart vite
+```
+
+**Check.** Reload the page: it draws, and the console is quiet.
+
+#### The local database was empty after `up` (Windows)[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-local-database-was-empty-after-up-windows)
+
+**Cause.** Copies of `bin/weld.ps1` from before 2026-11-06 created `database/database.sqlite` with `New-Item -Force` on every `up`, which empties a file that already exists. `bin/weld.sh` uses `touch` and never did.
+
+**Fix.** Take the current `bin/weld.ps1`, which creates the file only when it is missing. The lost rows do not come back; run the migrations and seeders again.
+
+**Check.** Sign in, run `.\bin\weld.ps1 up` again, and sign in once more: your user is still there.
 
 #### `composer ci` fails because the docs site is stale[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#composer-ci-fails-because-the-docs-site-is-stale)
 

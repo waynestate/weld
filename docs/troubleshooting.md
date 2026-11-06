@@ -11,6 +11,44 @@ This page covers the failures that trip people up in WELD, with the cause of eac
 
 Each entry follows the same shape: what you see, why it happens, how to fix it, and the command that proves it holds.
 
+### The page is blank except the `local` ribbon
+
+**Cause.** The page's scripts come from the Vite dev server, at the address Laravel's Vite plugin writes into `public/hot`. Copies of WELD from before 2026-11-06 ran `vite --host` in the container, so the plugin wrote the address it listened on, `http://[::]:5173`, which the browser cannot reach. On any copy, the very first load after `up` also waits while Vite compiles every module for the first time, which takes 10 to 20 seconds on a Windows bind mount.
+
+**Fix.** Take the current `compose.yaml` (its `vite` service runs `npm run dev` with `LARAVEL_SAIL: '1'`), restart Vite, and give the first load a moment:
+
+```
+docker compose up -d vite
+```
+
+**Check.** `public/hot` names an address your browser can open:
+
+```
+docker compose exec vite cat public/hot
+```
+
+Expected: `http://localhost:5173`.
+
+### A new page says "Page not found" (Windows)
+
+**Cause.** Docker Desktop on Windows passes edits to existing files into the Vite container, but not new files. Vite builds the list of pages when it starts, so a page added after `up` is missing from it, and Inertia throws `Page not found: ./pages/YourPage.vue` in the browser console.
+
+**Fix.** Restart Vite after adding a page:
+
+```
+docker compose restart vite
+```
+
+**Check.** Reload the page: it draws, and the console is quiet.
+
+### The local database was empty after `up` (Windows)
+
+**Cause.** Copies of `bin/weld.ps1` from before 2026-11-06 created `database/database.sqlite` with `New-Item -Force` on every `up`, which empties a file that already exists. `bin/weld.sh` uses `touch` and never did.
+
+**Fix.** Take the current `bin/weld.ps1`, which creates the file only when it is missing. The lost rows do not come back; run the migrations and seeders again.
+
+**Check.** Sign in, run `.\bin\weld.ps1 up` again, and sign in once more: your user is still there.
+
 ### `composer ci` fails because the docs site is stale
 
 **Cause.** The docs at `site/docs/` are built from `docs/` by the shared docs builder, and `composer ci` runs `composer docs:check`, which fails when the committed docs site is stale or the docs carry findings. Change a page in `docs/` or `CHANGELOG.md` without rebuilding, and the check fails.

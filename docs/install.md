@@ -28,6 +28,11 @@ cd my-app
 npm ci
 ```
 
+> [!NOTE]
+> `create-project` installs the newest tagged release, and `main` can be ahead of it: the [Changelog](changelog.md)
+> lists what is unreleased. On 2026-11-06 the newest tag, 0.1.2, was from before WayneUI drew the app (see
+> [Proof](reference/proof.md)). Clone when you want `main`.
+
 Or clone it, if you want the history too, and it is yours to rename:
 
 ```sh tab="clone"
