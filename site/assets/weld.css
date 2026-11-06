@@ -1624,8 +1624,30 @@ a.choice__name:hover {
   }
 }
 
-/* Under 600px the nav links grow to 44px tall tap targets. */
+/* Under 600px the nav links grow to 44px tall tap targets, and the header
+   takes two rows: the helmet, WELD and the chip on top (never squeezed, so
+   the chip cannot ride over the name), the four doors across underneath. */
 @media (max-width: 599px) {
+  .site-header .wsu-container {
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+  }
+
+  .brand {
+    flex-shrink: 0;
+  }
+
+  .brand__version {
+    margin-right: auto;
+  }
+
+  .site-nav {
+    flex-basis: 100%;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+
   .site-nav a {
     min-height: 44px;
   }
