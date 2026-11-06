@@ -50,8 +50,8 @@ npm ci
 ```
 
 `create-project` installs the newest tagged release, and `main` can be ahead of it (the [CHANGELOG](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/CHANGELOG.md)
-lists what is unreleased). On 2026-11-06 the newest tag, 0.1.2, was from before WayneUI drew the app; clone when
-you want `main`.
+lists what is unreleased). 0.1.3 (2026-11-06) is the first tag where WayneUI draws the app; clone when you want
+`main`.
 
 Or clone it, if you want the history too, and it is yours to rename:
 
@@ -715,6 +715,9 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+### 0.1.3 (2026-11-06)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-3-2026-11-06)
+
+- Changed: the Proof page marks the 0.1.2 install and the regen drift as fixed.
 - Fixed: every `php-test` job in the GitLab pipeline (PHP 8.3, 8.4, 8.5) crashed with exit 255 since the move to Pest. Preflight's component runs `vendor/bin/phpunit` unless told otherwise, and PHPUnit refuses to load a Pest file ("Please run ./vendor/bin/pest instead"); the jobs now run `vendor/bin/pest`, which runs the PHPUnit class tests too. Sourdough's Laravel templates got the same fix.
 - Fixed: the suite printed 62 warnings in CI, where there is no `.env` (Pest reports phpdotenv's suppressed read of the missing file). `tests/TestCase.php` now boots through `tests/Support/SkipEnvFile.php`, which reads `.env` when it exists and `.env.example` otherwise, the same files Sourdough's Inertia template ships.
 - Changed: `App\Support\DummyAppKey` and its call in `AppServiceProvider` now come from Sourdough's Laravel templates, so every Sourdough app refuses the dummy test key in production too. The regen gate reports no new drift, and `.sourdough/regen-baseline.json` shrinks from 87 to 65 known paths (35 files now match Sourdough byte for byte, up from 29).
@@ -1624,7 +1627,7 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 
 ### Status[#](https://weld.apps.wayne.edu/docs/#status)
 
-Latest release: 0.1.2 (2026-11-03). The license is MIT.
+Latest release: 0.1.3 (2026-11-06). The license is MIT.
 
 **Not to be confused with:** `weld:doctor` checks local setup only; standards checks are PROCTOR's.
 
@@ -1668,7 +1671,7 @@ npm ci
 
 Note
 
-`create-project` installs the newest tagged release, and `main` can be ahead of it: the [Changelog](https://weld.apps.wayne.edu/docs/changelog.html) lists what is unreleased. On 2026-11-06 the newest tag, 0.1.2, was from before WayneUI drew the app (see [Proof](https://weld.apps.wayne.edu/docs/reference/proof.html)). Clone when you want `main`.
+`create-project` installs the newest tagged release, and `main` can be ahead of it: the [Changelog](https://weld.apps.wayne.edu/docs/changelog.html) lists what is unreleased. 0.1.3 (2026-11-06) is the first tag where WayneUI draws the app; 0.1.2 was from before it (see [Proof](https://weld.apps.wayne.edu/docs/reference/proof.html)). Clone when you want `main`.
 
 Or clone it, if you want the history too, and it is yours to rename:
 
@@ -2022,7 +2025,7 @@ The `create-project` path:
 | `bin\weld.ps1 up` | 159 s | Up; the same blank page |
 | `bin\weld.ps1 test` |  | **Fails.** PROCTOR's `composer-audit` check found 7 advisories in Symfony components locked in 0.1.2, published after the tag, and one trusted-proxy test failed. `main` passes both |
 
-That is PROCTOR doing its job on a three-day-old lock: the gate caught advisories nobody had to go looking for. It is also a reason not to start from 0.1.2. Until the next release is tagged, start from a clone.
+That is PROCTOR doing its job on a three-day-old lock: the gate caught advisories nobody had to go looking for. It is also a reason not to start from 0.1.2; 0.1.3, tagged later the same day, carries the patched lock and WayneUI.
 
 ### WayneUI in the pages[#](https://weld.apps.wayne.edu/docs/reference/proof.html#wayneui-in-the-pages)
 
@@ -2058,9 +2061,9 @@ A run that only finds praise was not looking hard enough. This one found these, 
 
 - **Fixed: a blank page on the first open.** The Vite container ran `vite --host`, so Laravel's Vite plugin wrote the address it listened on, `http://[::]:5173`, into `public/hot`, and every page asked the browser to load its scripts from an address it cannot reach. `compose.yaml` now sets `LARAVEL_SAIL=1` instead, which makes the plugin listen on all addresses in the container and hand the browser `http://localhost:5173`. Checked by `tests/Unit/LocalStackTest.php` and by the pages rendering on the next run.
 - **Fixed: every second `up` on Windows emptied the local database.** `bin\weld.ps1 up` created the SQLite file with `New-Item -Force`, which truncates a file that already exists. One signed-in user before the second `up`, none after. It now creates the file only when it is missing (macOS and Linux used `touch` and were never affected). Checked by the same test and by a later `up` with the fix, which kept the user.
-- **Open: `create-project` installs 0.1.2.** The newest tag is from before WayneUI drew the app, and its locked Symfony components now carry advisories. A new tag fixes it; until then, clone.
+- **Fixed: `create-project` installed 0.1.2.** The newest tag was from before WayneUI drew the app, and its locked Symfony components now carry advisories. 0.1.3 (2026-11-06) is the fix, and the pipeline it was tagged from was green.
 - **Open: a new page on Windows says "Page not found".** Docker Desktop passes edits to existing files into the Vite container, but not new files, so Inertia cannot find a page added after `up` until Vite restarts: `docker compose restart vite`. Polling would see new files, but it took 21 seconds to notice a save and kept the Vite container at about a third of one CPU, so it is not the default. See [Troubleshooting](https://weld.apps.wayne.edu/docs/troubleshooting.html).
-- **Open: the regen gate.** Run by hand, today's Sourdough stops before generating, at its check for read access to Playbook, a private package; in CI that check is skipped and the app is generated with Playbook wired, which WELD does not require. With CI set, the gate reported 3 paths of new drift on top of the recorded baseline. The gate is warning-only, so CI stays green; the drift needs a decision in Sourdough or in the baseline.
+- **Open: the regen gate.** Run by hand, today's Sourdough stops before generating, at its check for read access to Playbook, a private package; in CI that check is skipped and the app is generated with Playbook wired, which WELD does not require. With CI set, the gate reported 3 paths of new drift on top of the recorded baseline. Fixed the same day: WELD took Sourdough's `SkipEnvFile` and `TestCase`, Sourdough took WELD's `DummyAppKey`, and the gate reports no new drift. Sourdough's Inertia template still draws with Tailwind while WELD draws with WayneUI, so the front-end files stay in the baseline until that template moves to WayneUI.
 - **Open: a warm `up` still reinstalls.** The second `up` took 188 seconds because it runs `composer install`, ADVISOR's install and a full `npm ci` again. It is correct, just slow; a faster path for an app that is already up is worth having.
 - **Open, small: Sign in lands on the welcome page.** SESAME signs the user in and returns them to `/`, where the button now reads Open the dashboard. One more click than it needs.
 
@@ -2393,7 +2396,7 @@ The CHANGELOG lists notable changes to WELD, newest first. Pending work sits und
 
 ### What a release does[#](https://weld.apps.wayne.edu/docs/upgrading.html#what-a-release-does)
 
-WELD is tagged (0.1.0 through 0.1.2 so far). A release:
+WELD is tagged (0.1.0 through 0.1.3 so far). A release:
 
 1. Moves the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. Needs all the checks green locally, then both pipelines green for that commit.
@@ -2403,7 +2406,7 @@ WELD is tagged (0.1.0 through 0.1.2 so far). A release:
 
 ### Breaking changes[#](https://weld.apps.wayne.edu/docs/upgrading.html#breaking-changes)
 
-No released version (0.1.0, 0.1.1, 0.1.2) carries a breaking change yet, so upgrading is just taking in the new release:
+No released version (0.1.0 through 0.1.3) carries a breaking change yet, so upgrading is just taking in the new release:
 
 ```sh
 composer require waynestate/<part>:^0.x

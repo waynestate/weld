@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Proof | WELD docs</title>
 <meta name="description" content="WELD made into a new app from a clean folder on 2026-11-06, both documented ways, with every gate it ships run locally and timed, plus one small Wayne State app ported onto it: what held, what broke, what was fixed, and what it does not prove.">
-<meta name="docs-version" content="0.1.2">
+<meta name="docs-version" content="0.1.3">
 <link rel="stylesheet" href="../../assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="../../assets/docs.css">
 <link rel="stylesheet" href="../../docs/theme/weld.css">
@@ -21,7 +21,7 @@
       <img src="../../brand/weld-avatar-256.png" width="32" height="32" alt="">
       <span class="brand__name">WELD</span>
     </a>
-    <span class="brand__version">0.1.2</span>
+    <span class="brand__version">0.1.3</span>
     <nav class="site-nav" aria-label="Site">
       <a href="../../index.html#start">Get started</a>
       <a href="../../index.html#chooser">Pieces</a>
@@ -162,7 +162,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>That is PROCTOR doing its job on a three-day-old lock: the gate caught advisories nobody had to go looking for. It is also a reason not to start from 0.1.2. Until the next release is tagged, start from a clone.</p>
+<p>That is PROCTOR doing its job on a three-day-old lock: the gate caught advisories nobody had to go looking for. It is also a reason not to start from 0.1.2; 0.1.3, tagged later the same day, carries the patched lock and WayneUI.</p>
 <h2 id="wayneui-in-the-pages">WayneUI in the pages<a class="docs-heading-link" aria-label="Link to this section" href="#wayneui-in-the-pages">#</a></h2>
 <p>After the fix, every page of the new app was WayneUI's: the app bar with the shield and the theme switch, the sidebar that turns into a drawer on a phone, breadcrumbs, cards, the form fields and the footer, in light and dark. Tab moved through the bar with a visible gold focus ring. The axe gate, run with reduced motion on, found nothing to report on any page, at either width, in either scheme.</p>
 <h2 id="a-port-one-small-app-onto-weld">A port: one small app onto WELD<a class="docs-heading-link" aria-label="Link to this section" href="#a-port-one-small-app-onto-weld">#</a></h2>
@@ -215,9 +215,9 @@
 <ul>
 <li><strong>Fixed: a blank page on the first open.</strong> The Vite container ran <code>vite --host</code>, so Laravel's Vite plugin wrote the address it listened on, <code>http://[::]:5173</code>, into <code>public/hot</code>, and every page asked the browser to load its scripts from an address it cannot reach. <code>compose.yaml</code> now sets <code>LARAVEL_SAIL=1</code> instead, which makes the plugin listen on all addresses in the container and hand the browser <code>http://localhost:5173</code>. Checked by <code>tests/Unit/LocalStackTest.php</code> and by the pages rendering on the next run.</li>
 <li><strong>Fixed: every second <code>up</code> on Windows emptied the local database.</strong> <code>bin\weld.ps1 up</code> created the SQLite file with <code>New-Item -Force</code>, which truncates a file that already exists. One signed-in user before the second <code>up</code>, none after. It now creates the file only when it is missing (macOS and Linux used <code>touch</code> and were never affected). Checked by the same test and by a later <code>up</code> with the fix, which kept the user.</li>
-<li><strong>Open: <code>create-project</code> installs 0.1.2.</strong> The newest tag is from before WayneUI drew the app, and its locked Symfony components now carry advisories. A new tag fixes it; until then, clone.</li>
+<li><strong>Fixed: <code>create-project</code> installed 0.1.2.</strong> The newest tag was from before WayneUI drew the app, and its locked Symfony components now carry advisories. 0.1.3 (2026-11-06) is the fix, and the pipeline it was tagged from was green.</li>
 <li><strong>Open: a new page on Windows says &quot;Page not found&quot;.</strong> Docker Desktop passes edits to existing files into the Vite container, but not new files, so Inertia cannot find a page added after <code>up</code> until Vite restarts: <code>docker compose restart vite</code>. Polling would see new files, but it took 21 seconds to notice a save and kept the Vite container at about a third of one CPU, so it is not the default. See <a href="../troubleshooting.html">Troubleshooting</a>.</li>
-<li><strong>Open: the regen gate.</strong> Run by hand, today's Sourdough stops before generating, at its check for read access to Playbook, a private package; in CI that check is skipped and the app is generated with Playbook wired, which WELD does not require. With CI set, the gate reported 3 paths of new drift on top of the recorded baseline. The gate is warning-only, so CI stays green; the drift needs a decision in Sourdough or in the baseline.</li>
+<li><strong>Open: the regen gate.</strong> Run by hand, today's Sourdough stops before generating, at its check for read access to Playbook, a private package; in CI that check is skipped and the app is generated with Playbook wired, which WELD does not require. With CI set, the gate reported 3 paths of new drift on top of the recorded baseline. Fixed the same day: WELD took Sourdough's <code>SkipEnvFile</code> and <code>TestCase</code>, Sourdough took WELD's <code>DummyAppKey</code>, and the gate reports no new drift. Sourdough's Inertia template still draws with Tailwind while WELD draws with WayneUI, so the front-end files stay in the baseline until that template moves to WayneUI.</li>
 <li><strong>Open: a warm <code>up</code> still reinstalls.</strong> The second <code>up</code> took 188 seconds because it runs <code>composer install</code>, ADVISOR's install and a full <code>npm ci</code> again. It is correct, just slow; a faster path for an app that is already up is worth having.</li>
 <li><strong>Open, small: Sign in lands on the welcome page.</strong> SESAME signs the user in and returns them to <code>/</code>, where the button now reads Open the dashboard. One more click than it needs.</li>
 </ul>
@@ -262,7 +262,7 @@ docker compose run --rm app composer proctor
   <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#what-ran">What ran</a></li><li class="docs-toc__item"><a href="#results">Results</a></li><li class="docs-toc__item"><a href="#wayneui-in-the-pages">WayneUI in the pages</a></li><li class="docs-toc__item"><a href="#a-port-one-small-app-onto-weld">A port: one small app onto WELD</a></li><li class="docs-toc__item"><a href="#what-it-caught-in-weld">What it caught in WELD</a></li><li class="docs-toc__item"><a href="#what-this-does-not-prove">What this does not prove</a></li><li class="docs-toc__item"><a href="#run-it-yourself">Run it yourself</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
-  <span>Documents WELD <span data-docs-version>0.1.2</span></span>
+  <span>Documents WELD <span data-docs-version>0.1.3</span></span>
   <span><a rel="noopener" href="https://nougat.snu.gs/enterprise-apps/weld">Source</a> Mirrors: <a rel="noopener" href="https://git.wayne.edu/enterprise-apps/weld">git.wayne.edu</a> <a rel="noopener" href="https://github.com/waynestate/weld">GitHub</a> <a href="proof.md">Markdown</a></span>
 </footer>
 </body>

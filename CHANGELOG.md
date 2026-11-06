@@ -4,6 +4,9 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+## 0.1.3 (2026-11-06)
+
+- Changed: the Proof page marks the 0.1.2 install and the regen drift as fixed.
 - Fixed: every `php-test` job in the GitLab pipeline (PHP 8.3, 8.4, 8.5) crashed with exit 255 since the move to Pest. Preflight's component runs `vendor/bin/phpunit` unless told otherwise, and PHPUnit refuses to load a Pest file ("Please run ./vendor/bin/pest instead"); the jobs now run `vendor/bin/pest`, which runs the PHPUnit class tests too. Sourdough's Laravel templates got the same fix.
 - Fixed: the suite printed 62 warnings in CI, where there is no `.env` (Pest reports phpdotenv's suppressed read of the missing file). `tests/TestCase.php` now boots through `tests/Support/SkipEnvFile.php`, which reads `.env` when it exists and `.env.example` otherwise, the same files Sourdough's Inertia template ships.
 - Changed: `App\Support\DummyAppKey` and its call in `AppServiceProvider` now come from Sourdough's Laravel templates, so every Sourdough app refuses the dummy test key in production too. The regen gate reports no new drift, and `.sourdough/regen-baseline.json` shrinks from 87 to 65 known paths (35 files now match Sourdough byte for byte, up from 29).

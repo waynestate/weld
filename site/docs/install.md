@@ -33,7 +33,7 @@ npm ci
 
 Note
 
-`create-project` installs the newest tagged release, and `main` can be ahead of it: the [Changelog](https://weld.apps.wayne.edu/docs/changelog.html) lists what is unreleased. On 2026-11-06 the newest tag, 0.1.2, was from before WayneUI drew the app (see [Proof](https://weld.apps.wayne.edu/docs/reference/proof.html)). Clone when you want `main`.
+`create-project` installs the newest tagged release, and `main` can be ahead of it: the [Changelog](https://weld.apps.wayne.edu/docs/changelog.html) lists what is unreleased. 0.1.3 (2026-11-06) is the first tag where WayneUI draws the app; 0.1.2 was from before it (see [Proof](https://weld.apps.wayne.edu/docs/reference/proof.html)). Clone when you want `main`.
 
 Or clone it, if you want the history too, and it is yours to rename:
 
