@@ -110,14 +110,14 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 
 | Part | What it does in WELD |
 |---|---|
-| WayneUI | The interface: Wayne State's design system, wired into the Vue front end and Blade layouts |
+| WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
 | Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier |
 | Preflight | The CI pipeline, from GitLab CI/CD components |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` |
-| Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue without an inline script |
+| Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ### Status
 
@@ -376,7 +376,7 @@ The same projects with a bit more detail. The first seven are part of WELD. The 
 
 2.0 Contrast | AA
 
-Wayne State's design system. WELD uses it in the Vue front end and the Blade layouts.
+Wayne State's design system. It draws every page of WELD's Vue front end, light and dark, and nothing else is allowed to.
 
 ```
 $ pnpm verify
@@ -703,6 +703,13 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: WayneUI draws the app. `@waynestate/wayne-ui-css` and `@waynestate/wayne-ui-vue` 2.0.8 are npm dependencies pinned exactly (the lock's sha512 integrity is the checksum), `resources/css/app.css` imports WayneUI's layered stylesheet, and every page wears its components: the app bar with the shield and the theme toggle, the sidebar that becomes a focus-trapping drawer on phones, breadcrumbs, cards, fields, the delete-account dialog and the footer. The welcome page is new: the WELD wordmark over a gold seam that draws itself once, and the six stops of a request lighting up along it (still and finished with reduced motion). All 14 `TODO(wayneui)` stand-ins are resolved.
+- Changed: the appearance setting is WayneUI's own theme switch (`wsu-theme`), so the settings page and the bar's sun and moon button stay in step, a pre-paint script (under HELMET's nonce) stops the dark-mode flash, and an old `appearance` choice carries over once.
+- Removed: the starter kit's Tailwind theme and its helpers: `tailwind.config.js`, `cn()` (`resources/js/lib/utils.ts`), `clsx`, `tailwind-merge`, `@headlessui/vue`, `lucide-vue-next`, `@vueuse/core`, `prettier-plugin-tailwindcss`, `@tailwindcss/forms` and the 16 kit components they served.
+- Added: BEST_PRACTICES W2 (WayneUI is the only component source) is `Checked`. ESLint bans imports from a `components/ui` path and the kit's helper packages, `tests/Feature/WayneUiOnlyTest.php` fails on a `components.json`, a Tailwind dependency or a loose WayneUI pin, and a new `frontend` CI job (GitLab and GitHub) runs `npm ci`, lint, Prettier, vue-tsc and the build. Ziggy's client now comes from the `ziggy-js` npm package, so the front end builds without `vendor/`.
+- Fixed: Save on the profile page and Delete on the account dialog did nothing in a browser. Laravel's JSON sessions hand SESAME's stored user back as an array, so the profile called the user's own email "already taken" and deletion answered 403; `App\Sesame\UserResolver` now implements SESAME's `RefreshesUser` and looks the user up again on each request (a user deleted elsewhere is signed out). Script-side `route()` calls threw "route is not defined" since the route list moved into the bundle; `app.ts` defines the global again.
+- Fixed: HELMET's environment ribbon is a polite status region, so it is no longer content outside every landmark (axe: region), and a link followed from the open phone drawer no longer leaves the ribbon `inert`.
+- Changed: the regen baseline records the front-end files that now differ from Sourdough's Tailwind-based Inertia template, until Sourdough's template takes the same WayneUI wiring.
 - Changed: the docs pages wear the front page's look: the same header and main menu (Docs marked current), each page a cream sheet on the green field, commands on the quick start's terminal with its gold Copy button, the weld bead under every title, branded callouts and a derived dark mode. Motion only for readers who allow it. Sources: `docs/_header.html`, `docs/theme/weld.css`, the `theme` key in `docs/docs.json`.
 - Fixed: code on the front page's Sourdough card is cream, so it meets AA contrast on the deep green.
 - Changed: the front page header has a main nav that includes Docs.
@@ -856,7 +863,7 @@ Without Docker: run `composer install`, `npm ci`, copy `.env.example` to `.env`,
 | --- | --- |
 | PROCTOR against CREED's policy | `composer proctor` |
 | Ziggy routes are current | `composer ziggy`, then `git diff --exit-code resources/js/ziggy.*` |
-| JS lint and format | `npm run lint` (pure check), `npm run fix` (apply fixes), `npm run format:check` |
+| JS lint, format and types | `npm run lint` (pure check, includes the WayneUI-only import rule), `npm run fix` (apply fixes), `npm run format:check`, `npm run typecheck` |
 | Production assets | `npm run build` |
 
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run PROCTOR, Ziggy or the JS lint.
@@ -867,10 +874,10 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 
 ### CI[#](https://weld.apps.wayne.edu/docs/contributing.html#ci)
 
-- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `ziggy` drift job and a `regen-gate` job (warning-only until `.sourdough/regen-baseline.json` is filled in).
-- **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci` and runs the same `regen-gate` check (`continue-on-error` until the baseline is filled in).
+- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `frontend` job (`npm ci`, lint, Prettier, vue-tsc and the build), a `ziggy` drift job and a `regen-gate` job (warning-only until `.sourdough/regen-baseline.json` is filled in).
+- **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci`, runs the same `frontend` job, and runs the same `regen-gate` check (`continue-on-error` until the baseline is filled in).
 
-Green means all of those pass; the regen gate may warn while its baseline is being filled in. JS lint is not in CI yet.
+Green means all of those pass; the regen gate may warn while its baseline is being filled in.
 
 ### Keeping the joints current[#](https://weld.apps.wayne.edu/docs/contributing.html#keeping-the-joints-current)
 
@@ -929,7 +936,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** The stack's promise is one interface contract on every consumer path; a parallel component set breaks the accessibility gate.
 
-**Stack:** `Not yet`. The shadcn-vue components and their npm dependencies are gone, but WayneUI is not wired in: the Vue components carry `TODO(wayneui)` stand-ins (for example `resources/js/layouts/settings/Layout.vue` and `resources/js/pages/settings/Profile.vue`) because WELD does not load WayneUI's stylesheet yet, and the Tailwind theme (`tailwind.config.js`) plus `cn()`/`clsx`/`tailwind-merge` (`resources/js/lib/utils.ts`, `package.json`) remain. Target `Checked`: an ESLint rule (Pinstripe) bans imports from the kit's `components/ui` path, and a check fails when `components.json` exists.
+**Stack:** `Checked`. WayneUI 2.0.8 is the interface: `package.json` pins `@waynestate/wayne-ui-css` and `@waynestate/wayne-ui-vue` exactly (the lock's sha512 integrity is the checksum), `resources/css/app.css` imports the layered `dist/wayne-ui.css`, and the pages and layouts use WayneUI's Vue components (`AppShell`, `AppBar`, `Sidebar`, `Card`, `Input`, `Dialog`, `RadioGroup`). The Tailwind theme, `cn()`, `clsx`, `tailwind-merge`, `@headlessui/vue` and `lucide-vue-next` are gone. ESLint's `no-restricted-imports` rule in `eslint.config.js` bans the kit's `components/ui` path and those helpers, `tests/Feature/WayneUiOnlyTest.php` fails when `components.json`, a `components/ui` folder, a Tailwind dependency or a loose WayneUI pin appears, and the `frontend` job in `.gitlab-ci.yml` and `.github/workflows/ci.yml` runs lint, Prettier, vue-tsc and the build. Where WayneUI has no component (the account menu), a small local one is built on its tokens and says so in a comment.
 
 ### W3. Own the app code; take stack changes through `sourdough feed` [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w3-own-the-app-code-take-stack-changes-through-sourdough-feed)
 
@@ -1020,7 +1027,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Use Pinstripe's Pint preset, PHPStan level 8 through Larastan, ESLint (flat config) and Prettier. No local overrides without a recorded reason.
 
-**Stack:** `Checked`, for the PHP side. `composer.json` runs `pint --test`, `composer.json` runs `phpstan analyse`, and both are in the `ci` script (`composer.json`), which CI runs; `pint.json` uses the `laravel` preset and `phpstan.neon` sets `level: 8`. The JS side is configured but not yet in the CI pipeline: `eslint.config.js` (flat config) and `.prettierrc` exist, but no CI job runs `npm run lint` or `npm run format:check`. Pinstripe is not a dependency yet, so the presets are copied, not included.
+**Stack:** `Checked`, for the PHP side. `composer.json` runs `pint --test`, `composer.json` runs `phpstan analyse`, and both are in the `ci` script (`composer.json`), which CI runs; `pint.json` uses the `laravel` preset and `phpstan.neon` sets `level: 8`. The JS side runs in CI too: the `frontend` job (`.gitlab-ci.yml`, `.github/workflows/ci.yml`) runs `npm run lint` (`eslint.config.js`, flat config) and `npm run format:check` (`.prettierrc`). Pinstripe is not a dependency yet, so the presets are copied, not included.
 
 ### W33: Pin shared CI components to a commit[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w33-pin-shared-ci-components-to-a-commit)
 
@@ -1376,7 +1383,7 @@ The same subcommands work on every OS:
 
 ### What you built[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#what-you-built)
 
-You have WELD running locally in Docker: the app and Vite in containers, `.env` copied from `.env.example`, the app key generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in, security headers, checks, coding standards, CI and the WayneUI interface already hooked up.
+You have WELD running locally in Docker: the app and Vite in containers, `.env` copied from `.env.example`, the app key generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in, security headers, checks, coding standards, CI and the WayneUI interface already hooked up. Open the app and every page you see (the welcome page, the dashboard, settings) is drawn by WayneUI's components, light or dark to match your device.
 
 ### Next steps[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#next-steps)
 
@@ -1530,14 +1537,14 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 
 | Part | What it does in WELD |
 | --- | --- |
-| WayneUI | The interface: Wayne State's design system, wired into the Vue front end and Blade layouts |
+| WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
 | Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier |
 | Preflight | The CI pipeline, from GitLab CI/CD components |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` |
-| Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue without an inline script |
+| Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ![WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys.](https://weld.apps.wayne.edu/docs/readme/journey.svg)
 
@@ -1557,6 +1564,7 @@ HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is
 - SESAME owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away
 - PROCTOR measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block
 - The starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's
+- WayneUI draws the Vue pages: `resources/css/app.css` imports its layered stylesheet, the pages use `@waynestate/wayne-ui-vue` components, and the appearance setting is WayneUI's own theme switch (`wsu-theme`), with the bar's sun and moon button in step. The starter kit's Tailwind theme and shadcn-vue copies are gone, and `npm run lint` fails on an import from a `components/ui` folder
 - The license is MIT
 
 ### Related[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#related)

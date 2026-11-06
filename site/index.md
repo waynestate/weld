@@ -126,7 +126,7 @@ The same projects with a bit more detail. The first seven are part of WELD. The 
 
 2.0 Contrast | AA
 
-Wayne State's design system. WELD uses it in the Vue front end and the Blade layouts.
+Wayne State's design system. It draws every page of WELD's Vue front end, light and dark, and nothing else is allowed to.
 
 ```
 $ pnpm verify

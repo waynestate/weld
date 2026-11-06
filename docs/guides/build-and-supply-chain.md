@@ -23,7 +23,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Use Pinstripe's Pint preset, PHPStan level 8 through Larastan, ESLint (flat config) and Prettier. No local overrides without a recorded reason.
 
-**Stack:** `Checked`, for the PHP side. `composer.json` runs `pint --test`, `composer.json` runs `phpstan analyse`, and both are in the `ci` script (`composer.json`), which CI runs; `pint.json` uses the `laravel` preset and `phpstan.neon` sets `level: 8`. The JS side is configured but not yet in the CI pipeline: `eslint.config.js` (flat config) and `.prettierrc` exist, but no CI job runs `npm run lint` or `npm run format:check`. Pinstripe is not a dependency yet, so the presets are copied, not included.
+**Stack:** `Checked`, for the PHP side. `composer.json` runs `pint --test`, `composer.json` runs `phpstan analyse`, and both are in the `ci` script (`composer.json`), which CI runs; `pint.json` uses the `laravel` preset and `phpstan.neon` sets `level: 8`. The JS side runs in CI too: the `frontend` job (`.gitlab-ci.yml`, `.github/workflows/ci.yml`) runs `npm run lint` (`eslint.config.js`, flat config) and `npm run format:check` (`.prettierrc`). Pinstripe is not a dependency yet, so the presets are copied, not included.
 
 ## W33: Pin shared CI components to a commit
 

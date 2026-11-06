@@ -66,7 +66,7 @@ Without Docker: run `composer install`, `npm ci`, copy `.env.example` to `.env`,
 |---|---|
 | PROCTOR against CREED's policy | `composer proctor` |
 | Ziggy routes are current | `composer ziggy`, then `git diff --exit-code resources/js/ziggy.*` |
-| JS lint and format | `npm run lint` (pure check), `npm run fix` (apply fixes), `npm run format:check` |
+| JS lint, format and types | `npm run lint` (pure check, includes the WayneUI-only import rule), `npm run fix` (apply fixes), `npm run format:check`, `npm run typecheck` |
 | Production assets | `npm run build` |
 
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run PROCTOR, Ziggy or the JS lint.
@@ -77,10 +77,10 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 
 ## CI
 
-- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `ziggy` drift job and a `regen-gate` job (warning-only until `.sourdough/regen-baseline.json` is filled in).
-- **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci` and runs the same `regen-gate` check (`continue-on-error` until the baseline is filled in).
+- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `frontend` job (`npm ci`, lint, Prettier, vue-tsc and the build), a `ziggy` drift job and a `regen-gate` job (warning-only until `.sourdough/regen-baseline.json` is filled in).
+- **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci`, runs the same `frontend` job, and runs the same `regen-gate` check (`continue-on-error` until the baseline is filled in).
 
-Green means all of those pass; the regen gate may warn while its baseline is being filled in. JS lint is not in CI yet.
+Green means all of those pass; the regen gate may warn while its baseline is being filled in.
 
 ## Keeping the joints current
 

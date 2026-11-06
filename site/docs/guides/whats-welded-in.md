@@ -14,14 +14,14 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 
 | Part | What it does in WELD |
 | --- | --- |
-| WayneUI | The interface: Wayne State's design system, wired into the Vue front end and Blade layouts |
+| WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
 | Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier |
 | Preflight | The CI pipeline, from GitLab CI/CD components |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` |
-| Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue without an inline script |
+| Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ![WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys.](https://weld.apps.wayne.edu/docs/readme/journey.svg)
 
@@ -41,6 +41,7 @@ HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is
 - SESAME owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away
 - PROCTOR measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block
 - The starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's
+- WayneUI draws the Vue pages: `resources/css/app.css` imports its layered stylesheet, the pages use `@waynestate/wayne-ui-vue` components, and the appearance setting is WayneUI's own theme switch (`wsu-theme`), with the bar's sun and moon button in step. The starter kit's Tailwind theme and shadcn-vue copies are gone, and `npm run lint` fails on an import from a `components/ui` folder
 - The license is MIT
 
 ## Related[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#related)

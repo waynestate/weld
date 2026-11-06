@@ -109,14 +109,14 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 
 | Part | What it does in WELD |
 |---|---|
-| WayneUI | The interface: Wayne State's design system, wired into the Vue front end and Blade layouts |
+| WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
 | Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier |
 | Preflight | The CI pipeline, from GitLab CI/CD components |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` |
-| Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue without an inline script |
+| Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 <div align="center">
   <img src="docs/readme/journey.svg" width="100%" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys.">

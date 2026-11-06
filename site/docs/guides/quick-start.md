@@ -60,7 +60,7 @@ The same subcommands work on every OS:
 
 ## What you built[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#what-you-built)
 
-You have WELD running locally in Docker: the app and Vite in containers, `.env` copied from `.env.example`, the app key generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in, security headers, checks, coding standards, CI and the WayneUI interface already hooked up.
+You have WELD running locally in Docker: the app and Vite in containers, `.env` copied from `.env.example`, the app key generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in, security headers, checks, coding standards, CI and the WayneUI interface already hooked up. Open the app and every page you see (the welcome page, the dashboard, settings) is drawn by WayneUI's components, light or dark to match your device.
 
 ## Next steps[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#next-steps)
 
