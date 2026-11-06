@@ -18,6 +18,24 @@ jobs:
       php-versions: '["8.3","8.4","8.5"]'
       ci-command: composer ci
 
+  # The front end: WayneUI is the only component source (BEST_PRACTICES W2).
+  # ESLint bans the kit's components/ui imports; Prettier, vue-tsc and the
+  # build run alongside it. No PHP: Ziggy's client comes from npm.
+  frontend:
+    name: Front end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.21.1'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run typecheck
+      - run: npm run build
+
   # Is WELD still Sourdough's Inertia shape? Generate a fresh app from
   # Sourdough's main and compare it with WELD by SHA-256. Failures are
   # warnings until .sourdough/regen-baseline.json is filled in.

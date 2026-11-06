@@ -34,6 +34,20 @@ proctor-root:
     - composer install --no-interaction --no-progress --prefer-dist
     - composer proctor
 
+# The front end: WayneUI is the only component source (BEST_PRACTICES W2).
+# ESLint bans the kit's components/ui imports, Prettier and vue-tsc keep the
+# code honest, and the build proves WayneUI's CSS and sprite still resolve.
+# No PHP here: Ziggy's client comes from npm, the route list is committed.
+# Multi-arch image, pinned by its list digest (the runner is arm64).
+frontend:
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/node:22.21.1-alpine3.22@sha256:b2358485e3e33bc3a33114d2b1bdb18cdbe4df01bd2b257198eb51beb1f026c5
+  script:
+    - npm ci --no-audit --no-fund
+    - npm run lint
+    - npm run format:check
+    - npm run typecheck
+    - npm run build
+
 # ZIGGY's route list ships inside the Vite bundle, not an inline script, so
 # the committed resources/js/ziggy.* must match the routes. Regenerate and
 # fail on any diff.

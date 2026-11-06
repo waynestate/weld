@@ -1,25 +1,15 @@
 <script setup lang="ts">
-import { TransitionRoot } from '@headlessui/vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Button, Card, Input } from '@waynestate/wayne-ui-vue';
 
 import DeleteUser from '@/components/DeleteUser.vue';
-import HeadingSmall from '@/components/HeadingSmall.vue';
-import InputError from '@/components/InputError.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { type BreadcrumbItem, type SharedData, type User } from '@/types';
 
-interface Props {
-    className?: string;
-}
-
-defineProps<Props>();
-
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Profile settings',
-        href: '/settings/profile',
-    },
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Profile settings', href: '/settings/profile' },
 ];
 
 const page = usePage<SharedData>();
@@ -42,63 +32,35 @@ const submit = () => {
         <Head title="Profile settings" />
 
         <SettingsLayout>
-            <div class="flex flex-col space-y-6">
-                <HeadingSmall title="Profile information" description="Update your name and email address" />
+            <Card title="Profile information">
+                <form class="weld-form" @submit.prevent="submit">
+                    <p class="weld-muted">Update your name and email address.</p>
 
-                <form @submit.prevent="submit" class="space-y-6">
-                    <!-- TODO(wayneui): .wsu-field/.wsu-input are WayneUI's form field; WELD does not load its stylesheet yet, so stand-ins keep the field a vertical stack and the input full-width. -->
-                    <div class="wsu-field">
-                        <label class="wsu-field__label" for="name">Name</label>
-                        <input class="wsu-input" id="name" v-model="form.name" required autocomplete="name" placeholder="Full name" />
-                        <InputError class="mt-2" :message="form.errors.name" />
-                    </div>
+                    <!-- WayneUI fields: the label, hint, error and aria-describedby come wired together. -->
+                    <Input id="name" v-model="form.name" name="name" label="Name" required autocomplete="name" :error="form.errors.name" />
+                    <Input
+                        id="email"
+                        v-model="form.email"
+                        name="email"
+                        type="email"
+                        label="Email address"
+                        required
+                        autocomplete="username"
+                        :error="form.errors.email"
+                    />
 
-                    <div class="wsu-field">
-                        <label class="wsu-field__label" for="email">Email address</label>
-                        <input
-                            class="wsu-input"
-                            id="email"
-                            type="email"
-                            v-model="form.email"
-                            required
-                            autocomplete="username"
-                            placeholder="Email address"
-                        />
-                        <InputError class="mt-2" :message="form.errors.email" />
-                    </div>
-
-                    <div class="flex items-center gap-4">
-                        <button type="submit" class="wsu-btn wsu-btn--primary" :disabled="form.processing">Save</button>
-
-                        <TransitionRoot
-                            :show="form.recentlySuccessful"
-                            enter="transition ease-in-out"
-                            enter-from="opacity-0"
-                            leave="transition ease-in-out"
-                            leave-to="opacity-0"
-                        >
-                            <p class="text-sm text-neutral-600">Saved.</p>
-                        </TransitionRoot>
+                    <div class="weld-form__actions">
+                        <Button variant="primary" type="submit" :loading="form.processing" :disabled="form.processing">Save</Button>
+                        <p class="weld-muted" role="status">
+                            <Transition name="weld-fade">
+                                <span v-if="form.recentlySuccessful">Saved.</span>
+                            </Transition>
+                        </p>
                     </div>
                 </form>
-            </div>
+            </Card>
 
             <DeleteUser />
         </SettingsLayout>
     </AppLayout>
 </template>
-
-<style scoped>
-/* Stand-in for WayneUI's .wsu-field layout until its stylesheet is loaded: a vertical
-   stack of label, control, and message. */
-.wsu-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-/* Stand-in for WayneUI's .wsu-input width until its stylesheet is loaded. */
-.wsu-input {
-    width: 100%;
-}
-</style>

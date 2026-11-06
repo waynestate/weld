@@ -21,8 +21,9 @@ class UiBrandingTest extends TestCase
 
     public function test_the_branding_drops_the_laravel_starter_kit()
     {
-        foreach (['AppLogo.vue', 'AppHeader.vue'] as $component) {
-            $contents = file_get_contents($this->path('resources/js/components/'.$component));
+        // The kit's AppLogo is gone: the mark is WayneUI's shield, set in AppHeader.
+        foreach (['components/AppHeader.vue', 'components/AppFooter.vue', 'pages/Welcome.vue'] as $file) {
+            $contents = file_get_contents($this->path('resources/js/'.$file));
 
             $this->assertStringNotContainsString('Laravel Starter Kit', $contents);
             $this->assertStringNotContainsString('laravel/vue-starter-kit', $contents);
