@@ -80,8 +80,13 @@ try {
             if (-not $appKey) {
                 Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'php', 'artisan', 'key:generate')
             }
-            Write-Host 'weld: New-Item database/database.sqlite'
-            New-Item -ItemType File -Force -Path 'database/database.sqlite' | Out-Null
+            # Create the SQLite file only when it is missing. New-Item -Force on
+            # an existing file empties it, so every second `up` used to wipe the
+            # local database; touch on macOS and Linux never did.
+            if (-not (Test-Path -LiteralPath 'database/database.sqlite')) {
+                Write-Host 'weld: New-Item database/database.sqlite'
+                New-Item -ItemType File -Path 'database/database.sqlite' | Out-Null
+            }
             Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'php', 'artisan', 'migrate')
             Write-Host 'weld: done. Open http://localhost:8000'
         }
