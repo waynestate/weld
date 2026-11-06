@@ -41,6 +41,7 @@ Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `ph
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run
 PROCTOR, Ziggy or the JS lint. `composer test` is Pest, running the PHPUnit class tests and the Pest tests side by side.
 The suite boots on a fixed dummy `APP_KEY` set in `phpunit.xml`; `App\Support\DummyAppKey` refuses that value when the app runs in production.
+Tests read `.env`, or `.env.example` when there is none (`tests/Support/SkipEnvFile.php`), so a bare CI container boots without warnings.
 
 The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (`sourdough new <dir>
 --inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`).
@@ -53,7 +54,7 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 
 ## CI
 
-- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a
+- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a
   `proctor` job (warnings pass, failures block), a `ziggy` drift job and a `regen-gate` job (warning-only until
   `.sourdough/regen-baseline.json` is filled in).
 - **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci` and runs the same

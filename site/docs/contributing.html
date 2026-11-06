@@ -98,7 +98,7 @@ bin/weld.sh down
 <p>Pint skips <code>deploy/</code>. That folder is the stack's shared front-page deploy layer (Squire kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.</p>
 <h2 id="ci">CI<a class="docs-heading-link" aria-label="Link to this section" href="#ci">#</a></h2>
 <ul>
-<li><strong>GitLab:</strong> Preflight's <code>php-test</code> (PHP 8.3, 8.4, 8.5) and <code>composer-audit</code> components, a <code>composer-ci</code> job, a <code>proctor</code> job (warnings pass, failures block), a <code>frontend</code> job (<code>npm ci</code>, lint, Prettier, vue-tsc and the build), a <code>ziggy</code> drift job and a <code>regen-gate</code> job (warning-only until <code>.sourdough/regen-baseline.json</code> is filled in).</li>
+<li><strong>GitLab:</strong> Preflight's <code>php-test</code> (PHP 8.3, 8.4, 8.5, running <code>vendor/bin/pest</code>) and <code>composer-audit</code> components, a <code>composer-ci</code> job, a <code>proctor</code> job (warnings pass, failures block), a <code>frontend</code> job (<code>npm ci</code>, lint, Prettier, vue-tsc and the build), a <code>ziggy</code> drift job and a <code>regen-gate</code> job (warning-only until <code>.sourdough/regen-baseline.json</code> is filled in).</li>
 <li><strong>GitHub:</strong> <code>.github/workflows/ci.yml</code> calls Preflight's reusable workflow with <code>composer ci</code>, runs the same <code>frontend</code> job, and runs the same <code>regen-gate</code> check (<code>continue-on-error</code> until the baseline is filled in).</li>
 </ul>
 <p>Green means all of those pass; the regen gate may warn while its baseline is being filled in.</p>

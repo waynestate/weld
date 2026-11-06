@@ -8,6 +8,9 @@ include:
     inputs:
       php_versions: ["8.3", "8.4", "8.5"]
       image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/php:${PHP_VERSION}-cli-trixie"
+      # The tests are Pest files, and PHPUnit refuses to load them ("Please run
+      # ./vendor/bin/pest instead"). Pest runs the PHPUnit class tests too.
+      test_command: vendor/bin/pest
   - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@79029cc2300702d0d450c42cc699e12af1b731f8 # 0.1.4
     inputs:
       image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2@sha256:b6dcd72ca98fa19d0e5b8476de179859704891fad06dd9e0b96833d4c430a5fc"

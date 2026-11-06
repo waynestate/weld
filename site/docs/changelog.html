@@ -43,6 +43,18 @@
 <h2 id="unreleased">Unreleased<a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></h2>
 <ul>
 <li>
+<p>Fixed: every <code>php-test</code> job in the GitLab pipeline (PHP 8.3, 8.4, 8.5) crashed with exit 255 since the move to Pest. Preflight's component runs <code>vendor/bin/phpunit</code> unless told otherwise, and PHPUnit refuses to load a Pest file (&quot;Please run ./vendor/bin/pest instead&quot;); the jobs now run <code>vendor/bin/pest</code>, which runs the PHPUnit class tests too. Sourdough's Laravel templates got the same fix.</p>
+</li>
+<li>
+<p>Fixed: the suite printed 62 warnings in CI, where there is no <code>.env</code> (Pest reports phpdotenv's suppressed read of the missing file). <code>tests/TestCase.php</code> now boots through <code>tests/Support/SkipEnvFile.php</code>, which reads <code>.env</code> when it exists and <code>.env.example</code> otherwise, the same files Sourdough's Inertia template ships.</p>
+</li>
+<li>
+<p>Changed: <code>App\Support\DummyAppKey</code> and its call in <code>AppServiceProvider</code> now come from Sourdough's Laravel templates, so every Sourdough app refuses the dummy test key in production too. The regen gate reports no new drift, and <code>.sourdough/regen-baseline.json</code> shrinks from 87 to 65 known paths (35 files now match Sourdough byte for byte, up from 29).</p>
+</li>
+<li>
+<p>Fixed: the two <code>DummyAppKey</code> tests that only proved &quot;no exception&quot; by not crashing now assert it, so the suite reports no risky tests.</p>
+</li>
+<li>
 <p>Added: a Proof page (Reference, <code>docs/reference/proof.md</code>). On 2026-11-06 a new app was made from an empty folder both documented ways, every gate WELD ships was run locally and timed, an axe-core accessibility gate checked four pages at two widths in light and dark (0 violations), and one small Wayne State app was ported onto a fresh clone. It lists what held, what broke, and what it does not prove.</p>
 </li>
 <li>

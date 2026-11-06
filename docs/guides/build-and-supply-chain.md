@@ -17,7 +17,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Pest 5 requires PHP `^8.4`. On a `^8.3` floor use Pest 4 or PHPUnit and cap the constraint.
 
-**Stack:** `Checked`. WELD uses PHPUnit, not Pest: `composer.json` pins `phpunit/phpunit: ^12.0`, and the CI matrix starts at 8.3 (`.gitlab-ci.yml`), so `composer install` runs on 8.3 and would fail if a dev tool required 8.4 or newer.
+**Stack:** `Checked`. WELD runs Pest 4: `composer.json` requires `pestphp/pest ^4` (Pest 5 needs PHP `^8.4`), and the CI matrix starts at 8.3 (`.gitlab-ci.yml`), so `composer install` runs on 8.3 and would fail if a dev tool required 8.4 or newer. The PHPUnit class tests still run, under Pest.
 
 ## W32: Pinstripe owns style and static analysis
 
@@ -29,7 +29,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Preflight components are referenced by commit SHA or a fixed tag, not a moving branch.
 
-**Stack:** `Documented`. `.gitlab-ci.yml` pins the `php-test` component to `@0.1.0` and `.github/workflows/ci.yml` pins the reusable workflow to a commit SHA; the comment "Pinned to Preflight 0.1.0. Never use ~latest." sits at `.gitlab-ci.yml`. There is no check that flags an unpinned include. Target `Checked`: PROCTOR flags `include:` entries without a SHA.
+**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.1.4 release SHA (the tag in a trailing comment) and `.github/workflows/ci.yml` pins the reusable workflow to a commit SHA; the comment "Pinned to Preflight 0.1.4. Never use ~latest." sits at the top of `.gitlab-ci.yml`. PROCTOR's `preflight-pinned` check, run by the `proctor-root` job, fails on an include without a SHA.
 
 ## Related
 

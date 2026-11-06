@@ -97,7 +97,7 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 
 ## CI[#](https://weld.apps.wayne.edu/docs/contributing.html#ci)
 
-- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `frontend` job (`npm ci`, lint, Prettier, vue-tsc and the build), a `ziggy` drift job and a `regen-gate` job (warning-only until `.sourdough/regen-baseline.json` is filled in).
+- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `frontend` job (`npm ci`, lint, Prettier, vue-tsc and the build), a `ziggy` drift job and a `regen-gate` job (warning-only until `.sourdough/regen-baseline.json` is filled in).
 - **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci`, runs the same `frontend` job, and runs the same `regen-gate` check (`continue-on-error` until the baseline is filled in).
 
 Green means all of those pass; the regen gate may warn while its baseline is being filled in.

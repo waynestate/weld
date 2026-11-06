@@ -8,12 +8,12 @@ it('refuses the dummy key in production', function () {
 });
 
 it('allows the dummy key while testing and locally', function () {
-    DummyAppKey::refuseIn('testing', DummyAppKey::VALUE);
-    DummyAppKey::refuseIn('local', DummyAppKey::VALUE);
+    expect(fn () => DummyAppKey::refuseIn('testing', DummyAppKey::VALUE))->not->toThrow(RuntimeException::class);
+    expect(fn () => DummyAppKey::refuseIn('local', DummyAppKey::VALUE))->not->toThrow(RuntimeException::class);
 });
 
 it('allows a real key in production', function () {
-    DummyAppKey::refuseIn('production', 'base64:'.str_repeat('B', 44));
+    expect(fn () => DummyAppKey::refuseIn('production', 'base64:'.str_repeat('B', 44)))->not->toThrow(RuntimeException::class);
 });
 
 it('uses the same dummy key as phpunit.xml', function () {

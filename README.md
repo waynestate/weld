@@ -162,8 +162,9 @@ What is on the bench today:
 
 **Testing.** Write new tests in Pest. Use an `it('...', function () { ... });` closure under `tests/Feature` or `tests/Unit`; the existing
 PHPUnit class tests keep working and are converted only when you touch them. `composer test` runs both, and `tests/Pest.php` binds the
-Feature tests to the Laravel app and a fresh database. The suite runs on a fixed dummy `APP_KEY` set in `phpunit.xml` so it boots with no
-`.env`; the app refuses that key in production, so a copied test config cannot ship.
+Feature tests to the Laravel app and a fresh database. The suite reads `.env` when it exists, otherwise `.env.example`
+(`tests/Support/SkipEnvFile.php`, the same file Sourdough ships), and runs on a fixed dummy `APP_KEY` set in `phpunit.xml`, so it boots
+with no `.env`; the app refuses that key in production, so a copied test config cannot ship. CI's `php-test` matrix runs `vendor/bin/pest`.
 
 Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](BEST_PRACTICES.md).
 

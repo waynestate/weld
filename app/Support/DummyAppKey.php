@@ -7,10 +7,11 @@ namespace App\Support;
 /**
  * Refuses the dummy test-only APP_KEY in production.
  *
- * The suite boots on a fixed dummy key (see phpunit.xml) so it runs without a
- * .env in a bare container. This guard makes sure that same value can never
- * ship: when APP_ENV is production and the key is still the dummy, booting
- * fails loudly instead of serving an app whose key anyone could guess.
+ * The suite boots on a fixed dummy key (tests/Support/SkipEnvFile.php hands it
+ * out when nothing else sets one) so it runs without a .env in a bare
+ * container. This guard makes sure that same value can never ship: when
+ * APP_ENV is production and the key is still the dummy, booting fails loudly
+ * instead of serving an app whose key anyone could guess.
  */
 final class DummyAppKey
 {
