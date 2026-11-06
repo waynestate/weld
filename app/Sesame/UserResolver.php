@@ -5,6 +5,7 @@ namespace App\Sesame;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Waynestate\Sesame\Identity;
+use Waynestate\Sesame\RefreshesUser;
 use Waynestate\Sesame\UserResolver as UserResolverContract;
 
 /**
@@ -19,7 +20,7 @@ use Waynestate\Sesame\UserResolver as UserResolverContract;
  * they can never use: sign-in goes through SESAME, never through a local
  * credential.
  */
-class UserResolver implements UserResolverContract
+class UserResolver implements RefreshesUser, UserResolverContract
 {
     public function findOrImportUser(Identity $identity): mixed
     {
@@ -42,5 +43,26 @@ class UserResolver implements UserResolverContract
         }
 
         return $user;
+    }
+
+    /**
+     * Turn what the session holds back into a User on every request.
+     *
+     * Laravel serializes sessions as JSON, so the model SESAME stored at
+     * sign-in comes back on the next request as a plain array. Everything
+     * that asked "is this a User?" said no: the profile form called the
+     * user's own email "already taken" and deleting the account answered 403.
+     * Looking the user up again also means a deleted user is signed out
+     * (SESAME's user_gone) instead of browsing on as a ghost.
+     */
+    public function refreshUser(mixed $user): mixed
+    {
+        $id = match (true) {
+            $user instanceof User => $user->getKey(),
+            is_array($user) => $user['id'] ?? null,
+            default => null,
+        };
+
+        return is_int($id) || is_string($id) ? User::find($id) : null;
     }
 }

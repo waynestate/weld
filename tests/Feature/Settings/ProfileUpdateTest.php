@@ -138,4 +138,47 @@ class ProfileUpdateTest extends TestCase
 
         $this->assertNotNull($user->fresh());
     }
+
+    /**
+     * The tests above run on the array session, which hands the stored model
+     * straight back. A real app's session is JSON, so on every request after
+     * sign-in SESAME's stored user arrives as a plain array. This is that
+     * request, and it is the one the browser makes.
+     */
+    protected function storeUserTheWayJsonSessionsReturnIt(User $user): void
+    {
+        $this->app['session.store']->put('sesame.user', json_decode((string) json_encode($user), true));
+    }
+
+    public function test_saving_an_unchanged_email_works_after_a_json_session_round_trip()
+    {
+        $user = $this->signInViaSesame();
+        $this->storeUserTheWayJsonSessionsReturnIt($user);
+
+        $this->patch('/settings/profile', ['name' => 'Jane Q. Doe', 'email' => $user->email])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/settings/profile');
+
+        $this->assertSame('Jane Q. Doe', $user->refresh()->name);
+    }
+
+    public function test_the_account_can_be_deleted_after_a_json_session_round_trip()
+    {
+        $user = $this->signInViaSesame();
+        $this->storeUserTheWayJsonSessionsReturnIt($user);
+
+        $this->delete('/settings/profile', ['confirmation' => $user->email])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/');
+
+        $this->assertNull($user->fresh());
+    }
+
+    public function test_a_user_deleted_elsewhere_is_signed_out()
+    {
+        $user = $this->signInViaSesame();
+        $user->delete();
+
+        $this->get('/dashboard')->assertRedirect('/login');
+    }
 }
