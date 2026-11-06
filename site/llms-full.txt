@@ -155,6 +155,8 @@ PHPUnit class tests keep working and are converted only when you touch them. `co
 Feature tests to the Laravel app and a fresh database. The suite reads `.env` when it exists, otherwise `.env.example`
 (`tests/Support/SkipEnvFile.php`, the same file Sourdough ships), and runs on a fixed dummy `APP_KEY` set in `phpunit.xml`, so it boots
 with no `.env`; the app refuses that key in production, so a copied test config cannot ship. CI's `php-test` matrix runs `vendor/bin/pest`.
+The accessibility gate checks every committed HTML page under `site/` with axe-core (WCAG 2.2 AA, light and dark,
+at 360 px and 1280 px) in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
 Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/BEST_PRACTICES.md).
 
@@ -714,6 +716,8 @@ Source: https://weld.apps.wayne.edu/docs/changelog.html
 Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
+
+- Added: an accessibility gate for the site: `scripts/a11y.sh` (Git Bash, Linux, macOS) and `scripts/a11y.ps1` (Windows) run axe-core (WCAG 2.2 AA, light and dark, at 360 px and 1280 px) in Docker over every committed HTML page under `site/`, so the Proof page's hand-run check is repeatable with one command; the first full run checked all 23 pages with 0 violations.
 
 ### 0.1.3 (2026-11-06)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-3-2026-11-06)
 
