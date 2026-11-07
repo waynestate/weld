@@ -8,7 +8,7 @@ The README and the Markdown twin of every page, joined. The index is https://wel
 
 ## README
 
-Source: https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/README.md
+Source: https://github.com/waynestate/weld/blob/HEAD/README.md
 
 ## WELD
 
@@ -20,21 +20,21 @@ Megazord, except it comes with a deploy script and nobody has to shout to make i
 
 ### Documentation
 
-The docs live at [site/docs/index.html](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/site/docs/index.html) and ship to https://weld.apps.wayne.edu/docs/. They are
+The docs live at [site/docs/index.html](https://github.com/waynestate/weld/blob/HEAD/site/docs/index.html) and ship to https://weld.apps.wayne.edu/docs/. They are
 built from `docs/` by the shared docs builder (`composer docs`) and checked in `composer ci`, so the page you read is
 the page that ships: same source, same bead. The docs wear the front page's look: the header is
 `docs/_header.html` and the theme is `docs/theme/weld.css` (named in `docs/docs.json`). Change the look there, never
 in the builder's kit files (`site/assets/docs.css`, `site/assets/docs.js`). In dark mode the docs are the shop after
 hours: steel, cream type and gold, with green kept for the helmet and the footer, not a green wallpaper.
 
-On Citadel the front page and docs are served by the raw-PHP deploy layer in [`deploy/`](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/deploy/): a Squire kit whose
+On Citadel the front page and docs are served by the raw-PHP deploy layer in [`deploy/`](https://github.com/waynestate/weld/blob/HEAD/deploy/): a Squire kit whose
 front controller serves `site/` behind HELMET's security headers. For local development, keep serving `site/` directly.
 
 ### Where the code lives
 
-The canonical repository is on nougat: [enterprise-apps/weld](https://nougat.snu.gs/enterprise-apps/weld). git.wayne.edu and GitHub ([waynestate/weld](https://github.com/waynestate/weld)) are read-only mirrors of it.
-Open issues and merge requests on nougat, not on the mirrors.
-This moves to git.wayne.edu once it has CI runners. The weld is made on nougat; the mirrors only get the polished bead.
+The canonical repository is [enterprise-apps/weld](https://git.wayne.edu/enterprise-apps/weld) on git.wayne.edu. Open issues and merge requests there; tags are made there, by the maintainer, with an approver.
+GitHub ([waynestate/weld](https://github.com/waynestate/weld)) is a read-only push mirror of it: nobody pushes to it, and Packagist reads from it.
+The weld is made on git.wayne.edu; the mirrors only get the polished bead.
 
 **Not to be confused with:** `weld:doctor` checks local setup only; standards checks are PROCTOR's.
 
@@ -49,7 +49,7 @@ cd my-app
 npm ci
 ```
 
-`create-project` installs the newest tagged release, and `main` can be ahead of it (the [CHANGELOG](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/CHANGELOG.md)
+`create-project` installs the newest tagged release, and `main` can be ahead of it (the [CHANGELOG](https://github.com/waynestate/weld/blob/HEAD/CHANGELOG.md)
 lists what is unreleased). 0.1.3 (2026-11-06) is the first tag where WayneUI draws the app; clone when you want
 `main`.
 
@@ -158,7 +158,7 @@ with no `.env`; the app refuses that key in production, so a copied test config 
 The accessibility gate checks every committed HTML page under `site/` with axe-core (WCAG 2.2 AA, light and dark,
 at 360 px and 1280 px) in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
-Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/BEST_PRACTICES.md).
+Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](https://github.com/waynestate/weld/blob/HEAD/BEST_PRACTICES.md).
 
 ### Run it locally
 
@@ -182,10 +182,10 @@ The same subcommands work on every OS:
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs |
 
-Deploying somewhere other than a laptop? [Running WELD off Citadel](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/docs/running-off-citadel.md) covers OpenShift,
+Deploying somewhere other than a laptop? [Running WELD off Citadel](https://github.com/waynestate/weld/blob/HEAD/docs/running-off-citadel.md) covers OpenShift,
 Coolify and plain Docker, with Citadel for comparison.
 
-Does it hold? [Proof](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/docs/reference/proof.md) is the bend test: on 2026-11-06 a new app went from an empty folder to
+Does it hold? [Proof](https://github.com/waynestate/weld/blob/HEAD/docs/reference/proof.md) is the bend test: on 2026-11-06 a new app went from an empty folder to
 a signed-in WayneUI dashboard in about four and a half minutes and to every CI gate green in about eight, with 0
 accessibility violations in 16 page checks, and one small Wayne State app was ported onto it. The run found a blank
 first page and a Windows `up` that emptied the local database; both are fixed, and the open findings are listed there.
@@ -226,7 +226,7 @@ bound to `127.0.0.1`. It fails closed when `WELD_ORACLE_IMAGE` is unset.
 
 ### Check your setup
 
-Maintainers: how to build, test and release this project, and where its data comes from, is in [MAINTAINING.md](https://nougat.snu.gs/enterprise-apps/weld/blob/HEAD/MAINTAINING.md).
+Maintainers: how to build, test and release this project, and where its data comes from, is in [MAINTAINING.md](https://github.com/waynestate/weld/blob/HEAD/MAINTAINING.md).
 
 `weld:doctor` strikes an arc across the local setup and reports every joint: the app key,
 writable storage, the database and pending migrations. One line per check, PASS or WARN or FAIL;
@@ -717,6 +717,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: The canonical repository is git.wayne.edu (ADR-0021); docs, links and package metadata no longer point at the archived nougat copy.
 - Changed: the GitLab `regen-gate` job blocks: `allow_failure` is gone, so new drift against Sourdough's main fails the pipeline. Fix the drift here or upstream in Sourdough, or record the current drift as accepted with `--write-baseline` and commit `.sourdough/regen-baseline.json`; the GitHub pipeline keeps `continue-on-error`.
 - Fixed: the README says Sourdough bakes five shapes, including raw PHP with a Vue SPA, which ships; it no longer says that shape is not available yet.
 - Fixed: `scripts/a11y.ps1` and its `.sh` twin mount the repo read-write instead of read-only plus a named volume for `tools/a11y/node_modules`: Docker Desktop refuses the nested volume, so on Windows the script failed before the container started. `node_modules` is gitignored, so the tree stays clean and npm still installs once and reuses it.
@@ -825,11 +826,11 @@ This page tells you how to build, test, keep current and release WELD, and where
 
 ### Where it lives[#](https://weld.apps.wayne.edu/docs/contributing.html#where-it-lives)
 
-Development happens on nougat, the canonical repository: [enterprise-apps/weld](https://nougat.snu.gs/enterprise-apps/weld). The GitHub repository and git.wayne.edu are read-only mirrors: `main` and tags are copied automatically. Changes, issues and merge requests go to nougat. Nobody pushes to the mirrors.
+Development happens on git.wayne.edu, the canonical repository: [enterprise-apps/weld](https://git.wayne.edu/enterprise-apps/weld). Changes, issues and merge requests go there; tags are made there, by the maintainer, with an approver. The GitHub repository ([waynestate/weld](https://github.com/waynestate/weld)) is a read-only push mirror: `main` and tags are copied automatically, nobody pushes to it, and Packagist reads from it.
 
 Note
 
-This moves to git.wayne.edu once it has CI runners. The weld is made on nougat; the mirrors only get the polished bead.
+The weld is made on git.wayne.edu; the mirrors only get the polished bead.
 
 ### Build and test[#](https://weld.apps.wayne.edu/docs/contributing.html#build-and-test)
 
@@ -929,7 +930,7 @@ WELD has no tags yet. When it gets one:
 1. Move the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. All the checks above green locally, then both pipelines green for that commit.
 3. Run a secrets scan of the history and check that nothing internal (server names, people, IDs) is in the tree.
-4. Tag `X.Y.Z` (no `v`) on nougat. The mirror carries the tag to GitHub.
+4. Tag `X.Y.Z` (no `v`) on git.wayne.edu, with an approver. The push mirror carries the tag to GitHub.
 5. A release needs a maintainer's approval. Never move or delete a published tag.
 
 ### Running it elsewhere[#](https://weld.apps.wayne.edu/docs/contributing.html#running-it-elsewhere)
@@ -2426,7 +2427,7 @@ WELD is tagged (0.1.0 through 0.1.3 so far). A release:
 1. Moves the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. Needs all the checks green locally, then both pipelines green for that commit.
 3. Runs a secrets scan of the history and checks that nothing internal (server names, people, IDs) is in the tree.
-4. Tags `X.Y.Z` (no `v`) on nougat; the mirror carries the tag to GitHub.
+4. Tags `X.Y.Z` (no `v`) on git.wayne.edu, with an approver; the push mirror carries the tag to GitHub.
 5. Needs a maintainer's approval. Never move or delete a published tag.
 
 ### Breaking changes[#](https://weld.apps.wayne.edu/docs/upgrading.html#breaking-changes)

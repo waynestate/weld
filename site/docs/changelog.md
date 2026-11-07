@@ -12,6 +12,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: The canonical repository is git.wayne.edu (ADR-0021); docs, links and package metadata no longer point at the archived nougat copy.
 - Changed: the GitLab `regen-gate` job blocks: `allow_failure` is gone, so new drift against Sourdough's main fails the pipeline. Fix the drift here or upstream in Sourdough, or record the current drift as accepted with `--write-baseline` and commit `.sourdough/regen-baseline.json`; the GitHub pipeline keeps `continue-on-error`.
 - Fixed: the README says Sourdough bakes five shapes, including raw PHP with a Vue SPA, which ships; it no longer says that shape is not available yet.
 - Fixed: `scripts/a11y.ps1` and its `.sh` twin mount the repo read-write instead of read-only plus a named volume for `tools/a11y/node_modules`: Docker Desktop refuses the nested volume, so on Windows the script failed before the container started. `node_modules` is gitignored, so the tree stays clean and npm still installs once and reuses it.

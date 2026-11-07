@@ -54,7 +54,7 @@ WELD is tagged (0.1.0 through 0.1.3 so far). A release:
 1. Moves the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. Needs all the checks green locally, then both pipelines green for that commit.
 3. Runs a secrets scan of the history and checks that nothing internal (server names, people, IDs) is in the tree.
-4. Tags `X.Y.Z` (no `v`) on nougat; the mirror carries the tag to GitHub.
+4. Tags `X.Y.Z` (no `v`) on git.wayne.edu, with an approver; the push mirror carries the tag to GitHub.
 5. Needs a maintainer's approval. Never move or delete a published tag.
 
 ## Breaking changes[#](https://weld.apps.wayne.edu/docs/upgrading.html#breaking-changes)
