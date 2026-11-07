@@ -13,6 +13,7 @@ Notable changes to WELD, newest first.
 ## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
 - Added: an accessibility gate for the site: `scripts/a11y.sh` (Git Bash, Linux, macOS) and `scripts/a11y.ps1` (Windows) run axe-core (WCAG 2.2 AA, light and dark, at 360 px and 1280 px) in Docker over every committed HTML page under `site/`, so the Proof page's hand-run check is repeatable with one command; the first full run checked all 23 pages with 0 violations.
+- Added: The Proof page records its last run.
 
 ## 0.1.3 (2026-11-06)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-3-2026-11-06)
 

@@ -12,6 +12,22 @@ This page says how WELD was proven on 2026-11-06: a new app made from a clean fo
 
 Welders prove a joint with a bend test: cut a strip across the seam, bend it double, and look for cracks. WELD's promise is that a Wayne State developer gets a full, working, accessible app quickly with the whole stack already joined. So the strip was a brand-new app, and the bending was done by a stopwatch, the app's own gates and a browser.
 
+## Last run[#](https://weld.apps.wayne.edu/docs/reference/proof.html#last-run)
+
+Run on one Windows machine with Docker Desktop, at commit `baf8e60`; durations are wall clock, including dependency installs where a command makes them.
+
+| Check | Date | Commit | Result | Duration |
+| --- | --- | --- | --- | --- |
+| `composer ci` (Pest, Pint, PHPStan level 8, agent-ready, docs site, audit) | 2026-11-07 | `baf8e60` | Pass: 90 tests (261 assertions), none risky; 67 files formatted; no PHPStan errors; no advisories | 470 s |
+| `composer proctor` | 2026-11-07 | `baf8e60` | Pass, 1 warning: the PHP 8.3 floor is in security-only support until 2027-12-31 | 176 s |
+| `ziggy` job | 2026-11-07 | `baf8e60` | Pass: the regenerated route list matches the committed one | 174 s |
+| `frontend` job (ESLint, Prettier, vue-tsc, Vite) | 2026-11-07 | `baf8e60` | Pass: lint, format and types clean; 168 modules built | 27 s |
+| Accessibility gate (axe-core, WCAG 2.2 AA) | 2026-11-07 | `baf8e60` | Pass: 23 pages, 0 violations, light and dark at 360 px and 1280 px | 69 s |
+| Regen gate (a fresh `sourdough new --inertia` compared with WELD) | 2026-11-07 | `baf8e60` | Fails: 4 new drift paths not in the baseline (`docker-compose.squire.yml`, `eslint.config.js`, `resources/js/components/AppHeader.vue`, `resources/js/navigation.ts`); CI runs the job warning-only | 10 s |
+| `weld:doctor` | 2026-11-07 | `baf8e60` | Pass: 4 PASS (app key, storage, database, migrations) | 21 s |
+
+Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with `composer docs` and `composer site:agent-ready`. The `create-project` path, the signed-in app-page accessibility checks and the `up` timings are not in the table: the first installs the newest public tag instead of this commit, and the rest need the running stack and a browser.
+
 ## What ran[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-ran)
 
 One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html) says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.

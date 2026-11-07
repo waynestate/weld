@@ -40,6 +40,71 @@
       <article class="docs-article"><h1 id="proof">Proof<a class="docs-heading-link" aria-label="Link to this section" href="#proof">#</a></h1>
 <p>This page says how WELD was proven on 2026-11-06: a new app made from a clean folder the way this site tells you to, every gate WELD ships run against it, and one small Wayne State app ported onto it. It lists what held, what broke, what was fixed that night, and what it does not prove yet. Next, see the <a href="../guides/quick-start.html">Quick start</a> for the steps the run followed and <a href="../troubleshooting.html">Troubleshooting</a> for the fixes it produced.</p>
 <p>Welders prove a joint with a bend test: cut a strip across the seam, bend it double, and look for cracks. WELD's promise is that a Wayne State developer gets a full, working, accessible app quickly with the whole stack already joined. So the strip was a brand-new app, and the bending was done by a stopwatch, the app's own gates and a browser.</p>
+<h2 id="last-run">Last run<a class="docs-heading-link" aria-label="Link to this section" href="#last-run">#</a></h2>
+<p>Run on one Windows machine with Docker Desktop, at commit <code>baf8e60</code>; durations are wall clock, including dependency installs where a command makes them.</p>
+<div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Date</th>
+<th>Commit</th>
+<th>Result</th>
+<th>Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>composer ci</code> (Pest, Pint, PHPStan level 8, agent-ready, docs site, audit)</td>
+<td>2026-11-07</td>
+<td><code>baf8e60</code></td>
+<td>Pass: 90 tests (261 assertions), none risky; 67 files formatted; no PHPStan errors; no advisories</td>
+<td>470 s</td>
+</tr>
+<tr>
+<td><code>composer proctor</code></td>
+<td>2026-11-07</td>
+<td><code>baf8e60</code></td>
+<td>Pass, 1 warning: the PHP 8.3 floor is in security-only support until 2027-12-31</td>
+<td>176 s</td>
+</tr>
+<tr>
+<td><code>ziggy</code> job</td>
+<td>2026-11-07</td>
+<td><code>baf8e60</code></td>
+<td>Pass: the regenerated route list matches the committed one</td>
+<td>174 s</td>
+</tr>
+<tr>
+<td><code>frontend</code> job (ESLint, Prettier, vue-tsc, Vite)</td>
+<td>2026-11-07</td>
+<td><code>baf8e60</code></td>
+<td>Pass: lint, format and types clean; 168 modules built</td>
+<td>27 s</td>
+</tr>
+<tr>
+<td>Accessibility gate (axe-core, WCAG 2.2 AA)</td>
+<td>2026-11-07</td>
+<td><code>baf8e60</code></td>
+<td>Pass: 23 pages, 0 violations, light and dark at 360 px and 1280 px</td>
+<td>69 s</td>
+</tr>
+<tr>
+<td>Regen gate (a fresh <code>sourdough new --inertia</code> compared with WELD)</td>
+<td>2026-11-07</td>
+<td><code>baf8e60</code></td>
+<td>Fails: 4 new drift paths not in the baseline (<code>docker-compose.squire.yml</code>, <code>eslint.config.js</code>, <code>resources/js/components/AppHeader.vue</code>, <code>resources/js/navigation.ts</code>); CI runs the job warning-only</td>
+<td>10 s</td>
+</tr>
+<tr>
+<td><code>weld:doctor</code></td>
+<td>2026-11-07</td>
+<td><code>baf8e60</code></td>
+<td>Pass: 4 PASS (app key, storage, database, migrations)</td>
+<td>21 s</td>
+</tr>
+</tbody>
+</table></div>
+<p>Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with <code>composer docs</code> and <code>composer site:agent-ready</code>. The <code>create-project</code> path, the signed-in app-page accessibility checks and the <code>up</code> timings are not in the table: the first installs the newest public tag instead of this commit, and the rest need the running stack and a browser.</p>
 <h2 id="what-ran">What ran<a class="docs-heading-link" aria-label="Link to this section" href="#what-ran">#</a></h2>
 <p>One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the <a href="../guides/quick-start.html">Quick start</a> says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.</p>
 <ol>
@@ -259,7 +324,7 @@ docker compose run --rm app composer proctor
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/reference/configuration.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Configuration</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/troubleshooting.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Troubleshooting</span></a></nav>
   </div>
-  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#what-ran">What ran</a></li><li class="docs-toc__item"><a href="#results">Results</a></li><li class="docs-toc__item"><a href="#wayneui-in-the-pages">WayneUI in the pages</a></li><li class="docs-toc__item"><a href="#a-port-one-small-app-onto-weld">A port: one small app onto WELD</a></li><li class="docs-toc__item"><a href="#what-it-caught-in-weld">What it caught in WELD</a></li><li class="docs-toc__item"><a href="#what-this-does-not-prove">What this does not prove</a></li><li class="docs-toc__item"><a href="#run-it-yourself">Run it yourself</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#last-run">Last run</a></li><li class="docs-toc__item"><a href="#what-ran">What ran</a></li><li class="docs-toc__item"><a href="#results">Results</a></li><li class="docs-toc__item"><a href="#wayneui-in-the-pages">WayneUI in the pages</a></li><li class="docs-toc__item"><a href="#a-port-one-small-app-onto-weld">A port: one small app onto WELD</a></li><li class="docs-toc__item"><a href="#what-it-caught-in-weld">What it caught in WELD</a></li><li class="docs-toc__item"><a href="#what-this-does-not-prove">What this does not prove</a></li><li class="docs-toc__item"><a href="#run-it-yourself">Run it yourself</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.3</span></span>
