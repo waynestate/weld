@@ -42,6 +42,7 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased">Unreleased<a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></h2>
 <ul>
+<li>Changed: the front page's deploy layer (<code>deploy/</code>) runs Squire's kit 0.5.0 (was 0.4.0): <code>.squire/base-fallback.Dockerfile</code> and <code>scripts/parity.ps1</code> take the new templates, and <code>docker-compose.squire.yml</code>, which Renovate had edited, is Squire's template again, so <code>squire init --check</code> passes.</li>
 <li>Changed: The canonical repository is git.wayne.edu (ADR-0021); docs, links and package metadata no longer point at the archived nougat copy.</li>
 <li>Changed: the GitLab <code>regen-gate</code> job blocks: <code>allow_failure</code> is gone, so new drift against Sourdough's main fails the pipeline. Fix the drift here or upstream in Sourdough, or record the current drift as accepted with <code>--write-baseline</code> and commit <code>.sourdough/regen-baseline.json</code>; the GitHub pipeline keeps <code>continue-on-error</code>.</li>
 <li>Fixed: the README says Sourdough bakes five shapes, including raw PHP with a Vue SPA, which ships; it no longer says that shape is not available yet.</li>
