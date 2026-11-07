@@ -45,15 +45,15 @@
 <p>Fill in one set of names in <code>.env</code> (the commented block in <code>.env.example</code>): <code>ORACLE_USERNAME</code>, <code>ORACLE_PASSWORD</code>, and either <code>ORACLE_TNS</code> (an Easy Connect string, <code>host:port/service</code>, or a full descriptor) or <code>ORACLE_HOST</code>, <code>ORACLE_PORT</code> and <code>ORACLE_SERVICE_NAME</code>. Leave them empty if your app does not use Oracle; nothing connects until they are set. On a server, set them in the app's environment settings, never in a file in git.</p>
 <h2 id="check-the-connection">Check the connection<a class="docs-heading-link" aria-label="Link to this section" href="#check-the-connection">#</a></h2>
 <p>Check the settings and the connection in plain language, one line per finding:</p>
-<pre><code>php artisan oracle:check
+<pre tabindex="0"><code>php artisan oracle:check
 </code></pre>
 <p><code>oracle:check</code> is a thin wire to Squire's shared check file: it runs <code>deploy/oracle-check.php</code> with the current environment, streams the plain-language lines straight through, and returns the check's exit code, 0 when Oracle is not configured or all passed and 1 when a problem was found. The check file promises to never print a setting value. WELD does not own the check; a kit refresh (<code>vendor/bin/squire update</code>) puts the file here. If the check file is not there yet, the command tells you to run <code>vendor/bin/squire update</code> to get it.</p>
 <h2 id="a-real-connection-from-your-machine">A real connection from your machine<a class="docs-heading-link" aria-label="Link to this section" href="#a-real-connection-from-your-machine">#</a></h2>
 <p>The local <code>app</code> container runs the stock Composer image, which has no Oracle driver. When you need a real connection from your machine, the Oracle-ready image is opt-in through <code>compose.oracle.yaml</code>:</p>
-<div class="docs-tabs" data-tabs="powershell|macos / linux"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">$env:WELD_ORACLE_IMAGE = &quot;squire/oracle-parity:8.3&quot;
+<div class="docs-tabs" data-tabs="powershell|macos / linux"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">$env:WELD_ORACLE_IMAGE = &quot;squire/oracle-parity:8.3&quot;
 docker compose -f compose.yaml -f compose.oracle.yaml up
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="macOS / Linux"><p class="docs-tabs__label">macOS / Linux</p><pre><code class="language-sh">WELD_ORACLE_IMAGE=squire/oracle-parity:8.3 docker compose -f compose.yaml -f compose.oracle.yaml up
+<div class="docs-tabs__panel" data-tab-label="macOS / Linux"><p class="docs-tabs__label">macOS / Linux</p><pre tabindex="0"><code class="language-sh">WELD_ORACLE_IMAGE=squire/oracle-parity:8.3 docker compose -f compose.yaml -f compose.oracle.yaml up
 </code></pre></div></div>
 <p>The overlay swaps only the app's image and passes the <code>ORACLE_*</code> settings through from <code>.env</code>; the ports stay bound to <code>127.0.0.1</code>. It fails closed when <code>WELD_ORACLE_IMAGE</code> is unset.</p>
 <p><code>squire/oracle-parity:8.3</code> is the name Squire documents for its parity image; build it once with Squire's <code>scripts/oracle-image-build.sh --flavour parity --php 8.3</code> (the name is a placeholder until a registry is chosen).</p>

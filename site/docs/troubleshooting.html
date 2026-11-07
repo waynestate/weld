@@ -44,16 +44,16 @@
 <h3 id="the-page-is-blank-except-the-local-ribbon">The page is blank except the <code>local</code> ribbon<a class="docs-heading-link" aria-label="Link to this section" href="#the-page-is-blank-except-the-local-ribbon">#</a></h3>
 <p><strong>Cause.</strong> The page's scripts come from the Vite dev server, at the address Laravel's Vite plugin writes into <code>public/hot</code>. Copies of WELD from before 2026-11-06 ran <code>vite --host</code> in the container, so the plugin wrote the address it listened on, <code>http://[::]:5173</code>, which the browser cannot reach. On any copy, the very first load after <code>up</code> also waits while Vite compiles every module for the first time, which takes 10 to 20 seconds on a Windows bind mount.</p>
 <p><strong>Fix.</strong> Take the current <code>compose.yaml</code> (its <code>vite</code> service runs <code>npm run dev</code> with <code>LARAVEL_SAIL: '1'</code>), restart Vite, and give the first load a moment:</p>
-<pre><code>docker compose up -d vite
+<pre tabindex="0"><code>docker compose up -d vite
 </code></pre>
 <p><strong>Check.</strong> <code>public/hot</code> names an address your browser can open:</p>
-<pre><code>docker compose exec vite cat public/hot
+<pre tabindex="0"><code>docker compose exec vite cat public/hot
 </code></pre>
 <p>Expected: <code>http://localhost:5173</code>.</p>
 <h3 id="a-new-page-says-page-not-found-windows">A new page says &quot;Page not found&quot; (Windows)<a class="docs-heading-link" aria-label="Link to this section" href="#a-new-page-says-page-not-found-windows">#</a></h3>
 <p><strong>Cause.</strong> Docker Desktop on Windows passes edits to existing files into the Vite container, but not new files. Vite builds the list of pages when it starts, so a page added after <code>up</code> is missing from it, and Inertia throws <code>Page not found: ./pages/YourPage.vue</code> in the browser console.</p>
 <p><strong>Fix.</strong> Restart Vite after adding a page:</p>
-<pre><code>docker compose restart vite
+<pre tabindex="0"><code>docker compose restart vite
 </code></pre>
 <p><strong>Check.</strong> Reload the page: it draws, and the console is quiet.</p>
 <h3 id="the-local-database-was-empty-after-up-windows">The local database was empty after <code>up</code> (Windows)<a class="docs-heading-link" aria-label="Link to this section" href="#the-local-database-was-empty-after-up-windows">#</a></h3>
@@ -63,29 +63,29 @@
 <h3 id="composer-ci-fails-because-the-docs-site-is-stale"><code>composer ci</code> fails because the docs site is stale<a class="docs-heading-link" aria-label="Link to this section" href="#composer-ci-fails-because-the-docs-site-is-stale">#</a></h3>
 <p><strong>Cause.</strong> The docs at <code>site/docs/</code> are built from <code>docs/</code> by the shared docs builder, and <code>composer ci</code> runs <code>composer docs:check</code>, which fails when the committed docs site is stale or the docs carry findings. Change a page in <code>docs/</code> or <code>CHANGELOG.md</code> without rebuilding, and the check fails.</p>
 <p><strong>Fix.</strong> Rebuild the site from the source and commit the output. Do not edit <code>site/</code> by hand; the builder writes it, so the page you read is the page that ships.</p>
-<pre><code>composer docs
+<pre tabindex="0"><code>composer docs
 </code></pre>
 <p><code>composer docs</code> writes <code>site/docs/</code> from <code>docs/</code> and generates <code>docs/changelog.md</code> from <code>CHANGELOG.md</code>.</p>
 <p><strong>Check.</strong> Run the same check that <code>composer ci</code> runs; it writes nothing:</p>
-<pre><code>composer docs:check
+<pre tabindex="0"><code>composer docs:check
 </code></pre>
 <h3 id="the-agent-ready-files-are-stale">The agent-ready files are stale<a class="docs-heading-link" aria-label="Link to this section" href="#the-agent-ready-files-are-stale">#</a></h3>
 <p><strong>Cause.</strong> The agent-ready site (prompt blocks, Markdown twins, llms.txt) comes from Squire's kit and is generated into <code>site/</code>. <code>composer ci</code> runs <code>composer site:agent-ready-check</code>, which fails when the agent-ready files are stale, a page lacks its Markdown link, a prompt drifts from the docs, or the kit was edited here.</p>
 <p><strong>Fix.</strong> Regenerate the files and commit the result:</p>
-<pre><code>composer site:agent-ready
+<pre tabindex="0"><code>composer site:agent-ready
 </code></pre>
 <p>That rewrites the Markdown twins, llms.txt, llms-full.txt, robots.txt and sitemap.xml in <code>site/</code>.</p>
 <p><strong>Check.</strong></p>
-<pre><code>composer site:agent-ready-check
+<pre tabindex="0"><code>composer site:agent-ready-check
 </code></pre>
 <h3 id="regen-check-reports-new-drift">regen-check reports new drift<a class="docs-heading-link" aria-label="Link to this section" href="#regen-check-reports-new-drift">#</a></h3>
 <p><strong>Cause.</strong> The regen gate compares a freshly generated Sourdough Inertia app with WELD file by file, from Sourdough's <code>.sourdough/manifest.json</code> (each path with its SHA-256). It skips the product files listed in <code>.sourdough/product-files.json</code> and any <code>vendor</code> or <code>node_modules</code> path, and reports each remaining path as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED (a Squire kit file WELD keeps byte-identical under <code>deploy/</code>). The gate is a ratchet: <code>.sourdough/regen-baseline.json</code> records the drift already known and accepted, and the check fails only on new drift, so a change in what Sourdough generates surfaces here.</p>
 <p><strong>Fix.</strong> Fix the drift here or upstream in Sourdough. If the drift is accepted as intended, record the current drift as accepted and commit <code>.sourdough/regen-baseline.json</code>:</p>
-<pre><code>php bin/regen-check.php --generated &lt;dir&gt; --write-baseline
+<pre tabindex="0"><code>php bin/regen-check.php --generated &lt;dir&gt; --write-baseline
 </code></pre>
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>The regen gate is not part of <code>composer ci</code>. CI runs it as a separate, warning-only job, and the GitHub pipeline keeps it warning-only with <code>continue-on-error</code> until the baseline is filled in.</p></aside>
 <p><strong>Check.</strong> Re-run the check against your own generation; it passes once every path is IDENTICAL or already recorded in the baseline:</p>
-<pre><code>php bin/regen-check.php --generated &lt;dir&gt;
+<pre tabindex="0"><code>php bin/regen-check.php --generated &lt;dir&gt;
 </code></pre>
 <p>Through Composer the same check is <code>composer regen-check -- --generated &lt;dir&gt;</code>.</p>
 <h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>

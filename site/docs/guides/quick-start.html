@@ -45,9 +45,9 @@ containers, so the host needs neither.</p>
 <ol>
 <li>
 <p>Bring the stack up:</p>
-<div class="docs-tabs" data-tabs="powershell|macos / linux"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 up
+<div class="docs-tabs" data-tabs="powershell|macos / linux"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 up
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="macOS / Linux"><p class="docs-tabs__label">macOS / Linux</p><pre><code class="language-sh">bin/weld.sh up
+<div class="docs-tabs__panel" data-tab-label="macOS / Linux"><p class="docs-tabs__label">macOS / Linux</p><pre tabindex="0"><code class="language-sh">bin/weld.sh up
 </code></pre></div></div>
 <p>Expected: <code>up</code> copies <code>.env.example</code> to <code>.env</code> if it is missing, installs the PHP and Node dependencies in the
 containers, starts the app and Vite, generates the app key if it is not set, and runs the migrations.</p>
@@ -57,18 +57,18 @@ containers, starts the app and Vite, generates the app key if it is not set, and
 </li>
 <li>
 <p>Run the doctor:</p>
-<div class="docs-tabs" data-tabs="powershell|macos / linux"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 doctor
+<div class="docs-tabs" data-tabs="powershell|macos / linux"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 doctor
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="macOS / Linux"><p class="docs-tabs__label">macOS / Linux</p><pre><code class="language-sh">bin/weld.sh doctor
+<div class="docs-tabs__panel" data-tab-label="macOS / Linux"><p class="docs-tabs__label">macOS / Linux</p><pre tabindex="0"><code class="language-sh">bin/weld.sh doctor
 </code></pre></div></div>
 <p>Expected: one line per check, PASS or WARN or FAIL; exit code 1 when anything FAILs. A good bead is a quiet one:
 all PASS and nothing to say.</p>
 </li>
 <li>
 <p>Run the checks:</p>
-<div class="docs-tabs" data-tabs="powershell|macos / linux"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 test
+<div class="docs-tabs" data-tabs="powershell|macos / linux"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 test
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="macOS / Linux"><p class="docs-tabs__label">macOS / Linux</p><pre><code class="language-sh">bin/weld.sh test
+<div class="docs-tabs__panel" data-tab-label="macOS / Linux"><p class="docs-tabs__label">macOS / Linux</p><pre tabindex="0"><code class="language-sh">bin/weld.sh test
 </code></pre></div></div>
 <p>Expected: <code>composer ci</code> runs in the app container: validate, tests, Pint, PHPStan level 8, the agent-ready check
 and audit.</p>

@@ -44,25 +44,25 @@
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>This moves to git.wayne.edu once it has CI runners. The weld is made on nougat; the mirrors only get the polished bead.</p></aside>
 <h2 id="build-and-test">Build and test<a class="docs-heading-link" aria-label="Link to this section" href="#build-and-test">#</a></h2>
 <p>The Docker path installs, migrates and serves in one command:</p>
-<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh up
+<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh up
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 up
+<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 up
 </code></pre></div></div>
 <p>All checks run <code>composer ci</code> in the container:</p>
-<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh test
+<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh test
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 test
+<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 test
 </code></pre></div></div>
 <p>Check your setup:</p>
-<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh doctor
+<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh doctor
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 doctor
+<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 doctor
 </code></pre></div></div>
 <p>Logs and stop:</p>
-<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh logs
+<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh logs
 bin/weld.sh down
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 logs
+<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 logs
 .\bin\weld.ps1 down
 </code></pre></div></div>
 <p>Without Docker: run <code>composer install</code>, <code>npm ci</code>, copy <code>.env.example</code> to <code>.env</code>, <code>php artisan key:generate</code>, then <code>composer ci</code>.</p>

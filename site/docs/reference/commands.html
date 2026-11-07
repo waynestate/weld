@@ -73,29 +73,29 @@
 </table></div>
 <aside class="docs-callout docs-callout--tip" role="note"><p class="docs-callout__label">Tip</p><p><code>up</code> finishes with a pointer to open <a rel="noopener" href="http://localhost:8000">http://localhost:8000</a>. Skip the ADVISOR step with <code>--no-advisor</code> (<code>-NoAdvisor</code> on Windows).</p></aside>
 <p>Bring the whole stack up:</p>
-<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 up
+<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 up
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh up
+<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh up
 </code></pre></div></div>
 <p>Run the full check suite in the app container:</p>
-<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 test
+<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 test
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh test
+<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh test
 </code></pre></div></div>
 <p>Check your setup:</p>
-<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 doctor
+<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 doctor
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh doctor
+<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh doctor
 </code></pre></div></div>
 <p>Follow the container logs:</p>
-<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 logs
+<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 logs
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh logs
+<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh logs
 </code></pre></div></div>
 <p>Stop and remove the containers:</p>
-<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 down
+<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 down
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh down
+<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh down
 </code></pre></div></div>
 <h2 id="composer-scripts">Composer scripts<a class="docs-heading-link" aria-label="Link to this section" href="#composer-scripts">#</a></h2>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
@@ -160,11 +160,11 @@
 <h3 id="php-artisan-weld-doctor"><code>php artisan weld:doctor</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-artisan-weld-doctor">#</a></h3>
 <p><code>weld:doctor</code> strikes an arc across the local setup and reports every joint: the app key, writable storage, the database and pending migrations. One line per check, PASS or WARN or FAIL; exit code 1 when anything FAILs, so it works as a gate. The standards checks (PHP version, debug in production, secure session cookies) belong to PROCTOR: run <code>composer proctor</code>, and the doctor report says so. A good bead is a quiet one: all PASS and nothing to say.</p>
 <p>Add <code>--json</code> to any of these for a machine-readable report. Run it through the <code>doctor</code> subcommand above, or straight to the container:</p>
-<div class="docs-tabs" data-tabs="powershell|sh|docker"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">.\bin\weld.ps1 doctor
+<div class="docs-tabs" data-tabs="powershell|sh|docker"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 doctor
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">bin/weld.sh doctor
+<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh doctor
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="Docker"><p class="docs-tabs__label">Docker</p><pre><code class="language-sh">docker compose run --rm app php artisan weld:doctor
+<div class="docs-tabs__panel" data-tab-label="Docker"><p class="docs-tabs__label">Docker</p><pre tabindex="0"><code class="language-sh">docker compose run --rm app php artisan weld:doctor
 </code></pre></div></div>
 <h3 id="php-bin-regen-check-php"><code>php bin/regen-check.php</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-bin-regen-check-php">#</a></h3>
 <p><code>bin/regen-check.php</code> compares a freshly generated Sourdough Inertia app (its <code>.sourdough/manifest.json</code>, each path with its SHA-256) with WELD file by file, skipping the product files listed in <code>.sourdough/product-files.json</code> and any <code>vendor</code> or <code>node_modules</code> path. Each remaining path is reported as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED. The gate is a ratchet: <code>.sourdough/regen-baseline.json</code> records the drift already known and accepted, and the check fails only on new drift. It is not part of <code>composer ci</code>; CI runs it as a separate, warning-only job.</p>

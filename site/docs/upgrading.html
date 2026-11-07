@@ -42,16 +42,16 @@
 <h2 id="take-stack-changes">Take stack changes<a class="docs-heading-link" aria-label="Link to this section" href="#take-stack-changes">#</a></h2>
 <p>WELD owns its app code. The wiring files are marked and refreshed by <code>sourdough feed</code>, not hand-edited, so the app does not fork from the stack. Sourdough is not a dependency yet, so there is no feed to run today; the target is for WELD's CI to run <code>sourdough feed</code> against each stack release and fail on drift.</p>
 <p>When HELMET, SESAME, CREED or PROCTOR releases, raise the constraint here, run all the checks, and commit the lock file:</p>
-<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre><code class="language-sh">composer require waynestate/&lt;part&gt;:^0.x
+<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">composer require waynestate/&lt;part&gt;:^0.x
 bin/weld.sh test
 </code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre><code class="language-powershell">composer require waynestate/&lt;part&gt;:^0.x
+<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">composer require waynestate/&lt;part&gt;:^0.x
 .\bin\weld.ps1 test
 </code></pre></div></div>
 <p><code>&lt;part&gt;</code> is the lowercase package name: <code>helmet</code>, <code>sesame</code>, <code>creed</code> or <code>proctor</code>.</p>
 <p>When Laravel, Inertia or Vue release, Booster's hops are the way to move; WELD is a good first test for them.</p>
 <p>After route changes, regenerate Ziggy and commit the result:</p>
-<pre><code class="language-sh">composer ziggy
+<pre tabindex="0"><code class="language-sh">composer ziggy
 git diff --exit-code resources/js/ziggy.*
 </code></pre>
 <p>When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in Sourdough; if the drift is accepted as intended, record it with <code>--write-baseline</code> and commit <code>.sourdough/regen-baseline.json</code>.</p>
@@ -68,7 +68,7 @@ git diff --exit-code resources/js/ziggy.*
 </ol>
 <h2 id="breaking-changes">Breaking changes<a class="docs-heading-link" aria-label="Link to this section" href="#breaking-changes">#</a></h2>
 <p>No released version (0.1.0 through 0.1.3) carries a breaking change yet, so upgrading is just taking in the new release:</p>
-<pre><code class="language-sh">composer require waynestate/&lt;part&gt;:^0.x
+<pre tabindex="0"><code class="language-sh">composer require waynestate/&lt;part&gt;:^0.x
 </code></pre>
 <p>Then run all the checks and commit the lock file.</p>
 <h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>

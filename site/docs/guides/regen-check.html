@@ -54,10 +54,10 @@ fails only on new drift. CI runs it against a fresh <code>sourdough new --inerti
 locally, point it at your own generation.</p>
 <h2 id="running-the-check">Running the check<a class="docs-heading-link" aria-label="Link to this section" href="#running-the-check">#</a></h2>
 <p>Run the check:</p>
-<pre><code class="language-sh">php bin/regen-check.php --generated &lt;dir&gt;
+<pre tabindex="0"><code class="language-sh">php bin/regen-check.php --generated &lt;dir&gt;
 </code></pre>
 <p>or through Composer:</p>
-<pre><code class="language-sh">composer regen-check -- --generated &lt;dir&gt;
+<pre tabindex="0"><code class="language-sh">composer regen-check -- --generated &lt;dir&gt;
 </code></pre>
 <p>Record the current drift as accepted: add <code>--write-baseline</code>.</p>
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>Exit codes: 0 no new drift (or the baseline was written), 1 new drift, listed on stderr, 2 usage error. The script
