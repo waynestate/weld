@@ -41,7 +41,7 @@
 <p>This page says how WELD was proven on 2026-11-06: a new app made from a clean folder the way this site tells you to, every gate WELD ships run against it, and one small Wayne State app ported onto it. It lists what held, what broke, what was fixed that night, and what it does not prove yet. Next, see the <a href="../guides/quick-start.html">Quick start</a> for the steps the run followed and <a href="../troubleshooting.html">Troubleshooting</a> for the fixes it produced.</p>
 <p>Welders prove a joint with a bend test: cut a strip across the seam, bend it double, and look for cracks. WELD's promise is that a Wayne State developer gets a full, working, accessible app quickly with the whole stack already joined. So the strip was a brand-new app, and the bending was done by a stopwatch, the app's own gates and a browser.</p>
 <h2 id="last-run">Last run<a class="docs-heading-link" aria-label="Link to this section" href="#last-run">#</a></h2>
-<p>Run on one Windows machine with Docker Desktop, at commit <code>baf8e60</code>; durations are wall clock, including dependency installs where a command makes them.</p>
+<p>Run on one Windows machine with Docker Desktop; durations are wall clock, including dependency installs where a command makes them.</p>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
 <tr>
@@ -56,9 +56,9 @@
 <tr>
 <td><code>composer ci</code> (Pest, Pint, PHPStan level 8, agent-ready, docs site, audit)</td>
 <td>2026-11-07</td>
-<td><code>baf8e60</code></td>
+<td><code>e555f03</code></td>
 <td>Pass: 90 tests (261 assertions), none risky; 67 files formatted; no PHPStan errors; no advisories</td>
-<td>470 s</td>
+<td>163 s (warm vendor)</td>
 </tr>
 <tr>
 <td><code>composer proctor</code></td>
@@ -84,16 +84,16 @@
 <tr>
 <td>Accessibility gate (axe-core, WCAG 2.2 AA)</td>
 <td>2026-11-07</td>
-<td><code>baf8e60</code></td>
+<td><code>e555f03</code></td>
 <td>Pass: 23 pages, 0 violations, light and dark at 360 px and 1280 px</td>
-<td>69 s</td>
+<td>70 s</td>
 </tr>
 <tr>
 <td>Regen gate (a fresh <code>sourdough new --inertia</code> compared with WELD)</td>
 <td>2026-11-07</td>
-<td><code>baf8e60</code></td>
-<td>Fails: 4 new drift paths not in the baseline (<code>docker-compose.squire.yml</code>, <code>eslint.config.js</code>, <code>resources/js/components/AppHeader.vue</code>, <code>resources/js/navigation.ts</code>); CI runs the job warning-only</td>
-<td>10 s</td>
+<td><code>e555f03</code></td>
+<td>Pass: no new drift against Sourdough main <code>323a82b</code>; every differing or missing path is in the baseline</td>
+<td>60 s</td>
 </tr>
 <tr>
 <td><code>weld:doctor</code></td>
@@ -104,7 +104,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with <code>composer docs</code> and <code>composer site:agent-ready</code>. The <code>create-project</code> path, the signed-in app-page accessibility checks and the <code>up</code> timings are not in the table: the first installs the newest public tag instead of this commit, and the rest need the running stack and a browser.</p>
+<p>Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with <code>composer docs</code> and <code>composer site:agent-ready</code>. The <code>composer ci</code>, accessibility and regen rows above are from this refresh at <code>e555f03</code>: the regen gate now passes against Sourdough's current main (<code>323a82b</code>), with no new drift beyond the recorded baseline, and the accessibility gate runs as <code>scripts/a11y.ps1</code> is written on Docker Desktop, checking all 23 committed pages with 0 violations. The <code>create-project</code> path, the signed-in app-page accessibility checks and the <code>up</code> timings are not in the table: the first installs the newest public tag instead of this commit, and the rest need the running stack and a browser.</p>
 <h2 id="what-ran">What ran<a class="docs-heading-link" aria-label="Link to this section" href="#what-ran">#</a></h2>
 <p>One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the <a href="../guides/quick-start.html">Quick start</a> says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.</p>
 <ol>
