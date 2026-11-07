@@ -15,9 +15,10 @@ so most of the upkeep is keeping the parts it joins current.
 
 ## Where it lives
 
-Development happens on nougat, the canonical repository: [enterprise-apps/weld](https://nougat.snu.gs/enterprise-apps/weld).
-This GitHub repository and git.wayne.edu are read-only mirrors: `main` and tags are copied automatically. Changes,
-issues and merge requests go to nougat. Nobody pushes to the mirrors.
+Development happens on git.wayne.edu, the canonical repository: [enterprise-apps/weld](https://git.wayne.edu/enterprise-apps/weld).
+Changes, issues and merge requests go there; tags are made there, by the maintainer, with an approver. The GitHub
+repository ([waynestate/weld](https://github.com/waynestate/weld)) is a read-only push mirror: `main` and tags are
+copied automatically, nobody pushes to it, and Packagist reads from it.
 
 ## Build and test
 
@@ -79,7 +80,7 @@ WELD is tagged (0.1.0 through 0.1.3 so far). To release a version:
 1. Move the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. All the checks above green locally, then both pipelines green for that commit.
 3. Run a secrets scan of the history and check that nothing internal (server names, people, IDs) is in the tree.
-4. Tag `X.Y.Z` (no `v`) on nougat. The mirror carries the tag to GitHub.
+4. Tag `X.Y.Z` (no `v`) on git.wayne.edu, with an approver. The push mirror carries the tag to GitHub.
 5. A release needs a maintainer's approval. Never move or delete a published tag.
 
 ## Running it elsewhere

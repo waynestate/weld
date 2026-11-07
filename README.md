@@ -31,9 +31,9 @@ front controller serves `site/` behind HELMET's security headers. For local deve
 
 ## Where the code lives
 
-The canonical repository is on nougat: [enterprise-apps/weld](https://nougat.snu.gs/enterprise-apps/weld). git.wayne.edu and GitHub ([waynestate/weld](https://github.com/waynestate/weld)) are read-only mirrors of it.
-Open issues and merge requests on nougat, not on the mirrors.
-This moves to git.wayne.edu once it has CI runners. The weld is made on nougat; the mirrors only get the polished bead.
+The canonical repository is [enterprise-apps/weld](https://git.wayne.edu/enterprise-apps/weld) on git.wayne.edu. Open issues and merge requests there; tags are made there, by the maintainer, with an approver.
+GitHub ([waynestate/weld](https://github.com/waynestate/weld)) is a read-only push mirror of it: nobody pushes to it, and Packagist reads from it.
+The weld is made on git.wayne.edu; the mirrors only get the polished bead.
 
 **Not to be confused with:** `weld:doctor` checks local setup only; standards checks are PROCTOR's.
 
@@ -288,7 +288,7 @@ locally, point it at your own generation:
   <a href="https://github.com/waynestate/pinstripe" title="Pinstripe"><img src="docs/readme/cast/pinstripe.png" width="48" alt="Pinstripe"></a>
   <a href="https://github.com/waynestate/booster" title="Booster"><img src="docs/readme/cast/booster.png" width="48" alt="Booster"></a>
   <a href="https://github.com/waynestate/rollcall" title="Rollcall"><img src="docs/readme/cast/rollcall.png" width="48" alt="Rollcall"></a>
-  <a href="https://nougat.snu.gs/enterprise-apps/drawbridge" title="Drawbridge"><img src="docs/readme/cast/drawbridge.png" width="48" alt="Drawbridge"></a>
+  <a href="https://git.wayne.edu/enterprise-apps/drawbridge" title="Drawbridge"><img src="docs/readme/cast/drawbridge.png" width="48" alt="Drawbridge"></a>
   <a href="https://github.com/waynestate/advisor" title="ADVISOR"><img src="docs/readme/cast/advisor.png" width="48" alt="ADVISOR"></a>
   <a href="https://github.com/waynestate/weld" title="WELD"><img src="docs/readme/cast/weld.png" width="48" alt="WELD"></a>
 </div>
