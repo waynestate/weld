@@ -11,6 +11,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+## 0.1.4 (2026-11-07)
+
 - Changed: the front page's deploy layer (`deploy/`) runs Squire's kit 0.5.0 (was 0.4.0): `.squire/base-fallback.Dockerfile` and `scripts/parity.ps1` take the new templates, and `docker-compose.squire.yml`, which Renovate had edited, is Squire's template again, so `squire init --check` passes.
 - Changed: The canonical repository is git.wayne.edu (ADR-0021); docs, links and package metadata no longer point at the archived nougat copy.
 - Changed: the GitLab `regen-gate` job blocks: `allow_failure` is gone, so new drift against Sourdough's main fails the pipeline. Fix the drift here or upstream in Sourdough, or record the current drift as accepted with `--write-baseline` and commit `.sourdough/regen-baseline.json`; the GitHub pipeline keeps `continue-on-error`.
