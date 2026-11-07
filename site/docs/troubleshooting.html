@@ -83,7 +83,7 @@
 <p><strong>Fix.</strong> Fix the drift here or upstream in Sourdough. If the drift is accepted as intended, record the current drift as accepted and commit <code>.sourdough/regen-baseline.json</code>:</p>
 <pre tabindex="0"><code>php bin/regen-check.php --generated &lt;dir&gt; --write-baseline
 </code></pre>
-<aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>The regen gate is not part of <code>composer ci</code>. CI runs it as a separate, warning-only job, and the GitHub pipeline keeps it warning-only with <code>continue-on-error</code> until the baseline is filled in.</p></aside>
+<aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>The regen gate is not part of <code>composer ci</code>. CI runs it as a separate job: on GitLab new drift fails the job, and the GitHub pipeline keeps it warning-only with <code>continue-on-error</code> until the baseline is filled in.</p></aside>
 <p><strong>Check.</strong> Re-run the check against your own generation; it passes once every path is IDENTICAL or already recorded in the baseline:</p>
 <pre tabindex="0"><code>php bin/regen-check.php --generated &lt;dir&gt;
 </code></pre>

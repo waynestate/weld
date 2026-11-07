@@ -57,7 +57,7 @@ The clone path, the one the Quick start teaches:
 | `composer proctor` | 6 s | Pass, 1 warning (the PHP 8.3 floor is in security-only support) |
 | `frontend` job | 72 s | Pass |
 | `ziggy` job | 7 s | Pass: the committed route list matches |
-| Regen gate | 15 s | Fails with 3 paths of new drift; CI runs it warning-only. Below |
+| Regen gate | 15 s | Fails with 3 paths of new drift; the GitLab job blocks on new drift. Below |
 | Accessibility gate | 65 s | **0 violations** in 16 page checks; 26 to 29 rules passed on each page |
 | A second `bin\weld.ps1 up` | 188 s | **Emptied the local database.** Fixed the same night, below |
 

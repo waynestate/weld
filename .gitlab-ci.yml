@@ -62,11 +62,10 @@ ziggy:
     - git diff --exit-code resources/js/ziggy.*
 
 # REGEN GATE: is WELD still Sourdough's Inertia shape? It generates a fresh
-# app from Sourdough's main and compares it with WELD by SHA-256. Failures
-# are warnings until .sourdough/regen-baseline.json is filled in.
+# app from Sourdough's main and compares it with WELD by SHA-256. New drift
+# blocks the pipeline: fix it, or record it as accepted with --write-baseline.
 regen-gate:
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3
-  allow_failure: true
   script:
     - composer install --no-interaction --no-progress --prefer-dist
     - git clone --depth 1 --branch main https://github.com/waynestate/sourdough.git /tmp/sourdough

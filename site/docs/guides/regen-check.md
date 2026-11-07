@@ -18,7 +18,7 @@ The generated app folder must contain `.sourdough/manifest.json`, the file list 
 
 ## The ratchet baseline[#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#the-ratchet-baseline)
 
-The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift. CI runs it against a fresh `sourdough new --inertia` generation from Sourdough's main; locally, point it at your own generation.
+The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift. CI runs it against a fresh `sourdough new --inertia` generation from Sourdough's main, and the GitLab `regen-gate` job blocks on new drift; locally, point it at your own generation. When it reports new drift, fix it here or upstream in Sourdough; if the drift is accepted as intended, record the current drift as accepted with `--write-baseline` and commit `.sourdough/regen-baseline.json`.
 
 ## Running the check[#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#running-the-check)
 

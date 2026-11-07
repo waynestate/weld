@@ -50,8 +50,10 @@ generates (files maps path to <code>{class, sha256}</code>). Paths listed in <co
 means the WELD file exists with another SHA-256.</p>
 <h2 id="the-ratchet-baseline">The ratchet baseline<a class="docs-heading-link" aria-label="Link to this section" href="#the-ratchet-baseline">#</a></h2>
 <p>The gate is a ratchet: <code>.sourdough/regen-baseline.json</code> records the drift already known and accepted, and the check
-fails only on new drift. CI runs it against a fresh <code>sourdough new --inertia</code> generation from Sourdough's main;
-locally, point it at your own generation.</p>
+fails only on new drift. CI runs it against a fresh <code>sourdough new --inertia</code> generation from Sourdough's main, and
+the GitLab <code>regen-gate</code> job blocks on new drift; locally, point it at your own generation. When it reports new drift,
+fix it here or upstream in Sourdough; if the drift is accepted as intended, record the current drift as accepted with
+<code>--write-baseline</code> and commit <code>.sourdough/regen-baseline.json</code>.</p>
 <h2 id="running-the-check">Running the check<a class="docs-heading-link" aria-label="Link to this section" href="#running-the-check">#</a></h2>
 <p>Run the check:</p>
 <pre tabindex="0"><code class="language-sh">php bin/regen-check.php --generated &lt;dir&gt;

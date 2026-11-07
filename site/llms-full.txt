@@ -110,7 +110,7 @@ git remote set-url origin https://git.example.com/you/my-app.git
 
 Then re-run the checks the way CI does: `.\bin\weld.ps1 test` (or `bin/weld.sh test`), which runs `composer ci` in the container, plus `composer proctor` for the standards check. A photocopy is not a weld yet: when the checks pass under your name, the seam holds.
 
-Want a smaller starting point than a full Laravel app? Sourdough is the starter tool for every shape of Wayne State app. It bakes four shapes today: raw PHP, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue; only raw PHP with a Vue SPA is not available yet. WELD is the Inertia and Vue shape, already assembled with every part wired and ready to clone.
+Want a smaller starting point than a full Laravel app? Sourdough is the starter tool for every shape of Wayne State app. It bakes five shapes: raw PHP, raw PHP with a Vue SPA, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue. WELD is the Inertia and Vue shape, already assembled with every part wired and ready to clone.
 
 ### What is welded in
 
@@ -242,7 +242,7 @@ Add `--json` to any of them for a machine-readable report.
 
 ### WELD and Sourdough
 
-Sourdough is the starter tool for every shape of Wayne State app. It bakes four shapes today: raw PHP, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue; only raw PHP with a Vue SPA is not available yet.
+Sourdough is the starter tool for every shape of Wayne State app. It bakes five shapes: raw PHP, raw PHP with a Vue SPA, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue.
 WELD is one of those shapes, Laravel with Inertia and Vue, with every part already joined and proved to work together.
 Pick Sourdough when you want a starter you shape yourself. Pick WELD when you want the finished piece.
 
@@ -717,6 +717,8 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the GitLab `regen-gate` job blocks: `allow_failure` is gone, so new drift against Sourdough's main fails the pipeline. Fix the drift here or upstream in Sourdough, or record the current drift as accepted with `--write-baseline` and commit `.sourdough/regen-baseline.json`; the GitHub pipeline keeps `continue-on-error`.
+- Fixed: the README says Sourdough bakes five shapes, including raw PHP with a Vue SPA, which ships; it no longer says that shape is not available yet.
 - Fixed: `scripts/a11y.ps1` and its `.sh` twin mount the repo read-write instead of read-only plus a named volume for `tools/a11y/node_modules`: Docker Desktop refuses the nested volume, so on Windows the script failed before the container started. `node_modules` is gitignored, so the tree stays clean and npm still installs once and reuses it.
 - Changed: WELD reconciles with Sourdough main (`323a82b`). `App\Sesame\UserResolver` adopts the template's username lookup (the same fix for Laravel 13's JSON sessions as WELD's id lookup; the docblock keeps WELD's name), and the regen baseline records four product drifts (`docker-compose.squire.yml`, where renovate keeps the haproxy digest newer than the Squire template copy; `eslint.config.js`; `AppHeader.vue`; `navigation.ts`) while dropping 17 paths that converged with the WayneUI-wired template or left it (53 known paths now). The full report of the run against `323a82b` sits at `.sourdough/regen-report-2026-11-07.txt`.
 - Added: an accessibility gate for the site: `scripts/a11y.sh` (Git Bash, Linux, macOS) and `scripts/a11y.ps1` (Windows) run axe-core (WCAG 2.2 AA, light and dark, at 360 px and 1280 px) in Docker over every committed HTML page under `site/`, so the Proof page's hand-run check is repeatable with one command; the first full run checked all 23 pages with 0 violations.
@@ -902,16 +904,16 @@ Without Docker: run `composer install`, `npm ci`, copy `.env.example` to `.env`,
 
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run PROCTOR, Ziggy or the JS lint.
 
-The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (`sourdough new <dir> --inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`). It skips the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path, and fails only on drift that is not already recorded in `.sourdough/regen-baseline.json`; `--write-baseline` records the current drift as accepted. It is not part of `composer ci`; CI runs it as a separate, warning-only job.
+The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (`sourdough new <dir> --inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`). It skips the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path, and fails only on drift that is not already recorded in `.sourdough/regen-baseline.json`; `--write-baseline` records the current drift as accepted. It is not part of `composer ci`; CI runs it as a separate job that blocks on new drift.
 
 Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer (Squire kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.
 
 ### CI[#](https://weld.apps.wayne.edu/docs/contributing.html#ci)
 
-- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `frontend` job (`npm ci`, lint, Prettier, vue-tsc and the build), a `ziggy` drift job and a `regen-gate` job (warning-only until `.sourdough/regen-baseline.json` is filled in).
+- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `frontend` job (`npm ci`, lint, Prettier, vue-tsc and the build), a `ziggy` drift job and a `regen-gate` job (new drift fails the job; `.sourdough/regen-baseline.json` records the drift already accepted).
 - **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci`, runs the same `frontend` job, and runs the same `regen-gate` check (`continue-on-error` until the baseline is filled in).
 
-Green means all of those pass; the regen gate may warn while its baseline is being filled in.
+Green means all of those pass; on GitLab the regen gate blocks on new drift, and on GitHub it may warn while the baseline is being filled in.
 
 ### Keeping the joints current[#](https://weld.apps.wayne.edu/docs/contributing.html#keeping-the-joints-current)
 
@@ -1449,7 +1451,7 @@ The generated app folder must contain `.sourdough/manifest.json`, the file list 
 
 ### The ratchet baseline[#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#the-ratchet-baseline)
 
-The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift. CI runs it against a fresh `sourdough new --inertia` generation from Sourdough's main; locally, point it at your own generation.
+The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift. CI runs it against a fresh `sourdough new --inertia` generation from Sourdough's main, and the GitLab `regen-gate` job blocks on new drift; locally, point it at your own generation. When it reports new drift, fix it here or upstream in Sourdough; if the drift is accepted as intended, record the current drift as accepted with `--write-baseline` and commit `.sourdough/regen-baseline.json`.
 
 ### Running the check[#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#running-the-check)
 
@@ -1857,7 +1859,7 @@ docker compose run --rm app php artisan weld:doctor
 
 #### `php bin/regen-check.php` [#](https://weld.apps.wayne.edu/docs/reference/commands.html#php-bin-regen-check-php)
 
-`bin/regen-check.php` compares a freshly generated Sourdough Inertia app (its `.sourdough/manifest.json`, each path with its SHA-256) with WELD file by file, skipping the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path. Each remaining path is reported as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED. The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift. It is not part of `composer ci`; CI runs it as a separate, warning-only job.
+`bin/regen-check.php` compares a freshly generated Sourdough Inertia app (its `.sourdough/manifest.json`, each path with its SHA-256) with WELD file by file, skipping the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path. Each remaining path is reported as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED. The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift. It is not part of `composer ci`; CI runs it as a separate job that blocks on new drift.
 
 - Run the check: `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`)
 - Record the current drift as accepted: add `--write-baseline`
@@ -2033,7 +2035,7 @@ The clone path, the one the Quick start teaches:
 | `composer proctor` | 6 s | Pass, 1 warning (the PHP 8.3 floor is in security-only support) |
 | `frontend` job | 72 s | Pass |
 | `ziggy` job | 7 s | Pass: the committed route list matches |
-| Regen gate | 15 s | Fails with 3 paths of new drift; CI runs it warning-only. Below |
+| Regen gate | 15 s | Fails with 3 paths of new drift; the GitLab job blocks on new drift. Below |
 | Accessibility gate | 65 s | **0 violations** in 16 page checks; 26 to 29 rules passed on each page |
 | A second `bin\weld.ps1 up` | 188 s | **Emptied the local database.** Fixed the same night, below |
 
@@ -2355,7 +2357,7 @@ php bin/regen-check.php --generated <dir> --write-baseline
 
 Note
 
-The regen gate is not part of `composer ci`. CI runs it as a separate, warning-only job, and the GitHub pipeline keeps it warning-only with `continue-on-error` until the baseline is filled in.
+The regen gate is not part of `composer ci`. CI runs it as a separate job: on GitLab new drift fails the job, and the GitHub pipeline keeps it warning-only with `continue-on-error` until the baseline is filled in.
 
 **Check.** Re-run the check against your own generation; it passes once every path is IDENTICAL or already recorded in the baseline:
 

@@ -100,7 +100,7 @@ php bin/regen-check.php --generated <dir> --write-baseline
 
 Note
 
-The regen gate is not part of `composer ci`. CI runs it as a separate, warning-only job, and the GitHub pipeline keeps it warning-only with `continue-on-error` until the baseline is filled in.
+The regen gate is not part of `composer ci`. CI runs it as a separate job: on GitLab new drift fails the job, and the GitHub pipeline keeps it warning-only with `continue-on-error` until the baseline is filled in.
 
 **Check.** Re-run the check against your own generation; it passes once every path is IDENTICAL or already recorded in the baseline:
 

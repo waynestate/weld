@@ -141,7 +141,7 @@ docker compose run --rm app php artisan weld:doctor
 
 ### `php bin/regen-check.php` [#](https://weld.apps.wayne.edu/docs/reference/commands.html#php-bin-regen-check-php)
 
-`bin/regen-check.php` compares a freshly generated Sourdough Inertia app (its `.sourdough/manifest.json`, each path with its SHA-256) with WELD file by file, skipping the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path. Each remaining path is reported as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED. The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift. It is not part of `composer ci`; CI runs it as a separate, warning-only job.
+`bin/regen-check.php` compares a freshly generated Sourdough Inertia app (its `.sourdough/manifest.json`, each path with its SHA-256) with WELD file by file, skipping the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path. Each remaining path is reported as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED. The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift. It is not part of `composer ci`; CI runs it as a separate job that blocks on new drift.
 
 - Run the check: `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`)
 - Record the current drift as accepted: add `--write-baseline`

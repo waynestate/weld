@@ -91,16 +91,16 @@ Without Docker: run `composer install`, `npm ci`, copy `.env.example` to `.env`,
 
 `composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run PROCTOR, Ziggy or the JS lint.
 
-The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (`sourdough new <dir> --inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`). It skips the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path, and fails only on drift that is not already recorded in `.sourdough/regen-baseline.json`; `--write-baseline` records the current drift as accepted. It is not part of `composer ci`; CI runs it as a separate, warning-only job.
+The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (`sourdough new <dir> --inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`). It skips the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path, and fails only on drift that is not already recorded in `.sourdough/regen-baseline.json`; `--write-baseline` records the current drift as accepted. It is not part of `composer ci`; CI runs it as a separate job that blocks on new drift.
 
 Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer (Squire kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.
 
 ## CI[#](https://weld.apps.wayne.edu/docs/contributing.html#ci)
 
-- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `frontend` job (`npm ci`, lint, Prettier, vue-tsc and the build), a `ziggy` drift job and a `regen-gate` job (warning-only until `.sourdough/regen-baseline.json` is filled in).
+- **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a `proctor` job (warnings pass, failures block), a `frontend` job (`npm ci`, lint, Prettier, vue-tsc and the build), a `ziggy` drift job and a `regen-gate` job (new drift fails the job; `.sourdough/regen-baseline.json` records the drift already accepted).
 - **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci`, runs the same `frontend` job, and runs the same `regen-gate` check (`continue-on-error` until the baseline is filled in).
 
-Green means all of those pass; the regen gate may warn while its baseline is being filled in.
+Green means all of those pass; on GitLab the regen gate blocks on new drift, and on GitHub it may warn while the baseline is being filled in.
 
 ## Keeping the joints current[#](https://weld.apps.wayne.edu/docs/contributing.html#keeping-the-joints-current)
 
