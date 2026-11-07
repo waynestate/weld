@@ -42,6 +42,8 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased">Unreleased<a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></h2>
 <ul>
+<li>Fixed: <code>scripts/a11y.ps1</code> and its <code>.sh</code> twin mount the repo read-write instead of read-only plus a named volume for <code>tools/a11y/node_modules</code>: Docker Desktop refuses the nested volume, so on Windows the script failed before the container started. <code>node_modules</code> is gitignored, so the tree stays clean and npm still installs once and reuses it.</li>
+<li>Changed: WELD reconciles with Sourdough main (<code>323a82b</code>). <code>App\Sesame\UserResolver</code> adopts the template's username lookup (the same fix for Laravel 13's JSON sessions as WELD's id lookup; the docblock keeps WELD's name), and the regen baseline records four product drifts (<code>docker-compose.squire.yml</code>, where renovate keeps the haproxy digest newer than the Squire template copy; <code>eslint.config.js</code>; <code>AppHeader.vue</code>; <code>navigation.ts</code>) while dropping 17 paths that converged with the WayneUI-wired template or left it (53 known paths now). The full report of the run against <code>323a82b</code> sits at <code>.sourdough/regen-report-2026-11-07.txt</code>.</li>
 <li>Added: an accessibility gate for the site: <code>scripts/a11y.sh</code> (Git Bash, Linux, macOS) and <code>scripts/a11y.ps1</code> (Windows) run axe-core (WCAG 2.2 AA, light and dark, at 360 px and 1280 px) in Docker over every committed HTML page under <code>site/</code>, so the Proof page's hand-run check is repeatable with one command; the first full run checked all 23 pages with 0 violations.</li>
 <li>Added: The Proof page records its last run.</li>
 </ul>
