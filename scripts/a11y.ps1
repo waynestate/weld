@@ -2,8 +2,9 @@
 # host browser is needed. Windows PowerShell 5.1 and PowerShell 7; on Linux
 # and macOS use scripts/a11y.sh.
 #
-# The repo is mounted read-only; only tools/a11y/node_modules lives in a named
-# volume, so npm installs once and later runs reuse it.
+# The repo is mounted read-write: Docker Desktop refuses the nested named
+# volume that used to hold tools/a11y/node_modules inside the bind mount.
+# node_modules is gitignored, so npm installs once and later runs reuse it.
 $ErrorActionPreference = "Stop"
 
 Set-Location -LiteralPath (Split-Path -Parent $PSScriptRoot)
@@ -17,8 +18,7 @@ $pageArgs = (git ls-files 'site/*.html' | ForEach-Object { "--page=" + ($_ -repl
 $inner = "if [ ! -d tools/a11y/node_modules/playwright ]; then if [ -f tools/a11y/package-lock.json ]; then (cd tools/a11y && npm ci --no-audit --no-fund); else (cd tools/a11y && npm install --no-audit --no-fund); fi; fi && node tools/a11y/check.mjs --root=site $pageArgs"
 
 docker run --rm `
-  -v "${PWD}:/work:ro" `
-  -v weld-a11y-node-modules:/work/tools/a11y/node_modules `
+  -v "${PWD}:/work" `
   -w /work `
   $image `
   sh -c $inner

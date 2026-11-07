@@ -4,8 +4,9 @@
 # or this script from Git Bash (the MSYSTEM block below handles its path
 # conversion).
 #
-# The repo is mounted read-only; only tools/a11y/node_modules lives in a named
-# volume, so npm installs once and later runs reuse it.
+# The repo is mounted read-write: Docker Desktop refuses the nested named
+# volume that used to hold tools/a11y/node_modules inside the bind mount.
+# node_modules is gitignored, so npm installs once and later runs reuse it.
 set -eu
 
 cd "$(dirname "$0")/.."
@@ -30,8 +31,7 @@ for PAGE in $(git ls-files 'site/*.html'); do
 done
 
 docker run --rm \
-  -v "${REPO}:/work:ro" \
-  -v weld-a11y-node-modules:/work/tools/a11y/node_modules \
+  -v "${REPO}:/work" \
   -w /work \
   "$IMAGE" \
   sh -c "if [ ! -d tools/a11y/node_modules/playwright ]; then if [ -f tools/a11y/package-lock.json ]; then (cd tools/a11y && npm ci --no-audit --no-fund); else (cd tools/a11y && npm install --no-audit --no-fund); fi; fi && node tools/a11y/check.mjs --root=site${PAGE_ARGS}"
