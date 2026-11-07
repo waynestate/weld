@@ -137,7 +137,7 @@ What is on the bench today:
 - `.gitattributes` sets `* text=auto eol=lf`
 - `composer ci` is the CI contract: it runs validate, the tests with Pest, Pint, PHPStan level 8, the agent-ready check and audit, the
   same command on GitLab and GitHub
-- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.1 is on Packagist
+- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.4 is on Packagist
   (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
 - HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline;
   the Vite build takes the per-request nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays
@@ -284,7 +284,7 @@ WELD is a Laravel 13 app with Inertia and Vue, and the rest of the stack is alre
 
 `$ composer create-project waynestate/weld my-app`
 
-Any other shape? [Sourdough](https://sourdough.apps.wayne.edu/) starts four of the five, from raw PHP to Vue islands, with the same sign-in, headers and checks.
+Any other shape? [Sourdough](https://sourdough.apps.wayne.edu/) starts every one of the five, from raw PHP to Vue islands, with the same sign-in, headers and checks.
 
 [Get started](https://weld.apps.wayne.edu/#start) [Which piece do I need?](https://weld.apps.wayne.edu/#chooser) [Meet the cast](https://weld.apps.wayne.edu/#cast-title) [Docs](https://weld.apps.wayne.edu/docs/index.html)
 
@@ -586,7 +586,7 @@ $
 
 0.1 Rise | Daily
 
-`sourdough new` makes a new app with SESAME, HELMET, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. It bakes four of the five app shapes today, and it is the starter for every shape.
+`sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 
 ```
 $ sourdough new --raw
@@ -603,7 +603,7 @@ $
 
 ### Pick your path
 
-The stack has five app shapes. Sourdough bakes four of them today; only raw PHP with a Vue SPA is still waiting. WELD is the Inertia and Vue one, built.
+The stack has five app shapes. Sourdough bakes all five; WELD is the Inertia and Vue one, built.
 
 From Sourdough
 
@@ -612,6 +612,14 @@ From Sourdough
 Plain PHP with no framework and no build step, using WayneUI's standalone files.
 
 `composer global require waynestate/sourdough sourdough new my-app --raw`
+
+From Sourdough
+
+#### Raw PHP + Vue SPA
+
+Raw PHP that answers JSON, with a Vue 3 front end built by Vite and drawn with WayneUI's Vue components.
+
+`sourdough new my-app --raw --vue`
 
 From Sourdough
 
@@ -636,8 +644,6 @@ This is WELD
 Laravel 13 with Inertia 2 and Vue 3. This is the shape WELD is, with the stack already installed.
 
 `composer create-project waynestate/weld my-app`
-
-Not baked yet: raw PHP + Vue SPA (`--raw --vue`); it prints a plan today.
 
 Hand it to your agent
 
@@ -716,6 +722,9 @@ Source: https://weld.apps.wayne.edu/docs/changelog.html
 Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
+
+- Fixed: the front page and the Sourdough guide say Sourdough bakes all five app shapes (they said four, with raw PHP plus a Vue SPA still waiting). "Pick your path" gives that shape its own card (`sourdough new my-app --raw --vue`), and the WELD card spans the row's last two cells.
+- Fixed: the README, "What is welded in" and the status page name Pinstripe 0.1.4 as the release on Packagist (they said 0.1.1).
 
 ### 0.1.4 (2026-11-07)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-4-2026-11-07)
 
@@ -1545,7 +1554,7 @@ This page explains how Sourdough and WELD divide the work of starting a Wayne St
 
 ### What Sourdough does[#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#what-sourdough-does)
 
-Sourdough is the starter tool for every shape of Wayne State app. It bakes four shapes today: raw PHP, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue; only raw PHP with a Vue SPA is not available yet.
+Sourdough is the starter tool for every shape of Wayne State app. It bakes all five: raw PHP, raw PHP with a Vue SPA, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue.
 
 ### Where WELD sits[#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#where-weld-sits)
 
@@ -1599,7 +1608,7 @@ HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is
 - `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap
 - `.gitattributes` sets `* text=auto eol=lf`
 - `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on GitLab and GitHub
-- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.1 is on Packagist (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
+- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.4 is on Packagist (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
 - HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays Laravel's built-in health route
 - SESAME owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away
 - PROCTOR measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block
@@ -2160,7 +2169,7 @@ HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is
 | Index length | `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap |
 | `.gitattributes` | sets `* text=auto eol=lf` |
 | CI contract | `composer ci` runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on GitLab and GitHub |
-| Pinstripe presets | `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.1 is on Packagist (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it |
+| Pinstripe presets | `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.4 is on Packagist (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it |
 | HELMET | runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays Laravel's built-in health route |
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |
 | PROCTOR | measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block |

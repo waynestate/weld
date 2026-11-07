@@ -11,6 +11,9 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Fixed: the front page and the Sourdough guide say Sourdough bakes all five app shapes (they said four, with raw PHP plus a Vue SPA still waiting). "Pick your path" gives that shape its own card (`sourdough new my-app --raw --vue`), and the WELD card spans the row's last two cells.
+- Fixed: the README, "What is welded in" and the status page name Pinstripe 0.1.4 as the release on Packagist (they said 0.1.1).
+
 ## 0.1.4 (2026-11-07)
 
 - Changed: the front page's deploy layer (`deploy/`) runs Squire's kit 0.5.0 (was 0.4.0): `.squire/base-fallback.Dockerfile` and `scripts/parity.ps1` take the new templates, and `docker-compose.squire.yml`, which Renovate had edited, is Squire's template again, so `squire init --check` passes.

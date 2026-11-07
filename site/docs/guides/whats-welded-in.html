@@ -92,7 +92,7 @@
 <li><code>Schema::defaultStringLength(191)</code> keeps index keys under Citadel's MySQL 5.6 767-byte cap</li>
 <li><code>.gitattributes</code> sets <code>* text=auto eol=lf</code></li>
 <li><code>composer ci</code> is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on GitLab and GitHub</li>
-<li><code>pint.json</code> and <code>phpstan.neon</code> still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.1 is on Packagist (tagged), and they switch to <code>includes: vendor/waynestate/pinstripe/...</code> when WELD requires it</li>
+<li><code>pint.json</code> and <code>phpstan.neon</code> still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.4 is on Packagist (tagged), and they switch to <code>includes: vendor/waynestate/pinstripe/...</code> when WELD requires it</li>
 <li>HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies are a literal list in <code>bootstrap/app.php</code>; <code>/up</code> stays Laravel's built-in health route</li>
 <li>SESAME owns sign-in at <code>/login</code> and <code>/logout</code>; the fake driver stands in for the identity provider locally, and CAS is an env change away</li>
 <li>PROCTOR measures WELD against CREED's <code>policy.json</code> as a CI job (<code>composer proctor</code>): warnings pass, failures block</li>

@@ -930,6 +930,8 @@ body {
 }
 
 .path-card--featured {
+  /* Five shapes in three columns: WELD takes the last two cells, so the row closes. */
+  grid-column: span 2;
   box-shadow: 0 0 0 3px var(--weld-gold), var(--weld-shadow);
 }
 
@@ -1470,6 +1472,10 @@ a.choice__name:hover {
     grid-template-columns: minmax(0, 1fr);
     max-width: 32rem;
     margin-inline: auto;
+  }
+
+  .path-card--featured {
+    grid-column: auto;
   }
 }
 

@@ -20,7 +20,7 @@ WELD is a Laravel 13 app with Inertia and Vue, and the rest of the stack is alre
 
 `$ composer create-project waynestate/weld my-app`
 
-Any other shape? [Sourdough](https://sourdough.apps.wayne.edu/) starts four of the five, from raw PHP to Vue islands, with the same sign-in, headers and checks.
+Any other shape? [Sourdough](https://sourdough.apps.wayne.edu/) starts every one of the five, from raw PHP to Vue islands, with the same sign-in, headers and checks.
 
 [Get started](https://weld.apps.wayne.edu/#start) [Which piece do I need?](https://weld.apps.wayne.edu/#chooser) [Meet the cast](https://weld.apps.wayne.edu/#cast-title) [Docs](https://weld.apps.wayne.edu/docs/index.html)
 
@@ -322,7 +322,7 @@ $
 
 0.1 Rise | Daily
 
-`sourdough new` makes a new app with SESAME, HELMET, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. It bakes four of the five app shapes today, and it is the starter for every shape.
+`sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 
 ```
 $ sourdough new --raw
@@ -339,7 +339,7 @@ $
 
 ## Pick your path
 
-The stack has five app shapes. Sourdough bakes four of them today; only raw PHP with a Vue SPA is still waiting. WELD is the Inertia and Vue one, built.
+The stack has five app shapes. Sourdough bakes all five; WELD is the Inertia and Vue one, built.
 
 From Sourdough
 
@@ -348,6 +348,14 @@ From Sourdough
 Plain PHP with no framework and no build step, using WayneUI's standalone files.
 
 `composer global require waynestate/sourdough sourdough new my-app --raw`
+
+From Sourdough
+
+### Raw PHP + Vue SPA
+
+Raw PHP that answers JSON, with a Vue 3 front end built by Vite and drawn with WayneUI's Vue components.
+
+`sourdough new my-app --raw --vue`
 
 From Sourdough
 
@@ -372,8 +380,6 @@ This is WELD
 Laravel 13 with Inertia 2 and Vue 3. This is the shape WELD is, with the stack already installed.
 
 `composer create-project waynestate/weld my-app`
-
-Not baked yet: raw PHP + Vue SPA (`--raw --vue`); it prints a plan today.
 
 Hand it to your agent
 

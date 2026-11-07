@@ -12,7 +12,7 @@ This page explains how Sourdough and WELD divide the work of starting a Wayne St
 
 ## What Sourdough does[#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#what-sourdough-does)
 
-Sourdough is the starter tool for every shape of Wayne State app. It bakes four shapes today: raw PHP, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue; only raw PHP with a Vue SPA is not available yet.
+Sourdough is the starter tool for every shape of Wayne State app. It bakes all five: raw PHP, raw PHP with a Vue SPA, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue.
 
 ## Where WELD sits[#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#where-weld-sits)
 
