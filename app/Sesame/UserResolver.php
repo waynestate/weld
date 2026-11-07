@@ -18,9 +18,10 @@ use Waynestate\Sesame\UserResolver as UserResolverContract;
  * email falls back to the Wayne State address for the username when the
  * provider releases no mail attribute. Imported users get a random password
  * they can never use: sign-in goes through SESAME, never through a local
- * credential.
+ * credential. The signed-in user is read again from the database on every
+ * request.
  */
-class UserResolver implements RefreshesUser, UserResolverContract
+class UserResolver implements UserResolverContract, RefreshesUser
 {
     public function findOrImportUser(Identity $identity): mixed
     {
@@ -46,23 +47,25 @@ class UserResolver implements RefreshesUser, UserResolverContract
     }
 
     /**
-     * Turn what the session holds back into a User on every request.
+     * Look the signed-in user up again on every request.
      *
-     * Laravel serializes sessions as JSON, so the model SESAME stored at
-     * sign-in comes back on the next request as a plain array. Everything
-     * that asked "is this a User?" said no: the profile form called the
-     * user's own email "already taken" and deleting the account answered 403.
-     * Looking the user up again also means a deleted user is signed out
-     * (SESAME's user_gone) instead of browsing on as a ghost.
+     * Laravel 13 stores sessions as JSON, so the user SESAME saved at
+     * sign-in comes back as a plain array, not a User. Reading the row again
+     * by username gives the guard and the pages a real User, and a deleted
+     * account stops being signed in from the next request on.
      */
     public function refreshUser(mixed $user): mixed
     {
-        $id = match (true) {
-            $user instanceof User => $user->getKey(),
-            is_array($user) => $user['id'] ?? null,
+        $username = match (true) {
+            $user instanceof User => $user->username,
+            is_array($user) => $user['username'] ?? null,
             default => null,
         };
 
-        return is_int($id) || is_string($id) ? User::find($id) : null;
+        if (! is_string($username) || $username === '') {
+            return null;
+        }
+
+        return User::where('username', $username)->first();
     }
 }
