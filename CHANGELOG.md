@@ -5,6 +5,7 @@ Notable changes to WELD, newest first.
 ## Unreleased
 
 - Changed: WELD's own CI jobs cache Composer and npm downloads under a fixed key, so a lock change downloads only what changed.
+- Fixed: MAINTAINING.md and BEST_PRACTICES.md name the HELMET 1.0, SESAME 0.5 and Preflight 0.3.0 pins and the composer.json and CI lines they cite today.
 - Changed: HELMET moves to `^1.0`, its first stable release, wherever this repo requires it.
 - Fixed: the docs menu closes with Escape and hands focus back to its button (docs kit synced from Squire).
 - Fixed: the docs kit's copy button no longer covers the first line of code when it says Copied or Failed: over the code it keeps its resting width and shows a check or a cross when the word does not fit (docs kit synced from Squire).
