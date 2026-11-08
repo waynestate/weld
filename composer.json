@@ -67,6 +67,7 @@
             "@lint",
             "@analyse",
             "@site:agent-ready-check",
+            "@docs:practices-check",
             "@docs:check",
             "@composer audit"
         ],
@@ -74,6 +75,8 @@
         "site:agent-ready-check": "php bin/agent-ready.php --check",
         "docs": "php bin/docs-site.php",
         "docs:check": "php bin/docs-site.php --check",
+        "docs:practices": "php bin/sync-practices.php",
+        "docs:practices-check": "php bin/sync-practices.php --check",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -99,7 +102,9 @@
         "site:agent-ready": "Rewrite the Markdown twins, llms.txt, llms-full.txt, robots.txt and sitemap.xml in site/ (Squire's agent-ready kit).",
         "site:agent-ready-check": "Fail when the agent-ready files are stale, a page lacks its Markdown link, a prompt drifts from the docs, or the kit was edited here.",
         "docs": "Write site/docs/ from docs/ with the shared docs builder, and generate docs/changelog.md from CHANGELOG.md.",
-        "docs:check": "Fail when the committed docs site is stale or the docs carry findings; writes nothing."
+        "docs:check": "Fail when the committed docs site is stale or the docs carry findings; writes nothing.",
+        "docs:practices": "Rewrite the Practice, Why and Stack lines of every practice section in docs/guides from BEST_PRACTICES.md.",
+        "docs:practices-check": "Fail when a guide's practice lines drift from BEST_PRACTICES.md; writes nothing."
     },
     "extra": {
         "laravel": {
