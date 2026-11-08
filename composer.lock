@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c2748c32742eb5de20908a1ebcb2aa8",
+    "content-hash": "906f1bad8ed717a93a9554869a5242cc",
     "packages": [
         {
             "name": "brick/math",
@@ -7173,16 +7173,16 @@
         },
         {
             "name": "waynestate/helmet",
-            "version": "0.4.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/helmet.git",
-                "reference": "966fad6f0401d76df3e69f97bd7daeb359bc88f8"
+                "reference": "96bdfa615a867e36a84710959378443963e7ae36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/helmet/zipball/966fad6f0401d76df3e69f97bd7daeb359bc88f8",
-                "reference": "966fad6f0401d76df3e69f97bd7daeb359bc88f8",
+                "url": "https://api.github.com/repos/waynestate/helmet/zipball/96bdfa615a867e36a84710959378443963e7ae36",
+                "reference": "96bdfa615a867e36a84710959378443963e7ae36",
                 "shasum": ""
             },
             "require": {
@@ -7245,7 +7245,7 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/helmet/-/issues",
                 "source": "https://github.com/waynestate/helmet"
             },
-            "time": "2026-11-07T23:01:01+00:00"
+            "time": "2026-11-08T07:23:51+00:00"
         },
         {
             "name": "waynestate/sesame",
