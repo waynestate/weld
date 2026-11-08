@@ -11,6 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Added: W19, the scheduler runs the queue on Citadel: QUEUE_WORKER_MODE=scheduler (the .env.example default) schedules queue:work --stop-when-empty --max-time=50 --tries=3 every minute; none leaves it to a supervisor. Copied byte for byte from Sourdough 53275fb; QueueWorkerScheduleTest covers both modes. BEST_PRACTICES W19 is Checked.
 - Docs: BEST_PRACTICES Stack lines match the code again: W1, W3, W4, W7, W9, W11, W27 and W28 move to Checked and W26 to Enforced (each names its test), eight rows cite the lines that moved, and the CI header names Preflight 0.3.1.
 - Changed: the deploy kit moves to Squire 0.7.0: the release script restarts queue workers and the scheduler after optimize (reload, or queue:restart and schedule:interrupt), report only, so W22 is Checked. The kit also brings Squire 0.7.0's image hardening: the web's PHP loses `exec`, `passthru`, `shell_exec`, `system`, `pcntl_exec`, `phpinfo`, `show_source` and `highlight_file` (the CLI keeps them; `SQUIRE_PHP_DISABLE_FUNCTIONS` sets the list, `none` disables nothing), production opcache (`SQUIRE_OPCACHE_VALIDATE=1` by default, `0` for an image that bakes its code in), Apache's `ServerTokens Prod`, and secrets read from `/run/secrets`. See Squire's upgrading notes for 0.7.0.
 - Changed: the local a11y scripts run Preflight's own checker (vendored from 0.3.1 and pinned by a test), so they check what CI checks: axe-core 4.14.0, 320 and 1280 px, and the reflow check.
