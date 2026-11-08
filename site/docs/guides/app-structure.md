@@ -32,7 +32,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Without a feed the app forks from the stack on day one and never gets fixes.
 
-**Stack:** `Checked`. Sourdough is still not a Composer dependency, but a drift gate runs: `bin/regen-check.php` compares WELD file by file by SHA-256 against a fresh `sourdough new --inertia` generation, skips the product files in `.sourdough/product-files.json`, and fails only on new drift versus `.sourdough/regen-baseline.json`. The `regen-gate` jobs in `.gitlab-ci.yml:100-108` and `.github/workflows/ci.yml:42-59` block on new drift. Open: the gate clones Sourdough's `main` branch, not a pinned stack release.
+**Stack:** `Checked`. Sourdough is still not a Composer dependency, but a drift gate runs: `bin/regen-check.php` compares WELD file by file by SHA-256 against a fresh `sourdough new --inertia` generation, skips the product files in `.sourdough/product-files.json`, and fails only on new drift versus `.sourdough/regen-baseline.json`. The `regen-gate` jobs in `.gitlab-ci.yml:129-137` and `.github/workflows/ci.yml:42-59` block on new drift. Open: the gate clones Sourdough's `main` branch, not a pinned stack release.
 
 ## W4. Inertia 3 only; migrate off the removed APIs[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w4-inertia-3-only-migrate-off-the-removed-apis)
 

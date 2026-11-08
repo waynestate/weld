@@ -160,6 +160,17 @@ The accessibility gate runs Preflight's own checker (vendored in `tools/a11y/che
 light and dark, at 320 and 1280 px, plus the WCAG 1.4.10 reflow check), so a page that passes locally passes
 CI. It runs in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
+**The app's own gates.** The pipeline carries the three gates every Sourdough app carries, with the jobs copied
+from the Inertia shape. The `a11y-pages` job boots WELD with SESAME's fake driver and saves `/` signed out and
+`/dashboard` signed in into `a11y-site/`. The `a11y-app` job checks them with the same checker, blocking. Add each
+page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages`. Automated checks find only part of the
+problems, so try each page with a keyboard and a screen reader too. Preflight's `sbom` job keeps `sbom.cdx.json`
+(Composer) and the `frontend` job keeps `sbom-npm.cdx.json` (npm), each for 30 days. Preflight's `secret-detection`
+job runs Gitleaks over the repository. WELD deploys by Quick Update, so its pipeline holds no deploy credential. A
+deploy job added later extends `.deploy`, which never runs for a merge request and runs only on a protected branch
+or tag. The project settings a file cannot hold (protected `main` and tags, protected and masked variables, the job
+token allowlist) are listed under "Pipeline" in the README Sourdough bakes.
+
 Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](https://github.com/waynestate/weld/blob/HEAD/BEST_PRACTICES.md).
 
 ### Run it locally
@@ -748,6 +759,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Added: the CI gates from Sourdough's Inertia shape, job for job (the file's other lines stay WELD's). The `a11y-pages` job boots WELD with SESAME's fake driver and saves `/` and `/dashboard`, signed in. A second a11y include, `a11y-app`, checks those pages at WCAG 2.2 AA, blocking, beside the site's `a11y` job. Preflight's `sbom` keeps `sbom.cdx.json`, the `frontend` job adds `sbom-npm.cdx.json` from CycloneDX's npm tool, and Preflight's `secret-detection` runs Gitleaks. A hidden `.deploy` template keeps any future deploy job off merge requests and on protected refs.
 - Changed: `config/helmet.php` is now a thin override (only `policy_path`, pointed at the bundled CREED policy), copied byte for byte from Sourdough's Inertia shape. HELMET's service provider merges the package's own config for everything else, so WELD picks up HELMET's newer settings and its Playbook lookup for `HELMET_PRESET` instead of a 400-line copy that had fallen behind. Laravel merges config one level deep, so an app that changes `csp` or `trusted_types` sets that whole key in its `config/helmet.php` (`php artisan vendor:publish --tag=helmet-config --force` brings back the full file). The regen baseline is one path shorter (`config/helmet.php` now matches), and BEST_PRACTICES W28 cites the package's lines.
 - Added: W23, a stopped scheduler shows up at `/ready`. The scheduler stamps the cache every minute (`scheduler-heartbeat` in routes/console.php), and HELMET's `/ready` answers 503 while the stamp is missing or older than `WORKER_HEARTBEAT_MAX_AGE` (default 180 seconds, config/worker.php). `/up` stays the liveness answer, and nothing probes `/ready` yet: Squire's health check still asks `/up`. Copied byte for byte from Sourdough's Inertia shape, with tests/Feature/SchedulerHeartbeatTest.php; BEST_PRACTICES W23 is `Checked` for the heartbeat (the Prometheus gauge is still open).
 - Added: the Node floor from Sourdough: `.nvmrc` (22), `engines.node` `>=22` in package.json, and `.npmrc` with the one-day `min-release-age=1` cooldown, so a package published an hour ago waits a day before it lands in a build.
@@ -1060,7 +1072,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Without a feed the app forks from the stack on day one and never gets fixes.
 
-**Stack:** `Checked`. Sourdough is still not a Composer dependency, but a drift gate runs: `bin/regen-check.php` compares WELD file by file by SHA-256 against a fresh `sourdough new --inertia` generation, skips the product files in `.sourdough/product-files.json`, and fails only on new drift versus `.sourdough/regen-baseline.json`. The `regen-gate` jobs in `.gitlab-ci.yml:100-108` and `.github/workflows/ci.yml:42-59` block on new drift. Open: the gate clones Sourdough's `main` branch, not a pinned stack release.
+**Stack:** `Checked`. Sourdough is still not a Composer dependency, but a drift gate runs: `bin/regen-check.php` compares WELD file by file by SHA-256 against a fresh `sourdough new --inertia` generation, skips the product files in `.sourdough/product-files.json`, and fails only on new drift versus `.sourdough/regen-baseline.json`. The `regen-gate` jobs in `.gitlab-ci.yml:129-137` and `.github/workflows/ci.yml:42-59` block on new drift. Open: the gate clones Sourdough's `main` branch, not a pinned stack release.
 
 ### W4. Inertia 3 only; migrate off the removed APIs[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w4-inertia-3-only-migrate-off-the-removed-apis)
 

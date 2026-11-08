@@ -170,6 +170,17 @@ The accessibility gate runs Preflight's own checker (vendored in `tools/a11y/che
 light and dark, at 320 and 1280 px, plus the WCAG 1.4.10 reflow check), so a page that passes locally passes
 CI. It runs in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
+**The app's own gates.** The pipeline carries the three gates every Sourdough app carries, with the jobs copied
+from the Inertia shape. The `a11y-pages` job boots WELD with SESAME's fake driver and saves `/` signed out and
+`/dashboard` signed in into `a11y-site/`. The `a11y-app` job checks them with the same checker, blocking. Add each
+page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages`. Automated checks find only part of the
+problems, so try each page with a keyboard and a screen reader too. Preflight's `sbom` job keeps `sbom.cdx.json`
+(Composer) and the `frontend` job keeps `sbom-npm.cdx.json` (npm), each for 30 days. Preflight's `secret-detection`
+job runs Gitleaks over the repository. WELD deploys by Quick Update, so its pipeline holds no deploy credential. A
+deploy job added later extends `.deploy`, which never runs for a merge request and runs only on a protected branch
+or tag. The project settings a file cannot hold (protected `main` and tags, protected and masked variables, the job
+token allowlist) are listed under "Pipeline" in the README Sourdough bakes.
+
 Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](BEST_PRACTICES.md).
 
 ## Run it locally
