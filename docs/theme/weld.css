@@ -1169,6 +1169,76 @@ body {
   .docs-pager__link {
     max-width: none;
   }
+
+  /* Which command when: four columns of prose cannot share a phone, so each
+     row becomes a ticket, the command on its tinted head and every answer
+     under its column's name, and nothing scrolls sideways. The builder writes
+     plain cells, so the names are set here; the columns are fixed by the
+     canonical copy on that page. The head row stays in the accessibility tree
+     (only clipped), so the names below are drawn, not read twice. */
+  .docs-article:has(> h1#which-command-when) .docs-table {
+    border: 0;
+    border-radius: 0;
+    background: none;
+    overflow: visible;
+  }
+
+  .docs-article:has(> h1#which-command-when) .docs-table :is(table, tbody, tr, td) {
+    display: block;
+  }
+
+  .docs-article:has(> h1#which-command-when) .docs-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .docs-article:has(> h1#which-command-when) .docs-table tbody tr {
+    margin-block-end: 0.875rem;
+    border: 1px solid var(--weld-sheet-rule);
+    border-radius: var(--wsu-radius-field, 0.375rem);
+    overflow: hidden;
+  }
+
+  .docs-article:has(> h1#which-command-when) .docs-table tbody tr:last-child {
+    margin-block-end: 0;
+  }
+
+  .docs-article:has(> h1#which-command-when) .docs-table td,
+  .docs-article:has(> h1#which-command-when) .docs-table tbody tr:last-child td {
+    min-width: 0;
+    padding: 0.2rem 0.875rem 0.6rem;
+    border-bottom: 0;
+  }
+
+  .docs-article:has(> h1#which-command-when) .docs-table td:first-child {
+    margin-block-end: 0.5rem;
+    padding-block: 0.6rem;
+    border-bottom: 1px solid var(--weld-sheet-rule);
+    background-color: var(--weld-sheet-tint);
+  }
+
+  .docs-article:has(> h1#which-command-when) .docs-table td:first-child code {
+    font-size: 0.8125rem;
+  }
+
+  .docs-article:has(> h1#which-command-when) .docs-table td:not(:first-child)::before {
+    display: block;
+    margin-block-end: 0.15rem;
+    font-family: var(--dk-mono);
+    font-size: 0.6875rem;
+    font-weight: var(--wsu-font-weight-bold, 700);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--weld-sheet-muted);
+  }
+
+  .docs-article:has(> h1#which-command-when) .docs-table td:nth-child(2)::before { content: "What it checks" / ""; }
+  .docs-article:has(> h1#which-command-when) .docs-table td:nth-child(3)::before { content: "When to run it" / ""; }
+  .docs-article:has(> h1#which-command-when) .docs-table td:nth-child(4)::before { content: "Where it runs" / ""; }
 }
 
 @media (max-width: 400px) {

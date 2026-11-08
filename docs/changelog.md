@@ -12,6 +12,9 @@ Notable changes to WELD, newest first.
 ## Unreleased
 
 - Fixed: the docs menu closes with Escape and hands focus back to its button (docs kit synced from Squire).
+- Fixed: the docs kit's copy button no longer covers the first line of code when it says Copied or Failed: over the code it keeps its resting width and shows a check or a cross when the word does not fit (docs kit synced from Squire).
+- Fixed: the front page's version chip shows the full version the docs show (0.1.5, was 0.1). It carries `data-docs-version` now, so the docs builder (synced from Squire) rewrites it at every release and `composer docs:check` fails while it is stale.
+- Fixed: the Which command when page reads as one ticket per command on a phone (640 px and narrower), each answer under its column's name, instead of a four-column table that scrolled sideways.
 - Changed: the pipeline pins every Preflight CI component to 0.3.0 (preflight@0.3.0); component image inputs are plain image names, since Preflight adds the Dependency Proxy prefix itself.
 - Changed: the app requires PROCTOR ^0.8 in require-dev (was ^0.7, locked 0.8.0), so its CI also runs the new crlf-deploy-script check, and the deploy layer requires PROCTOR ^0.8 (was ^0.4, locked 0.8.0).
 - Docs: a "Which command when" page (Reference) and README section put the look-alike commands side by side (`weld:doctor`, `squire doctor`, `proctor check`, `proctor gate`, `oracle:check` and the rest): what each checks, when to run it and where it runs. It is the canonical copy; the READMEs of Squire, PROCTOR, Sourdough, Booster and Rollcall carry it word for word (D-064).
