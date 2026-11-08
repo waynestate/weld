@@ -8,7 +8,7 @@ so most of the upkeep is keeping the parts it joins current.
 
 - `waynestate/weld`, a Composer `project` (an app you clone), not a library. It is on Packagist, installed with `composer create-project waynestate/weld`.
 - **The stack parts it joins:** `waynestate/helmet` `^0.2` and `waynestate/sesame` `^0.2` at runtime;
-  `waynestate/creed` `^0.1` and `waynestate/proctor` `^0.2` for checks. WayneUI provides the interface.
+  `waynestate/creed` `^0.1` and `waynestate/proctor` `^0.8` for checks. WayneUI provides the interface.
 - Laravel 13, Inertia 2 with Vue 3, Ziggy for routes (a committed, generated `resources/js/ziggy.*`), Vite.
 - WELD is the Laravel + Inertia/Vue shape that Sourdough's templates describe, already shaped. If every app should get
   a change, it belongs in Sourdough; if only this shape should, it lives here.
