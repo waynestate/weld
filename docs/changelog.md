@@ -9,7 +9,7 @@ description: All notable changes to this project.
 
 Notable changes to WELD, newest first.
 
-## Unreleased
+## 0.1.5 (2026-11-07)
 
 - Fixed: the committed Ziggy route list (`resources/js/ziggy.js` and `ziggy.d.ts`) includes SESAME 0.5's `sesame.status` route, so the `ziggy` job is green again.
 - Fixed: `composer proctor` and `ProctorCheckTest` run plain `proctor check`; PROCTOR 0.7 refuses `--policy` in CI, which turned `proctor-root` and every `php-test` job red.

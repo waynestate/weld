@@ -721,7 +721,7 @@ Source: https://weld.apps.wayne.edu/docs/changelog.html
 
 Notable changes to WELD, newest first.
 
-### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
+### 0.1.5 (2026-11-07)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-5-2026-11-07)
 
 - Fixed: the committed Ziggy route list (`resources/js/ziggy.js` and `ziggy.d.ts`) includes SESAME 0.5's `sesame.status` route, so the `ziggy` job is green again.
 - Fixed: `composer proctor` and `ProctorCheckTest` run plain `proctor check`; PROCTOR 0.7 refuses `--policy` in CI, which turned `proctor-root` and every `php-test` job red.
@@ -1657,7 +1657,7 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 
 ### Status[#](https://weld.apps.wayne.edu/docs/#status)
 
-Latest release: 0.1.4 (2026-11-07). The license is MIT.
+Latest release: 0.1.5 (2026-11-07). The license is MIT.
 
 **Not to be confused with:** `weld:doctor` checks local setup only; standards checks are PROCTOR's.
 
@@ -2442,7 +2442,7 @@ The CHANGELOG lists notable changes to WELD, newest first. Pending work sits und
 
 ### What a release does[#](https://weld.apps.wayne.edu/docs/upgrading.html#what-a-release-does)
 
-WELD is tagged (0.1.0 through 0.1.4 so far). A release:
+WELD is tagged (0.1.0 through 0.1.5 so far). A release:
 
 1. Moves the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. Needs all the checks green locally, then both pipelines green for that commit.
@@ -2452,7 +2452,7 @@ WELD is tagged (0.1.0 through 0.1.4 so far). A release:
 
 ### Breaking changes[#](https://weld.apps.wayne.edu/docs/upgrading.html#breaking-changes)
 
-No released version (0.1.0 through 0.1.4) carries a breaking change yet, so upgrading is just taking in the new release:
+No released version (0.1.0 through 0.1.5) carries a breaking change yet, so upgrading is just taking in the new release:
 
 ```sh
 composer require waynestate/<part>:^0.x
