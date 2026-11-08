@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Added: the app refuses to boot in production with APP_DEBUG on (app/Support/ProductionDebug.php, Sourdough's guard).
 - Changed: WELD's own CI jobs cache Composer and npm downloads under a fixed key, so a lock change downloads only what changed.
 - Fixed: MAINTAINING.md and BEST_PRACTICES.md name the HELMET 1.0, SESAME 0.5 and Preflight 0.3.0 pins and the composer.json and CI lines they cite today.
 - Changed: HELMET moves to `^1.0`, its first stable release, wherever this repo requires it.
