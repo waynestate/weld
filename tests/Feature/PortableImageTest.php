@@ -8,12 +8,12 @@
 | Off Citadel (ADR-0010) WELD runs from Squire's portable image,
 | deploy/.squire/portable.Dockerfile: the code baked in, run as web,
 | worker, scheduler or migrate by SQUIRE_ROLE (W8), as USER 10001:0 with
- | group-0 writable folders, Apache on 8080 (W13), a graceful stop on
- | SIGTERM (W16), and a vendor/ with no dev packages (W29). The kit is
- | Squire's byte for byte (squire init --check), and Squire's
- | PortableImageTest runs the entrypoint itself; this file reads WELD's
- | copy and fails when a kit update drops a role, the user or the port.
- | The Citadel mirror next to it must not change.
+| group-0 writable folders, Apache on 8080 (W13), a graceful stop on
+| SIGTERM (W16), and a vendor/ with no dev packages (W29). The kit is
+| Squire's byte for byte (squire init --check), and Squire's
+| PortableImageTest runs the entrypoint itself; this file reads WELD's
+| copy and fails when a kit update drops a role, the user or the port.
+| The Citadel mirror next to it must not change.
 | One image, four hats: the welder, the night shift, the foreman's
 | clipboard and the inspector who signs off once.
 */
