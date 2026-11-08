@@ -11,6 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Added: CI runs Preflight's a11y component (0.3.1) on site/, every page in light and dark at 320 and 1280 px with the WCAG 1.4.10 reflow check, blocking.
 - Added: tests/Feature/CsrfTest.php proves a POST without a CSRF token gets 419, and that a matching token or a same-origin request passes (Sourdough's copy, W27).
 - Changed: the GitHub regen gate blocks like GitLab's (it only warned), now that the drift baseline is complete.
 - Changed: CI pins the Preflight components to 0.3.1 (fixed cache keys, and caches saved even when a job fails; D-072).
