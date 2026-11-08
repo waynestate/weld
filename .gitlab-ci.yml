@@ -78,6 +78,18 @@ composer-ci:
     - composer install --no-interaction --no-progress --prefer-dist
     - composer ci
 
+# Agent tooling stays out of production (BEST_PRACTICES W29): install the way
+# a release does (composer install --no-dev, as Squire's release.sh runs it),
+# then fail if Laravel Boost came along, and boot artisan to prove the app
+# still runs without its dev packages. A boost for laptops, never for servers.
+no-dev-install:
+  extends: .composer-cache
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3@sha256:2cf275428757e5435a667bfc0d038b14520ca02be2b1b70d44a05c8c19e2de48
+  script:
+    - composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
+    - test ! -e vendor/laravel/boost || { echo "laravel/boost is in a --no-dev install; keep it in require-dev."; exit 1; }
+    - php artisan --version
+
 # PROCTOR measures WELD against the CREED version policy. Warnings are
 # allowed; failures block the pipeline.
 proctor-root:

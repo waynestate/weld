@@ -69,6 +69,8 @@ php artisan key:generate
 
 The `advisor install` line writes `.mcp.json`, the MCP config that points Claude Code at ADVISOR's server; the file is git-ignored, because a committed `.mcp.json` would run a program on whoever opens the project. Set `ADVISOR_ENABLED=1` in `.env` to switch the advisor on. Running WELD through Docker instead? PHP is not on your host PATH, so `bin/weld.ps1 up` and `bin/weld.sh up` run the same install inside the app container for you (skip it with `--no-advisor`, or `-NoAdvisor` on Windows); see ADVISOR's README for the details.
 
+Laravel Boost is in `require-dev` too: run `php artisan boost:install` once per checkout to wire it into your agent. It writes `CLAUDE.md`, `AGENTS.md`, `boost.json` and the agent's skills, all git-ignored, and folds in the committed team guidance from `.ai/guidelines/` and `.ai/rules/`. `composer update` refreshes it through `composer boost-update`. Boost knows Laravel, ADVISOR knows the stack, and neither reaches production: the `no-dev-install` CI job fails if a `--no-dev` install brings Boost along. Its MCP server runs queries, so keep the development `.env` on a local database.
+
 ## Clone it and rename
 
 Want an app that is yours instead of a copy of WELD? Clone it, rename the four things that still say WELD, give it its own key, and re-run the checks.
@@ -122,6 +124,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` |
+| Laravel Boost | Dev only: the MCP server, guidelines and skills that teach your coding agent Laravel, with WELD's conventions in `.ai/` |
 | Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 <div align="center">

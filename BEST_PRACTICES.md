@@ -50,10 +50,10 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Stack:** `Checked`. WELD is on Inertia 3: `composer.json:19` requires `inertiajs/inertia-laravel: ^3.0` and `package.json:26` requires `@inertiajs/vue3: ^3.0`. `tests/Feature/CspScriptTagsTest.php:53-60` pins the Inertia 3 JSON page island, so a regression to the Inertia 2 layout fails the suite. Open: an ESLint restriction on `axios` and a grep guard for `Inertia::lazy`.
 
 ### W5. Commit `.ai/rules`; ignore what Boost regenerates
-- **Practice:** Laravel Boost is a `require-dev` package. Commit `.ai/rules/` (project rules). Ignore `.mcp.json`, `boost.json` and the generated block of `CLAUDE.md`/`AGENTS.md`. WELD's own conventions go in `.ai/guidelines/` and each stack package may ship `resources/boost/guidelines/core.blade.php` and `resources/boost/skills/*/SKILL.md`.
-- **Why:** Rules are shared team memory; generated files change with every `boost:update`.
+- **Practice:** Laravel Boost is a `require-dev` package. Commit `.ai/`: project rules in `.ai/rules/` (with Boost's `index.md`) and WELD's own conventions in `.ai/guidelines/`. Ignore what `boost:install` and `boost:update` write: `.mcp.json`, `boost.json`, `CLAUDE.md`, `AGENTS.md`, `.claude/skills/` and `.junie/`. Git cannot ignore only the generated block inside `CLAUDE.md`, so the whole file is ignored and team guidance goes in `.ai/guidelines/`, which Boost folds into every agent's file. `.agents/` stays tracked (Booster's playbooks live there). Each stack package may ship `resources/boost/guidelines/core.blade.php` and `resources/boost/skills/*/SKILL.md`.
+- **Why:** Rules are shared team memory; generated files change with every `boost:update`, and `boost.json` holds each developer's own agent picks.
 - **Sources:** [Laravel Boost](https://laravel.com/docs/13.x/boost) (project rules "should be committed"; generated files may be gitignored).
-- **Stack:** `Not yet`. Boost is not a dependency and there is no `.ai/` directory yet. Target `Checked`: PROCTOR confirms the `.gitignore` entries and that `.ai/rules/` exists.
+- **Stack:** `Checked`. `composer.json` requires `laravel/boost: ^2.10` in `require-dev`; `.ai/guidelines/wayne-state.md` and `.ai/rules/` (`index.md`, `migrations.md`, `routes.md`) are committed as Sourdough's Inertia template ships them, and the `.gitignore` carries Sourdough's Boost block. `tests/Feature/BoostDevOnlyTest.php` "ignores what Boost regenerates and keeps what the team shares" fails CI when an ignore line or a committed `.ai` file goes missing, and the regen gate keeps the `.ai` files equal to Sourdough's. Open: a PROCTOR check for apps Sourdough did not bake.
 
 ### W6. Sail is local development only
 - **Practice:** Sail's own description is "Laravel's default Docker development environment". It is not a production image and WELD never deploys it.
@@ -203,7 +203,7 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Practice:** Laravel Boost is `require-dev`. Its MCP server can write rules to disk and run database queries; its docs tool sends queries to a hosted service. Production images are built with `composer install --no-dev`; guard any `post-update-cmd` that calls `boost:update`.
 - **Why:** A dev tool with write and query abilities is attack surface.
 - **Sources:** [Laravel Boost](https://laravel.com/docs/13.x/boost).
-- **Stack:** `Not yet`. Boost is not a dependency yet. Target `Checked`: the portability job fails when `vendor/laravel/boost` exists in the image.
+- **Stack:** `Checked`. Boost is in `require-dev` only and `composer.lock` lists it under `packages-dev`; `tests/Feature/BoostDevOnlyTest.php` "keeps Boost in require-dev only" and "locks Boost as a dev package, so composer install --no-dev leaves it out" fail the suite otherwise. The `no-dev-install` CI job (GitLab and GitHub) installs with `composer install --no-dev`, as Squire's `release.sh` does, fails when `vendor/laravel/boost` exists, and boots `php artisan`. The `post-update-cmd` hook calls `composer boost-update`, which runs `boost:update` only when `vendor/laravel/boost` is installed and `boost.json` names an agent ("skips the refresh where Boost is not set up", "runs boost:update and keeps its exit code where Boost is set up"). Open: the same check inside the built image, once Preflight portability is wired into WELD.
 
 ## 5. Build and supply chain
 
