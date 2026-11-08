@@ -138,10 +138,10 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Stack:** `Documented`. `.env.example:67` sets `QUEUE_CONNECTION=database`, `config/queue.php:16` defaults to it, and the jobs tables are migrated by `database/migrations/0001_01_01_000002_create_jobs_table.php:14`. No job classes exist yet, so the `#[Tries]`/`#[Timeout]`/`#[Backoff]` attributes are not in use. Target `Checked`: a test that every job class declares `#[Tries]` and `#[Timeout]`.
 
 ### W19. Where no worker can run, run the queue from the scheduler
-- **Practice:** On Citadel (no queue workers), schedule `queue:work --stop-when-empty --max-time=50 --tries=3` every minute with `withoutOverlapping` and a short expiry. Select it with `WELD_QUEUE_MODE=scheduled`.
+- **Practice:** On Citadel (no queue workers), schedule `queue:work --stop-when-empty --max-time=50 --tries=3` every minute with `withoutOverlapping` and a short expiry. Select it with `QUEUE_WORKER_MODE=scheduler` (`none` leaves the queue to a supervisor).
 - **Why:** `--stop-when-empty` is documented for Docker use ("shutdown the container after the queue is empty"), and the scheduler is the one cron entry Citadel can run. This exact pattern is an inference, not a documented recipe.
 - **Sources:** [Laravel queues](https://laravel.com/docs/13.x/queues), [scheduling](https://laravel.com/docs/13.x/scheduling).
-- **Stack:** `Not yet`. `routes/console.php` has no scheduler entries yet (only the `inspire` command). Target `Checked`: a test that `schedule:list` shows the entry under the `citadel` preset and not under the others.
+- **Stack:** `Checked`. `routes/console.php` schedules `queue:work --stop-when-empty --max-time=50 --tries=3` every minute with `withoutOverlapping(10)` when `config('worker.mode')` is `scheduler` (`config/worker.php`, env `QUEUE_WORKER_MODE`, default `scheduler` in `.env.example`); `tests/Feature/QueueWorkerScheduleTest.php` checks both modes. Byte for byte from Sourdough, held by the regen gate.
 
 ### W20. Timeout below `retry_after`
 - **Practice:** Set each job timeout lower than the connection's `retry_after`. Timeouts need the PCNTL extension.
