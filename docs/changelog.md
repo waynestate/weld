@@ -11,6 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Added: PortableImageTest proves the portable image builds `vendor/` without dev packages (the build context leaves `vendor/` out and its only Composer install is release.sh's `--no-dev` one), which closes W29's open item.
 - Changed: the regen baseline no longer excuses `docker-compose.squire.yml`, `health.php` and `scripts/release.sh`: Sourdough bakes Squire 0.8.0 now, so a fresh bake matches WELD's kit.
 - Changed: the deploy layer names Squire 0.8.0 (was 0.7.1), the release that ships the portable image WELD already carries; no kit file changed.
 - Changed: the regen gate passes against Sourdough 3000349 with three Squire kit paths accepted in the baseline until Sourdough takes Squire 0.8.0: `deploy/docker-compose.squire.yml`, `deploy/health.php` and `deploy/scripts/release.sh` come from Squire's newer kit (the portable image's compose profile, `health.php` reading `SQUIRE_APP_DIR`, the release-script download cache), while Sourdough's `templates/squire` still carries 0.7.1's. Drop the three from `.sourdough/regen-baseline.json` once Sourdough's kit catches up; everything else matches Sourdough's Inertia shape or was already accepted.
