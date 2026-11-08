@@ -10,7 +10,10 @@ use Tests\TestCase;
  * own job and as the deploy gate (`composer proctor`), but it is not part of
  * `composer ci`, so nothing in the test suite would notice if the check
  * started failing. This test closes that gap: it runs the same command the
- * composer script runs and fails when PROCTOR does not pass.
+ * composer script runs, plain `proctor check`, and fails when PROCTOR does
+ * not pass. PROCTOR refuses the `policy` flag in CI, and without it uses
+ * CREED's policy from `vendor/waynestate/creed`, so the test runs the same
+ * command in CI and locally.
  *
  * Warnings pass, failures block: PROCTOR exits 0 while it only warns, as it
  * does today about the PHP floor and the hard-coded proxy address.
@@ -20,7 +23,7 @@ class ProctorCheckTest extends TestCase
     public function test_proctor_passes_against_creed_policy()
     {
         $process = new Process(
-            [PHP_BINARY, 'vendor/bin/proctor', 'check', '--policy=vendor/waynestate/creed/policy/policy.json'],
+            [PHP_BINARY, 'vendor/bin/proctor', 'check'],
             $this->app->basePath(),
         );
         $process->setTimeout(120);
