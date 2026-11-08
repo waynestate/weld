@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: the GitHub regen gate blocks like GitLab's (it only warned), now that the drift baseline is complete.
 - Changed: CI saves its Composer and npm caches even when a job fails, so a retry after a dropped download fetches only what is missing (D-072).
 - Added: the app refuses to boot in production with APP_DEBUG on (app/Support/ProductionDebug.php, Sourdough's guard).
 - Changed: WELD's own CI jobs cache Composer and npm downloads under a fixed key, so a lock change downloads only what changed.

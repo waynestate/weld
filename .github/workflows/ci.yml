@@ -37,12 +37,11 @@ jobs:
       - run: npm run build
 
   # Is WELD still Sourdough's Inertia shape? Generate a fresh app from
-  # Sourdough's main and compare it with WELD by SHA-256. Failures are
-  # warnings until .sourdough/regen-baseline.json is filled in.
+  # Sourdough's main and compare it with WELD by SHA-256. The gate blocks,
+  # as on GitLab: any new drift from Sourdough's Inertia template fails it, and known drift is listed in .sourdough/regen-baseline.json.
   regen-gate:
     name: Regen gate
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
