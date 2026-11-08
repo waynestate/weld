@@ -17,11 +17,11 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 ## W19. Where no worker can run, run the queue from the scheduler
 
-**Practice:** On Citadel (no queue workers), schedule `queue:work --stop-when-empty --max-time=50 --tries=3` every minute with `withoutOverlapping` and a short expiry. Select it with `QUEUE_WORKER_MODE=scheduler` (`none` leaves the queue to a supervisor).
+**Practice:** On Citadel (no queue workers), schedule `queue:work --stop-when-empty --max-time=50 --timeout=45 --tries=3` every minute with `withoutOverlapping` and a short expiry. Select it with `QUEUE_WORKER_MODE=scheduler` (`none` leaves the queue to a supervisor).
 
 **Why:** `--stop-when-empty` is documented for Docker use ("shutdown the container after the queue is empty"), and the scheduler is the one cron entry Citadel can run. This exact pattern is an inference, not a documented recipe.
 
-**Stack:** `Checked`. `routes/console.php` schedules `queue:work --stop-when-empty --max-time=50 --tries=3` every minute with `withoutOverlapping(10)` when `config('worker.mode')` is `scheduler` (`config/worker.php`, env `QUEUE_WORKER_MODE`, default `scheduler` in `.env.example`); `tests/Feature/QueueWorkerScheduleTest.php` checks both modes. Byte for byte from Sourdough, held by the regen gate.
+**Stack:** `Checked`. `routes/console.php` schedules `queue:work --stop-when-empty --max-time=50 --timeout=45 --tries=3` every minute with `withoutOverlapping(10)` when `config('worker.mode')` is `scheduler` (`config/worker.php`, env `QUEUE_WORKER_MODE`, default `scheduler` in `.env.example`); `tests/Feature/QueueWorkerScheduleTest.php` checks both modes. Byte for byte from Sourdough, held by the regen gate.
 
 ## W20. Timeout below `retry_after`
 
@@ -29,7 +29,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Otherwise the job is attempted again before it has finished.
 
-**Stack:** `Not yet`. No job classes exist yet. Target `Checked`: a config test comparing the two values; the image installs `pcntl`.
+**Stack:** `Checked` for the scheduled worker. `routes/console.php` passes `--timeout=45`, and `tests/Feature/QueueWorkerScheduleTest.php` fails when that is not below the default connection's `retry_after` (or, for `sync`, below every connection's; Laravel's default is 90). The deploy image installs `pcntl` (`deploy/.squire/base-fallback.Dockerfile`). No job classes exist yet: a job's own `#[Timeout]` must stay below `retry_after` too, and nothing checks that until one exists. Byte for byte from Sourdough, held by the regen gate.
 
 ## W21. One scheduler entry; one run per task
 
