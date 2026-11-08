@@ -4,7 +4,6 @@
     ".gitattributes",
     ".gitignore",
     ".gitlab-ci.yml",
-    ".npmrc",
     "AGENTS.md",
     "CLAUDE.md",
     "app/Console/Commands/OracleCheck.php",
