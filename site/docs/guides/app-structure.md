@@ -16,7 +16,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Two login systems mean two session rules and two audit trails, and the kit's Fortify registers its routes automatically.
 
-**Stack:** `Documented`. SESAME is a dependency (`composer.json`), the starter kit's Fortify routes are removed, and `tests/Feature/AuthRoutesTest.php` fails if WELD grows its own auth routes. Target `Checked`: a PROCTOR check and a feature test over `php artisan route:list --json`.
+**Stack:** `Checked`. SESAME is a dependency (`composer.json:24`), the starter kit's Fortify routes are removed, and `tests/Feature/AuthRoutesTest.php` fails if WELD grows its own auth routes: no register, password, two-factor, forgot, reset, verify or confirm URIs (`:17-30`), no `Laravel\Fortify` actions (`:32-43`), and `/login` and `/logout` owned by SESAME exactly once each (`:45-64`). Open: a PROCTOR check over `php artisan route:list --json`.
 
 ## W2. WayneUI is the only component source[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w2-wayneui-is-the-only-component-source)
 
@@ -32,7 +32,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Without a feed the app forks from the stack on day one and never gets fixes.
 
-**Stack:** `Not yet`. Sourdough is not a dependency yet, so there is no feed to run. Target `Checked`: WELD's CI runs `sourdough feed` against each stack release and fails on drift.
+**Stack:** `Checked`. Sourdough is still not a Composer dependency, but a drift gate runs: `bin/regen-check.php` compares WELD file by file by SHA-256 against a fresh `sourdough new --inertia` generation, skips the product files in `.sourdough/product-files.json`, and fails only on new drift versus `.sourdough/regen-baseline.json`. The `regen-gate` jobs in `.gitlab-ci.yml:100-108` and `.github/workflows/ci.yml:42-59` block on new drift. Open: the gate clones Sourdough's `main` branch, not a pinned stack release.
 
 ## W4. Inertia 3 only; migrate off the removed APIs[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w4-inertia-3-only-migrate-off-the-removed-apis)
 
@@ -40,7 +40,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Inertia 3 removed all of these; code copied from older tutorials fails or half-works.
 
-**Stack:** `Not yet`. WELD is on Inertia 2, not 3: `composer.json` pins `inertiajs/inertia-laravel: ^2.0` and `package.json` pins `@inertiajs/vue3: ^2.0.0-beta.3`. The removed APIs are not used (no `axios` dependency, no `Inertia::lazy`, no `data-page`), so the migration is a version bump, not a rewrite. Target `Checked`: ESLint `no-restricted-imports` for `axios`, a grep check for `Inertia::lazy`, and Composer constraints.
+**Stack:** `Checked`. WELD is on Inertia 3: `composer.json:19` requires `inertiajs/inertia-laravel: ^3.0` and `package.json:26` requires `@inertiajs/vue3: ^3.0`. `tests/Feature/CspScriptTagsTest.php:53-60` pins the Inertia 3 JSON page island, so a regression to the Inertia 2 layout fails the suite. Open: an ESLint restriction on `axios` and a grep guard for `Inertia::lazy`.
 
 ## W5. Commit `.ai/rules`; ignore what Boost regenerates[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w5-commit-ai-rules-ignore-what-boost-regenerates)
 
@@ -56,7 +56,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Sail's runtime images carry dev tooling and a bash-script CLI.
 
-**Stack:** `Documented`. `composer.json` keeps `laravel/sail` in `require-dev`, so it is a local tool, not a runtime dependency. Target `Checked`: PROCTOR flags `laravel/sail` outside `require-dev` and any `vendor/laravel/sail` path in a production Dockerfile.
+**Stack:** `Documented`. `composer.json:32` keeps `laravel/sail` in `require-dev`, so it is a local tool, not a runtime dependency. Target `Checked`: PROCTOR flags `laravel/sail` outside `require-dev` and any `vendor/laravel/sail` path in a production Dockerfile.
 
 ## W7. The supported dev path is Compose driven by native scripts, not Sail[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w7-the-supported-dev-path-is-compose-driven-by-native-scripts-not-sail)
 
@@ -64,7 +64,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Every developer OS gets its own native path.
 
-**Stack:** `Documented`. `compose.yaml` and the `bin/weld.ps1` / `bin/weld.sh` pair exist. Target `Checked`: a pair-parity test.
+**Stack:** `Checked`. `compose.yaml` and the `bin/weld.ps1` / `bin/weld.sh` pair exist, and `tests/Unit/LocalStackTest.php:10-47` pins the pair's shared behaviour: the SQLite file is created only when missing and never truncated, and the Vite service writes a reachable listen address.
 
 ## W8. One image, several process types[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w8-one-image-several-process-types)
 
@@ -72,7 +72,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** One build means one tested artifact, and the process types stay identical in code.
 
-**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`, a local mirror of the image Citadel generates), but it runs one process type only: `CMD ["apache2-foreground"]` (`deploy/.squire/Dockerfile`), with no worker or scheduler variant. Target `Checked`: Preflight portability boots the image with each command.
+**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`, a local mirror of the image Citadel generates), but it runs one process type only: `CMD ["apache2-foreground"]` (`deploy/.squire/Dockerfile:50`), with no worker or scheduler variant. Target `Checked`: Preflight portability boots the image with each command.
 
 ## How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#how-to-read-the-tags)
 

@@ -16,7 +16,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** After `config:cache` the `.env` file is not loaded and `env()` returns `null` elsewhere.
 
-**Stack:** `Documented`. Every `env()` call in the app is inside `config/*.php`; none is in `app/` or `routes/`. The one exception is `bootstrap/app.php`, which reads `TRUSTED_PROXIES` with `env()` because that closure runs before config loads (it carries a PHPStan ignore). Target `Checked`: Pinstripe/PROCTOR ban `env(` outside `config/`; the portability job boots without `.env`.
+**Stack:** `Checked`. Every `env()` call is inside `config/*.php` except one documented exception: `bootstrap/app.php:27` reads `TRUSTED_PROXIES` because the middleware closure runs before config is loaded, and carries a `@phpstan-ignore` for `larastan.noEnvCallsOutsideOfConfig`. That rule is live (`phpstan.neon:10` sets `reportUnmatchedIgnoredErrors: true`), and `phpstan analyse` runs in the `ci` script (`composer.json:60`, `:64-72`), so a new `env()` outside `config/` fails CI.
 
 ## W10. `config:cache` runs at container start, never at image build[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w10-config-cache-runs-at-container-start-never-at-image-build)
 
@@ -24,7 +24,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A build-time `config:cache` freezes the build machine's environment into the image.
 
-**Stack:** `Documented`. The image build runs no artisan commands: `deploy/build.sh` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh`, on by default, off with `SQUIRE_ARTISAN_OPTIMIZE=0`), so config is cached at deploy, never at build. Target `Checked`: PROCTOR scans the Dockerfile.
+**Stack:** `Documented`. The image build runs no artisan commands: `deploy/build.sh:49-51` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh:453-459`), so config is cached at deploy, never at build. Target `Checked`: PROCTOR scans the Dockerfile.
 
 ## W11. `/up` is the liveness endpoint, and it never checks the database[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w11-up-is-the-liveness-endpoint-and-it-never-checks-the-database)
 
@@ -32,7 +32,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A database blip must not make the orchestrator kill every web container.
 
-**Stack:** `Documented`. `bootstrap/app.php` sets the health route to `/up`, which answers 200 when the framework boots and touches no database. The `/ready` endpoint is not built yet. Target `Checked`: the portability job requests `/up` with `Host: 10.1.2.3:8080` and no forwarded headers, and again with the database stopped.
+**Stack:** `Checked`. `bootstrap/app.php:16` sets the health route to `/up`, and `tests/Feature/HelmetHeadersTest.php:41-51` fails the suite when `/up` stops answering 200. Open: the `/ready` endpoint is not built yet.
 
 ## W12. Image health check matches the platform[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w12-image-health-check-matches-the-platform)
 
@@ -40,7 +40,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** Traefik will not route to an unhealthy container, and a missing tool makes a healthy app look dead.
 
-**Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php`, `deploy/health.php`). Target `Checked`: Preflight portability runs `docker inspect` for a health status of `healthy`.
+**Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile:47`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php:27`, `deploy/health.php:13`). Target `Checked`: Preflight portability runs `docker inspect` for a health status of `healthy`.
 
 ## W13. Non-root, arbitrary UID in group 0, listen on 8080[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w13-non-root-arbitrary-uid-in-group-0-listen-on-8080)
 
@@ -48,7 +48,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** OpenShift runs a random UID in group 0 with all capabilities dropped.
 
-**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`), but it is the Citadel Apache image: it declares no `USER`, the vhost listens on 80 (`deploy/.squire/vhost.conf`) and the fallback base exposes 80 (`deploy/.squire/base-fallback.Dockerfile`), so the non-root, group-0, 8080 contract is not held. Target `Checked`: Preflight portability starts the image with a UID that has no `/etc/passwd` entry, `cap_drop: ALL`, `no-new-privileges` and a read-only root filesystem.
+**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`), but it is the Citadel Apache image: it declares no `USER`, the vhost listens on 80 (`deploy/.squire/vhost.conf:2`) and the fallback base exposes 80 (`deploy/.squire/base-fallback.Dockerfile:113`), so the non-root, group-0, 8080 contract is not held. Target `Checked`: Preflight portability starts the image with a UID that has no `/etc/passwd` entry, `cap_drop: ALL`, `no-new-privileges` and a read-only root filesystem.
 
 ## W14. Logs go to stderr; the app writes only where it may[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w14-logs-go-to-stderr-the-app-writes-only-where-it-may)
 
@@ -56,7 +56,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** Platforms collect stdout/stderr; local files vanish with the container.
 
-**Stack:** `Documented`. `.env.example` sets `LOG_CHANNEL=stderr`. Target `Checked`: the portability job fails when `storage/logs` is non-empty.
+**Stack:** `Documented`. `.env.example:18` sets `LOG_CHANNEL=stderr`. Target `Checked`: the portability job fails when `storage/logs` is non-empty.
 
 ## W15. Sessions and cache live in a shared store[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w15-sessions-and-cache-live-in-a-shared-store)
 
@@ -64,7 +64,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A login must survive a hop between replicas.
 
-**Stack:** `Documented`. `.env.example` sets `SESSION_DRIVER=database` and `.env.example` sets `CACHE_STORE=database`; `config/session.php` and `config/cache.php` default to the same. Target `Checked`: the portability job logs in on replica A and reads the session on replica B.
+**Stack:** `Documented`. `.env.example:38` sets `SESSION_DRIVER=database` and `.env.example:69` sets `CACHE_STORE=database`; `config/session.php:21` and `config/cache.php:18` default to the same. Target `Checked`: the portability job logs in on replica A and reads the session on replica B.
 
 ## W16. Stop cleanly on SIGTERM[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w16-stop-cleanly-on-sigterm)
 
@@ -72,7 +72,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A hard kill mid-job double-runs it after `retry_after`.
 
-**Stack:** `Documented`. The entrypoint replaces the shell with the server (`deploy/.squire/fallback/citadel-apache-entrypoint`), so `SIGTERM` reaches the foreground process directly; no queue worker process type exists yet, and the grace period is a platform setting. Target `Checked`: the portability job sends `SIGTERM` and requires exit 0 within the grace period.
+**Stack:** `Documented`. The entrypoint replaces the shell with the server (`deploy/.squire/fallback/citadel-apache-entrypoint:58`), so `SIGTERM` reaches the foreground process directly; no queue worker process type exists yet, and the grace period is a platform setting. Target `Checked`: the portability job sends `SIGTERM` and requires exit 0 within the grace period.
 
 ## W17. Trust proxies by preset, never `*` [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w17-trust-proxies-by-preset-never)
 

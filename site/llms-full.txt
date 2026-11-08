@@ -748,6 +748,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Added: bin/sync-practices.php writes each practice's Practice, Why and Stack lines in docs/guides from BEST_PRACTICES.md, and composer ci fails when a guide drifts (19 of 24 had).
 - Changed: WELD requires SESAME ^0.6 (locked 0.6.0, was ^0.5 and 0.5.0), matching Sourdough's Inertia bake; MAINTAINING.md and five docs pages name the current HELMET 1.0 and Preflight 0.3.1 pins.
 - Changed: the deploy layer runs Squire's kit 0.7.1 (was 0.7.0): `.squire/php.ini` no longer sets `session.sid_length` or `session.sid_bits_per_character` (PHP 8.4 deprecated both), so sessions use PHP's default 128-bit ID.
 - Added: W19, the scheduler runs the queue on Citadel: QUEUE_WORKER_MODE=scheduler (the .env.example default) schedules queue:work --stop-when-empty --max-time=50 --tries=3 every minute; none leaves it to a supervisor. Copied byte for byte from Sourdough 53275fb; QueueWorkerScheduleTest covers both modes. BEST_PRACTICES W19 is Checked.
@@ -1037,7 +1038,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Two login systems mean two session rules and two audit trails, and the kit's Fortify registers its routes automatically.
 
-**Stack:** `Documented`. SESAME is a dependency (`composer.json`), the starter kit's Fortify routes are removed, and `tests/Feature/AuthRoutesTest.php` fails if WELD grows its own auth routes. Target `Checked`: a PROCTOR check and a feature test over `php artisan route:list --json`.
+**Stack:** `Checked`. SESAME is a dependency (`composer.json:24`), the starter kit's Fortify routes are removed, and `tests/Feature/AuthRoutesTest.php` fails if WELD grows its own auth routes: no register, password, two-factor, forgot, reset, verify or confirm URIs (`:17-30`), no `Laravel\Fortify` actions (`:32-43`), and `/login` and `/logout` owned by SESAME exactly once each (`:45-64`). Open: a PROCTOR check over `php artisan route:list --json`.
 
 ### W2. WayneUI is the only component source[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w2-wayneui-is-the-only-component-source)
 
@@ -1053,7 +1054,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Without a feed the app forks from the stack on day one and never gets fixes.
 
-**Stack:** `Not yet`. Sourdough is not a dependency yet, so there is no feed to run. Target `Checked`: WELD's CI runs `sourdough feed` against each stack release and fails on drift.
+**Stack:** `Checked`. Sourdough is still not a Composer dependency, but a drift gate runs: `bin/regen-check.php` compares WELD file by file by SHA-256 against a fresh `sourdough new --inertia` generation, skips the product files in `.sourdough/product-files.json`, and fails only on new drift versus `.sourdough/regen-baseline.json`. The `regen-gate` jobs in `.gitlab-ci.yml:100-108` and `.github/workflows/ci.yml:42-59` block on new drift. Open: the gate clones Sourdough's `main` branch, not a pinned stack release.
 
 ### W4. Inertia 3 only; migrate off the removed APIs[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w4-inertia-3-only-migrate-off-the-removed-apis)
 
@@ -1061,7 +1062,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Inertia 3 removed all of these; code copied from older tutorials fails or half-works.
 
-**Stack:** `Not yet`. WELD is on Inertia 2, not 3: `composer.json` pins `inertiajs/inertia-laravel: ^2.0` and `package.json` pins `@inertiajs/vue3: ^2.0.0-beta.3`. The removed APIs are not used (no `axios` dependency, no `Inertia::lazy`, no `data-page`), so the migration is a version bump, not a rewrite. Target `Checked`: ESLint `no-restricted-imports` for `axios`, a grep check for `Inertia::lazy`, and Composer constraints.
+**Stack:** `Checked`. WELD is on Inertia 3: `composer.json:19` requires `inertiajs/inertia-laravel: ^3.0` and `package.json:26` requires `@inertiajs/vue3: ^3.0`. `tests/Feature/CspScriptTagsTest.php:53-60` pins the Inertia 3 JSON page island, so a regression to the Inertia 2 layout fails the suite. Open: an ESLint restriction on `axios` and a grep guard for `Inertia::lazy`.
 
 ### W5. Commit `.ai/rules`; ignore what Boost regenerates[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w5-commit-ai-rules-ignore-what-boost-regenerates)
 
@@ -1077,7 +1078,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Sail's runtime images carry dev tooling and a bash-script CLI.
 
-**Stack:** `Documented`. `composer.json` keeps `laravel/sail` in `require-dev`, so it is a local tool, not a runtime dependency. Target `Checked`: PROCTOR flags `laravel/sail` outside `require-dev` and any `vendor/laravel/sail` path in a production Dockerfile.
+**Stack:** `Documented`. `composer.json:32` keeps `laravel/sail` in `require-dev`, so it is a local tool, not a runtime dependency. Target `Checked`: PROCTOR flags `laravel/sail` outside `require-dev` and any `vendor/laravel/sail` path in a production Dockerfile.
 
 ### W7. The supported dev path is Compose driven by native scripts, not Sail[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w7-the-supported-dev-path-is-compose-driven-by-native-scripts-not-sail)
 
@@ -1085,7 +1086,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Every developer OS gets its own native path.
 
-**Stack:** `Documented`. `compose.yaml` and the `bin/weld.ps1` / `bin/weld.sh` pair exist. Target `Checked`: a pair-parity test.
+**Stack:** `Checked`. `compose.yaml` and the `bin/weld.ps1` / `bin/weld.sh` pair exist, and `tests/Unit/LocalStackTest.php:10-47` pins the pair's shared behaviour: the SQLite file is created only when missing and never truncated, and the Vite service writes a reachable listen address.
 
 ### W8. One image, several process types[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w8-one-image-several-process-types)
 
@@ -1093,7 +1094,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** One build means one tested artifact, and the process types stay identical in code.
 
-**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`, a local mirror of the image Citadel generates), but it runs one process type only: `CMD ["apache2-foreground"]` (`deploy/.squire/Dockerfile`), with no worker or scheduler variant. Target `Checked`: Preflight portability boots the image with each command.
+**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`, a local mirror of the image Citadel generates), but it runs one process type only: `CMD ["apache2-foreground"]` (`deploy/.squire/Dockerfile:50`), with no worker or scheduler variant. Target `Checked`: Preflight portability boots the image with each command.
 
 ### How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#how-to-read-the-tags)
 
@@ -1220,7 +1221,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** After `config:cache` the `.env` file is not loaded and `env()` returns `null` elsewhere.
 
-**Stack:** `Documented`. Every `env()` call in the app is inside `config/*.php`; none is in `app/` or `routes/`. The one exception is `bootstrap/app.php`, which reads `TRUSTED_PROXIES` with `env()` because that closure runs before config loads (it carries a PHPStan ignore). Target `Checked`: Pinstripe/PROCTOR ban `env(` outside `config/`; the portability job boots without `.env`.
+**Stack:** `Checked`. Every `env()` call is inside `config/*.php` except one documented exception: `bootstrap/app.php:27` reads `TRUSTED_PROXIES` because the middleware closure runs before config is loaded, and carries a `@phpstan-ignore` for `larastan.noEnvCallsOutsideOfConfig`. That rule is live (`phpstan.neon:10` sets `reportUnmatchedIgnoredErrors: true`), and `phpstan analyse` runs in the `ci` script (`composer.json:60`, `:64-72`), so a new `env()` outside `config/` fails CI.
 
 ### W10. `config:cache` runs at container start, never at image build[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w10-config-cache-runs-at-container-start-never-at-image-build)
 
@@ -1228,7 +1229,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A build-time `config:cache` freezes the build machine's environment into the image.
 
-**Stack:** `Documented`. The image build runs no artisan commands: `deploy/build.sh` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh`, on by default, off with `SQUIRE_ARTISAN_OPTIMIZE=0`), so config is cached at deploy, never at build. Target `Checked`: PROCTOR scans the Dockerfile.
+**Stack:** `Documented`. The image build runs no artisan commands: `deploy/build.sh:49-51` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh:453-459`), so config is cached at deploy, never at build. Target `Checked`: PROCTOR scans the Dockerfile.
 
 ### W11. `/up` is the liveness endpoint, and it never checks the database[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w11-up-is-the-liveness-endpoint-and-it-never-checks-the-database)
 
@@ -1236,7 +1237,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A database blip must not make the orchestrator kill every web container.
 
-**Stack:** `Documented`. `bootstrap/app.php` sets the health route to `/up`, which answers 200 when the framework boots and touches no database. The `/ready` endpoint is not built yet. Target `Checked`: the portability job requests `/up` with `Host: 10.1.2.3:8080` and no forwarded headers, and again with the database stopped.
+**Stack:** `Checked`. `bootstrap/app.php:16` sets the health route to `/up`, and `tests/Feature/HelmetHeadersTest.php:41-51` fails the suite when `/up` stops answering 200. Open: the `/ready` endpoint is not built yet.
 
 ### W12. Image health check matches the platform[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w12-image-health-check-matches-the-platform)
 
@@ -1244,7 +1245,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** Traefik will not route to an unhealthy container, and a missing tool makes a healthy app look dead.
 
-**Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php`, `deploy/health.php`). Target `Checked`: Preflight portability runs `docker inspect` for a health status of `healthy`.
+**Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile:47`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php:27`, `deploy/health.php:13`). Target `Checked`: Preflight portability runs `docker inspect` for a health status of `healthy`.
 
 ### W13. Non-root, arbitrary UID in group 0, listen on 8080[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w13-non-root-arbitrary-uid-in-group-0-listen-on-8080)
 
@@ -1252,7 +1253,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** OpenShift runs a random UID in group 0 with all capabilities dropped.
 
-**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`), but it is the Citadel Apache image: it declares no `USER`, the vhost listens on 80 (`deploy/.squire/vhost.conf`) and the fallback base exposes 80 (`deploy/.squire/base-fallback.Dockerfile`), so the non-root, group-0, 8080 contract is not held. Target `Checked`: Preflight portability starts the image with a UID that has no `/etc/passwd` entry, `cap_drop: ALL`, `no-new-privileges` and a read-only root filesystem.
+**Stack:** `Not yet`. A Dockerfile now exists (`deploy/.squire/Dockerfile`), but it is the Citadel Apache image: it declares no `USER`, the vhost listens on 80 (`deploy/.squire/vhost.conf:2`) and the fallback base exposes 80 (`deploy/.squire/base-fallback.Dockerfile:113`), so the non-root, group-0, 8080 contract is not held. Target `Checked`: Preflight portability starts the image with a UID that has no `/etc/passwd` entry, `cap_drop: ALL`, `no-new-privileges` and a read-only root filesystem.
 
 ### W14. Logs go to stderr; the app writes only where it may[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w14-logs-go-to-stderr-the-app-writes-only-where-it-may)
 
@@ -1260,7 +1261,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** Platforms collect stdout/stderr; local files vanish with the container.
 
-**Stack:** `Documented`. `.env.example` sets `LOG_CHANNEL=stderr`. Target `Checked`: the portability job fails when `storage/logs` is non-empty.
+**Stack:** `Documented`. `.env.example:18` sets `LOG_CHANNEL=stderr`. Target `Checked`: the portability job fails when `storage/logs` is non-empty.
 
 ### W15. Sessions and cache live in a shared store[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w15-sessions-and-cache-live-in-a-shared-store)
 
@@ -1268,7 +1269,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A login must survive a hop between replicas.
 
-**Stack:** `Documented`. `.env.example` sets `SESSION_DRIVER=database` and `.env.example` sets `CACHE_STORE=database`; `config/session.php` and `config/cache.php` default to the same. Target `Checked`: the portability job logs in on replica A and reads the session on replica B.
+**Stack:** `Documented`. `.env.example:38` sets `SESSION_DRIVER=database` and `.env.example:69` sets `CACHE_STORE=database`; `config/session.php:21` and `config/cache.php:18` default to the same. Target `Checked`: the portability job logs in on replica A and reads the session on replica B.
 
 ### W16. Stop cleanly on SIGTERM[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w16-stop-cleanly-on-sigterm)
 
@@ -1276,7 +1277,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A hard kill mid-job double-runs it after `retry_after`.
 
-**Stack:** `Documented`. The entrypoint replaces the shell with the server (`deploy/.squire/fallback/citadel-apache-entrypoint`), so `SIGTERM` reaches the foreground process directly; no queue worker process type exists yet, and the grace period is a platform setting. Target `Checked`: the portability job sends `SIGTERM` and requires exit 0 within the grace period.
+**Stack:** `Documented`. The entrypoint replaces the shell with the server (`deploy/.squire/fallback/citadel-apache-entrypoint:58`), so `SIGTERM` reaches the foreground process directly; no queue worker process type exists yet, and the grace period is a platform setting. Target `Checked`: the portability job sends `SIGTERM` and requires exit 0 within the grace period.
 
 ### W17. Trust proxies by preset, never `*` [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w17-trust-proxies-by-preset-never)
 
@@ -1370,15 +1371,15 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** It needs no extra service, and `--max-time` recycles memory.
 
-**Stack:** `Documented`. `.env.example` sets `QUEUE_CONNECTION=database`, `config/queue.php` defaults to it, and the jobs tables are migrated by `database/migrations/0001_01_01_000002_create_jobs_table.php`. No job classes exist yet, so the `#[Tries]`/`#[Timeout]`/`#[Backoff]` attributes are not in use. Target `Checked`: a test that every job class declares `#[Tries]` and `#[Timeout]`.
+**Stack:** `Documented`. `.env.example:67` sets `QUEUE_CONNECTION=database`, `config/queue.php:16` defaults to it, and the jobs tables are migrated by `database/migrations/0001_01_01_000002_create_jobs_table.php:14`. No job classes exist yet, so the `#[Tries]`/`#[Timeout]`/`#[Backoff]` attributes are not in use. Target `Checked`: a test that every job class declares `#[Tries]` and `#[Timeout]`.
 
 ### W19. Where no worker can run, run the queue from the scheduler[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w19-where-no-worker-can-run-run-the-queue-from-the-scheduler)
 
-**Practice:** On Citadel (no queue workers), schedule `queue:work --stop-when-empty --max-time=50 --tries=3` every minute with `withoutOverlapping` and a short expiry. Select it with `WELD_QUEUE_MODE=scheduled`.
+**Practice:** On Citadel (no queue workers), schedule `queue:work --stop-when-empty --max-time=50 --tries=3` every minute with `withoutOverlapping` and a short expiry. Select it with `QUEUE_WORKER_MODE=scheduler` (`none` leaves the queue to a supervisor).
 
 **Why:** `--stop-when-empty` is documented for Docker use ("shutdown the container after the queue is empty"), and the scheduler is the one cron entry Citadel can run. This exact pattern is an inference, not a documented recipe.
 
-**Stack:** `Not yet`. `routes/console.php` has no scheduler entries yet (only the `inspire` command). Target `Checked`: a test that `schedule:list` shows the entry under the `citadel` preset and not under the others.
+**Stack:** `Checked`. `routes/console.php` schedules `queue:work --stop-when-empty --max-time=50 --tries=3` every minute with `withoutOverlapping(10)` when `config('worker.mode')` is `scheduler` (`config/worker.php`, env `QUEUE_WORKER_MODE`, default `scheduler` in `.env.example`); `tests/Feature/QueueWorkerScheduleTest.php` checks both modes. Byte for byte from Sourdough, held by the regen gate.
 
 ### W20. Timeout below `retry_after` [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w20-timeout-below-retry-after)
 
@@ -1394,7 +1395,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Three schedulers run a nightly report three times.
 
-**Stack:** `Not yet`. `routes/console.php` has no scheduler entries yet. Target `Checked`: a test fails on any scheduled closure without `->name()`.
+**Stack:** `Checked`. `tests/Feature/SchedulerNamingTest.php` (Sourdough's copy) fails the suite on any scheduled closure without `->name()`, and its second case proves the guard catches one.
 
 ### W22. Interrupt and restart long-lived processes at deploy[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w22-interrupt-and-restart-long-lived-processes-at-deploy)
 
@@ -1402,7 +1403,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Workers and a minute-long `schedule:run` keep the old code until they exit.
 
-**Stack:** `Not yet`. The release script now exists (`deploy/scripts/release.sh`) but runs none of `queue:restart`, `reload` or `schedule:interrupt`. Target `Checked`: the release script lists the three commands; PROCTOR checks the file.
+**Stack:** `Checked`. The Squire 0.7.0 release step "laravel restart long-lived processes" (`deploy/scripts/release.sh:461`) runs `php artisan reload` where Laravel has it, otherwise `queue:restart` and `schedule:interrupt`, each when its own `--help` answers; report only, and `SQUIRE_ARTISAN_RESTART=0` turns the step off. `tests/Feature/ReleaseRestartTest.php` holds the commands and the switch in place.
 
 ### W23. Make a silent scheduler visible[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w23-make-a-silent-scheduler-visible)
 
@@ -1418,7 +1419,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Parallel replicas race on schema changes.
 
-**Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh`) and the Quick Update post-script (`deploy/scripts/release.sh`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
+**Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:448`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh:25`) and the Quick Update post-script (`deploy/scripts/release.sh:7`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
 
 ### How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#how-to-read-the-tags)
 
