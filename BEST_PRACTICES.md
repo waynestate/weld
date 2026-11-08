@@ -91,7 +91,7 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Practice:** Keep Laravel's `/up` (200 when the app boots). It must answer for any `Host`, over plain HTTP, before trusted hosts, redirects, sessions, CSP and auth. Put database and cache checks on a separate `/ready` endpoint, through the `DiagnosingHealth` event or a package.
 - **Why:** A database blip must not make the orchestrator kill every web container.
 - **Sources:** [Laravel deployment: the health route](https://laravel.com/docs/13.x/deployment).
-- **Stack:** `Checked`. `bootstrap/app.php:16` sets the health route to `/up`, and `tests/Feature/HelmetHeadersTest.php:41-51` fails the suite when `/up` stops answering 200. Open: the `/ready` endpoint is not built yet.
+- **Stack:** `Checked`. `bootstrap/app.php:16` sets the health route to `/up`, and `tests/Feature/HelmetHeadersTest.php:41-51` fails the suite when `/up` stops answering 200. `/ready` is a separate route (HELMET's `Route::helmetReady()`, `routes/web.php:11`) that checks only the scheduler heartbeat (W23); it runs no database or cache checks yet.
 
 ### W12. Image health check matches the platform
 - **Practice:** Put a `HEALTHCHECK` in the Dockerfile that calls `/up` with a tool the image has (`curl` or `wget`). On Coolify a Dockerfile `HEALTHCHECK` takes precedence over the dashboard check, and a dashboard check needs `curl` or `wget` inside the container.
@@ -165,7 +165,7 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Practice:** Record a heartbeat on every scheduler minute and fail `/ready` (not `/up`) when it is older than a few minutes. Export the age as a Prometheus gauge (off by default).
 - **Why:** With no worker supervisor, a stopped scheduler is otherwise invisible.
 - **Sources:** [Laravel scheduling events](https://laravel.com/docs/13.x/scheduling) (`ScheduledTaskFinished`).
-- **Stack:** `Not yet`. There is no scheduler and no `/ready` endpoint yet. Target `Checked`: a test advances a fake clock and asserts `/ready` fails.
+- **Stack:** `Checked` for the heartbeat. `routes/console.php:17-19` stamps the cache every minute in a closure named `scheduler-heartbeat`, and `routes/web.php:11` registers HELMET's `/ready` with `App\Health\SchedulerHeartbeat`, which answers 503 while the stamp is missing or older than `worker.heartbeat_max_age` (`config/worker.php:30`, env `WORKER_HEARTBEAT_MAX_AGE`, default 180 seconds). `tests/Feature/SchedulerHeartbeatTest.php` proves it: "answers 503 on /ready when the scheduler has not written a heartbeat", "answers 200 on /ready right after the heartbeat closure runs", "answers 503 on /ready again once the clock moves past the max age" (the fake clock) and "schedules the heartbeat every minute under its own name". Byte for byte from Sourdough, held by the regen gate. Open: the Prometheus gauge is not built, and nothing probes `/ready` yet: Squire's `health.php` (Citadel's Health Check and the compose healthcheck) asks `/up`, so only point a traffic probe at `/ready` where `schedule:run` really runs.
 
 ### W24. Run migrations exactly once per release
 - **Practice:** Use a Job, a pre-deploy hook (Coolify "Pre-deployment Command"), or `migrate --isolated`. Never run `migrate` in a per-replica entrypoint.
@@ -236,10 +236,10 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 The Laravel base has landed; the gaps below are the stack packages and the deploy path that have not.
 
 - The stack packages are dependencies now: SESAME and HELMET in `require`, CREED and PROCTOR in `require-dev`, all from Packagist. The items that waited on them (SESAME W1, HELMET W17 and W28, PROCTOR's `Checked` targets, CREED W25) can be checked against the installed packages. Preflight portability (W8, W10, W12, W13, W16, W24), Pinstripe (W32) is not wired into WELD yet; WayneUI (W2) is, at 2.0.8 from npm.
-- The Squire kit in `deploy/` now carries the Citadel deploy path: a Dockerfile mirroring the platform image, an entrypoint and an idempotent release script, so W10, W12, W16 and W24 hold for that path. Still plans: worker and scheduler process types (W8), the non-root, group-0, 8080 contract (W13), and the deploy-time queue/scheduler work (W19, W23).
+- The Squire kit in `deploy/` now carries the Citadel deploy path: a Dockerfile mirroring the platform image, an entrypoint and an idempotent release script, so W10, W12, W16 and W24 hold for that path. Still plans: worker and scheduler process types (W8), the non-root, group-0, 8080 contract (W13), and the deploy-time queue/scheduler work (W19).
 - Unverified: OpenShift arbitrary-UID text on a primary Red Hat page; `serversideup/php` behavior under a random UID; Pest 4's PHP floor; `spatie/laravel-health` scheduler and queue checks; whether Laravel's health route runs before `TrustHosts`; whether the old CSRF middleware name is still an alias.
 - Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap. Confirm with the deploy kit project whether Citadel can run a cron-driven `schedule:run` at all.
-- Decision needed: `spatie/laravel-health` or our own `/ready` (W11, W23).
+- Decided: `/ready` is HELMET's `Route::helmetReady()` with app checks as invokable classes (the scheduler heartbeat today, W23); database and cache checks (W11) can join it the same way.
 - Decision needed: whether WELD keeps Fortify for a non-SSO mode.
 - Decision needed: SSR on by default or off.
 

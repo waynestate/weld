@@ -11,7 +11,7 @@ This page gets you a working copy of WELD: what it needs, the two ways to get it
 
 - PHP `^8.3`
 - Laravel `^13.29`
-- Node, for `npm ci`
+- Node 22 or newer, for `npm ci` (`.nvmrc` says 22; `engines` in `package.json` says `>=22`)
 - Docker, for the local stack
 
 > [!NOTE]

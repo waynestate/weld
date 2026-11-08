@@ -53,7 +53,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** With no worker supervisor, a stopped scheduler is otherwise invisible.
 
-**Stack:** `Not yet`. There is no scheduler and no `/ready` endpoint yet. Target `Checked`: a test advances a fake clock and asserts `/ready` fails.
+**Stack:** `Checked` for the heartbeat. `routes/console.php:17-19` stamps the cache every minute in a closure named `scheduler-heartbeat`, and `routes/web.php:11` registers HELMET's `/ready` with `App\Health\SchedulerHeartbeat`, which answers 503 while the stamp is missing or older than `worker.heartbeat_max_age` (`config/worker.php:30`, env `WORKER_HEARTBEAT_MAX_AGE`, default 180 seconds). `tests/Feature/SchedulerHeartbeatTest.php` proves it: "answers 503 on /ready when the scheduler has not written a heartbeat", "answers 200 on /ready right after the heartbeat closure runs", "answers 503 on /ready again once the clock moves past the max age" (the fake clock) and "schedules the heartbeat every minute under its own name". Byte for byte from Sourdough, held by the regen gate. Open: the Prometheus gauge is not built, and nothing probes `/ready` yet: Squire's `health.php` (Citadel's Health Check and the compose healthcheck) asks `/up`, so only point a traffic probe at `/ready` where `schedule:run` really runs.
 
 ## W24. Run migrations exactly once per release
 

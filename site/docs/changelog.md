@@ -12,6 +12,9 @@ Notable changes to WELD, newest first.
 
 ## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Added: W23, a stopped scheduler shows up at `/ready`. The scheduler stamps the cache every minute (`scheduler-heartbeat` in routes/console.php), and HELMET's `/ready` answers 503 while the stamp is missing or older than `WORKER_HEARTBEAT_MAX_AGE` (default 180 seconds, config/worker.php). `/up` stays the liveness answer, and nothing probes `/ready` yet: Squire's health check still asks `/up`. Copied byte for byte from Sourdough's Inertia shape, with tests/Feature/SchedulerHeartbeatTest.php; BEST_PRACTICES W23 is `Checked` for the heartbeat (the Prometheus gauge is still open).
+- Added: the Node floor from Sourdough: `.nvmrc` (22), `engines.node` `>=22` in package.json, and `.npmrc` with the one-day `min-release-age=1` cooldown, so a package published an hour ago waits a day before it lands in a build.
+- Changed: the regen gate passes against Sourdough's current main again, and the baseline is one path shorter (`.npmrc` now matches). The joint holds.
 - Added: bin/sync-practices.php writes each practice's Practice, Why and Stack lines in docs/guides from BEST_PRACTICES.md, and composer ci fails when a guide drifts (19 of 24 had).
 - Changed: W20, the scheduled queue worker sets --timeout=45, below the connection's retry_after (Laravel's default 90), and QueueWorkerScheduleTest checks the two; W20 is `Checked` for that worker. Copied byte for byte from Sourdough's Inertia shape. The queues guide names the real switch, QUEUE_WORKER_MODE=scheduler (it said WELD_QUEUE_MODE=scheduled).
 - Changed: WELD requires SESAME ^0.6 (locked 0.6.0, was ^0.5 and 0.5.0), matching Sourdough's Inertia bake; MAINTAINING.md and five docs pages name the current HELMET 1.0 and Preflight 0.3.1 pins.

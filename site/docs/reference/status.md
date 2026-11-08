@@ -33,11 +33,11 @@ HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is
 The Laravel base has landed; the gaps below are the stack packages and the deploy path that have not.
 
 - The stack packages are dependencies now: SESAME and HELMET in `require`, CREED and PROCTOR in `require-dev`, all from Packagist. The items that waited on them (SESAME W1, HELMET W17 and W28, PROCTOR's `Checked` targets, CREED W25) can be checked against the installed packages. Preflight portability (W8, W10, W12, W13, W16, W24), Pinstripe (W2, W32) and WayneUI (W2) are not wired into WELD yet.
-- The Squire kit in `deploy/` now carries the Citadel deploy path: a Dockerfile mirroring the platform image, an entrypoint and an idempotent release script, so W10, W12, W16 and W24 hold for that path. Still plans: worker and scheduler process types (W8), the non-root, group-0, 8080 contract (W13), the restart commands in the release script (W22), and the deploy-time queue/scheduler work (W19, W21, W23).
+- The Squire kit in `deploy/` now carries the Citadel deploy path: a Dockerfile mirroring the platform image, an entrypoint and an idempotent release script, so W10, W12, W16 and W24 hold for that path. Still plans: worker and scheduler process types (W8), the non-root, group-0, 8080 contract (W13), the restart commands in the release script (W22), and the deploy-time queue/scheduler work (W19, W21).
 - The JS side of the coding standard (W32) is configured but not in CI.
 - Unverified: OpenShift arbitrary-UID text on a primary Red Hat page; `serversideup/php` behavior under a random UID; Pest 4's PHP floor; `spatie/laravel-health` scheduler and queue checks; whether Laravel's health route runs before `TrustHosts`; whether the old CSRF middleware name is still an alias.
 - Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap. Confirm with the deploy kit project whether Citadel can run a cron-driven `schedule:run` at all.
-- Decision needed: `spatie/laravel-health` or our own `/ready` (W11, W23).
+- Decided: `/ready` is HELMET's `Route::helmetReady()` with app checks as invokable classes (the scheduler heartbeat today, W23); database and cache checks (W11) can join it the same way.
 - Decision needed: whether WELD keeps Fortify for a non-SSO mode.
 - Decision needed: SSR on by default or off.
 
