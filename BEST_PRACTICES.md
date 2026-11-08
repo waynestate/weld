@@ -153,7 +153,7 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Practice:** Run `php artisan schedule:run` every minute (cron, or a CronJob), or `schedule:work` for a single long-lived container. With more than one scheduler, mark tasks `onOneServer()` (shared cache) and name closures.
 - **Why:** Three schedulers run a nightly report three times.
 - **Sources:** [Laravel scheduling](https://laravel.com/docs/13.x/scheduling).
-- **Stack:** `Not yet`. `routes/console.php` has no scheduler entries yet. Target `Checked`: a test fails on any scheduled closure without `->name()`.
+- **Stack:** `Checked`. `tests/Feature/SchedulerNamingTest.php` (Sourdough's copy) fails the suite on any scheduled closure without `->name()`, and its second case proves the guard catches one.
 
 ### W22. Interrupt and restart long-lived processes at deploy
 - **Practice:** After a release run `php artisan queue:restart` (or `php artisan reload`), and `schedule:interrupt` when sub-minute tasks exist.
