@@ -23,6 +23,7 @@ Notable changes to WELD, newest first.
 - Added: tests/Feature/SchedulerNamingTest.php fails on any scheduled closure without ->name(), so onOneServer() and withoutOverlapping() always have a lock name (Sourdough's copy, W21).
 - Added: CI runs Preflight's a11y component (0.3.1) on site/, every page in light and dark at 320 and 1280 px with the WCAG 1.4.10 reflow check, blocking.
 - Changed: Inertia 3 (inertiajs/inertia-laravel ^3.0, @inertiajs/vue3 ^3.0), matching Sourdough's Inertia shape: the progress bar gets HELMET's CSP nonce and the title is marked data-inertia (W4).
+- Changed: the composer image in WELD's own CI jobs is pinned by its multi-arch digest, like the Node image already was.
 - Added: tests/Feature/CsrfTest.php proves a POST without a CSRF token gets 419, and that a matching token or a same-origin request passes (Sourdough's copy, W27).
 - Changed: the GitHub regen gate blocks like GitLab's (it only warned), now that the drift baseline is complete.
 - Changed: CI pins the Preflight components to 0.3.1 (fixed cache keys, and caches saved even when a job fails; D-072).
