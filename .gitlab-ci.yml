@@ -1,22 +1,22 @@
 # WELD's pipeline, built from the Preflight components on this GitLab.
-# Pinned to Preflight 0.1.4. Never use ~latest.
+# Pinned to Preflight 0.2.0. Never use ~latest.
 # WELD requires PHP ^8.3, so the test matrix starts at 8.3.
 # composer ci is the contract: every check runs from the "ci" script in composer.json.
 # Docker Hub images go through the GitLab Dependency Proxy to avoid the anonymous pull limit.
 include:
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@79029cc2300702d0d450c42cc699e12af1b731f8 # 0.1.4
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@7d4f6dad9c90c4f2b2aaf50fdde2a43dbdc5def1 # 0.2.0
     inputs:
       php_versions: ["8.3", "8.4", "8.5"]
       image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/php:${PHP_VERSION}-cli-trixie"
       # The tests are Pest files, and PHPUnit refuses to load them ("Please run
       # ./vendor/bin/pest instead"). Pest runs the PHPUnit class tests too.
       test_command: vendor/bin/pest
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@79029cc2300702d0d450c42cc699e12af1b731f8 # 0.1.4
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@7d4f6dad9c90c4f2b2aaf50fdde2a43dbdc5def1 # 0.2.0
     inputs:
       image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2@sha256:b6dcd72ca98fa19d0e5b8476de179859704891fad06dd9e0b96833d4c430a5fc"
   # The front page deploy layer (ADR-0017): PROCTOR checks deploy/ against CREED's policy.
   # allow_failure: current findings: unbounded dev-main constraints; CI files missing in deploy/.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@79029cc2300702d0d450c42cc699e12af1b731f8 # 0.1.4
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@7d4f6dad9c90c4f2b2aaf50fdde2a43dbdc5def1 # 0.2.0
     inputs:
       working_dir: deploy
       proctor_command: vendor/bin/proctor check --policy=vendor/waynestate/creed/policy/policy.json --format=codequality
