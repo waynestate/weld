@@ -42,7 +42,7 @@ The CHANGELOG lists notable changes to WELD, newest first. Pending work sits und
 
 ## What a release does
 
-WELD is tagged (0.1.0 through 0.1.4 so far). A release:
+WELD is tagged (0.1.0 through 0.1.5 so far). A release:
 
 1. Moves the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. Needs all the checks green locally, then both pipelines green for that commit.
@@ -52,7 +52,7 @@ WELD is tagged (0.1.0 through 0.1.4 so far). A release:
 
 ## Breaking changes
 
-No released version (0.1.0 through 0.1.4) carries a breaking change yet, so upgrading is just taking in the new release:
+No released version (0.1.0 through 0.1.5) carries a breaking change yet, so upgrading is just taking in the new release:
 
 ```sh
 composer require waynestate/<part>:^0.x
