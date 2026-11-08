@@ -24,12 +24,10 @@
     "config/oracle.php",
     "config/queue.php",
     "config/services.php",
-    "config/sesame.php",
     "config/session.php",
     "database/migrations/0001_01_01_000001_create_cache_table.php",
     "database/migrations/0001_01_01_000002_create_jobs_table.php",
     "database/seeders/DatabaseSeeder.php",
-    "docker-compose.squire.yml",
     "eslint.config.js",
     "package.json",
     "phpstan.neon",
@@ -51,5 +49,6 @@
     "storage/framework/.gitignore",
     "storage/framework/cache/.gitignore",
     "storage/framework/cache/locks/.gitignore",
+    "tests/Feature/SkeletonTest.php",
     "tests/Unit/ExampleTest.php"
 ]
