@@ -36,7 +36,7 @@ Warning
 
 **Practice:** HELMET sets the CSP header and calls `Vite::useCspNonce()`; Laravel then adds the nonce to the tags `@vite` emits. Inertia 3 puts initial page data in a JSON script element. Run the policy in report-only first.
 
-**Stack:** `Documented`. HELMET `^0.3` is a dependency and its security headers and CSP middleware run in the global chain. Target `Checked`: a browser test under an enforced CSP.
+**Stack:** `Documented`. HELMET `^1.0` is a dependency and its security headers and CSP middleware run in the global chain. Target `Checked`: a browser test under an enforced CSP.
 
 ## W29: Agent tooling stays out of production[#](https://weld.apps.wayne.edu/docs/guides/security.html#w29-agent-tooling-stays-out-of-production)
 

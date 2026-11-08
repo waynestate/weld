@@ -748,6 +748,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: WELD requires SESAME ^0.6 (locked 0.6.0, was ^0.5 and 0.5.0), matching Sourdough's Inertia bake; MAINTAINING.md and five docs pages name the current HELMET 1.0 and Preflight 0.3.1 pins.
 - Changed: the deploy layer runs Squire's kit 0.7.1 (was 0.7.0): `.squire/php.ini` no longer sets `session.sid_length` or `session.sid_bits_per_character` (PHP 8.4 deprecated both), so sessions use PHP's default 128-bit ID.
 - Added: W19, the scheduler runs the queue on Citadel: QUEUE_WORKER_MODE=scheduler (the .env.example default) schedules queue:work --stop-when-empty --max-time=50 --tries=3 every minute; none leaves it to a supervisor. Copied byte for byte from Sourdough 53275fb; QueueWorkerScheduleTest covers both modes. BEST_PRACTICES W19 is Checked.
 - Docs: BEST_PRACTICES Stack lines match the code again: W1, W3, W4, W7, W9, W11, W27 and W28 move to Checked and W26 to Enforced (each names its test), eight rows cite the lines that moved, and the CI header names Preflight 0.3.1.
@@ -1141,7 +1142,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Preflight components are referenced by commit SHA or a fixed tag, not a moving branch.
 
-**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.1.4 release SHA (the tag in a trailing comment) and `.github/workflows/ci.yml` pins the reusable workflow to a commit SHA; the comment "Pinned to Preflight 0.1.4. Never use ~latest." sits at the top of `.gitlab-ci.yml`. PROCTOR's `preflight-pinned` check, run by the `proctor-root` job, fails on an include without a SHA.
+**Stack:** `Checked`. `.gitlab-ci.yml` includes every Preflight component at the full release tag 0.3.1 (published tags never move) and `.github/workflows/ci.yml` pins the reusable workflow to a commit SHA (0.1.4, the tag in a trailing comment); the comment "Pinned to Preflight 0.3.1. Never use ~latest." sits at the top of `.gitlab-ci.yml`. PROCTOR's `preflight-pinned` check, run by the `proctor-root` job, warns on an include without a full release tag or a commit SHA.
 
 ### Related[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#related)
 
@@ -1283,7 +1284,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** An app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks.
 
-**Stack:** `Enforced` by HELMET 0.3 (required `^0.3`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Target `Checked`: a portability probe sends forged `X-Forwarded-Host` and `-Proto` from an untrusted peer.
+**Stack:** `Enforced` by HELMET 1.0 (required `^1.0`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Target `Checked`: a portability probe sends forged `X-Forwarded-Host` and `-Proto` from an untrusted peer.
 
 ### How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#how-to-read-the-tags)
 
@@ -1588,7 +1589,7 @@ Warning
 
 **Practice:** HELMET sets the CSP header and calls `Vite::useCspNonce()`; Laravel then adds the nonce to the tags `@vite` emits. Inertia 3 puts initial page data in a JSON script element. Run the policy in report-only first.
 
-**Stack:** `Documented`. HELMET `^0.3` is a dependency and its security headers and CSP middleware run in the global chain. Target `Checked`: a browser test under an enforced CSP.
+**Stack:** `Documented`. HELMET `^1.0` is a dependency and its security headers and CSP middleware run in the global chain. Target `Checked`: a browser test under an enforced CSP.
 
 ### W29: Agent tooling stays out of production[#](https://weld.apps.wayne.edu/docs/guides/security.html#w29-agent-tooling-stays-out-of-production)
 
@@ -2042,7 +2043,7 @@ This page lists every environment variable a WELD app reads, its default from `.
 
 ### Trusted proxies and HELMET_PRESET[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#trusted-proxies-and-helmet-preset)
 
-HELMET owns the trusted proxies (W17, `Enforced` by HELMET 0.2): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Pick a platform preset with `HELMET_PRESET`; HELMET 0.2 ships two, `citadel` and `docker`, and an unknown preset name throws at boot. On other platforms, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Do not paste `trustProxies(at: '*')` from tutorials: an app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks. Laravel's own proxy list has its own variable; set `TRUSTED_PROXIES` to the same address (unset means Citadel's `172.18.0.1`). In WELD today, trusted proxies are a literal list in `bootstrap/app.php`.
+HELMET owns the trusted proxies (W17, `Enforced` by HELMET 1.0): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Pick a platform preset with `HELMET_PRESET`; HELMET 1.0 ships two, `citadel` and `docker`, and an unknown preset name throws at boot. On other platforms, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Do not paste `trustProxies(at: '*')` from tutorials: an app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks. Laravel's own proxy list has its own variable; set `TRUSTED_PROXIES` to the same address (unset means Citadel's `172.18.0.1`). In WELD today, trusted proxies are a literal list in `bootstrap/app.php`.
 
 ### Keep .env out of version control[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#keep-env-out-of-version-control)
 
@@ -2304,7 +2305,7 @@ WELD deploys on Citadel through Squire: one container per app, and builds run at
 Two notes before the tables. Claims marked **(check)** depend on something not built yet:
 
 - There is no production Dockerfile or entrypoint. `compose.yaml` is the local development stack (`artisan serve` on 8000 plus Vite on 5173, SQLite), not a deploy image.
-- HELMET (`^0.2`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and HELMET 0.2 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
+- HELMET (`^1.0`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and HELMET 1.0 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
 
 ### Common ground, every platform[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#common-ground-every-platform)
 

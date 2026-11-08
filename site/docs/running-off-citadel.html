@@ -46,8 +46,8 @@ written, which user runs it, how the platform knows it is alive, and what to run
 <ul>
 <li>There is no production Dockerfile or entrypoint. <code>compose.yaml</code> is the local development stack (<code>artisan serve</code>
 on 8000 plus Vite on 5173, SQLite), not a deploy image.</li>
-<li>HELMET (<code>^0.2</code>) owns the trusted proxies (BEST_PRACTICES.md, W17). <code>HELMET_PRESET</code> picks a platform preset, and
-HELMET 0.2 ships two: <code>citadel</code> and <code>docker</code>. An unknown preset name throws at boot. Anywhere else, list the front
+<li>HELMET (<code>^1.0</code>) owns the trusted proxies (BEST_PRACTICES.md, W17). <code>HELMET_PRESET</code> picks a platform preset, and
+HELMET 1.0 ships two: <code>citadel</code> and <code>docker</code>. An unknown preset name throws at boot. Anywhere else, list the front
 proxy's address in <code>HELMET_PROXIES</code> (it wins over <code>HELMET_PRESET</code>), and never trust a whole private range.
 Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).</li>
 </ul>

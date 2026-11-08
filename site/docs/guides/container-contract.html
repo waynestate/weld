@@ -74,7 +74,7 @@
 <h2 id="w17-trust-proxies-by-preset-never">W17. Trust proxies by preset, never <code>*</code><a class="docs-heading-link" aria-label="Link to this section" href="#w17-trust-proxies-by-preset-never">#</a></h2>
 <p><strong>Practice:</strong> Select a HELMET preset (<code>citadel</code> or <code>docker</code>), or list the front proxy in <code>HELMET_PROXIES</code> on other platforms. Do not paste <code>trustProxies(at: '*')</code> from tutorials. Set <code>APP_URL</code> and trusted hosts; Laravel trusts subdomains of <code>APP_URL</code> unless <code>subdomains: false</code>.</p>
 <p><strong>Why:</strong> An app that trusts all proxies lets a client forge <code>X-Forwarded-*</code> and the host used in callbacks.</p>
-<p><strong>Stack:</strong> <code>Enforced</code> by HELMET 0.3 (required <code>^0.3</code>): it trusts only the preset or listed proxies and drops <code>X-Forwarded-Port</code>. Target <code>Checked</code>: a portability probe sends forged <code>X-Forwarded-Host</code> and <code>-Proto</code> from an untrusted peer.</p>
+<p><strong>Stack:</strong> <code>Enforced</code> by HELMET 1.0 (required <code>^1.0</code>): it trusts only the preset or listed proxies and drops <code>X-Forwarded-Port</code>. Target <code>Checked</code>: a portability probe sends forged <code>X-Forwarded-Host</code> and <code>-Proto</code> from an untrusted peer.</p>
 <h2 id="how-to-read-the-tags">How to read the tags<a class="docs-heading-link" aria-label="Link to this section" href="#how-to-read-the-tags">#</a></h2>
 <p>Each practice ends with exactly one tag.</p>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
