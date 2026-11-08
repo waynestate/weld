@@ -23,7 +23,25 @@ include:
       allow_failure: true
       image: "php:8.4-cli-trixie@sha256:9cf851bc2c1b37c3e59dfd677a3c3e56d485af5a47c93f629424bb039eafcb69"
 
+# Every dependency download goes through a cache. The key is fixed per tool,
+# not a lock-file hash: Composer's and npm's caches are additive, so a lock
+# change downloads only what changed instead of everything.
+variables:
+  COMPOSER_CACHE_DIR: "$CI_PROJECT_DIR/.cache/composer"
+  npm_config_cache: "$CI_PROJECT_DIR/.cache/npm"
+
+.composer-cache:
+  cache:
+    key: composer
+    paths: [.cache/composer/]
+
+.npm-cache:
+  cache:
+    key: npm
+    paths: [.cache/npm/]
+
 composer-ci:
+  extends: .composer-cache
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3
   script:
     - composer install --no-interaction --no-progress --prefer-dist
@@ -32,6 +50,7 @@ composer-ci:
 # PROCTOR measures WELD against the CREED version policy. Warnings are
 # allowed; failures block the pipeline.
 proctor-root:
+  extends: .composer-cache
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3
   script:
     - composer install --no-interaction --no-progress --prefer-dist
@@ -43,6 +62,7 @@ proctor-root:
 # No PHP here: Ziggy's client comes from npm, the route list is committed.
 # Multi-arch image, pinned by its list digest (the runner is arm64).
 frontend:
+  extends: .npm-cache
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/node:22.21.1-alpine3.22@sha256:b2358485e3e33bc3a33114d2b1bdb18cdbe4df01bd2b257198eb51beb1f026c5
   script:
     - npm ci --no-audit --no-fund
@@ -55,6 +75,7 @@ frontend:
 # the committed resources/js/ziggy.* must match the routes. Regenerate and
 # fail on any diff.
 ziggy:
+  extends: .composer-cache
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3
   script:
     - composer install --no-interaction --no-progress --prefer-dist
@@ -65,6 +86,7 @@ ziggy:
 # app from Sourdough's main and compares it with WELD by SHA-256. New drift
 # blocks the pipeline: fix it, or record it as accepted with --write-baseline.
 regen-gate:
+  extends: .composer-cache
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3
   script:
     - composer install --no-interaction --no-progress --prefer-dist
