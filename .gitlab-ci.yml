@@ -1,22 +1,22 @@
 # WELD's pipeline, built from the Preflight components on this GitLab.
-# Pinned to Preflight 0.3.1. Never use ~latest.
+# Pinned to Preflight 0.4.0. Never use ~latest.
 # WELD requires PHP ^8.3, so the test matrix starts at 8.3.
 # composer ci is the contract: every check runs from the "ci" script in composer.json.
 # Docker Hub images go through the GitLab Dependency Proxy to avoid the anonymous pull limit.
 include:
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.3.1
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.4.0
     inputs:
       php_versions: ["8.3", "8.4", "8.5"]
       image: "php:${PHP_VERSION}-cli-trixie"
       # The tests are Pest files, and PHPUnit refuses to load them ("Please run
       # ./vendor/bin/pest instead"). Pest runs the PHPUnit class tests too.
       test_command: vendor/bin/pest
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@0.3.1
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@0.4.0
     inputs:
       image: "composer:2@sha256:b6dcd72ca98fa19d0e5b8476de179859704891fad06dd9e0b96833d4c430a5fc"
   # The front page deploy layer (ADR-0017): PROCTOR checks deploy/ against CREED's policy.
   # allow_failure: current findings: unbounded dev-main constraints; CI files missing in deploy/.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@0.3.1
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@0.4.0
     inputs:
       working_dir: deploy
       proctor_command: vendor/bin/proctor check --format=codequality
@@ -25,7 +25,7 @@ include:
   # Accessibility: Preflight's a11y component serves site/ and checks every page with axe-core 4.14.0, light and
   # dark, at 320 and 1280 px, plus WCAG 1.4.10 reflow, at WCAG 2.2 AA. Its Playwright image comes from
   # mcr.microsoft.com, which the Dependency Proxy does not front, so it takes no image_prefix.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.3.1
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.4.0
     inputs:
       site_dir: site
       pages: ["**/*.html"]
@@ -34,7 +34,7 @@ include:
   # it: the a11y-pages job saves them into a11y-site/, signed in by SESAME's
   # fake driver. Named a11y-app so it sits beside the site's a11y job. The
   # pages list is the a11y-pages job's A11Y_PATHS: change the two together.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.3.1
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.4.0
     inputs:
       job_name: a11y-app
       site_dir: a11y-site
@@ -44,11 +44,11 @@ include:
   # composer.lock installs, dev packages left out, kept as sbom.cdx.json for
   # 30 days. When the next advisory lands, finding out whether WELD has the
   # package is one search instead of one guess.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/sbom@0.3.1
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/sbom@0.4.0
   # Gitleaks reads the checkout and fails on anything shaped like a
   # credential, with the finding redacted in the log and in gitleaks.json.
   # A secret belongs in Settings > CI/CD > Variables, never in a file.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/secret-detection@0.3.1
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/secret-detection@0.4.0
 
 # Every dependency download goes through a cache. The key is fixed per tool,
 # not a lock-file hash: Composer's and npm's caches are additive, so a lock
