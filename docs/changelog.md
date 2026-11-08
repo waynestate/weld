@@ -9,6 +9,11 @@ description: All notable changes to this project.
 
 Notable changes to WELD, newest first.
 
+## Unreleased
+
+- Fixed: `composer proctor` and `ProctorCheckTest` run plain `proctor check`; PROCTOR 0.7 refuses `--policy` in CI, which turned `proctor-root` and every `php-test` job red.
+- Fixed: the pipeline's PROCTOR jobs no longer pass `--policy`, which PROCTOR 0.7 refuses in CI; PROCTOR checks against the CREED policy it bundles.
+
 ## 0.1.4 (2026-11-07)
 
 - Changed: the front page deploy layer (`deploy/`) runs Squire's kit 0.6.0 (was 0.5.0): `scripts/release.sh` now asks PROCTOR for a go or no-go right after `composer audit`, before the front end builds and the migrations run (the verdict lands in `proctor-gate.json` under `SQUIRE_PROCTOR_RECORD_DIR`, ratcheted against the last release that went on; `SQUIRE_PROCTOR=enforce` stops the release on a no-go, the default is report only), and `.env.squire.example` gains `SQUIRE_PROCTOR_RECORD_DIR`. The squire holds the gate; the proctor says who may pass.

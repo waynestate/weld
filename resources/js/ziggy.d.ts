@@ -3,6 +3,7 @@ declare module 'ziggy-js' {
   interface RouteList {
     "sesame.login": [],
     "sesame.logout": [],
+    "sesame.status": [],
     "home": [],
     "dashboard": [],
     "profile.edit": [],
