@@ -12,6 +12,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Added: tests/Feature/CsrfTest.php proves a POST without a CSRF token gets 419, and that a matching token or a same-origin request passes (Sourdough's copy, W27).
 - Changed: the GitHub regen gate blocks like GitLab's (it only warned), now that the drift baseline is complete.
 - Changed: CI pins the Preflight components to 0.3.1 (fixed cache keys, and caches saved even when a job fails; D-072).
 - Changed: CI saves its Composer and npm caches even when a job fails, so a retry after a dropped download fetches only what is missing (D-072).
