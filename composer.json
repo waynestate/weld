@@ -20,7 +20,7 @@
         "laravel/framework": "^13.29",
         "laravel/tinker": "^3.0",
         "tightenco/ziggy": "^2.4",
-        "waynestate/helmet": "^0.4",
+        "waynestate/helmet": "^1.0",
         "waynestate/sesame": "^0.5",
         "yajra/laravel-oci8": "^13.14"
     },
