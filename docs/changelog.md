@@ -11,6 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: HELMET moves to `^1.0`, its first stable release, wherever this repo requires it.
 - Fixed: the docs menu closes with Escape and hands focus back to its button (docs kit synced from Squire).
 - Fixed: the docs kit's copy button no longer covers the first line of code when it says Copied or Failed: over the code it keeps its resting width and shows a check or a cross when the word does not fit (docs kit synced from Squire).
 - Fixed: the front page's version chip shows the full version the docs show (0.1.5, was 0.1). It carries `data-docs-version` now, so the docs builder (synced from Squire) rewrites it at every release and `composer docs:check` fails while it is stale.
