@@ -12,3 +12,7 @@ README.md export-ignore
 # README art: generated images and their generator, not part of the package.
 /docs/readme export-ignore
 /scripts/readme-art export-ignore
+
+# The vendored Preflight a11y checker is pinned byte for byte by
+# tests/Unit/A11yCheckerPinTest.php; keep its line endings LF.
+tools/a11y/check.mjs text eol=lf

@@ -1,5 +1,5 @@
 {
-  "name": "rollcall-a11y",
+  "name": "weld-a11y",
   "description": "Front page accessibility gate: axe-core (WCAG 2.2 AA) in a real Chromium browser.",
   "private": true,
   "type": "module",
@@ -7,7 +7,8 @@
     "check": "node check.mjs"
   },
   "dependencies": {
-    "@axe-core/playwright": "4.10.1",
-    "playwright": "1.49.1"
+    "@axe-core/playwright": "4.14.0",
+    "axe-core": "4.14.0",
+    "playwright": "1.65.0"
   }
 }
