@@ -43,6 +43,7 @@
 <h2 id="unreleased">Unreleased<a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></h2>
 <ul>
 <li>Added: bin/sync-practices.php writes each practice's Practice, Why and Stack lines in docs/guides from BEST_PRACTICES.md, and composer ci fails when a guide drifts (19 of 24 had).</li>
+<li>Changed: W20, the scheduled queue worker sets --timeout=45, below the connection's retry_after (Laravel's default 90), and QueueWorkerScheduleTest checks the two; W20 is <code>Checked</code> for that worker. Copied byte for byte from Sourdough's Inertia shape. The queues guide names the real switch, QUEUE_WORKER_MODE=scheduler (it said WELD_QUEUE_MODE=scheduled).</li>
 <li>Changed: WELD requires SESAME ^0.6 (locked 0.6.0, was ^0.5 and 0.5.0), matching Sourdough's Inertia bake; MAINTAINING.md and five docs pages name the current HELMET 1.0 and Preflight 0.3.1 pins.</li>
 <li>Changed: the deploy layer runs Squire's kit 0.7.1 (was 0.7.0): <code>.squire/php.ini</code> no longer sets <code>session.sid_length</code> or <code>session.sid_bits_per_character</code> (PHP 8.4 deprecated both), so sessions use PHP's default 128-bit ID.</li>
 <li>Added: W19, the scheduler runs the queue on Citadel: QUEUE_WORKER_MODE=scheduler (the .env.example default) schedules queue:work --stop-when-empty --max-time=50 --tries=3 every minute; none leaves it to a supervisor. Copied byte for byte from Sourdough 53275fb; QueueWorkerScheduleTest covers both modes. BEST_PRACTICES W19 is Checked.</li>

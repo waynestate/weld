@@ -13,6 +13,7 @@ Notable changes to WELD, newest first.
 ## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
 - Added: bin/sync-practices.php writes each practice's Practice, Why and Stack lines in docs/guides from BEST_PRACTICES.md, and composer ci fails when a guide drifts (19 of 24 had).
+- Changed: W20, the scheduled queue worker sets --timeout=45, below the connection's retry_after (Laravel's default 90), and QueueWorkerScheduleTest checks the two; W20 is `Checked` for that worker. Copied byte for byte from Sourdough's Inertia shape. The queues guide names the real switch, QUEUE_WORKER_MODE=scheduler (it said WELD_QUEUE_MODE=scheduled).
 - Changed: WELD requires SESAME ^0.6 (locked 0.6.0, was ^0.5 and 0.5.0), matching Sourdough's Inertia bake; MAINTAINING.md and five docs pages name the current HELMET 1.0 and Preflight 0.3.1 pins.
 - Changed: the deploy layer runs Squire's kit 0.7.1 (was 0.7.0): `.squire/php.ini` no longer sets `session.sid_length` or `session.sid_bits_per_character` (PHP 8.4 deprecated both), so sessions use PHP's default 128-bit ID.
 - Added: W19, the scheduler runs the queue on Citadel: QUEUE_WORKER_MODE=scheduler (the .env.example default) schedules queue:work --stop-when-empty --max-time=50 --tries=3 every minute; none leaves it to a supervisor. Copied byte for byte from Sourdough 53275fb; QueueWorkerScheduleTest covers both modes. BEST_PRACTICES W19 is Checked.
