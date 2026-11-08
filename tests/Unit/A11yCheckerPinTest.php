@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class A11yCheckerPinTest extends TestCase
 {
-    private const ROOT = __DIR__ . '/../..';
+    private const ROOT = __DIR__.'/../..';
 
     /** The Preflight tag the a11y component runs at in .gitlab-ci.yml. */
     private const PREFLIGHT_TAG = '0.3.1';
@@ -32,25 +32,25 @@ class A11yCheckerPinTest extends TestCase
 
     /** How to bring a drifted pin back, in one commit. */
     private const UPDATE = 'To update the a11y pin, in one commit: bump the preflight/a11y tag in .gitlab-ci.yml, '
-        . 'recopy the checker byte for byte with git -C <a Preflight clone> show <tag>:templates/a11y/check.mjs '
-        . '> tools/a11y/check.mjs (LF line endings), move the image string in scripts/a11y.sh and scripts/a11y.ps1 '
-        . 'and the pins in tools/a11y/package.json to the new tag, and update the constants in this test.';
+        .'recopy the checker byte for byte with git -C <a Preflight clone> show <tag>:templates/a11y/check.mjs '
+        .'> tools/a11y/check.mjs (LF line endings), move the image string in scripts/a11y.sh and scripts/a11y.ps1 '
+        .'and the pins in tools/a11y/package.json to the new tag, and update the constants in this test.';
 
     public function test_the_vendored_checker_matches_the_pinned_tag_byte_for_byte(): void
     {
-        $this->assertFileExists(self::ROOT . '/tools/a11y/check.mjs', 'tools/a11y/check.mjs is missing; ' . self::UPDATE);
-        $raw = (string) file_get_contents(self::ROOT . '/tools/a11y/check.mjs');
+        $this->assertFileExists(self::ROOT.'/tools/a11y/check.mjs', 'tools/a11y/check.mjs is missing; '.self::UPDATE);
+        $raw = (string) file_get_contents(self::ROOT.'/tools/a11y/check.mjs');
 
         $this->assertSame(
             self::CHECKER_SHA256,
             hash('sha256', str_replace("\r\n", "\n", $raw)),
-            'tools/a11y/check.mjs does not match Preflight ' . self::PREFLIGHT_TAG . ' byte for byte. ' . self::UPDATE,
+            'tools/a11y/check.mjs does not match Preflight '.self::PREFLIGHT_TAG.' byte for byte. '.self::UPDATE,
         );
     }
 
     public function test_every_ci_include_of_the_a11y_component_names_the_pinned_tag(): void
     {
-        $ci = (string) file_get_contents(self::ROOT . '/.gitlab-ci.yml');
+        $ci = (string) file_get_contents(self::ROOT.'/.gitlab-ci.yml');
         preg_match_all('/preflight\/a11y@([0-9]+\.[0-9]+\.[0-9]+)/', $ci, $matches);
         $this->assertNotEmpty($matches[1], '.gitlab-ci.yml includes no preflight/a11y component');
 
@@ -58,7 +58,7 @@ class A11yCheckerPinTest extends TestCase
             $this->assertSame(
                 self::PREFLIGHT_TAG,
                 $tag,
-                '.gitlab-ci.yml pins the a11y component to ' . $tag . ', not ' . self::PREFLIGHT_TAG . '. ' . self::UPDATE,
+                '.gitlab-ci.yml pins the a11y component to '.$tag.', not '.self::PREFLIGHT_TAG.'. '.self::UPDATE,
             );
         }
     }
@@ -70,15 +70,15 @@ class A11yCheckerPinTest extends TestCase
             'scripts/a11y.ps1',
         ];
         foreach ($scripts as $script) {
-            $code = (string) file_get_contents(self::ROOT . '/' . $script);
+            $code = (string) file_get_contents(self::ROOT.'/'.$script);
             preg_match_all('/mcr\.microsoft\.com\/playwright:[0-9A-Za-z.:@_-]+/', $code, $matches);
-            $this->assertNotEmpty($matches[0], $script . ' names no Playwright image');
+            $this->assertNotEmpty($matches[0], $script.' names no Playwright image');
 
             foreach (array_unique($matches[0]) as $image) {
                 $this->assertSame(
                     self::IMAGE,
                     $image,
-                    $script . ' uses ' . $image . ', not the pinned image. ' . self::UPDATE,
+                    $script.' uses '.$image.', not the pinned image. '.self::UPDATE,
                 );
             }
         }
@@ -86,19 +86,19 @@ class A11yCheckerPinTest extends TestCase
 
     public function test_the_checker_packages_pin_the_template_axe_versions(): void
     {
-        $package = json_decode((string) file_get_contents(self::ROOT . '/tools/a11y/package.json'), true);
+        $package = json_decode((string) file_get_contents(self::ROOT.'/tools/a11y/package.json'), true);
         $this->assertIsArray($package, 'tools/a11y/package.json is not valid JSON');
         $dependencies = $package['dependencies'] ?? [];
 
         $this->assertSame(
             self::AXE_PLAYWRIGHT_VERSION,
             $dependencies['@axe-core/playwright'] ?? null,
-            '@axe-core/playwright must pin the template axe_playwright_version default. ' . self::UPDATE,
+            '@axe-core/playwright must pin the template axe_playwright_version default. '.self::UPDATE,
         );
         $this->assertSame(
             self::AXE_CORE_VERSION,
             $dependencies['axe-core'] ?? null,
-            'axe-core must pin the template axe_core_version default. ' . self::UPDATE,
+            'axe-core must pin the template axe_core_version default. '.self::UPDATE,
         );
     }
 }
