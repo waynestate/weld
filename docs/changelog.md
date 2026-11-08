@@ -11,7 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
-- Changed: the deploy kit moves to Squire 0.7.0: the release script restarts queue workers and the scheduler after optimize (reload, or queue:restart and schedule:interrupt), report only, so W22 is Checked.
+- Changed: the deploy kit moves to Squire 0.7.0: the release script restarts queue workers and the scheduler after optimize (reload, or queue:restart and schedule:interrupt), report only, so W22 is Checked. The kit also brings Squire 0.7.0's image hardening: the web's PHP loses `exec`, `passthru`, `shell_exec`, `system`, `pcntl_exec`, `phpinfo`, `show_source` and `highlight_file` (the CLI keeps them; `SQUIRE_PHP_DISABLE_FUNCTIONS` sets the list, `none` disables nothing), production opcache (`SQUIRE_OPCACHE_VALIDATE=1` by default, `0` for an image that bakes its code in), Apache's `ServerTokens Prod`, and secrets read from `/run/secrets`. See Squire's upgrading notes for 0.7.0.
 - Changed: the local a11y scripts run Preflight's own checker (vendored from 0.3.1 and pinned by a test), so they check what CI checks: axe-core 4.14.0, 320 and 1280 px, and the reflow check.
 - Added: tests/Feature/SchedulerNamingTest.php fails on any scheduled closure without ->name(), so onOneServer() and withoutOverlapping() always have a lock name (Sourdough's copy, W21).
 - Added: CI runs Preflight's a11y component (0.3.1) on site/, every page in light and dark at 320 and 1280 px with the WCAG 1.4.10 reflow check, blocking.
