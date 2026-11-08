@@ -77,7 +77,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** An app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks.
 
-**Stack:** `Enforced` by HELMET 0.3 (required `^0.3`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Target `Checked`: a portability probe sends forged `X-Forwarded-Host` and `-Proto` from an untrusted peer.
+**Stack:** `Enforced` by HELMET 1.0 (required `^1.0`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Target `Checked`: a portability probe sends forged `X-Forwarded-Host` and `-Proto` from an untrusted peer.
 
 ## How to read the tags
 

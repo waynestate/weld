@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b9f8fe9d5bb3f0990c7442997bcfd33",
+    "content-hash": "d4ffae7a4bd361d4c88dda8d0e58338c",
     "packages": [
         {
             "name": "brick/math",
@@ -7249,16 +7249,16 @@
         },
         {
             "name": "waynestate/sesame",
-            "version": "0.5.0",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/sesame.git",
-                "reference": "51953f9c8874ee590d5ff2b6bf5018c6eb266a05"
+                "reference": "f90277c10c034aab298281501d5c70d575c87262"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/sesame/zipball/51953f9c8874ee590d5ff2b6bf5018c6eb266a05",
-                "reference": "51953f9c8874ee590d5ff2b6bf5018c6eb266a05",
+                "url": "https://api.github.com/repos/waynestate/sesame/zipball/f90277c10c034aab298281501d5c70d575c87262",
+                "reference": "f90277c10c034aab298281501d5c70d575c87262",
                 "shasum": ""
             },
             "require": {
@@ -7276,11 +7276,16 @@
                 "psr/simple-cache": "^3.0",
                 "symfony/http-foundation": "^6.4 || ^7.4"
             },
+            "conflict": {
+                "onelogin/php-saml": "<4.3.2",
+                "robrichards/xmlseclibs": "<3.1.5"
+            },
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.9 || ^8.0",
                 "laravel/pint": "^1.32",
                 "league/commonmark": "^2.10",
                 "league/oauth2-client": "^2.9.1",
+                "onelogin/php-saml": "^4.3.2",
                 "orchestra/testbench": "^10.0 || ^11.0",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-strict-rules": "^2.0",
@@ -7291,6 +7296,7 @@
                 "guzzlehttp/guzzle": "A PSR-18 client for the cas, oauth2 and oidc drivers",
                 "laravel/framework": "For the Laravel adapter",
                 "league/oauth2-client": "Required by the oidc driver (browser sign-in to Entra): the authorization code flow with PKCE and the token request",
+                "onelogin/php-saml": "Required by the saml driver (a SAML 2.0 service provider for a Shibboleth-style IdP): ^4.3.2",
                 "symfony/http-client": "A PSR-18 client for the cas, oauth2 and oidc drivers",
                 "waynestate/playbook": "WSU's shared values (CAS, Entra, gateway); private, git.wayne.edu"
             },
@@ -7328,7 +7334,7 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/sesame/-/issues",
                 "source": "https://github.com/waynestate/sesame"
             },
-            "time": "2026-11-07T22:54:30+00:00"
+            "time": "2026-11-08T13:51:16+00:00"
         },
         {
             "name": "yajra/laravel-oci8",

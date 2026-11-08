@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: WELD requires SESAME ^0.6 (locked 0.6.0, was ^0.5 and 0.5.0), matching Sourdough's Inertia bake; MAINTAINING.md and five docs pages name the current HELMET 1.0 and Preflight 0.3.1 pins.
 - Changed: the deploy layer runs Squire's kit 0.7.1 (was 0.7.0): `.squire/php.ini` no longer sets `session.sid_length` or `session.sid_bits_per_character` (PHP 8.4 deprecated both), so sessions use PHP's default 128-bit ID.
 - Added: W19, the scheduler runs the queue on Citadel: QUEUE_WORKER_MODE=scheduler (the .env.example default) schedules queue:work --stop-when-empty --max-time=50 --tries=3 every minute; none leaves it to a supervisor. Copied byte for byte from Sourdough 53275fb; QueueWorkerScheduleTest covers both modes. BEST_PRACTICES W19 is Checked.
 - Docs: BEST_PRACTICES Stack lines match the code again: W1, W3, W4, W7, W9, W11, W27 and W28 move to Checked and W26 to Enforced (each names its test), eight rows cite the lines that moved, and the CI header names Preflight 0.3.1.
