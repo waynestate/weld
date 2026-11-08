@@ -44,8 +44,9 @@ and plain Docker. This page is the per-platform contract: how traffic reaches th
 written, which user runs it, how the platform knows it is alive, and what to run after every deploy.</p>
 <p>Two notes before the tables. Claims marked <strong>(check)</strong> depend on something not built yet:</p>
 <ul>
-<li>There is no production Dockerfile or entrypoint. <code>compose.yaml</code> is the local development stack (<code>artisan serve</code>
-on 8000 plus Vite on 5173, SQLite), not a deploy image.</li>
+<li>The image is Squire's portable image, <code>deploy/.squire/portable.Dockerfile</code> (see &quot;The portable image&quot; below).
+<code>compose.yaml</code> is the local development stack (<code>artisan serve</code> on 8000 plus Vite on 5173, SQLite), not a deploy
+image.</li>
 <li>HELMET (<code>^1.0</code>) owns the trusted proxies (BEST_PRACTICES.md, W17). <code>HELMET_PRESET</code> picks a platform preset, and
 HELMET 1.0 ships two: <code>citadel</code> and <code>docker</code>. An unknown preset name throws at boot. Anywhere else, list the front
 proxy's address in <code>HELMET_PROXIES</code> (it wins over <code>HELMET_PRESET</code>), and never trust a whole private range.
@@ -78,7 +79,11 @@ Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same a
 </tr>
 <tr>
 <td>User</td>
-<td>Non-root. Declare a <code>USER</code> in the image; never depend on a <code>www-data</code> entry (W13).</td>
+<td>Non-root. The portable image declares <code>USER 10001:0</code> and never depends on a <code>www-data</code> entry; any UID in group 0 runs it (W13).</td>
+</tr>
+<tr>
+<td>Processes</td>
+<td>One image, four roles by <code>SQUIRE_ROLE</code>: <code>web</code> (Apache on 8080), <code>worker</code> (<code>queue:work --tries=3 --max-time=3600 --sleep=3</code>), <code>scheduler</code> (<code>schedule:work</code>, with <code>QUEUE_WORKER_MODE=none</code>) and <code>migrate</code> (once per release) (W8, W24).</td>
 </tr>
 <tr>
 <td>Health</td>
@@ -125,7 +130,7 @@ Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same a
 </tr>
 <tr>
 <td>Queue</td>
-<td>No queue workers on Citadel. The scheduled-worker mode <code>WELD_QUEUE_MODE=scheduled</code> is planned, not built (W19, <strong>check</strong>).</td>
+<td>No queue workers on Citadel. <code>QUEUE_WORKER_MODE=scheduler</code> (the <code>.env.example</code> default) schedules a short <code>queue:work --stop-when-empty --max-time=50 --tries=3</code> every minute (W19).</td>
 </tr>
 <tr>
 <td>After deploy</td>
@@ -160,11 +165,15 @@ Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same a
 </tr>
 <tr>
 <td>User</td>
-<td>OpenShift assigns a random UID in group 0 with capabilities dropped (W13), so make both writable paths group-owned and group-writable before the pod starts: <code>chgrp -R 0 storage bootstrap/cache &amp;&amp; chmod -R g=u storage bootstrap/cache</code>.</td>
+<td>OpenShift assigns a random UID in group 0 with capabilities dropped (W13). The portable image already made <code>storage/</code>, <code>bootstrap/cache/</code> and Apache's folders group-owned and group-writable (<code>chgrp -R 0</code>, <code>chmod -R g=u</code>), so it runs as that UID unchanged.</td>
+</tr>
+<tr>
+<td>Processes</td>
+<td>A Deployment each for <code>web</code> (<code>SQUIRE_ROLE=web</code>, container port 8080) and <code>worker</code>, one replica of <code>scheduler</code>, and a Job (or a pre-deploy hook) for <code>migrate</code> (W8).</td>
 </tr>
 <tr>
 <td>Health</td>
-<td>Liveness probe: HTTP GET <code>/up</code>. It answers for any <code>Host</code> over plain HTTP, before trusted hosts, sessions and auth (W11).</td>
+<td>Liveness probe: HTTP GET <code>/up</code> on 8080. It answers for any <code>Host</code> over plain HTTP, before trusted hosts, sessions and auth (W11).</td>
 </tr>
 <tr>
 <td>After deploy</td>
@@ -199,11 +208,15 @@ Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same a
 </tr>
 <tr>
 <td>User</td>
-<td>Whatever the image declares; keep it non-root (W13).</td>
+<td>Whatever the image declares: <code>10001:0</code> for the portable image (W13).</td>
+</tr>
+<tr>
+<td>Processes</td>
+<td>Deploy the portable image's Dockerfile, or the <code>portable</code> profile of <code>deploy/docker-compose.squire.yml</code> as a Compose app (W8).</td>
 </tr>
 <tr>
 <td>Health</td>
-<td>A Dockerfile <code>HEALTHCHECK</code> that calls <code>/up</code> takes precedence over the dashboard check; either way the image needs <code>curl</code> or <code>wget</code> (W12). Traefik stops routing to an unhealthy container.</td>
+<td>A Dockerfile <code>HEALTHCHECK</code> takes precedence over the dashboard check (W12). The portable image's runs <code>squire-entrypoint health</code>: <code>health.php</code> asks the web role's <code>/up</code>, and the other roles are healthy while they run. A dashboard check instead needs <code>curl</code> or <code>wget</code> in the image. Traefik stops routing to an unhealthy container.</td>
 </tr>
 <tr>
 <td>After deploy</td>
@@ -226,7 +239,7 @@ Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same a
 </tr>
 <tr>
 <td>Logs</td>
-<td><code>php://stderr</code>; follow them with <code>docker compose logs -f app</code>.</td>
+<td><code>php://stderr</code>, and Apache's logs to stdout and stderr; follow them with <code>docker compose logs -f web worker scheduler</code>.</td>
 </tr>
 <tr>
 <td>Writable paths</td>
@@ -234,11 +247,15 @@ Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same a
 </tr>
 <tr>
 <td>User</td>
-<td>Non-root <code>USER</code> in the image (W13).</td>
+<td>Non-root <code>USER</code> in the image (W13); try OpenShift's way with <code>SQUIRE_PORTABLE_USER=1000123:0</code>.</td>
+</tr>
+<tr>
+<td>Processes</td>
+<td>The <code>portable</code> profile's <code>migrate</code>, <code>web</code>, <code>worker</code> and <code>scheduler</code> services, one image (W8).</td>
 </tr>
 <tr>
 <td>Health</td>
-<td><code>HEALTHCHECK</code> on <code>/up</code> in the image (W12).</td>
+<td><code>HEALTHCHECK</code> in the image (W12).</td>
 </tr>
 <tr>
 <td>After deploy</td>
@@ -246,14 +263,35 @@ Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same a
 </tr>
 </tbody>
 </table></div>
-<p>The <code>compose.yaml</code> in this repository is the local development stack, not a production image. A production image
-for raw Docker is <strong>(check)</strong> until one ships.</p>
+<p>The <code>compose.yaml</code> in this repository is the local development stack, not a production image.</p>
+<h2 id="the-portable-image">The portable image<a class="docs-heading-link" aria-label="Link to this section" href="#the-portable-image">#</a></h2>
+<p>Squire's kit in <code>deploy/</code> carries the image for every platform above but Citadel. Build it from the repository root
+(the app), with the kit's folder named:</p>
+<!-- docs-test: skip needs Docker -->
+<pre tabindex="0"><code class="language-sh">docker build -f deploy/.squire/portable.Dockerfile --build-arg SQUIRE_KIT_DIR=deploy --build-arg BASE_IMAGE=&lt;base image&gt; -t weld .
+docker run -d --user 1000123:0 --cap-drop ALL --security-opt no-new-privileges:true --env-file .env -p 127.0.0.1:8081:8080 weld
+docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=worker weld
+docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=scheduler -e QUEUE_WORKER_MODE=none weld
+</code></pre>
+<p>Or the four roles at once, with MySQL beside them, from <code>deploy/</code> (copy <code>.env.squire.example</code> to <code>.env.squire</code> and set
+<code>SQUIRE_PORTABLE_CONTEXT=..</code>, <code>SQUIRE_KIT_DIR=deploy</code> and <code>SQUIRE_PORTABLE_ENV_FILE=../.env</code> there):</p>
+<!-- docs-test: skip needs Docker -->
+<pre tabindex="0"><code class="language-sh">docker compose -f docker-compose.squire.yml --env-file .env.squire --profile portable up -d --build web worker scheduler
+</code></pre>
+<p>The build runs the install-and-build half of the release (Composer without dev packages, the Vite build); each
+container runs <code>php artisan optimize</code> when it starts, so config is cached for its own environment, never at build
+(W10), and <code>migrate</code> runs once before the others (W24). Every role stops gracefully on <code>SIGTERM</code> (W16). Squire's
+<a rel="noopener" href="https://squire.apps.wayne.edu/docs/guides/portable-image.html">portable image guide</a> has the whole contract.</p>
+<aside class="docs-callout docs-callout--warning" role="note"><p class="docs-callout__label">Warning</p><p><code>php artisan optimize</code> fails today in WELD: SESAME 0.6.0 registers route closures that capture its service
+provider, and serializing them for <code>route:cache</code> runs out of memory, so the container stops. Until SESAME's routes
+move to controllers, start the containers with <code>SQUIRE_ARTISAN_OPTIMIZE=0</code>, which also skips the config cache. The
+optimize step in <code>scripts/release.sh</code> would hit the same routes on Citadel.</p></aside>
 <p>Four tables, one bead: if the joint passes <code>weld:doctor</code> on all of them, the seam holds.</p>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../docs/guides/regen-check.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Is WELD still Sourdough&#039;s shape?</span></a><a class="docs-pager__link docs-pager__link--next" href="../docs/guides/app-structure.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">App structure</span></a></nav>
   </div>
-  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#common-ground-every-platform">Common ground, every platform</a></li><li class="docs-toc__item"><a href="#citadel-for-comparison">Citadel (for comparison)</a></li><li class="docs-toc__item"><a href="#openshift">OpenShift</a></li><li class="docs-toc__item"><a href="#coolify">Coolify</a></li><li class="docs-toc__item"><a href="#plain-docker-compose">Plain Docker compose</a></li></ul></nav>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#common-ground-every-platform">Common ground, every platform</a></li><li class="docs-toc__item"><a href="#citadel-for-comparison">Citadel (for comparison)</a></li><li class="docs-toc__item"><a href="#openshift">OpenShift</a></li><li class="docs-toc__item"><a href="#coolify">Coolify</a></li><li class="docs-toc__item"><a href="#plain-docker-compose">Plain Docker compose</a></li><li class="docs-toc__item"><a href="#the-portable-image">The portable image</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.5</span></span>

@@ -206,7 +206,9 @@ The same subcommands work on every OS:
 | `logs` | Follow the container logs |
 
 Deploying somewhere other than a laptop? [Running WELD off Citadel](docs/running-off-citadel.md) covers OpenShift,
-Coolify and plain Docker, with Citadel for comparison.
+Coolify and plain Docker, with Citadel for comparison. Off Citadel, WELD ships as one image from Squire's kit
+(`deploy/.squire/portable.Dockerfile`) that runs as `web`, `worker`, `scheduler` or `migrate`, as any UID in group 0
+on port 8080: the same bead, four passes.
 
 Does it hold? [Proof](docs/reference/proof.md) is the bend test: on 2026-11-06 a new app went from an empty folder to
 a signed-in WayneUI dashboard in about four and a half minutes and to every CI gate green in about eight, with 0

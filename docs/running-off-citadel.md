@@ -12,8 +12,9 @@ written, which user runs it, how the platform knows it is alive, and what to run
 
 Two notes before the tables. Claims marked **(check)** depend on something not built yet:
 
-- There is no production Dockerfile or entrypoint. `compose.yaml` is the local development stack (`artisan serve`
-  on 8000 plus Vite on 5173, SQLite), not a deploy image.
+- The image is Squire's portable image, `deploy/.squire/portable.Dockerfile` (see "The portable image" below).
+  `compose.yaml` is the local development stack (`artisan serve` on 8000 plus Vite on 5173, SQLite), not a deploy
+  image.
 - HELMET (`^1.0`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and
   HELMET 1.0 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front
   proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range.
@@ -27,7 +28,8 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Logs | `LOG_CHANNEL=stderr` (`.env.example:18`). Everything goes to `php://stderr`; nothing under `storage/logs` (W14). |
 | Writable paths | `storage/` and `bootstrap/cache/` only, plus `/tmp` (W14). |
 | Sessions and cache | A shared store, even for one replica: `SESSION_DRIVER=database` (`.env.example:30`) and `CACHE_STORE=database` (`.env.example:40`), because every deploy overlaps old and new containers (W15). |
-| User | Non-root. Declare a `USER` in the image; never depend on a `www-data` entry (W13). |
+| User | Non-root. The portable image declares `USER 10001:0` and never depends on a `www-data` entry; any UID in group 0 runs it (W13). |
+| Processes | One image, four roles by `SQUIRE_ROLE`: `web` (Apache on 8080), `worker` (`queue:work --tries=3 --max-time=3600 --sleep=3`), `scheduler` (`schedule:work`, with `QUEUE_WORKER_MODE=none`) and `migrate` (once per release) (W8, W24). |
 | Health | `/up`, registered in `bootstrap/app.php`: 200 when the framework boots, and it never checks the database, so a database blip cannot kill every replica (W11). |
 | After every deploy | Run `php artisan weld:doctor` in the app container. One PASS, WARN or FAIL line per check; exit code 1 when anything FAILs, so it works as a gate. |
 
@@ -41,7 +43,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Writable paths | `storage/`, `bootstrap/cache/`. |
 | User | Set by the Citadel image **(check)**. |
 | Health | `/up`. |
-| Queue | No queue workers on Citadel. The scheduled-worker mode `WELD_QUEUE_MODE=scheduled` is planned, not built (W19, **check**). |
+| Queue | No queue workers on Citadel. `QUEUE_WORKER_MODE=scheduler` (the `.env.example` default) schedules a short `queue:work --stop-when-empty --max-time=50 --tries=3` every minute (W19). |
 | After deploy | `php artisan weld:doctor` in the app container. |
 
 ## OpenShift
@@ -52,8 +54,9 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Trusted proxies | `HELMET_PROXIES=<router address>`, and the same address in TRUSTED_PROXIES: trust the router only (W17). There is no `openshift` preset; setting one throws. |
 | Logs | `php://stderr`; read them with `oc logs`. |
 | Writable paths | `storage/`, `bootstrap/cache/`. |
-| User | OpenShift assigns a random UID in group 0 with capabilities dropped (W13), so make both writable paths group-owned and group-writable before the pod starts: `chgrp -R 0 storage bootstrap/cache && chmod -R g=u storage bootstrap/cache`. |
-| Health | Liveness probe: HTTP GET `/up`. It answers for any `Host` over plain HTTP, before trusted hosts, sessions and auth (W11). |
+| User | OpenShift assigns a random UID in group 0 with capabilities dropped (W13). The portable image already made `storage/`, `bootstrap/cache/` and Apache's folders group-owned and group-writable (`chgrp -R 0`, `chmod -R g=u`), so it runs as that UID unchanged. |
+| Processes | A Deployment each for `web` (`SQUIRE_ROLE=web`, container port 8080) and `worker`, one replica of `scheduler`, and a Job (or a pre-deploy hook) for `migrate` (W8). |
+| Health | Liveness probe: HTTP GET `/up` on 8080. It answers for any `Host` over plain HTTP, before trusted hosts, sessions and auth (W11). |
 | After deploy | `oc exec deploy/<app> -- php artisan weld:doctor`. |
 
 ## Coolify
@@ -64,8 +67,9 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Trusted proxies | `HELMET_PROXIES=<Traefik container address>`, and the same address in TRUSTED_PROXIES (W17). There is no `coolify` preset; setting one throws. |
 | Logs | `php://stderr`; Coolify shows the container logs. |
 | Writable paths | `storage/`, `bootstrap/cache/`, on a persistent volume so they survive redeploys. |
-| User | Whatever the image declares; keep it non-root (W13). |
-| Health | A Dockerfile `HEALTHCHECK` that calls `/up` takes precedence over the dashboard check; either way the image needs `curl` or `wget` (W12). Traefik stops routing to an unhealthy container. |
+| User | Whatever the image declares: `10001:0` for the portable image (W13). |
+| Processes | Deploy the portable image's Dockerfile, or the `portable` profile of `deploy/docker-compose.squire.yml` as a Compose app (W8). |
+| Health | A Dockerfile `HEALTHCHECK` takes precedence over the dashboard check (W12). The portable image's runs `squire-entrypoint health`: `health.php` asks the web role's `/up`, and the other roles are healthy while they run. A dashboard check instead needs `curl` or `wget` in the image. Traefik stops routing to an unhealthy container. |
 | After deploy | Exec into the app container and run `php artisan weld:doctor`. |
 
 ## Plain Docker compose
@@ -73,13 +77,45 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Concern | How it works |
 |---|---|
 | Traffic | Direct to the container, or your own reverse proxy in front. With no proxy, trust no forwarded headers: `HELMET_PRESET=docker` **(check)** (W17). |
-| Logs | `php://stderr`; follow them with `docker compose logs -f app`. |
+| Logs | `php://stderr`, and Apache's logs to stdout and stderr; follow them with `docker compose logs -f web worker scheduler`. |
 | Writable paths | Mount `storage/` and `bootstrap/cache/` as volumes so data survives the container. |
-| User | Non-root `USER` in the image (W13). |
-| Health | `HEALTHCHECK` on `/up` in the image (W12). |
+| User | Non-root `USER` in the image (W13); try OpenShift's way with `SQUIRE_PORTABLE_USER=1000123:0`. |
+| Processes | The `portable` profile's `migrate`, `web`, `worker` and `scheduler` services, one image (W8). |
+| Health | `HEALTHCHECK` in the image (W12). |
 | After deploy | `docker compose exec app php artisan weld:doctor`. |
 
-The `compose.yaml` in this repository is the local development stack, not a production image. A production image
-for raw Docker is **(check)** until one ships.
+The `compose.yaml` in this repository is the local development stack, not a production image.
+
+## The portable image
+
+Squire's kit in `deploy/` carries the image for every platform above but Citadel. Build it from the repository root
+(the app), with the kit's folder named:
+
+<!-- docs-test: skip needs Docker -->
+```sh
+docker build -f deploy/.squire/portable.Dockerfile --build-arg SQUIRE_KIT_DIR=deploy --build-arg BASE_IMAGE=<base image> -t weld .
+docker run -d --user 1000123:0 --cap-drop ALL --security-opt no-new-privileges:true --env-file .env -p 127.0.0.1:8081:8080 weld
+docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=worker weld
+docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=scheduler -e QUEUE_WORKER_MODE=none weld
+```
+
+Or the four roles at once, with MySQL beside them, from `deploy/` (copy `.env.squire.example` to `.env.squire` and set
+`SQUIRE_PORTABLE_CONTEXT=..`, `SQUIRE_KIT_DIR=deploy` and `SQUIRE_PORTABLE_ENV_FILE=../.env` there):
+
+<!-- docs-test: skip needs Docker -->
+```sh
+docker compose -f docker-compose.squire.yml --env-file .env.squire --profile portable up -d --build web worker scheduler
+```
+
+The build runs the install-and-build half of the release (Composer without dev packages, the Vite build); each
+container runs `php artisan optimize` when it starts, so config is cached for its own environment, never at build
+(W10), and `migrate` runs once before the others (W24). Every role stops gracefully on `SIGTERM` (W16). Squire's
+[portable image guide](https://squire.apps.wayne.edu/docs/guides/portable-image.html) has the whole contract.
+
+> [!WARNING]
+> `php artisan optimize` fails today in WELD: SESAME 0.6.0 registers route closures that capture its service
+> provider, and serializing them for `route:cache` runs out of memory, so the container stops. Until SESAME's routes
+> move to controllers, start the containers with `SQUIRE_ARTISAN_OPTIMIZE=0`, which also skips the config cache. The
+> optimize step in `scripts/release.sh` would hit the same routes on Citadel.
 
 Four tables, one bead: if the joint passes `weld:doctor` on all of them, the seam holds.
