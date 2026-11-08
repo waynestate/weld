@@ -9,19 +9,15 @@ description: All notable changes to this project.
 
 Notable changes to WELD, newest first.
 
-## Unreleased
+## 0.1.4 (2026-11-07)
 
 - Changed: the front page deploy layer (`deploy/`) runs Squire's kit 0.6.0 (was 0.5.0): `scripts/release.sh` now asks PROCTOR for a go or no-go right after `composer audit`, before the front end builds and the migrations run (the verdict lands in `proctor-gate.json` under `SQUIRE_PROCTOR_RECORD_DIR`, ratcheted against the last release that went on; `SQUIRE_PROCTOR=enforce` stops the release on a no-go, the default is report only), and `.env.squire.example` gains `SQUIRE_PROCTOR_RECORD_DIR`. The squire holds the gate; the proctor says who may pass.
 - Changed: the GitLab pipeline pins the Preflight components to the 0.2.0 release SHA (was 0.1.4).
 - Changed: the stack pins move up: HELMET `^0.4` (locked 0.4.0), SESAME `^0.5` (locked 0.5.0) and PROCTOR `^0.7` (locked 0.7.0). SESAME 0.5 binds each sign-in to the browser that started it, so `config/sesame.php` gains `require_pending_login` (on by default; off only for an app that must accept a ticket for a login it did not start) and the fake driver answers `jane.doe` when `SESAME_FAKE_USERNAME` is unset.
 - Added: `tests/Feature/SkeletonTest.php`, the skeleton tests Sourdough ships with its Inertia template: `/up`, the guest and signed-in routes, the 404 page, and the resolver's round trip from a JSON session back to the User. WELD's branded Welcome page is asserted where the skeleton shows Home.
 - Changed: the regen baseline rebalances for the 0.6.0 kit: `config/sesame.php` converges byte for byte, `docker-compose.squire.yml` and `scripts/release.sh` sit under `deploy/` as relocated copies, and `tests/Feature/SkeletonTest.php` joins the accepted drift (52 known paths now).
-
 - Fixed: the front page and the Sourdough guide say Sourdough bakes all five app shapes (they said four, with raw PHP plus a Vue SPA still waiting). "Pick your path" gives that shape its own card (`sourdough new my-app --raw --vue`), and the WELD card spans the row's last two cells.
 - Fixed: the README, "What is welded in" and the status page name Pinstripe 0.1.4 as the release on Packagist (they said 0.1.1).
-
-## 0.1.4 (2026-11-07)
-
 - Changed: the front page's deploy layer (`deploy/`) runs Squire's kit 0.5.0 (was 0.4.0): `.squire/base-fallback.Dockerfile` and `scripts/parity.ps1` take the new templates, and `docker-compose.squire.yml`, which Renovate had edited, is Squire's template again, so `squire init --check` passes.
 - Changed: The canonical repository is git.wayne.edu (ADR-0021); docs, links and package metadata no longer point at the archived nougat copy.
 - Changed: the GitLab `regen-gate` job blocks: `allow_failure` is gone, so new drift against Sourdough's main fails the pipeline. Fix the drift here or upstream in Sourdough, or record the current drift as accepted with `--write-baseline` and commit `.sourdough/regen-baseline.json`; the GitHub pipeline keeps `continue-on-error`.
