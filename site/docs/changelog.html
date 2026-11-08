@@ -42,6 +42,7 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased">Unreleased<a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></h2>
 <ul>
+<li>Changed: CI saves its Composer and npm caches even when a job fails, so a retry after a dropped download fetches only what is missing (D-072).</li>
 <li>Added: the app refuses to boot in production with APP_DEBUG on (app/Support/ProductionDebug.php, Sourdough's guard).</li>
 <li>Changed: WELD's own CI jobs cache Composer and npm downloads under a fixed key, so a lock change downloads only what changed.</li>
 <li>Fixed: MAINTAINING.md and BEST_PRACTICES.md name the HELMET 1.0, SESAME 0.5 and Preflight 0.3.0 pins and the composer.json and CI lines they cite today.</li>
