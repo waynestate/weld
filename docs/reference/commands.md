@@ -125,6 +125,7 @@ These run as `composer docs` and `composer docs:check`. The docs are built from 
 
 ## Related
 
+- [Which command when](which-command.md): `weld:doctor`, `squire doctor`, `proctor check` and the other look-alikes side by side
 - [Check your setup](../guides/check-your-setup.md)
 - [Is WELD still Sourdough's shape?](../guides/regen-check.md)
 - [WELD and Sourdough](../guides/sourdough.md)

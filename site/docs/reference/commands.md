@@ -162,6 +162,7 @@ These run as `composer docs` and `composer docs:check`. The docs are built from 
 
 ## Related[#](https://weld.apps.wayne.edu/docs/reference/commands.html#related)
 
+- [Which command when](https://weld.apps.wayne.edu/docs/reference/which-command.html): `weld:doctor`, `squire doctor`, `proctor check` and the other look-alikes side by side
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
 - [Is WELD still Sourdough's shape?](https://weld.apps.wayne.edu/docs/guides/regen-check.html)
 - [WELD and Sourdough](https://weld.apps.wayne.edu/docs/guides/sourdough.html)

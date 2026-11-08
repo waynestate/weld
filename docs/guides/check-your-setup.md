@@ -39,8 +39,11 @@ Each check prints one line: PASS, WARN or FAIL. The exit code is 1 when anything
 > [!NOTE]
 > The standards checks (PHP version, debug in production, secure session cookies) belong to PROCTOR: run `composer proctor`, and the doctor report says so.
 
+Not sure whether you want `weld:doctor`, `squire doctor` or `proctor check`? [Which command when](../reference/which-command.md) puts every look-alike side by side.
+
 ## Related
 
+- [Which command when](../reference/which-command.md)
 - [What is welded in](whats-welded-in.md)
 - [Oracle](oracle.md)
 - [Running WELD off Citadel](../running-off-citadel.md)

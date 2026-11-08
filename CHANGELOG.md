@@ -2,6 +2,10 @@
 
 Notable changes to WELD, newest first.
 
+## Unreleased
+
+- Docs: a "Which command when" page (Reference) and README section put the look-alike commands side by side (`weld:doctor`, `squire doctor`, `proctor check`, `proctor gate`, `oracle:check` and the rest): what each checks, when to run it and where it runs. It is the canonical copy; the READMEs of Squire, PROCTOR, Sourdough, Booster and Rollcall carry it word for word (D-064).
+
 ## 0.1.5 (2026-11-07)
 
 - Fixed: the committed Ziggy route list (`resources/js/ziggy.js` and `ziggy.d.ts`) includes SESAME 0.5's `sesame.status` route, so the `ziggy` job is green again.

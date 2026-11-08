@@ -49,8 +49,11 @@ Note
 
 The standards checks (PHP version, debug in production, secure session cookies) belong to PROCTOR: run `composer proctor`, and the doctor report says so.
 
+Not sure whether you want `weld:doctor`, `squire doctor` or `proctor check`? [Which command when](https://weld.apps.wayne.edu/docs/reference/which-command.html) puts every look-alike side by side.
+
 ## Related[#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#related)
 
+- [Which command when](https://weld.apps.wayne.edu/docs/reference/which-command.html)
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html)
 - [Oracle](https://weld.apps.wayne.edu/docs/guides/oracle.html)
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)

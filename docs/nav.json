@@ -80,6 +80,10 @@
           "path": "reference/commands"
         },
         {
+          "title": "Which command when",
+          "path": "reference/which-command"
+        },
+        {
           "title": "Configuration",
           "path": "reference/configuration"
         },
