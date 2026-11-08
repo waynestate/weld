@@ -155,8 +155,10 @@ PHPUnit class tests keep working and are converted only when you touch them. `co
 Feature tests to the Laravel app and a fresh database. The suite reads `.env` when it exists, otherwise `.env.example`
 (`tests/Support/SkipEnvFile.php`, the same file Sourdough ships), and runs on a fixed dummy `APP_KEY` set in `phpunit.xml`, so it boots
 with no `.env`; the app refuses that key in production, so a copied test config cannot ship. CI's `php-test` matrix runs `vendor/bin/pest`.
-The accessibility gate checks every committed HTML page under `site/` with axe-core (WCAG 2.2 AA, light and dark,
-at 360 px and 1280 px) in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
+The accessibility gate runs Preflight's own checker (vendored in `tools/a11y/check.mjs`, pinned to the CI tag
+0.3.1 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
+light and dark, at 320 and 1280 px, plus the WCAG 1.4.10 reflow check), so a page that passes locally passes
+CI. It runs in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
 Best practices for building, running and deploying WELD live in [BEST_PRACTICES.md](https://github.com/waynestate/weld/blob/HEAD/BEST_PRACTICES.md).
 
@@ -746,6 +748,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the local a11y scripts run Preflight's own checker (vendored from 0.3.1 and pinned by a test), so they check what CI checks: axe-core 4.14.0, 320 and 1280 px, and the reflow check.
 - Added: tests/Feature/SchedulerNamingTest.php fails on any scheduled closure without ->name(), so onOneServer() and withoutOverlapping() always have a lock name (Sourdough's copy, W21).
 - Added: CI runs Preflight's a11y component (0.3.1) on site/, every page in light and dark at 320 and 1280 px with the WCAG 1.4.10 reflow check, blocking.
 - Changed: Inertia 3 (inertiajs/inertia-laravel ^3.0, @inertiajs/vue3 ^3.0), matching Sourdough's Inertia shape: the progress bar gets HELMET's CSP nonce and the title is marked data-inertia (W4).
