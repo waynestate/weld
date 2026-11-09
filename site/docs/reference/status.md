@@ -10,7 +10,7 @@ generator: Squire agent-ready
 
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
-Every part of the stack is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.4.0; the deploy layer runs Squire's kit 0.10.2. Pinstripe's presets are still copied rather than installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
+Every part of the stack is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.5.0; the deploy layer runs Squire's kit 0.10.2. Pinstripe's presets are still copied rather than installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
 ## What is on the bench today[#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
@@ -22,7 +22,7 @@ Every part of the stack is welded in except one: HELMET and SESAME are in `requi
 | Index length | `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap |
 | `.gitattributes` | sets `* text=auto eol=lf` |
 | CI contract | `composer ci` runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub |
-| CI jobs | on GitLab, Preflight 0.4.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM, secret detection and the portability job, which builds the portable image and boots it the way OpenShift would; the `frontend` job runs ESLint and Prettier |
+| CI jobs | on GitLab, Preflight 0.5.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM, secret detection and the portability job, which builds the portable image and boots it the way OpenShift would; the `frontend` job runs ESLint and Prettier |
 | WayneUI | an npm dependency at 2.0.8; it draws every page of the app and the site |
 | HELMET | runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays Laravel's built-in liveness route and `/ready` is HELMET's readiness route, checking the database, the cache and the scheduler heartbeat |
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |

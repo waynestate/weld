@@ -47,7 +47,7 @@ function weldPortabilityInputs(): array
 
 it('pins the portability component at the Preflight tag every other component uses', function () {
     expect(weldPortabilityInputs()['component'])
-        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.4.0');
+        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.5.0');
 });
 
 it('builds the portable image from the kit in deploy/, on the base the job builds first', function () {
@@ -84,9 +84,11 @@ it('passes all three kit images through the proxy by swapping only the registry 
         ->toMatch('/^ARG COMPOSER_IMAGE=docker\.io\/library\//m');
 });
 
-it('starts the image\'s own entrypoint, in its own session, behind a pipe the app owns', function () {
-    expect(weldPortabilityInputs()['inputs']['start_command'])
-        ->toBe("exec setsid bash -c 'exec > >(exec cat) 2>&1; exec squire-entrypoint'");
+it('starts the image\'s own entrypoint with no shim, as the platforms do', function () {
+    // Preflight 0.5.0's launcher gives each replica its own session and a
+    // stdio pipe the uid owns. A setsid shim on top forks Apache away from
+    // the replica's main process, and health fails.
+    expect(weldPortabilityInputs()['inputs'])->not->toHaveKey('start_command');
 });
 
 it('runs on main and tags, waits for a click on a merge request, and never runs from the schedule', function () {

@@ -9,7 +9,7 @@ so most of the upkeep is keeping the parts it joins current.
 - `waynestate/weld`, a Composer `project` (an app you clone), not a library. It is on Packagist, installed with `composer create-project waynestate/weld`.
 - **The stack parts it joins:** `waynestate/helmet` `^1.3` and `waynestate/sesame` `^0.7` at runtime;
   `waynestate/creed` `^0.1.8` and `waynestate/proctor` `^0.11` for checks, and `waynestate/advisor` `^0.2` for coding
-  agents (all three `require-dev`). WayneUI provides the interface (npm, 2.0.8), Preflight's components run CI (0.4.0),
+  agents (all three `require-dev`). WayneUI provides the interface (npm, 2.0.8), Preflight's components run CI (0.5.0),
   and Squire's kit in `deploy/` deploys it (0.10.2). Pinstripe's presets are copied, not required.
 - Laravel 13, Inertia 3 with Vue 3, Ziggy for routes (a committed, generated `resources/js/ziggy.*`), Vite.
 - WELD is the Laravel + Inertia/Vue shape that Sourdough's templates describe, already shaped. If every app should get
@@ -63,7 +63,7 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 
 - **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a
   `no-dev-install` job (a `composer install --no-dev` that fails if Laravel Boost comes along), a `proctor` job (warnings pass, failures block), a `ziggy` drift job and a `regen-gate` job (new drift fails the job;
-  `.sourdough/regen-baseline.json` records the drift already accepted). Preflight 0.4.0 also brings the `a11y` job
+  `.sourdough/regen-baseline.json` records the drift already accepted). Preflight 0.5.0 also brings the `a11y` job
   (axe over `site/`), the `a11y-app` job (axe over the app's own pages, saved by the `a11y-pages` job), `sbom`,
   `secret-detection` and `portability`, and a `frontend` job runs `npm run lint`, `npm run format:check`, the typecheck
   and the build.
@@ -74,11 +74,11 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
   fresh `APP_KEY`. The kit names its three images (`PHP_IMAGE`, `NODE_IMAGE`, `COMPOSER_IMAGE`) in full, because
   Buildah refuses a short name, and the setup passes each one as a build argument through the Dependency Proxy, with
   `docker.io/library/` swapped for the group prefix and the tag and digest kept (Squire's Image hardening guide,
-  "Through a proxy or a mirror"). The `start_command` input runs the image's own entrypoint behind two shims for how Buildah runs a
-  replica, which no platform shares: `setsid`, because the replica would otherwise share the job's process group and
-  Apache's graceful stop (a signal to its whole group) makes Buildah SIGKILL the main process; and a `cat` pipe,
-  because Buildah hands the app root-owned stdout and stderr that Apache, as the job's uid, may not reopen as
-  `/proc/self/fd/2`. Drop both when Preflight's probe does them itself. Two image builds take a while on vfs, so the
+  "Through a proxy or a mirror"). There is no `start_command`: the probe runs the image's own entrypoint, as the
+  platforms do. Since Preflight 0.5.0 it starts each replica in a session of its own, behind a stdout and stderr
+  pipe the uid owns, so Apache's graceful stop reaches only Apache and Apache can reopen `/proc/self/fd/2`. Never add
+  a `setsid` shim back: inside that launcher it forks Apache away from the replica's main process and `health`
+  fails. Two image builds take a while on vfs, so the
   job gets 60 minutes. It runs on `main` and on tags, is manual on a merge request and never runs from the schedule;
   it is `allow_failure` (not yet blocking) until its first green run on the runner, `interruptible`, and its
   `after_script` deletes every container and image it left in Buildah's storage. `session-hop` is left out until the job

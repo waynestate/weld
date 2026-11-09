@@ -120,7 +120,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
 | Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets |
-| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection and portability |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.5.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
@@ -143,7 +143,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 ## Status
 
 Every part is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in
-`require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.10.2.
+`require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.2.
 Pinstripe's presets are still copied rather than installed. The bead is nearly closed.
 What is on the bench today:
 
@@ -179,7 +179,7 @@ A deprecation your code raises or causes fails the suite (`failOnDeprecation` in
 before an upgrade does; `tests/TestCase.php` hands deprecations to PHPUnit (`tests/Support/ReportsDeprecationsToPhpUnit.php`, from
 Sourdough), because Laravel's own handler drops them while testing.
 The accessibility gate runs Preflight's own checker (vendored in `tools/a11y/check.mjs`, pinned to the CI tag
-0.4.0 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
+0.5.0 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
 light and dark, at 320 and 1280 px, plus the WCAG 1.4.10 reflow check), so a page that passes locally passes
 CI. It runs in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
