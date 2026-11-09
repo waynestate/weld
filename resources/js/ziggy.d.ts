@@ -4,13 +4,13 @@ declare module 'ziggy-js' {
     "sesame.login": [],
     "sesame.logout": [],
     "sesame.status": [],
-    "helmet.ready": [],
     "home": [],
     "dashboard": [],
     "profile.edit": [],
     "profile.update": [],
     "profile.destroy": [],
     "appearance": [],
+    "helmet.ready": [],
     "storage.local": [
         {
             "name": "path",
