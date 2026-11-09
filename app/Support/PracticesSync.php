@@ -15,9 +15,22 @@ namespace App\Support;
  * `**Practice:** ...`, `**Why:** ...` and `**Stack:** ...`. sync() rewrites
  * those paragraph lines from the parsed practices and keeps every other byte,
  * including line endings.
+ *
+ * A heading may separate the id with a period or a colon (`## W26: <title>`
+ * reads the same as `## W26. <title>`). Before both were read, the five
+ * security and four supply chain practices sat under colon headings, the
+ * sync skipped them without a word, and their guides went stale. coverage()
+ * is the guard against the next quiet skip: every practice must have exactly
+ * one section, with a Stack line, somewhere in the guides.
  */
 final class PracticesSync
 {
+    /** A practice heading in BEST_PRACTICES.md: `### W<n>.` or `### W<n>:`. */
+    private const SOURCE_HEADING = '/^### W(\d+)[.:] /';
+
+    /** A practice section heading in a guide: `## W<n>.` or `## W<n>:`. */
+    private const GUIDE_HEADING = '/^## W(\d+)[.:] /';
+
     /**
      * The BEST_PRACTICES text as a map of practice id to the label lines it
      * carries, in file order and only for the labels present.
@@ -30,7 +43,7 @@ final class PracticesSync
         $current = null;
 
         foreach (self::lines($bestPractices) as [$line]) {
-            if (preg_match('/^### W(\d+)\. /', $line, $m) === 1) {
+            if (preg_match(self::SOURCE_HEADING, $line, $m) === 1) {
                 $current = 'W'.$m[1];
                 $out[$current] ??= [];
 
@@ -65,7 +78,7 @@ final class PracticesSync
         $current = null;
 
         foreach (self::lines($guide) as [$body, $ending]) {
-            if (preg_match('/^## W(\d+)\. /', $body, $m) === 1) {
+            if (preg_match(self::GUIDE_HEADING, $body, $m) === 1) {
                 $current = 'W'.$m[1];
 
                 $out .= $body.$ending;
@@ -89,6 +102,91 @@ final class PracticesSync
         }
 
         return $out;
+    }
+
+    /**
+     * The practice sections a guide carries, in file order: each id with
+     * whether its section has a `**Stack:**` line. An id that appears twice
+     * in one guide is listed twice.
+     *
+     * @return list<array{0: string, 1: bool}> e.g. [['W25', true], ['W26', false]]
+     */
+    public static function sections(string $guide): array
+    {
+        /** @var list<string> $ids */
+        $ids = [];
+        /** @var list<bool> $stacks */
+        $stacks = [];
+        $inSection = false;
+
+        foreach (self::lines($guide) as [$body]) {
+            if (preg_match(self::GUIDE_HEADING, $body, $m) === 1) {
+                $ids[] = 'W'.$m[1];
+                $stacks[] = false;
+                $inSection = true;
+
+                continue;
+            }
+            if (str_starts_with($body, '## ')) {
+                $inSection = false;
+
+                continue;
+            }
+            if ($inSection && str_starts_with($body, '**Stack:** ')) {
+                array_pop($stacks);
+                $stacks[] = true;
+            }
+        }
+
+        $out = [];
+        foreach ($ids as $i => $id) {
+            $out[] = [$id, $stacks[$i]];
+        }
+
+        return $out;
+    }
+
+    /**
+     * What keeps the guides from covering BEST_PRACTICES.md one for one, as
+     * plain sentences (empty when they do): a practice with no section in
+     * any guide, a practice with a section in more than one place, a section
+     * whose id BEST_PRACTICES.md does not know, and a section without a
+     * Stack line (the tag is the point of the section).
+     *
+     * @param  array<string, array<string, string>>  $practices  from practices()
+     * @param  array<string, string>  $guides  guide path (as it should be printed) => guide text
+     * @return list<string>
+     */
+    public static function coverage(array $practices, array $guides): array
+    {
+        $problems = [];
+        /** @var array<string, list<string>> $seenIn */
+        $seenIn = [];
+
+        foreach ($guides as $path => $text) {
+            foreach (self::sections($text) as [$id, $hasStack]) {
+                $seenIn[$id][] = $path;
+                if (! isset($practices[$id])) {
+                    $problems[] = "{$path}: {$id} is not a practice in BEST_PRACTICES.md.";
+
+                    continue;
+                }
+                if (! $hasStack) {
+                    $problems[] = "{$path}: the {$id} section has no **Stack:** line.";
+                }
+            }
+        }
+
+        foreach (array_keys($practices) as $id) {
+            $places = $seenIn[$id] ?? [];
+            if ($places === []) {
+                $problems[] = "{$id} is in BEST_PRACTICES.md, but no guide in docs/guides has a \"## {$id}.\" section.";
+            } elseif (count($places) > 1) {
+                $problems[] = "{$id} has more than one section: ".implode(', ', $places).'.';
+            }
+        }
+
+        return $problems;
     }
 
     /**

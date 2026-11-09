@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Fixed: `composer docs:practices` skipped the nine practices under `## W25:` style headings (Security, Build and supply chain), so those guides went stale: W26 read `Not yet` while it was `Enforced`, W27 and W28 `Documented` while `Checked`. The sync now reads a colon or a period after the id, rewrote both guides, and both modes fail when a practice has no guide section, has two, lacks its Stack line, or a section names a practice BEST_PRACTICES.md does not have (`tests/Unit/PracticesCoverageTest.php`). BEST_PRACTICES W31 and W33 keep the facts only their guides carried, and the `composer.json` line numbers in W6, W9, W25, W30 and W32 are current again.
 - Changed: CI pins the Preflight components to 0.4.0 (the proctor job clones the full history, so the override-approver check can read git blame).
 - Added: PortableImageTest proves the portable image builds `vendor/` without dev packages (the build context leaves `vendor/` out and its only Composer install is release.sh's `--no-dev` one), which closes W29's open item.
 - Changed: the regen baseline no longer excuses `docker-compose.squire.yml`, `health.php` and `scripts/release.sh`: Sourdough bakes Squire 0.8.0 now, so a fresh bake matches WELD's kit.
