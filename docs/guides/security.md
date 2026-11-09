@@ -26,7 +26,7 @@ This page states WELD's security practices, one per heading, each with the rule 
 
 **Practice:** Laravel 13 formalized request-forgery protection as `PreventRequestForgery` (origin-aware, still token-compatible). Any custom middleware stack or HELMET code must reference the new name.
 
-**Stack:** `Checked`. `bootstrap/app.php:31-34` appends to the default `web` middleware group. `tests/Feature/CsrfTest.php:15-19` posts without a token and expects 419, `:21-29` lets the session token through, and `:31-37` lets a same-origin `Sec-Fetch-Site` request through.
+**Stack:** `Checked`. `bootstrap/app.php:48-51` appends to the default `web` middleware group. `tests/Feature/CsrfTest.php:15-19` posts without a token and expects 419, `:21-29` lets the session token through, and `:31-37` lets a same-origin `Sec-Fetch-Site` request through.
 
 ## W28: CSP works with Inertia 3 and Vite
 
