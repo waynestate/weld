@@ -39,10 +39,10 @@
     <main id="main">
       <article class="docs-article"><h1 id="status">Status<a class="docs-heading-link" aria-label="Link to this section" href="#status">#</a></h1>
 <p>This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.</p>
-<p>Every part of the stack is welded in except one: HELMET and SESAME are in <code>require</code>; CREED, PROCTOR and ADVISOR
+<p>Every part of the stack is welded in: HELMET and SESAME are in <code>require</code>; CREED, Pinstripe, PROCTOR and ADVISOR
 are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.5.0; the deploy layer runs
-Squire's kit 0.10.3. Pinstripe's presets are still copied rather than installed. For what each part does in WELD, see
-<a href="../guides/whats-welded-in.html">What is welded in</a>.</p>
+Squire's kit 0.10.3. Pinstripe's PHP presets are installed; its npm half is <a href="#pinstripe-s-npm-half">the next step</a>.
+For what each part does in WELD, see <a href="../guides/whats-welded-in.html">What is welded in</a>.</p>
 <h2 id="what-is-on-the-bench-today">What is on the bench today<a class="docs-heading-link" aria-label="Link to this section" href="#what-is-on-the-bench-today">#</a></h2>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
@@ -105,8 +105,8 @@ Squire's kit 0.10.3. Pinstripe's presets are still copied rather than installed.
 <td>the deploy kit in <code>deploy/</code> at 0.10.3: the Citadel image, an idempotent release script and one portable image for other hosts</td>
 </tr>
 <tr>
-<td>Pinstripe presets</td>
-<td><code>pint.json</code> and <code>phpstan.neon</code> still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on Packagist and npm, and they switch to <code>includes: vendor/waynestate/pinstripe/...</code> when WELD requires it</td>
+<td>Pinstripe</td>
+<td><code>waynestate/pinstripe</code> <code>^0.3</code> in <code>require-dev</code>. <code>phpstan.neon</code> includes its <code>phpstan/laravel.neon</code> and adds only WELD's paths, so the level, the ignore rules and the banned calls (<code>eval()</code>, <code>dd()</code>, TLS checks turned off, SQL joined from strings) come from the package; WELD's own code passes them with no new ignore and no baseline. <code>pint.json</code> is Pinstripe's <code>pint/laravel.json</code> plus two recorded excludes (Squire's <code>deploy/</code> kit and <code>bin/docs-site.php</code>), and <code>tests/Unit/PinstripeWiringTest.php</code> fails on any other drift. <code>composer-ci</code> saves Pint's findings as a Code Quality report (<code>composer lint:gitlab</code>). ESLint and Prettier still run on WELD's own config: see <a href="#pinstripe-s-npm-half">Pinstripe's npm half</a></td>
 </tr>
 <tr>
 <td>Password auth</td>
@@ -121,7 +121,7 @@ Squire's kit 0.10.3. Pinstripe's presets are still copied rather than installed.
 <h2 id="gaps-for-the-backlog">Gaps for the backlog<a class="docs-heading-link" aria-label="Link to this section" href="#gaps-for-the-backlog">#</a></h2>
 <p>These mirror the gaps at the end of <a rel="noopener" href="https://git.wayne.edu/enterprise-apps/weld/-/blob/main/BEST_PRACTICES.md">BEST_PRACTICES.md</a>.</p>
 <ul>
-<li>Preflight's <code>portability</code> job builds the portable image and boots its <code>web</code> role in CI, on <code>main</code> and tags (manual on a merge request, blocking) (W10, W14 and W16 are <code>Checked</code>; W8, W13 and W17 gain a CI check). It leaves out the <code>HEALTHCHECK</code> command (W12), a session shared across replicas (W15, which needs a database service in the job) and migrations once per release (W24). Pinstripe (W32) is copied presets, not a dependency.</li>
+<li>Preflight's <code>portability</code> job builds the portable image and boots its <code>web</code> role in CI, on <code>main</code> and tags (manual on a merge request, blocking) (W10, W14 and W16 are <code>Checked</code>; W8, W13 and W17 gain a CI check). It leaves out the <code>HEALTHCHECK</code> command (W12), a session shared across replicas (W15, which needs a database service in the job) and migrations once per release (W24). Pinstripe (W32) is a dependency for the PHP side; the JS side waits on <a href="#pinstripe-s-npm-half">its npm half</a>.</li>
 <li>The deploy-time scheduler work (W23) is still a plan.</li>
 <li><code>tests/Feature/HealthHostTest.php</code> sends a forged <code>Host</code> and an IP:port <code>Host</code> to <code>/up</code> and expects 200, no cookie and no redirect, so W11 is <code>Checked</code> in full. The other items that once sat on an &quot;Unverified&quot; list are pinned: the CSRF check (<code>tests/Feature/CsrfTest.php</code>), a random UID (W13), Pest 4 on the PHP 8.3 floor, and <code>/ready</code> without <code>spatie/laravel-health</code>.</li>
 <li>Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap.</li>
@@ -129,6 +129,28 @@ Squire's kit 0.10.3. Pinstripe's presets are still copied rather than installed.
 <li>Decision needed: whether WELD keeps Fortify for a non-SSO mode.</li>
 <li>Decision needed: SSR on by default or off.</li>
 </ul>
+<h2 id="pinstripe-s-npm-half">Pinstripe's npm half<a class="docs-heading-link" aria-label="Link to this section" href="#pinstripe-s-npm-half">#</a></h2>
+<p>WELD takes Pinstripe's PHP side from Composer today. The JS side, <code>@waynestate/pinstripe</code> (ESLint and Prettier
+presets for Vue), waits for 0.3.0 on npm, because npm still has 0.1.4. The presets inside have not changed since
+0.1.4, but the move is a real refit, not a version bump: Pinstripe's presets need ESLint 10 (WELD runs 9), print at
+100 columns with 2-space indents where WELD's <code>.prettierrc</code> prints at 150 with 4, and add eslint-plugin-vuejs-accessibility, so
+every Vue file is reformatted once and the accessibility rules may report findings. Once 0.3.0 is on npm:</p>
+<ol>
+<li>Install it with ESLint 10: <code>npm install --save-dev @waynestate/pinstripe@^0.3 eslint@^10 prettier</code>, and drop the
+packages the preset now brings (<code>@eslint/js</code>, <code>@vue/eslint-config-typescript</code>, <code>eslint-config-prettier</code>,
+<code>eslint-plugin-vue</code>, <code>typescript-eslint</code>).</li>
+<li>In <code>eslint.config.js</code>, spread <code>@waynestate/pinstripe/eslint/typescript</code> first and keep WELD's own blocks after
+it: the WayneUI-only import ban (W2, checked by <code>tests/Feature/WayneUiOnlyTest.php</code>) and the ignore for Squire's
+<code>site/assets/docs.js</code>. If the accessibility rules report more than one change should fix, take the
+<code>typescript-warn</code> twin for that cut, then switch back.</li>
+<li>Point Prettier at the preset (<code>&quot;prettier&quot;: &quot;@waynestate/pinstripe/prettier&quot;</code> in <code>package.json</code>) and delete
+<code>.prettierrc</code>. If <code>prettier-plugin-organize-imports</code> stays, that is a local override: record why.</li>
+<li>Run <code>npm run format</code> as a commit of its own, with nothing else in it, and list its hash in
+<code>.git-blame-ignore-revs</code> so <code>git blame</code> skips the reformat.</li>
+<li><code>npm run lint</code>, <code>npm run format:check</code>, <code>npm run typecheck</code> and <code>npm run build</code> pass, the a11y gates stay green,
+and W32 says the JS side comes from the package too.</li>
+</ol>
+<p>One tailor, two fittings: the trousers are done, the jacket waits for the cloth to arrive.</p>
 <h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
 <ul>
 <li><a href="../guides/whats-welded-in.html">What is welded in</a></li>
@@ -139,7 +161,7 @@ Squire's kit 0.10.3. Pinstripe's presets are still copied rather than installed.
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/guides/build-and-supply-chain.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Build and supply chain</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/reference/commands.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Commands</span></a></nav>
   </div>
-  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#what-is-on-the-bench-today">What is on the bench today</a></li><li class="docs-toc__item"><a href="#gaps-for-the-backlog">Gaps for the backlog</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#what-is-on-the-bench-today">What is on the bench today</a></li><li class="docs-toc__item"><a href="#gaps-for-the-backlog">Gaps for the backlog</a></li><li class="docs-toc__item"><a href="#pinstripe-s-npm-half">Pinstripe&#039;s npm half</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.1.5</span></span>

@@ -11,7 +11,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** `composer.json` requires `php: ^8.3` with `config.platform.php` `8.3.0`. Tests run on 8.3, 8.4 and 8.5. Laravel 13 needs 8.3 or newer.
 
-**Stack:** `Checked`. `composer.json:18` requires `php: ^8.3`, `composer.json:131` sets `config.platform.php` to `8.3.0`, and the CI matrix runs on 8.3, 8.4 and 8.5 (`.gitlab-ci.yml:9` and `.github/workflows/ci.yml:18`).
+**Stack:** `Checked`. `composer.json:18` requires `php: ^8.3`, `composer.json:134` sets `config.platform.php` to `8.3.0`, and the CI matrix runs on 8.3, 8.4 and 8.5 (`.gitlab-ci.yml:9` and `.github/workflows/ci.yml:18`).
 
 ## W31: Keep dev tools inside the PHP floor
 
@@ -23,7 +23,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Use Pinstripe's Pint preset, PHPStan level 8 through Larastan, ESLint (flat config) and Prettier. No local overrides without a recorded reason.
 
-**Stack:** `Checked`, for the PHP side. `composer.json:59` runs `pint --test`, `composer.json:61` runs `phpstan analyse`, and both are in the `ci` script (`composer.json:66-75`), which CI runs; `pint.json:2` uses the `laravel` preset and `phpstan.neon:8` sets `level: 8`. The JS side runs in CI too: the `frontend` job (`.gitlab-ci.yml`, `.github/workflows/ci.yml`) runs `npm run lint` (`eslint.config.js`, flat config) and `npm run format:check` (`.prettierrc`). Pinstripe is not a dependency yet, so the presets are copied, not included.
+**Stack:** `Checked`, for the PHP side. `waynestate/pinstripe` `^0.3` is a dev dependency (`composer.json:43`), and `phpstan.neon:10` includes its `phpstan/laravel.neon`, so level 8, the ignore rules and the banned calls (SQL joined from strings among them) come from the package; WELD's code passes with no new ignore and no baseline. `composer.json:60` runs `pint --test`, `composer.json:63` runs `phpstan analyse`, and both are in the `ci` script (`composer.json:68-77`), which CI runs. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's `deploy/` kit and `bin/docs-site.php`, since Pint cannot extend a config file; `tests/Unit/PinstripeWiringTest.php` fails on any other drift in either file. The JS side runs in CI too, on WELD's own config until `@waynestate/pinstripe` 0.3.0 is on npm: the `frontend` job (`.gitlab-ci.yml`, `.github/workflows/ci.yml`) runs `npm run lint` (`eslint.config.js`, flat config) and `npm run format:check` (`.prettierrc`).
 
 ## W33: Pin shared CI components to a commit
 

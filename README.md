@@ -119,7 +119,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 |---|---|
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
-| Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets |
+| Pinstripe | The coding standard, 0.3 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in |
 | Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.5.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
@@ -142,9 +142,10 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 
 ## Status
 
-Every part is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in
+Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in
 `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.3.
-Pinstripe's presets are still copied rather than installed. The bead is nearly closed.
+Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is
+on npm (the [status page](docs/reference/status.md#pinstripe-s-npm-half) has the steps). The bead is closed on the PHP side.
 What is on the bench today:
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
@@ -153,8 +154,12 @@ What is on the bench today:
 - `.gitattributes` sets `* text=auto eol=lf`
 - `composer ci` is the CI contract: it runs validate, the tests with Pest, Pint, PHPStan level 8, the agent-ready check, the
   practices sync check, the docs check and audit, the same command on GitLab and GitHub
-- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on Packagist
-  and npm, and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
+- `phpstan.neon` includes `vendor/waynestate/pinstripe/phpstan/laravel.neon` and adds only WELD's paths, so the
+  level, the ignore rules and the banned calls (`eval()`, `dd()`, TLS checks turned off, SQL joined from strings)
+  come from Pinstripe 0.3. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's
+  `deploy/` kit and its vendored `bin/docs-site.php` (Pint cannot extend another config file), and
+  `tests/Unit/PinstripeWiringTest.php` fails if either file drifts from that. In CI, `composer-ci` also saves Pint's
+  findings as a Code Quality report for the merge request (`composer lint:gitlab`)
 - HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline;
   the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays
   Laravel's built-in health route, and `/ready` (HELMET's readiness route, outside the web group, so no session

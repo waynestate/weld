@@ -115,12 +115,16 @@
 <td>Run Pint as a check (<code>pint --test</code>)</td>
 </tr>
 <tr>
+<td><code>composer lint:gitlab</code></td>
+<td>Write Pint's findings as GitLab Code Quality JSON to <code>pint-codequality.json</code> (<code>[]</code> when clean); the <code>composer-ci</code> job runs it so findings show in the merge request</td>
+</tr>
+<tr>
 <td><code>composer fix</code></td>
 <td>Apply Pint fixes (<code>pint</code>)</td>
 </tr>
 <tr>
 <td><code>composer analyse</code></td>
-<td>Run PHPStan analysis (<code>phpstan analyse --memory-limit=1G</code>)</td>
+<td>Run PHPStan analysis (<code>phpstan analyse --memory-limit=1G</code>) with Pinstripe's Laravel preset: level 8, Larastan and the banned calls, SQL joined from strings among them</td>
 </tr>
 <tr>
 <td><code>composer proctor</code></td>

@@ -34,3 +34,6 @@ yarn-error.log
 /CLAUDE.md
 /.claude/skills/
 /.junie/
+
+# Pint's Code Quality report (composer lint:gitlab), an artifact in CI only.
+/pint-codequality.json

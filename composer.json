@@ -40,6 +40,7 @@
         "phpunit/phpunit": "^12.0",
         "waynestate/advisor": "^0.2",
         "waynestate/creed": "^0.1.8",
+        "waynestate/pinstripe": "^0.3",
         "waynestate/proctor": "^0.11"
     },
     "autoload": {
@@ -57,6 +58,7 @@
     "scripts": {
         "test": "pest",
         "lint": "pint --test",
+        "lint:gitlab": "pint --test --format=gitlab > pint-codequality.json",
         "fix": "pint",
         "analyse": "phpstan analyse --memory-limit=1G",
         "proctor": "proctor check",
@@ -108,7 +110,8 @@
         "docs": "Write site/docs/ from docs/ with the shared docs builder, and generate docs/changelog.md from CHANGELOG.md.",
         "docs:check": "Fail when the committed docs site is stale or the docs carry findings; writes nothing.",
         "docs:practices": "Rewrite the Practice, Why and Stack lines of every practice section in docs/guides from BEST_PRACTICES.md.",
-        "docs:practices-check": "Fail when a guide's practice lines drift from BEST_PRACTICES.md; writes nothing."
+        "docs:practices-check": "Fail when a guide's practice lines drift from BEST_PRACTICES.md; writes nothing.",
+        "lint:gitlab": "Write Pint's findings as GitLab Code Quality JSON to pint-codequality.json ([] when clean), for the merge request widget."
     },
     "extra": {
         "laravel": {

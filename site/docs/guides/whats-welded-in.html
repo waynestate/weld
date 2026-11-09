@@ -58,7 +58,7 @@
 </tr>
 <tr>
 <td>Pinstripe</td>
-<td>The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets</td>
+<td>The coding standard, 0.3 in <code>require-dev</code>: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in</td>
 </tr>
 <tr>
 <td>Preflight</td>
@@ -93,14 +93,14 @@
 <p><img src="../readme/journey.svg" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys." /></p>
 <p>One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.</p>
 <h2 id="what-is-on-the-bench-today">What is on the bench today<a class="docs-heading-link" aria-label="Link to this section" href="#what-is-on-the-bench-today">#</a></h2>
-<p>Every part is welded in except one: HELMET and SESAME are in <code>require</code>; CREED, PROCTOR and ADVISOR are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.3. Pinstripe's presets are still copied rather than installed.</p>
+<p>Every part is welded in: HELMET and SESAME are in <code>require</code>; CREED, Pinstripe, PROCTOR and ADVISOR are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.3. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once <code>@waynestate/pinstripe</code> 0.3.0 is on npm (<a href="../reference/status.html#pinstripe-s-npm-half">the steps</a>).</p>
 <ul>
 <li><code>composer.json</code> is <code>waynestate/weld</code>, requires PHP <code>^8.3</code>, and the lock file resolves for 8.3.0</li>
 <li><code>.env.example</code> sets <code>APP_NAME=WELD</code>, <code>LOG_CHANNEL=stderr</code> and <code>SESSION_DRIVER=database</code></li>
 <li><code>Schema::defaultStringLength(191)</code> keeps index keys under Citadel's MySQL 5.6 767-byte cap</li>
 <li><code>.gitattributes</code> sets <code>* text=auto eol=lf</code></li>
 <li><code>composer ci</code> is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub</li>
-<li><code>pint.json</code> and <code>phpstan.neon</code> still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on Packagist and npm, and they switch to <code>includes: vendor/waynestate/pinstripe/...</code> when WELD requires it</li>
+<li><code>phpstan.neon</code> includes <code>vendor/waynestate/pinstripe/phpstan/laravel.neon</code> and adds only WELD's paths, so the level, the ignore rules and the banned calls (<code>eval()</code>, <code>dd()</code>, TLS checks turned off, SQL joined from strings) come from Pinstripe 0.3; <code>pint.json</code> is Pinstripe's <code>pint/laravel.json</code> plus two recorded excludes, Squire's <code>deploy/</code> kit and its vendored <code>bin/docs-site.php</code>, and <code>tests/Unit/PinstripeWiringTest.php</code> fails if either file drifts from that</li>
 <li>HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from <code>TRUSTED_PROXIES</code> (<code>bootstrap/app.php</code>); <code>/up</code> stays Laravel's built-in liveness route, and <code>/ready</code> checks the database, the cache and the scheduler heartbeat</li>
 <li>SESAME owns sign-in at <code>/login</code> and <code>/logout</code>; the fake driver stands in for the identity provider locally, and CAS is an env change away</li>
 <li>PROCTOR measures WELD against CREED's <code>policy.json</code> as a CI job (<code>composer proctor</code>): warnings pass, failures block</li>

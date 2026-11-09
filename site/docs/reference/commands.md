@@ -102,8 +102,9 @@ bin/weld.sh down
 | --- | --- |
 | `composer test` | Pest, running the PHPUnit class tests and the Pest tests side by side |
 | `composer lint` | Run Pint as a check (`pint --test`) |
+| `composer lint:gitlab` | Write Pint's findings as GitLab Code Quality JSON to `pint-codequality.json` (`[]` when clean); the `composer-ci` job runs it so findings show in the merge request |
 | `composer fix` | Apply Pint fixes (`pint`) |
-| `composer analyse` | Run PHPStan analysis (`phpstan analyse --memory-limit=1G`) |
+| `composer analyse` | Run PHPStan analysis (`phpstan analyse --memory-limit=1G`) with Pinstripe's Laravel preset: level 8, Larastan and the banned calls, SQL joined from strings among them |
 | `composer proctor` | PROCTOR against CREED's policy |
 | `composer ziggy` | Confirm the Ziggy routes are current: `composer ziggy`, then `git diff --exit-code resources/js/ziggy.*` |
 | `composer regen-check` | Compare a freshly generated Sourdough Inertia app with WELD by SHA-256 and fail only on new drift versus `.sourdough/regen-baseline.json`; pass `--generated <dir>` (and optionally `--write-baseline`) through |

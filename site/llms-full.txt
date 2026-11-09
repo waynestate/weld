@@ -120,7 +120,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 |---|---|
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
-| Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets |
+| Pinstripe | The coding standard, 0.3 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in |
 | Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.5.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
@@ -132,9 +132,10 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 
 ### Status
 
-Every part is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in
+Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in
 `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.3.
-Pinstripe's presets are still copied rather than installed. The bead is nearly closed.
+Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is
+on npm (the [status page](https://github.com/waynestate/weld/blob/HEAD/docs/reference/status.md#pinstripe-s-npm-half) has the steps). The bead is closed on the PHP side.
 What is on the bench today:
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
@@ -143,8 +144,12 @@ What is on the bench today:
 - `.gitattributes` sets `* text=auto eol=lf`
 - `composer ci` is the CI contract: it runs validate, the tests with Pest, Pint, PHPStan level 8, the agent-ready check, the
   practices sync check, the docs check and audit, the same command on GitLab and GitHub
-- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on Packagist
-  and npm, and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
+- `phpstan.neon` includes `vendor/waynestate/pinstripe/phpstan/laravel.neon` and adds only WELD's paths, so the
+  level, the ignore rules and the banned calls (`eval()`, `dd()`, TLS checks turned off, SQL joined from strings)
+  come from Pinstripe 0.3. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's
+  `deploy/` kit and its vendored `bin/docs-site.php` (Pint cannot extend another config file), and
+  `tests/Unit/PinstripeWiringTest.php` fails if either file drifts from that. In CI, `composer-ci` also saves Pint's
+  findings as a Code Quality report for the merge request (`composer lint:gitlab`)
 - HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline;
   the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays
   Laravel's built-in health route, and `/ready` (HELMET's readiness route, outside the web group, so no session
@@ -455,7 +460,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 4. Joint 03
    ### Pinstripe
    The code style
-   Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist and npm.
+   Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist; npm still has 0.1.4.
    Release 0.3.0
    Inspection: In use
    [Site of Pinstripe](https://pinstripe.apps.wayne.edu/) [Docs for Pinstripe](https://pinstripe.apps.wayne.edu/docs/)
@@ -653,7 +658,7 @@ $
 
 0.3.0 Creases | Sharp
 
-The code style presets, now banning SQL joined from strings. WELD runs Pint and PHPStan at level 8 from a copy of Pinstripe's 0.1 Laravel presets, and ESLint and Prettier in CI.
+The code style presets, now banning SQL joined from strings. WELD requires 0.3 and runs Pint and PHPStan at level 8 straight from its Laravel preset, banned calls and all; ESLint and Prettier run in CI on WELD's own config until the npm half moves in.
 
 ```
 $ composer lint && composer analyse
@@ -888,6 +893,9 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Added: WELD requires Pinstripe 0.3 (`waynestate/pinstripe` `^0.3` in `require-dev`), so its coding standard is installed, not copied. `phpstan.neon` includes `vendor/waynestate/pinstripe/phpstan/laravel.neon` and keeps only WELD's paths: level 8, the ignore rules and the banned calls (`eval()`, `extract()`, `var_dump()`, `dd()`, `dump()`, TLS checks turned off, and SQL joined from strings through `DB::select()`, PDO, mysqli or oci8) now come from the package. WELD's own code passes the new rules with no new ignore and no baseline (it runs no raw SQL at all, and its one existing ignore is the documented `env()` read in `bootstrap/app.php`); a planted `DB::select('... ' . $id)` and a `dd()` both fail. `pint.json` stays as Pinstripe's `pint/laravel.json` plus two recorded excludes (Squire's `deploy/` kit and `bin/docs-site.php`), because Pint cannot extend another config file and Pinstripe's preset would restyle the vendored kit; `tests/Unit/PinstripeWiringTest.php` fails if either file drifts from the package. The lock adds `spaze/phpstan-disallowed-calls`, `phpstan/phpstan-strict-rules`, `phpstan/phpstan-deprecation-rules` and `nette/neon`, and moves PHPStan to 2.3.5. Fitted at last: the suit is off the rack, not run up from a pattern.
+- Added: `composer lint:gitlab` writes Pint's findings as GitLab Code Quality JSON (Pinstripe's documented setup), and the `composer-ci` job runs it in `after_script`, so a style failure shows in the merge request widget. `pint-codequality.json` is gitignored.
+- Docs: the README, "What is welded in", the status page, MAINTAINING, BEST_PRACTICES W32, the commands reference and the front page say Pinstripe is a dependency. The status page gains "Pinstripe's npm half", the steps for the ESLint and Prettier presets once `@waynestate/pinstripe` 0.3.0 is on npm (it has 0.1.4 today; the move needs ESLint 10 and one reformat). The front page's weld log stops saying Pinstripe 0.3.0 is on npm.
 - Docs: stale text. The front page's weld log and cast name each part's latest release (Sourdough 0.3.0 with `sourdough adopt`, Squire 0.10.3, Booster 1.14.0, Rollcall 1.1.0, Drawbridge 0.6.0), the README, "What is welded in", the status page and the front page say Pinstripe 0.3.0 is on Packagist (they said Packagist still listed 0.1.4), BEST_PRACTICES W8 stops calling the portable image Unreleased, and the Unreleased notes drop internal decision IDs.
 - Changed: the deploy kit is Squire 0.10.3 (was 0.10.2), refreshed with `squire update --path=deploy`: the kit's comments say in plain words what they used to point at with internal item IDs. Comments only; no setting, default or behavior changes, and `squire init --check` passes.
 - Docs: MAINTAINING's "Who maintains it" names a role, the stack maintainer, instead of a person, and says to reach them with an issue on git.wayne.edu.
@@ -1306,7 +1314,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** `composer.json` requires `php: ^8.3` with `config.platform.php` `8.3.0`. Tests run on 8.3, 8.4 and 8.5. Laravel 13 needs 8.3 or newer.
 
-**Stack:** `Checked`. `composer.json:18` requires `php: ^8.3`, `composer.json:131` sets `config.platform.php` to `8.3.0`, and the CI matrix runs on 8.3, 8.4 and 8.5 (`.gitlab-ci.yml:9` and `.github/workflows/ci.yml:18`).
+**Stack:** `Checked`. `composer.json:18` requires `php: ^8.3`, `composer.json:134` sets `config.platform.php` to `8.3.0`, and the CI matrix runs on 8.3, 8.4 and 8.5 (`.gitlab-ci.yml:9` and `.github/workflows/ci.yml:18`).
 
 ### W31: Keep dev tools inside the PHP floor[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w31-keep-dev-tools-inside-the-php-floor)
 
@@ -1318,7 +1326,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Use Pinstripe's Pint preset, PHPStan level 8 through Larastan, ESLint (flat config) and Prettier. No local overrides without a recorded reason.
 
-**Stack:** `Checked`, for the PHP side. `composer.json:59` runs `pint --test`, `composer.json:61` runs `phpstan analyse`, and both are in the `ci` script (`composer.json:66-75`), which CI runs; `pint.json:2` uses the `laravel` preset and `phpstan.neon:8` sets `level: 8`. The JS side runs in CI too: the `frontend` job (`.gitlab-ci.yml`, `.github/workflows/ci.yml`) runs `npm run lint` (`eslint.config.js`, flat config) and `npm run format:check` (`.prettierrc`). Pinstripe is not a dependency yet, so the presets are copied, not included.
+**Stack:** `Checked`, for the PHP side. `waynestate/pinstripe` `^0.3` is a dev dependency (`composer.json:43`), and `phpstan.neon:10` includes its `phpstan/laravel.neon`, so level 8, the ignore rules and the banned calls (SQL joined from strings among them) come from the package; WELD's code passes with no new ignore and no baseline. `composer.json:60` runs `pint --test`, `composer.json:63` runs `phpstan analyse`, and both are in the `ci` script (`composer.json:68-77`), which CI runs. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's `deploy/` kit and `bin/docs-site.php`, since Pint cannot extend a config file; `tests/Unit/PinstripeWiringTest.php` fails on any other drift in either file. The JS side runs in CI too, on WELD's own config until `@waynestate/pinstripe` 0.3.0 is on npm: the `frontend` job (`.gitlab-ci.yml`, `.github/workflows/ci.yml`) runs `npm run lint` (`eslint.config.js`, flat config) and `npm run format:check` (`.prettierrc`).
 
 ### W33: Pin shared CI components to a commit[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w33-pin-shared-ci-components-to-a-commit)
 
@@ -1833,7 +1841,7 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 | --- | --- |
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
-| Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets |
+| Pinstripe | The coding standard, 0.3 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in |
 | Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.5.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
@@ -1848,14 +1856,14 @@ One request, six stops, one seam. The bead runs the length of it; with reduced m
 
 ### What is on the bench today[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
-Every part is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.3. Pinstripe's presets are still copied rather than installed.
+Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.3. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is on npm ([the steps](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)).
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
 - `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
 - `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap
 - `.gitattributes` sets `* text=auto eol=lf`
 - `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub
-- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on Packagist and npm, and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
+- `phpstan.neon` includes `vendor/waynestate/pinstripe/phpstan/laravel.neon` and adds only WELD's paths, so the level, the ignore rules and the banned calls (`eval()`, `dd()`, TLS checks turned off, SQL joined from strings) come from Pinstripe 0.3; `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's `deploy/` kit and its vendored `bin/docs-site.php`, and `tests/Unit/PinstripeWiringTest.php` fails if either file drifts from that
 - HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays Laravel's built-in liveness route, and `/ready` checks the database, the cache and the scheduler heartbeat
 - SESAME owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away
 - PROCTOR measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block
@@ -2080,8 +2088,9 @@ bin/weld.sh down
 | --- | --- |
 | `composer test` | Pest, running the PHPUnit class tests and the Pest tests side by side |
 | `composer lint` | Run Pint as a check (`pint --test`) |
+| `composer lint:gitlab` | Write Pint's findings as GitLab Code Quality JSON to `pint-codequality.json` (`[]` when clean); the `composer-ci` job runs it so findings show in the merge request |
 | `composer fix` | Apply Pint fixes (`pint`) |
-| `composer analyse` | Run PHPStan analysis (`phpstan analyse --memory-limit=1G`) |
+| `composer analyse` | Run PHPStan analysis (`phpstan analyse --memory-limit=1G`) with Pinstripe's Laravel preset: level 8, Larastan and the banned calls, SQL joined from strings among them |
 | `composer proctor` | PROCTOR against CREED's policy |
 | `composer ziggy` | Confirm the Ziggy routes are current: `composer ziggy`, then `git diff --exit-code resources/js/ziggy.*` |
 | `composer regen-check` | Compare a freshly generated Sourdough Inertia app with WELD by SHA-256 and fail only on new drift versus `.sourdough/regen-baseline.json`; pass `--generated <dir>` (and optionally `--write-baseline`) through |
@@ -2406,7 +2415,7 @@ Source: https://weld.apps.wayne.edu/docs/reference/status.html
 
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
-Every part of the stack is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.5.0; the deploy layer runs Squire's kit 0.10.3. Pinstripe's presets are still copied rather than installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
+Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.5.0; the deploy layer runs Squire's kit 0.10.3. Pinstripe's PHP presets are installed; its npm half is [the next step](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half). For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
 ### What is on the bench today[#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
@@ -2425,7 +2434,7 @@ Every part of the stack is welded in except one: HELMET and SESAME are in `requi
 | PROCTOR | measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block |
 | ADVISOR | in `require-dev`; `php vendor/bin/advisor install --client=claude --write` points a coding agent at the stack's read-only MCP server |
 | Squire | the deploy kit in `deploy/` at 0.10.3: the Citadel image, an idempotent release script and one portable image for other hosts |
-| Pinstripe presets | `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on Packagist and npm, and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it |
+| Pinstripe | `waynestate/pinstripe` `^0.3` in `require-dev`. `phpstan.neon` includes its `phpstan/laravel.neon` and adds only WELD's paths, so the level, the ignore rules and the banned calls (`eval()`, `dd()`, TLS checks turned off, SQL joined from strings) come from the package; WELD's own code passes them with no new ignore and no baseline. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes (Squire's `deploy/` kit and `bin/docs-site.php`), and `tests/Unit/PinstripeWiringTest.php` fails on any other drift. `composer-ci` saves Pint's findings as a Code Quality report (`composer lint:gitlab`). ESLint and Prettier still run on WELD's own config: see [Pinstripe's npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half) |
 | Password auth | the starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's |
 | License | MIT |
 
@@ -2433,13 +2442,25 @@ Every part of the stack is welded in except one: HELMET and SESAME are in `requi
 
 These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/enterprise-apps/weld/-/blob/main/BEST_PRACTICES.md).
 
-- Preflight's `portability` job builds the portable image and boots its `web` role in CI, on `main` and tags (manual on a merge request, blocking) (W10, W14 and W16 are `Checked`; W8, W13 and W17 gain a CI check). It leaves out the `HEALTHCHECK` command (W12), a session shared across replicas (W15, which needs a database service in the job) and migrations once per release (W24). Pinstripe (W32) is copied presets, not a dependency.
+- Preflight's `portability` job builds the portable image and boots its `web` role in CI, on `main` and tags (manual on a merge request, blocking) (W10, W14 and W16 are `Checked`; W8, W13 and W17 gain a CI check). It leaves out the `HEALTHCHECK` command (W12), a session shared across replicas (W15, which needs a database service in the job) and migrations once per release (W24). Pinstripe (W32) is a dependency for the PHP side; the JS side waits on [its npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half).
 - The deploy-time scheduler work (W23) is still a plan.
 - `tests/Feature/HealthHostTest.php` sends a forged `Host` and an IP:port `Host` to `/up` and expects 200, no cookie and no redirect, so W11 is `Checked` in full. The other items that once sat on an "Unverified" list are pinned: the CSRF check (`tests/Feature/CsrfTest.php`), a random UID (W13), Pest 4 on the PHP 8.3 floor, and `/ready` without `spatie/laravel-health`.
 - Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap.
 - Decided: `/ready` is HELMET's `Route::helmetReady()` with app checks as invokable classes: the database and the cache (W11) and the scheduler heartbeat (W23).
 - Decision needed: whether WELD keeps Fortify for a non-SSO mode.
 - Decision needed: SSR on by default or off.
+
+### Pinstripe's npm half[#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
+
+WELD takes Pinstripe's PHP side from Composer today. The JS side, `@waynestate/pinstripe` (ESLint and Prettier presets for Vue), waits for 0.3.0 on npm, because npm still has 0.1.4. The presets inside have not changed since 0.1.4, but the move is a real refit, not a version bump: Pinstripe's presets need ESLint 10 (WELD runs 9), print at 100 columns with 2-space indents where WELD's `.prettierrc` prints at 150 with 4, and add eslint-plugin-vuejs-accessibility, so every Vue file is reformatted once and the accessibility rules may report findings. Once 0.3.0 is on npm:
+
+1. Install it with ESLint 10: `npm install --save-dev @waynestate/pinstripe@^0.3 eslint@^10 prettier`, and drop the packages the preset now brings (`@eslint/js`, `@vue/eslint-config-typescript`, `eslint-config-prettier`, `eslint-plugin-vue`, `typescript-eslint`).
+2. In `eslint.config.js`, spread `@waynestate/pinstripe/eslint/typescript` first and keep WELD's own blocks after it: the WayneUI-only import ban (W2, checked by `tests/Feature/WayneUiOnlyTest.php`) and the ignore for Squire's `site/assets/docs.js`. If the accessibility rules report more than one change should fix, take the `typescript-warn` twin for that cut, then switch back.
+3. Point Prettier at the preset (`"prettier": "@waynestate/pinstripe/prettier"` in `package.json`) and delete `.prettierrc`. If `prettier-plugin-organize-imports` stays, that is a local override: record why.
+4. Run `npm run format` as a commit of its own, with nothing else in it, and list its hash in `.git-blame-ignore-revs` so `git blame` skips the reformat.
+5. `npm run lint`, `npm run format:check`, `npm run typecheck` and `npm run build` pass, the a11y gates stay green, and W32 says the JS side comes from the package too.
+
+One tailor, two fittings: the trousers are done, the jacket waits for the cloth to arrive.
 
 ### Related[#](https://weld.apps.wayne.edu/docs/reference/status.html#related)
 
