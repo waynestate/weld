@@ -129,5 +129,6 @@ WELD targets Citadel first. `docs/running-off-citadel.md` covers other hosts.
 
 ## Who maintains it
 
-Adam Perkins, Wayne State University Enterprise Applications. Internal runbook (accounts, tokens, mirrors, deploy
-access): ask Enterprise Applications.
+The stack maintainer (a role, not a named person), Wayne State University Enterprise Applications. To reach them,
+open an issue on [git.wayne.edu](https://git.wayne.edu/enterprise-apps/weld/-/issues). Internal runbook (accounts,
+tokens, mirrors, deploy access): ask Enterprise Applications.
