@@ -16,7 +16,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** After `config:cache` the `.env` file is not loaded and `env()` returns `null` elsewhere.
 
-**Stack:** `Checked`. Every `env()` call is inside `config/*.php` except one documented exception: `bootstrap/app.php:27` reads `TRUSTED_PROXIES` because the middleware closure runs before config is loaded, and carries a `@phpstan-ignore` for `larastan.noEnvCallsOutsideOfConfig`. That rule is live (`phpstan.neon:10` sets `reportUnmatchedIgnoredErrors: true`), and `phpstan analyse` runs in the `ci` script (`composer.json:61`, `:66-75`), so a new `env()` outside `config/` fails CI.
+**Stack:** `Checked`. Every `env()` call is inside `config/*.php` except one documented exception: `bootstrap/app.php:44` reads `TRUSTED_PROXIES` because the middleware closure runs before config is loaded, and carries a `@phpstan-ignore` for `larastan.noEnvCallsOutsideOfConfig`. That rule is live (`phpstan.neon:10` sets `reportUnmatchedIgnoredErrors: true`), and `phpstan analyse` runs in the `ci` script (`composer.json:61`, `:66-75`), so a new `env()` outside `config/` fails CI.
 
 ## W10. `config:cache` runs at container start, never at image build[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w10-config-cache-runs-at-container-start-never-at-image-build)
 
@@ -32,7 +32,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A database blip must not make the orchestrator kill every web container.
 
-**Stack:** `Checked`. `bootstrap/app.php:16` sets the health route to `/up`, and `tests/Feature/HelmetHeadersTest.php:41-51` fails the suite when `/up` stops answering 200. `/ready` is a separate route (HELMET's `Route::helmetReady()`, `routes/web.php:11`) that checks only the scheduler heartbeat (W23); it runs no database or cache checks yet.
+**Stack:** `Checked`. `bootstrap/app.php:20` sets the health route to `/up`, and `tests/Feature/HelmetHeadersTest.php:41-51` fails the suite when `/up` stops answering 200. `/ready` is a separate route, HELMET's `Route::helmetReady()` registered in the routing `then:` callback outside the web group (`bootstrap/app.php:27-33`), so a probe writes no session row and sets no cookie. It checks the database (`app/Health/DatabaseReady.php` opens the default connection), the cache (`app/Health/CacheReady.php` writes a key, reads it back and forgets it) and the scheduler heartbeat (W23), and answers 503 when one fails. `tests/Feature/ReadyChecksTest.php` proves it: "answers 503 on /ready when the database cannot be reached" (a missing SQLite file), "answers 503 on /ready when the cache store fails" (a store with no driver), "serves /ready outside the web group, with no session cookie" and "keeps /up free of the readiness checks" (the same broken database, and `/up` still answers 200). The checks and the test are byte for byte from Sourdough's Inertia shape; the route lines join WELD's own `bootstrap/app.php` and `routes/web.php`, which the regen baseline already accepts as drift. The checks use Laravel's own `DB` and `Cache` rather than the `DiagnosingHealth` event or a package, because HELMET's route already gives each check a name, a status and a logged reason.
 
 ## W12. Image health check matches the platform[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w12-image-health-check-matches-the-platform)
 

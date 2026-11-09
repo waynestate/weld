@@ -144,7 +144,11 @@ What is on the bench today:
   (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
 - HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline;
   the Vite build takes the per-request nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays
-  Laravel's built-in health route
+  Laravel's built-in health route, and `/ready` (HELMET's readiness route, outside the web group, so no session
+  or cookie) answers 503 while the database, the cache or the scheduler heartbeat fails
+- Every queued job under `app/Jobs` declares `#[Tries]` and a `#[Timeout]` below the queue's `retry_after`
+  (`tests/Feature/JobLimitsTest.php` fails the suite otherwise), and `php artisan make:job` writes both
+  (`stubs/`: three tries, 45 seconds each)
 - SESAME owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and
   CAS is an env change away
 - PROCTOR measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures
@@ -764,6 +768,9 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Docs: BEST_PRACTICES W11, W18 and W20 follow the copies. W11 cites `/ready` in `bootstrap/app.php` (it pointed at a stale `routes/web.php:11`) and names the database and cache checks and the test that breaks each; W18 is `Checked` for the job attributes (`#[Backoff]` stays open); W20 is `Checked` for every job, not only the scheduled worker. W9, W23 and W27 cite the `bootstrap/app.php` lines that moved, and the guides are synced.
+- Added: every queued job carries its limits. `tests/Feature/JobLimitsTest.php` fails the suite on a queued job under `app/Jobs` without `#[Tries]` and `#[Timeout]`, or with a timeout at or above the queue connection's `retry_after`, and passes while there are no jobs; `stubs/job.queued.stub` and `stubs/job.batched.queued.stub` make `php artisan make:job` write `#[Tries(3)]` and `#[Timeout(45)]`. Copied byte for byte from Sourdough's Inertia shape.
+- Added: `/ready` checks the database and the cache as well as the scheduler heartbeat (`app/Health/DatabaseReady.php`, `app/Health/CacheReady.php`), and moves from `routes/web.php` to the routing `then:` callback in `bootstrap/app.php`, outside the web group, so a probe writes no session row and sets no cookie. The checks and `tests/Feature/ReadyChecksTest.php` (which breaks the database, then the cache, and expects 503) are byte for byte from Sourdough's Inertia shape; the route lines are merged into WELD's own `bootstrap/app.php` and `routes/web.php`.
 - Fixed: `composer docs:practices` skipped the nine practices under `## W25:` style headings (Security, Build and supply chain), so those guides went stale: W26 read `Not yet` while it was `Enforced`, W27 and W28 `Documented` while `Checked`. The sync now reads a colon or a period after the id, rewrote both guides, and both modes fail when a practice has no guide section, has two, lacks its Stack line, or a section names a practice BEST_PRACTICES.md does not have (`tests/Unit/PracticesCoverageTest.php`). BEST_PRACTICES W31 and W33 keep the facts only their guides carried, and the `composer.json` line numbers in W6, W9, W25, W30 and W32 are current again.
 - Changed: CI pins the Preflight components to 0.4.0 (the proctor job clones the full history, so the override-approver check can read git blame).
 - Added: PortableImageTest proves the portable image builds `vendor/` without dev packages (the build context leaves `vendor/` out and its only Composer install is release.sh's `--no-dev` one), which closes W29's open item.
@@ -1254,7 +1261,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** After `config:cache` the `.env` file is not loaded and `env()` returns `null` elsewhere.
 
-**Stack:** `Checked`. Every `env()` call is inside `config/*.php` except one documented exception: `bootstrap/app.php:27` reads `TRUSTED_PROXIES` because the middleware closure runs before config is loaded, and carries a `@phpstan-ignore` for `larastan.noEnvCallsOutsideOfConfig`. That rule is live (`phpstan.neon:10` sets `reportUnmatchedIgnoredErrors: true`), and `phpstan analyse` runs in the `ci` script (`composer.json:61`, `:66-75`), so a new `env()` outside `config/` fails CI.
+**Stack:** `Checked`. Every `env()` call is inside `config/*.php` except one documented exception: `bootstrap/app.php:44` reads `TRUSTED_PROXIES` because the middleware closure runs before config is loaded, and carries a `@phpstan-ignore` for `larastan.noEnvCallsOutsideOfConfig`. That rule is live (`phpstan.neon:10` sets `reportUnmatchedIgnoredErrors: true`), and `phpstan analyse` runs in the `ci` script (`composer.json:61`, `:66-75`), so a new `env()` outside `config/` fails CI.
 
 ### W10. `config:cache` runs at container start, never at image build[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w10-config-cache-runs-at-container-start-never-at-image-build)
 
@@ -1270,7 +1277,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A database blip must not make the orchestrator kill every web container.
 
-**Stack:** `Checked`. `bootstrap/app.php:16` sets the health route to `/up`, and `tests/Feature/HelmetHeadersTest.php:41-51` fails the suite when `/up` stops answering 200. `/ready` is a separate route (HELMET's `Route::helmetReady()`, `routes/web.php:11`) that checks only the scheduler heartbeat (W23); it runs no database or cache checks yet.
+**Stack:** `Checked`. `bootstrap/app.php:20` sets the health route to `/up`, and `tests/Feature/HelmetHeadersTest.php:41-51` fails the suite when `/up` stops answering 200. `/ready` is a separate route, HELMET's `Route::helmetReady()` registered in the routing `then:` callback outside the web group (`bootstrap/app.php:27-33`), so a probe writes no session row and sets no cookie. It checks the database (`app/Health/DatabaseReady.php` opens the default connection), the cache (`app/Health/CacheReady.php` writes a key, reads it back and forgets it) and the scheduler heartbeat (W23), and answers 503 when one fails. `tests/Feature/ReadyChecksTest.php` proves it: "answers 503 on /ready when the database cannot be reached" (a missing SQLite file), "answers 503 on /ready when the cache store fails" (a store with no driver), "serves /ready outside the web group, with no session cookie" and "keeps /up free of the readiness checks" (the same broken database, and `/up` still answers 200). The checks and the test are byte for byte from Sourdough's Inertia shape; the route lines join WELD's own `bootstrap/app.php` and `routes/web.php`, which the regen baseline already accepts as drift. The checks use Laravel's own `DB` and `Cache` rather than the `DiagnosingHealth` event or a package, because HELMET's route already gives each check a name, a status and a logged reason.
 
 ### W12. Image health check matches the platform[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w12-image-health-check-matches-the-platform)
 
@@ -1404,7 +1411,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** It needs no extra service, and `--max-time` recycles memory.
 
-**Stack:** `Documented`. `.env.example:67` sets `QUEUE_CONNECTION=database`, `config/queue.php:16` defaults to it, and the jobs tables are migrated by `database/migrations/0001_01_01_000002_create_jobs_table.php:14`. No job classes exist yet, so the `#[Tries]`/`#[Timeout]`/`#[Backoff]` attributes are not in use. Target `Checked`: a test that every job class declares `#[Tries]` and `#[Timeout]`.
+**Stack:** `Checked` for the job attributes. `.env.example:67` sets `QUEUE_CONNECTION=database`, `config/queue.php:16` defaults to it, and the jobs tables are migrated by `database/migrations/0001_01_01_000002_create_jobs_table.php:14`. `tests/Feature/JobLimitsTest.php` fails the suite on a queued job under `app/Jobs` without `#[Tries]` and `#[Timeout]` (on the class, a parent or a trait; the older `$tries` and `$timeout` properties count too), proves the guard on fixture jobs, and passes while there are no jobs, which is WELD today. `stubs/job.queued.stub` and `stubs/job.batched.queued.stub` make `php artisan make:job` write `#[Tries(3)]` and `#[Timeout(45)]`. Byte for byte from Sourdough's Inertia shape, held by the regen gate. The worker process type is the portable image's `worker` role (`queue:work --tries=3 --max-time=3600`, W8). Open: nothing asks for `#[Backoff]`, so a failed job retries at once unless it sets one.
 
 ### W19. Where no worker can run, run the queue from the scheduler[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w19-where-no-worker-can-run-run-the-queue-from-the-scheduler)
 
@@ -1420,7 +1427,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Otherwise the job is attempted again before it has finished.
 
-**Stack:** `Checked` for the scheduled worker. `routes/console.php` passes `--timeout=45`, and `tests/Feature/QueueWorkerScheduleTest.php` fails when that is not below the default connection's `retry_after` (or, for `sync`, below every connection's; Laravel's default is 90). The deploy image installs `pcntl` (`deploy/.squire/base-fallback.Dockerfile`). No job classes exist yet: a job's own `#[Timeout]` must stay below `retry_after` too, and nothing checks that until one exists. Byte for byte from Sourdough, held by the regen gate.
+**Stack:** `Checked`. `routes/console.php` passes `--timeout=45`, and `tests/Feature/QueueWorkerScheduleTest.php` fails when that is not below the default connection's `retry_after` (or, for `sync`, below every connection's; Laravel's default is 90). Each job's own timeout is held the same way: `tests/Feature/JobLimitsTest.php` fails on a job under `app/Jobs` whose `#[Timeout]` (or `$timeout`) is at or above that `retry_after` ("keeps every job timeout below the queue connection retry_after"; "catches a job timeout at or above retry_after" proves it on a 600-second fixture), and holds the `make:job` stubs' 45 below it too. The deploy image installs `pcntl` (`deploy/.squire/base-fallback.Dockerfile`). Byte for byte from Sourdough, held by the regen gate.
 
 ### W21. One scheduler entry; one run per task[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w21-one-scheduler-entry-one-run-per-task)
 
@@ -1444,7 +1451,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** With no worker supervisor, a stopped scheduler is otherwise invisible.
 
-**Stack:** `Checked` for the heartbeat. `routes/console.php:17-19` stamps the cache every minute in a closure named `scheduler-heartbeat`, and `routes/web.php:11` registers HELMET's `/ready` with `App\Health\SchedulerHeartbeat`, which answers 503 while the stamp is missing or older than `worker.heartbeat_max_age` (`config/worker.php:31`, env `WORKER_HEARTBEAT_MAX_AGE`, default 180 seconds; 0 turns the check off for an app that runs no scheduler). `tests/Feature/SchedulerHeartbeatTest.php` proves it: "answers 503 on /ready when the scheduler has not written a heartbeat", "answers 200 on /ready right after the heartbeat closure runs", "answers 503 on /ready again once the clock moves past the max age" (the fake clock), "answers 200 on /ready with no heartbeat when the check is turned off" and "schedules the heartbeat every minute under its own name". Byte for byte from Sourdough, held by the regen gate. Open: the Prometheus gauge is not built, and nothing probes `/ready` yet: Squire's `health.php` (Citadel's Health Check and the compose healthcheck) asks `/up`, so only point a traffic probe at `/ready` where `schedule:run` really runs.
+**Stack:** `Checked` for the heartbeat. `routes/console.php:17-19` stamps the cache every minute in a closure named `scheduler-heartbeat`, and `bootstrap/app.php:31` puts `App\Health\SchedulerHeartbeat` on HELMET's `/ready` beside the database and cache checks (W11), which answers 503 while the stamp is missing or older than `worker.heartbeat_max_age` (`config/worker.php:31`, env `WORKER_HEARTBEAT_MAX_AGE`, default 180 seconds; 0 turns the check off for an app that runs no scheduler). `tests/Feature/SchedulerHeartbeatTest.php` proves it: "answers 503 on /ready when the scheduler has not written a heartbeat", "answers 200 on /ready right after the heartbeat closure runs", "answers 503 on /ready again once the clock moves past the max age" (the fake clock), "answers 200 on /ready with no heartbeat when the check is turned off" and "schedules the heartbeat every minute under its own name". Byte for byte from Sourdough, held by the regen gate. Open: the Prometheus gauge is not built, and nothing probes `/ready` yet: Squire's `health.php` (Citadel's Health Check and the compose healthcheck) asks `/up`, so only point a traffic probe at `/ready` where `schedule:run` really runs.
 
 ### W24. Run migrations exactly once per release[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w24-run-migrations-exactly-once-per-release)
 
@@ -1617,7 +1624,7 @@ Warning
 
 **Practice:** Laravel 13 formalized request-forgery protection as `PreventRequestForgery` (origin-aware, still token-compatible). Any custom middleware stack or HELMET code must reference the new name.
 
-**Stack:** `Checked`. `bootstrap/app.php:31-34` appends to the default `web` middleware group. `tests/Feature/CsrfTest.php:15-19` posts without a token and expects 419, `:21-29` lets the session token through, and `:31-37` lets a same-origin `Sec-Fetch-Site` request through.
+**Stack:** `Checked`. `bootstrap/app.php:48-51` appends to the default `web` middleware group. `tests/Feature/CsrfTest.php:15-19` posts without a token and expects 419, `:21-29` lets the session token through, and `:31-37` lets a same-origin `Sec-Fetch-Site` request through.
 
 ### W28: CSP works with Inertia 3 and Vite[#](https://weld.apps.wayne.edu/docs/guides/security.html#w28-csp-works-with-inertia-3-and-vite)
 
