@@ -123,7 +123,7 @@ Squire's kit 0.9.0. Pinstripe's presets are still copied rather than installed. 
 <ul>
 <li>Preflight portability does not boot the image in CI yet (W8, W10, W12, W13, W16, W24), and Pinstripe (W32) is copied presets, not a dependency.</li>
 <li>The deploy-time scheduler work (W23) is still a plan.</li>
-<li>Still open: no test sends a forged <code>Host</code> to <code>/up</code>, so that half of W11 stays <code>Documented</code>. The other items that once sat on an &quot;Unverified&quot; list are pinned: the CSRF check (<code>tests/Feature/CsrfTest.php</code>), a random UID (W13), Pest 4 on the PHP 8.3 floor, and <code>/ready</code> without <code>spatie/laravel-health</code>.</li>
+<li><code>tests/Feature/HealthHostTest.php</code> sends a forged <code>Host</code> and an IP:port <code>Host</code> to <code>/up</code> and expects 200, no cookie and no redirect, so W11 is <code>Checked</code> in full. The other items that once sat on an &quot;Unverified&quot; list are pinned: the CSRF check (<code>tests/Feature/CsrfTest.php</code>), a random UID (W13), Pest 4 on the PHP 8.3 floor, and <code>/ready</code> without <code>spatie/laravel-health</code>.</li>
 <li>Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap.</li>
 <li>Decided: <code>/ready</code> is HELMET's <code>Route::helmetReady()</code> with app checks as invokable classes: the database and the cache (W11) and the scheduler heartbeat (W23).</li>
 <li>Decision needed: whether WELD keeps Fortify for a non-SSO mode.</li>
