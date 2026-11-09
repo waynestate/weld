@@ -25,7 +25,7 @@ Every page below is Markdown. The HTML pages send the same Markdown to a client 
 - [Is WELD still Sourdough's shape? | WELD docs](https://weld.apps.wayne.edu/docs/guides/regen-check.md): Whether WELD is still Sourdough's Inertia shape: the regen gate compares a fresh generation with WELD and fails only on new drift.
 - [Security | WELD docs](https://weld.apps.wayne.edu/docs/guides/security.md): Security in WELD: sign-in through SESAME, the security headers and CSP from HELMET, and the standards checks from PROCTOR.
 - [WELD and Sourdough | WELD docs](https://weld.apps.wayne.edu/docs/guides/sourdough.md): WELD and Sourdough: the starter tool for every shape of Wayne State app, and why WELD is the finished piece.
-- [What is welded in | WELD docs](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.md): The parts welded into WELD: WayneUI, CREED, Pinstripe, Preflight, PROCTOR, SESAME, HELMET and Ziggy, and what each does in the app.
+- [What is welded in | WELD docs](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.md): The parts welded into WELD: WayneUI, CREED, Pinstripe, Preflight, PROCTOR, SESAME, HELMET, ADVISOR, Squire and Ziggy, and what each does in the app.
 - [Overview | WELD docs](https://weld.apps.wayne.edu/docs/index.md): What WELD is: the whole Wayne State app stack joined into one application, and where each part sits in it.
 - [Install | WELD docs](https://weld.apps.wayne.edu/docs/install.md): How to get WELD: composer create-project or clone, then one Docker command brings the app, PHP and Node up.
 - [Commands | WELD docs](https://weld.apps.wayne.edu/docs/reference/commands.md): The commands a WELD app runs: the composer scripts, the artisan commands and the bin/weld subcommands.

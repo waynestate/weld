@@ -50,8 +50,8 @@ npm ci
 ```
 
 `create-project` installs the newest tagged release, and `main` can be ahead of it (the [CHANGELOG](https://github.com/waynestate/weld/blob/HEAD/CHANGELOG.md)
-lists what is unreleased). 0.1.3 (2026-11-06) is the first tag where WayneUI draws the app; clone when you want
-`main`.
+lists what is unreleased). The newest tag is 0.1.5; 0.1.3 (2026-11-06) was the first where WayneUI draws the app.
+Clone when you want `main`.
 
 Or clone it, if you want the history too, and it is yours to rename:
 
@@ -120,30 +120,33 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 |---|---|
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
-| Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier |
-| Preflight | The CI pipeline, from GitLab CI/CD components |
+| Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM and secret detection |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
-| HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` |
+| HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
+| ADVISOR | Dev only: the stack's read-only MCP server, so your coding agent knows the stack's rules and versions |
+| Squire | The deploy kit in `deploy/`, at 0.9.0: the Citadel image, an idempotent release script and one portable image for other hosts |
 | Laravel Boost | Dev only: the MCP server, guidelines and skills that teach your coding agent Laravel, with WELD's conventions in `.ai/` |
 | Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ### Status
 
-HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is on Packagist too and gets welded on
-in turn.
+Every part is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in
+`require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.9.0.
+Pinstripe's presets are still copied rather than installed. The bead is nearly closed.
 What is on the bench today:
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
 - `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
 - `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap
 - `.gitattributes` sets `* text=auto eol=lf`
-- `composer ci` is the CI contract: it runs validate, the tests with Pest, Pint, PHPStan level 8, the agent-ready check and audit, the
-  same command on GitLab and GitHub
-- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.4 is on Packagist
-  (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
+- `composer ci` is the CI contract: it runs validate, the tests with Pest, Pint, PHPStan level 8, the agent-ready check, the
+  practices sync check, the docs check and audit, the same command on GitLab and GitHub
+- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on npm
+  (Packagist still lists 0.1.4), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
 - HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline;
-  the Vite build takes the per-request nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays
+  the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays
   Laravel's built-in health route, and `/ready` (HELMET's readiness route, outside the web group, so no session
   or cookie) answers 503 while the database, the cache or the scheduler heartbeat fails
 - Every queued job under `app/Jobs` declares `#[Tries]` and a `#[Timeout]` below the queue's `retry_after`
@@ -334,7 +337,7 @@ WELD is a Laravel 13 app with Inertia and Vue, and the rest of the stack is alre
 
 Any other shape? [Sourdough](https://sourdough.apps.wayne.edu/) starts every one of the five, from raw PHP to Vue islands, with the same sign-in, headers and checks.
 
-[Get started](https://weld.apps.wayne.edu/#start) [Which piece do I need?](https://weld.apps.wayne.edu/#chooser) [Meet the cast](https://weld.apps.wayne.edu/#cast-title) [Docs](https://weld.apps.wayne.edu/docs/index.html)
+[Get started](https://weld.apps.wayne.edu/#start) [Which piece do I need?](https://weld.apps.wayne.edu/#chooser) [Every project](https://weld.apps.wayne.edu/#log) [Docs](https://weld.apps.wayne.edu/docs/index.html)
 
 Start here
 
@@ -415,6 +418,113 @@ CREED writes the rules down and PROCTOR grades your app against them. Pinstripe 
 
 WELD already has all four set up. Run `composer ci` and `composer proctor` on your machine, and GitLab runs both through Preflight on every push.
 
+The whole stack
+
+### The weld log
+
+Every project in the stack on one sheet: what it holds, its latest release, where it stands, and where to read more. WayneUI is joint 00, because everything else is drawn on it.
+
+1. Joint 00
+   ### WayneUI
+   The interface
+   Wayne State's design system, one contract on four paths: static HTML, raw PHP, Blade and Vue. It draws every page of WELD.
+   Release 2.0.8
+   Inspection: Stable
+   [Site of WayneUI](https://wayneui.apps.wayne.edu/) [Docs for WayneUI](https://wayneui.apps.wayne.edu/docs/)
+2. Joint 01
+   ### CREED
+   The standard
+   61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-08.
+   Release 0.1.7
+   Inspection: In use
+   [Site of CREED](https://creed.apps.wayne.edu/) [Docs for CREED](https://creed.apps.wayne.edu/docs/)
+3. Joint 02
+   ### PROCTOR
+   The grader
+   Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.9.0 adds the dev-only package, case clash and override approver checks.
+   Release 0.9.0
+   Inspection: In use
+   [Site of PROCTOR](https://proctor.apps.wayne.edu/) [Docs for PROCTOR](https://proctor.apps.wayne.edu/docs/)
+4. Joint 03
+   ### Pinstripe
+   The code style
+   Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On npm now; Packagist still lists 0.1.4.
+   Release 0.3.0
+   Inspection: In use
+   [Site of Pinstripe](https://pinstripe.apps.wayne.edu/) [Docs for Pinstripe](https://pinstripe.apps.wayne.edu/docs/)
+5. Joint 04
+   ### Preflight
+   The CI runner
+   GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, Pint, PHPStan and ESLint.
+   Release 0.4.0
+   Inspection: In use
+   [Site of Preflight](https://preflight.apps.wayne.edu/) [Docs for Preflight](https://preflight.apps.wayne.edu/docs/)
+6. Joint 05
+   ### HELMET
+   The runtime baseline
+   Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
+   Release 1.0.1
+   Inspection: Stable
+   [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
+7. Joint 06
+   ### SESAME
+   Sign-in
+   CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
+   Release 0.6.2
+   Inspection: In use
+   [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
+8. Joint 07
+   ### Sourdough
+   The starter
+   Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app.
+   Release 0.2.0
+   Inspection: In use
+   [Site of Sourdough](https://sourdough.apps.wayne.edu/) [Docs for Sourdough](https://sourdough.apps.wayne.edu/docs/)
+9. Joint 08
+   ### Squire
+   The deploy kit
+   Citadel's build, release and health-check scripts from templates, `squire doctor`, local runs on Citadel's image, and one portable image for other hosts.
+   Release 0.9.0
+   Inspection: In use
+   [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
+10. Joint 09
+    ### Booster
+    Upgrades
+    Plans PHP and Laravel upgrades as hops on Rector and gates each hop with your tests on the target PHP. It never commits for you.
+    Release 1.12.0
+    Inspection: Stable
+    [Site of Booster](https://booster.apps.wayne.edu/) [Docs for Booster](https://booster.apps.wayne.edu/docs/)
+11. Joint 10
+    ### Rollcall
+    The fleet report
+    Scans the apps and reports each one's PHP, Laravel, sign-in package and PROCTOR result against CREED's dates, with an end-of-life burn-down. It only reports.
+    Release 1.0.0
+    Inspection: Stable
+    [Site of Rollcall](https://rollcall.apps.wayne.edu/) [Docs for Rollcall](https://rollcall.apps.wayne.edu/docs/)
+12. Joint 11
+    ### Drawbridge
+    The sign-in gateway
+    One OpenID Connect client for Entra ID in front of Citadel apps, passing a signed assertion SESAME checks. Not in front of any apps yet.
+    Release 0.4.0
+    Inspection: Pilot
+    [Site of Drawbridge](https://drawbridge.apps.wayne.edu/) [Docs for Drawbridge](https://drawbridge.apps.wayne.edu/docs/)
+13. Joint 12
+    ### ADVISOR
+    The MCP server
+    Nine read-only tools your coding agent can ask about the stack. Every answer names the file it came from.
+    Release 0.1.7
+    Inspection: In use
+    [Site of ADVISOR](https://advisor.apps.wayne.edu/) [Docs for ADVISOR](https://advisor.apps.wayne.edu/docs/)
+14. Joint 13
+    ### WELD
+    All of the above
+    You are here: Laravel 13 with Inertia 3 and Vue, every joint above already made. Clone it and rename it.
+    Release 0.1.5
+    Inspection: In use
+    [Docs for WELD](https://weld.apps.wayne.edu/docs/index.html) [Changes in WELD](https://weld.apps.wayne.edu/docs/changelog.html)
+
+Stable: released at 1.0 or later. In use: a 0.x release that WELD or the apps Sourdough bakes already run on. Pilot: built and tested, and not yet in front of a real app. Each release is the latest tag on that project's main branch, checked on November 9, 2026.
+
 ### The journey
 
 Roughly in order: what happens to a request on its way to the page, then what happens to your code before it ships.
@@ -430,13 +540,13 @@ Up close
 
 ### The cast
 
-The same projects with a bit more detail. The first seven are part of WELD. The next five work around your app: upgrades, the fleet scan, deploys, the sign-in gateway and the MCP server. After those come Sourdough and the one we're building next.
+The same projects with a bit more detail. The first seven are part of WELD. The next five work around your app: upgrades, the fleet scan, deploys, the sign-in gateway and the MCP server. After those come Sourdough and the one still on the drawing board.
 
 ![WayneUI logo: a rounded frame around a solid shape, with a gold tab on the lower edge](https://weld.apps.wayne.edu/assets/marks/wayneui.svg)
 
 #### [WayneUI](https://wayneui.apps.wayne.edu/)
 
-2.0 Contrast | AA
+2.0.8 Contrast | AA
 
 Wayne State's design system. It draws every page of WELD's Vue front end, light and dark, and nothing else is allowed to.
 
@@ -445,7 +555,7 @@ $ pnpm verify
 ✓ tokens     built
 ✓ contrast   AA, every pair
 ✓ axe        0 violations
-a11y: 100
+bar: WCAG 2.2 AA
 $
 ```
 
@@ -453,15 +563,15 @@ $
 
 #### [CREED](https://creed.apps.wayne.edu/)
 
-0.1 Volume | Eleven
+0.1.7 Volume | Eleven
 
 The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 
 ```
-$ creed policy show
-php      8.3, 8.4
+$ less policy/policy.json
+php      8.3, 8.4, 8.5
 laravel  12, 13
-node     22 LTS
+node     22, 24, 26
 volume   eleven
 $
 ```
@@ -470,15 +580,15 @@ $
 
 #### [HELMET](https://helmet.apps.wayne.edu/)
 
-0.2 Fit | Snug
+1.0.1 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
 ```
-$ helmet headers
-CSP      strict, nonce
-HSTS     1 year
-frames   DENY
+$ curl -sI https://my-app.apps.wayne.edu
+csp      nonce, strict-dynamic
+hsts     1 year
+frames   SAMEORIGIN
 $
 ```
 
@@ -486,15 +596,15 @@ $
 
 #### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.2 Says | Open
+0.6.2 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
 ```
-$ sesame login
+$ curl -sI localhost:8000/dashboard
+302      Found
+location /login
 → off to CAS and back
-✓ signed in as ab1234
-✓ session: app-native
 $
 ```
 
@@ -502,15 +612,15 @@ $
 
 #### [PROCTOR](https://proctor.apps.wayne.edu/)
 
-0.2 Strictness | Kind
+0.9.0 Strictness | Kind
 
 In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
 ```
-$ proctor check
+$ composer proctor
 ✓ php 8.4 supported
-✓ headers present
-✓ 42 passed, 0 failed
+✓ composer.lock committed
+✓ 0 failed: no resit
 $
 ```
 
@@ -518,15 +628,15 @@ $
 
 #### [Preflight](https://preflight.apps.wayne.edu/)
 
-0.1 Checklist | Long
+0.4.0 Checklist | Long
 
-GitLab CI/CD components. WELD's pipeline uses them to run the tests on PHP 8.3, 8.4 and 8.5, plus the audit.
+GitLab CI/CD components. WELD's pipeline pins them at 0.4.0 to run the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection and the accessibility gate.
 
 ```
-$ preflight run
-✓ lint         pass
-✓ test         312 pass
-✓ portability  pass
+$ git push
+✓ php-test     8.3, 8.4, 8.5
+✓ proctor      pass
+✓ a11y         0 violations
 $
 ```
 
@@ -534,13 +644,13 @@ $
 
 #### [Pinstripe](https://pinstripe.apps.wayne.edu/)
 
-0.1 Creases | Sharp
+0.3.0 Creases | Sharp
 
-The code style presets. WELD runs Pint and PHPStan at level 8 from a copy of Pinstripe's 0.1 Laravel presets.
+The code style presets, now banning SQL joined from strings. WELD runs Pint and PHPStan at level 8 from a copy of Pinstripe's 0.1 Laravel presets, and ESLint and Prettier in CI.
 
 ```
-$ pinstripe apply
-✓ pint      14 files pressed
+$ composer lint && composer analyse
+✓ pint      pressed
 ✓ phpstan   level 8, 0 errors
 ✓ eslint    clean
 style: sharp
@@ -551,7 +661,7 @@ $
 
 #### [Booster](https://booster.apps.wayne.edu/)
 
-0.1 Sting | Mild
+1.12.0 Sting | Mild
 
 Plans an upgrade as hops, like Laravel 10 to 11, and runs them one at a time with Rector. Your tests have to pass on the new PHP before the next hop starts.
 
@@ -567,7 +677,7 @@ $
 
 #### [Rollcall](https://rollcall.apps.wayne.edu/)
 
-0.1 Attendance | Taken
+1.0.0 Attendance | Taken
 
 Every app answers “present”, with its PHP, Laravel and auth versions. Rollcall only reports. It never opens an issue or blocks a deploy.
 
@@ -583,9 +693,9 @@ $
 
 #### [Squire](https://squire.apps.wayne.edu/)
 
-0.3 Armor | Carried
+0.9.0 Armor | Carried
 
-The deploy kit for Citadel: `build.sh`, a release script, a health check and local runs on the same images. This page deploys with it too.
+The deploy kit for Citadel: `build.sh`, a release script, a health check and local runs on the same images, plus one portable image for other hosts. This page deploys with it too.
 
 ```
 $ squire doctor
@@ -599,9 +709,9 @@ $
 
 #### [Drawbridge](https://drawbridge.apps.wayne.edu/)
 
-0.1 Moat | Full
+0.4.0 Moat | Full
 
-One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app.
+One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app. Built and tested; not in front of any apps yet.
 
 ```
 $ drawbridge config:validate
@@ -616,14 +726,14 @@ $
 
 #### [ADVISOR](https://advisor.apps.wayne.edu/)
 
-0.1 Office hours | Always
+0.1.7 Office hours | Always
 
 Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only in 0.1: it can't write files or run shell commands.
 
 ```
 $ advisor mcp
 ✓ serving   stdio
-✓ tools     read-only
+✓ tools     nine, read-only
 answers: from policy.json
 $
 ```
@@ -632,22 +742,22 @@ $
 
 #### [Sourdough](https://sourdough.apps.wayne.edu/)
 
-0.1 Rise | Daily
+0.2.0 Rise | Daily
 
 `sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 
 ```
-$ sourdough new --raw
+$ sourdough new my-app --raw
 Next steps:
   cd my-app
   composer install
 $
 ```
 
-#### Next off the line
+#### Still on the drawing board
 
-- Rolodex next
-  Person data with types, so nobody has to flip through cards by hand.
+- Rolodex later
+  Person data with types, so nobody has to flip through cards by hand. Paused for now, with no release yet.
 
 ### Pick your path
 
@@ -689,7 +799,7 @@ This is WELD
 
 #### Laravel + Inertia/Vue
 
-Laravel 13 with Inertia 2 and Vue 3. This is the shape WELD is, with the stack already installed.
+Laravel 13 with Inertia 3 and Vue 3. This is the shape WELD is, with the stack already installed.
 
 `composer create-project waynestate/weld my-app`
 
@@ -771,6 +881,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Docs: the front page gains "The weld log", the stack's hub: all fourteen parts on one inspection sheet, WayneUI as joint 00, each with its latest release (checked 2026-11-09), a one-line state, an inspection stamp (Stable, In use or Pilot) and links to its site and docs; with motion allowed, each joint tacks gold in turn as it scrolls in. The nav and the hero link point at it. The cast cards carry full release numbers and real commands in their terminals, the bench marks Rolodex as paused, and the paths say Inertia 3. README, MAINTAINING, the status page and "What is welded in" list every part that is welded in (ADVISOR, Preflight 0.4.0, Squire's kit 0.9.0; Pinstripe still copied), the CI jobs and checks as they run, and trusted proxies read from `TRUSTED_PROXIES`. BEST_PRACTICES' intro describes the repo as of 2026-11-09, and its "Unverified" list becomes a "Verified" note saying where each item is pinned (`CsrfTest.php:8`, W13, `composer.json:37`, no `spatie/laravel-health`); a forged `Host` on `/up` is still untested, so that half of W11 stays `Documented`.
 - Changed: the GitLab regen gate runs on every tag, on a pipeline schedule and on Run pipeline, and on a push only when the push touches a path the gate compares or the gate itself, so docs and site pushes no longer turn main red for drift they cannot cause. The job is `interruptible`, and only its network steps (the two `composer install` lines and the Sourdough clone) get three tries, so a dropped GitHub download no longer fails it while drift still fails at once. `.deploy` never runs from a schedule, and `tests/Unit/RegenGateRulesTest.php` holds the rules. The nightly schedule itself is a project setting, pending the maintainer's approval.
 - Added: deprecations fail the tests, copied from Sourdough's Inertia shape. `phpunit.xml` sets `failOnDeprecation` (indirect deprecations, a package's to fix, are ignored), and `tests/TestCase.php` hands deprecations back to PHPUnit through `tests/Support/ReportsDeprecationsToPhpUnit.php`, byte for byte from Sourdough, because Laravel's handler drops them while testing. `tests/Unit/DeprecationGateTest.php` holds the settings; the suite raised none.
 - Changed: the deploy layer runs Squire's kit 0.9.0 (was 0.8.0), refreshed with `squire update --path=deploy`: a Laravel release now stops when `APP_KEY` is unset or `APP_DEBUG` is on in production, before anything installs, and warns on an `APP_ENV` that is not production (`tests/Feature/ReleaseEnvGuardTest.php`, BEST_PRACTICES W26); `SQUIRE_PHP_RUNTIME` picks the PHP version PROCTOR's gate grades. BEST_PRACTICES W10, W22 and W24 cite the moved release-script lines.
@@ -1700,11 +1811,13 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 | --- | --- |
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
-| Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier |
-| Preflight | The CI pipeline, from GitLab CI/CD components |
+| Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM and secret detection |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
-| HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` |
+| HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
+| ADVISOR | The stack's read-only MCP server for coding agents, in `require-dev` |
+| Squire | The deploy kit in `deploy/`, at 0.9.0: the Citadel image, an idempotent release script and one portable image for other hosts |
 | Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ![WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys.](https://weld.apps.wayne.edu/docs/readme/journey.svg)
@@ -1713,15 +1826,15 @@ One request, six stops, one seam. The bead runs the length of it; with reduced m
 
 ### What is on the bench today[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
-HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is on Packagist too and gets welded on in turn.
+Every part is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.9.0. Pinstripe's presets are still copied rather than installed.
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
 - `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
 - `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap
 - `.gitattributes` sets `* text=auto eol=lf`
-- `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on GitLab and GitHub
-- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.4 is on Packagist (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
-- HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays Laravel's built-in health route
+- `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub
+- `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on npm (Packagist still lists 0.1.4), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it
+- HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays Laravel's built-in liveness route, and `/ready` checks the database, the cache and the scheduler heartbeat
 - SESAME owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away
 - PROCTOR measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block
 - The starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's
@@ -2092,7 +2205,7 @@ This page lists every environment variable a WELD app reads, its default from `.
 
 ### Trusted proxies and HELMET_PRESET[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#trusted-proxies-and-helmet-preset)
 
-HELMET owns the trusted proxies (W17, `Enforced` by HELMET 1.0): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Pick a platform preset with `HELMET_PRESET`; HELMET 1.0 ships two, `citadel` and `docker`, and an unknown preset name throws at boot. On other platforms, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Do not paste `trustProxies(at: '*')` from tutorials: an app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks. Laravel's own proxy list has its own variable; set `TRUSTED_PROXIES` to the same address (unset means Citadel's `172.18.0.1`). In WELD today, trusted proxies are a literal list in `bootstrap/app.php`.
+HELMET owns the trusted proxies (W17, `Enforced` by HELMET 1.0): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Pick a platform preset with `HELMET_PRESET`; HELMET 1.0 ships two, `citadel` and `docker`, and an unknown preset name throws at boot. On other platforms, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Do not paste `trustProxies(at: '*')` from tutorials: an app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks. Laravel's own proxy list has its own variable; set `TRUSTED_PROXIES` to the same address (unset means Citadel's `172.18.0.1`). In WELD, `bootstrap/app.php` reads that variable through `App\Support\TrustedProxies::fromEnv()`: set but empty trusts nothing.
 
 ### Keep .env out of version control[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#keep-env-out-of-version-control)
 
@@ -2271,34 +2384,38 @@ Source: https://weld.apps.wayne.edu/docs/reference/status.html
 
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
-HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is on Packagist too and gets welded on in turn. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
+Every part of the stack is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.4.0; the deploy layer runs Squire's kit 0.9.0. Pinstripe's presets are still copied rather than installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
 ### What is on the bench today[#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
 | Item | Value |
 | --- | --- |
 | `composer.json` | `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0 |
+| Framework | Laravel 13 with Inertia 3 and Vue 3 |
 | `.env.example` | sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database` |
 | Index length | `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap |
 | `.gitattributes` | sets `* text=auto eol=lf` |
-| CI contract | `composer ci` runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on GitLab and GitHub |
-| Pinstripe presets | `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.4 is on Packagist (tagged), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it |
-| HELMET | runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies are a literal list in `bootstrap/app.php`; `/up` stays Laravel's built-in health route |
+| CI contract | `composer ci` runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub |
+| CI jobs | on GitLab, Preflight 0.4.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM and secret detection; the `frontend` job runs ESLint and Prettier |
+| WayneUI | an npm dependency at 2.0.8; it draws every page of the app and the site |
+| HELMET | runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays Laravel's built-in liveness route and `/ready` is HELMET's readiness route, checking the database, the cache and the scheduler heartbeat |
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |
 | PROCTOR | measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block |
+| ADVISOR | in `require-dev`; `php vendor/bin/advisor install --client=claude --write` points a coding agent at the stack's read-only MCP server |
+| Squire | the deploy kit in `deploy/` at 0.9.0: the Citadel image, an idempotent release script and one portable image for other hosts |
+| Pinstripe presets | `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on npm (Packagist still lists 0.1.4), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it |
 | Password auth | the starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's |
 | License | MIT |
 
 ### Gaps for the backlog[#](https://weld.apps.wayne.edu/docs/reference/status.html#gaps-for-the-backlog)
 
-The Laravel base has landed; the gaps below are the stack packages and the deploy path that have not.
+These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/enterprise-apps/weld/-/blob/main/BEST_PRACTICES.md).
 
-- The stack packages are dependencies now: SESAME and HELMET in `require`, CREED and PROCTOR in `require-dev`, all from Packagist. The items that waited on them (SESAME W1, HELMET W17 and W28, PROCTOR's `Checked` targets, CREED W25) can be checked against the installed packages. Preflight portability (W8, W10, W12, W13, W16, W24), Pinstripe (W2, W32) and WayneUI (W2) are not wired into WELD yet.
-- The Squire kit in `deploy/` now carries the Citadel deploy path: a Dockerfile mirroring the platform image, an entrypoint and an idempotent release script, so W10, W12, W16 and W24 hold for that path. Still plans: worker and scheduler process types (W8), the non-root, group-0, 8080 contract (W13), the restart commands in the release script (W22), and the deploy-time queue/scheduler work (W19, W21).
-- The JS side of the coding standard (W32) is configured but not in CI.
-- Unverified: OpenShift arbitrary-UID text on a primary Red Hat page; `serversideup/php` behavior under a random UID; Pest 4's PHP floor; `spatie/laravel-health` scheduler and queue checks; whether Laravel's health route runs before `TrustHosts`; whether the old CSRF middleware name is still an alias.
-- Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap. Confirm with the deploy kit project whether Citadel can run a cron-driven `schedule:run` at all.
-- Decided: `/ready` is HELMET's `Route::helmetReady()` with app checks as invokable classes (the scheduler heartbeat today, W23); database and cache checks (W11) can join it the same way.
+- Preflight portability does not boot the image in CI yet (W8, W10, W12, W13, W16, W24), and Pinstripe (W32) is copied presets, not a dependency.
+- The deploy-time scheduler work (W23) is still a plan.
+- Still open: no test sends a forged `Host` to `/up`, so that half of W11 stays `Documented`. The other items that once sat on an "Unverified" list are pinned: the CSRF check (`tests/Feature/CsrfTest.php`), a random UID (W13), Pest 4 on the PHP 8.3 floor, and `/ready` without `spatie/laravel-health`.
+- Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap.
+- Decided: `/ready` is HELMET's `Route::helmetReady()` with app checks as invokable classes: the database and the cache (W11) and the scheduler heartbeat (W23).
 - Decision needed: whether WELD keeps Fortify for a non-SSO mode.
 - Decision needed: SSR on by default or off.
 

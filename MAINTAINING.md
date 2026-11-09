@@ -8,8 +8,10 @@ so most of the upkeep is keeping the parts it joins current.
 
 - `waynestate/weld`, a Composer `project` (an app you clone), not a library. It is on Packagist, installed with `composer create-project waynestate/weld`.
 - **The stack parts it joins:** `waynestate/helmet` `^1.0` and `waynestate/sesame` `^0.6` at runtime;
-  `waynestate/creed` `^0.1` and `waynestate/proctor` `^0.8` for checks. WayneUI provides the interface.
-- Laravel 13, Inertia 2 with Vue 3, Ziggy for routes (a committed, generated `resources/js/ziggy.*`), Vite.
+  `waynestate/creed` `^0.1` and `waynestate/proctor` `^0.8` for checks, and `waynestate/advisor` `^0.1` for coding
+  agents (all three `require-dev`). WayneUI provides the interface (npm, 2.0.8), Preflight's components run CI (0.4.0),
+  and Squire's kit in `deploy/` deploys it (0.9.0). Pinstripe's presets are copied, not required.
+- Laravel 13, Inertia 3 with Vue 3, Ziggy for routes (a committed, generated `resources/js/ziggy.*`), Vite.
 - WELD is the Laravel + Inertia/Vue shape that Sourdough's templates describe, already shaped. If every app should get
   a change, it belongs in Sourdough; if only this shape should, it lives here.
 
@@ -39,8 +41,9 @@ Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `ph
 | JS lint and format | `npm run lint` (pure check), `npm run fix` (apply fixes), `npm run format:check` |
 | Production assets | `npm run build` |
 
-`composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan and `composer audit`. It does not run
-PROCTOR, Ziggy or the JS lint. `composer test` is Pest, running the PHPUnit class tests and the Pest tests side by side.
+`composer ci` runs `composer validate --strict`, the tests, Pint, PHPStan, the agent-ready check
+(`site:agent-ready-check`), the practices sync check (`docs:practices-check`), the docs check (`docs:check`) and
+`composer audit`. It does not run PROCTOR, Ziggy or the JS lint; CI runs those as their own jobs. `composer test` is Pest, running the PHPUnit class tests and the Pest tests side by side.
 The suite boots on a fixed dummy `APP_KEY` set in `phpunit.xml`; `App\Support\DummyAppKey` refuses that value when the app runs in production.
 Tests read `.env`, or `.env.example` when there is none (`tests/Support/SkipEnvFile.php`), so a bare CI container boots without warnings.
 A deprecation WELD's code raises or causes fails the suite: `phpunit.xml` sets `failOnDeprecation` (and ignores indirect ones, a
@@ -60,7 +63,9 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 
 - **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a
   `no-dev-install` job (a `composer install --no-dev` that fails if Laravel Boost comes along), a `proctor` job (warnings pass, failures block), a `ziggy` drift job and a `regen-gate` job (new drift fails the job;
-  `.sourdough/regen-baseline.json` records the drift already accepted).
+  `.sourdough/regen-baseline.json` records the drift already accepted). Preflight 0.4.0 also brings the `a11y` job
+  (axe over `site/`), the `a11y-app` job (axe over the app's own pages, saved by the `a11y-pages` job), `sbom` and
+  `secret-detection`, and a `frontend` job runs `npm run lint`, `npm run format:check`, the typecheck and the build.
 - **When the GitLab regen gate runs:** always on a tag (the release check, blocking), on a pipeline schedule and on
   Run pipeline; on a push only when the push touches a path the gate compares or the gate itself (the `changes:`
   lists in its `rules:`), so a docs-only or `site/`-only push skips it. When Sourdough starts writing a new top-level
@@ -71,9 +76,8 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
   did not cause (Sourdough's main or the Laravel skeleton moving) within a day. `.deploy` never runs from a schedule.
   `tests/Unit/RegenGateRulesTest.php` holds the rules.
 - **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci` and runs the same
-  `regen-gate` check (`continue-on-error` until the baseline is filled in).
-- Green means all of those pass; on GitLab the regen gate blocks on new drift, and on GitHub it may warn while the
-  baseline is being filled in. JS lint is not in CI yet.
+  `regen-gate` check and a `frontend` job.
+- Green means all of those pass; on both GitLab and GitHub the regen gate blocks on new drift.
 
 ## Keeping the joints current
 

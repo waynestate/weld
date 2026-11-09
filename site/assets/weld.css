@@ -16,6 +16,7 @@
      2. header and seam         6. paths, footer, toast
      3. hero                    7. responsive
      4. journey                 8. motion (only with .motion, see the end)
+                                9. weld log (layout and motion together)
    ========================================================================== */
 
 /* -------------------------------------------------------- 1. tokens, frame */
@@ -1632,7 +1633,9 @@ a.choice__name:hover {
 
 /* Under 600px the nav links grow to 44px tall tap targets, and the header
    takes two rows: the helmet, WELD and the chip on top (never squeezed, so
-   the chip cannot ride over the name), the four doors across underneath. */
+   the chip cannot ride over the name), the five doors across underneath.
+   Five doors fit on one line at 320px only with half the gap, so the gap
+   shrinks there (space-between still spreads them on wider phones). */
 @media (max-width: 599px) {
   .site-header .wsu-container {
     flex-wrap: wrap;
@@ -1651,6 +1654,7 @@ a.choice__name:hover {
     flex-basis: 100%;
     flex-wrap: nowrap;
     justify-content: space-between;
+    column-gap: 0.5rem;
     margin-left: 0;
   }
 
@@ -2335,4 +2339,404 @@ li.journey__stop:has(:is(.part-link, .cast-card__link):hover) img { transform: t
 @media print {
   .ar-prompt__actions, .ar-cmd, .ar-prompt__more, .hero__agent { display: none; }
   .ar-prompt.is-collapsed .ar-prompt__text { max-height: none; -webkit-mask-image: none; mask-image: none; }
+}
+
+/* ------------------------------------------------------------ 9. weld log */
+
+/* The hub's index, set as a shop weld log: a cream sheet, one ruled row per
+   joint (project), the joint numbers down the left on a gold bead, and an
+   inspection stamp per row. Layout, responsive and motion live together
+   here so the sheet can be lifted out whole.
+
+   The finished sheet is the default: bead laid, joints gold, stamps down.
+   weld.js adds .is-armed (cold) and then .is-welded (tacked) to each row as
+   it scrolls into view, and only when motion is on. */
+
+.log {
+  --pad-x: 1.5rem;
+  --pad-y: 0.875rem;
+  --no: 2.25rem;
+  --rule: rgba(15, 31, 28, 0.14);
+  --weld-focus: var(--weld-ink);
+  max-width: 1120px;
+  margin-inline: auto;
+  background-color: var(--weld-cream);
+  color: var(--weld-ink);
+  border-radius: var(--wsu-radius-box);
+  box-shadow: var(--weld-shadow);
+  overflow: clip;
+}
+
+/* The sheet's title block, like the strip across the top of a shop form. */
+.log__sheet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  padding: 0.875rem var(--pad-x);
+  border-bottom: 2px solid var(--weld-ink);
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--weld-cream-muted);
+}
+
+.log__sheet span:first-child {
+  color: var(--weld-ink);
+  font-weight: var(--wsu-font-weight-black);
+}
+
+/* One track list for the column heads and the rows, so they line up. */
+.log__cols,
+.joint {
+  display: grid;
+  grid-template-columns: var(--no) 2.5rem minmax(9.5rem, 12.5rem) minmax(0, 1fr) 4.25rem 5.5rem 7.25rem;
+  column-gap: 1rem;
+  padding: var(--pad-y) var(--pad-x);
+}
+
+.log__cols {
+  padding-block: 0.5rem;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.6875rem;
+  font-weight: var(--wsu-font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--weld-cream-muted);
+}
+
+.log__col--part {
+  grid-column: span 2;
+}
+
+.log__col--links {
+  padding-left: 0.375rem;
+}
+
+.log__rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.joint {
+  position: relative;
+  align-items: start;
+  border-top: 1px solid var(--rule);
+  transition: background-color 200ms ease;
+}
+
+.joint:hover {
+  background-color: rgba(12, 84, 73, 0.05);
+}
+
+/* WELD's own row: the one you are standing in. */
+.joint--weld {
+  background-color: rgba(255, 204, 51, 0.22);
+}
+
+.joint--weld:hover {
+  background-color: rgba(255, 204, 51, 0.32);
+}
+
+/* The bead: a gold seam through every joint, drawn per row so it always
+   meets the joint circles whatever the row heights. It starts at the first
+   circle and stops at the last. ::after is the chalk line under it. */
+.joint::before,
+.joint::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--pad-x) + var(--no) / 2 - 2px);
+  width: 4px;
+}
+
+.joint::after {
+  left: calc(var(--pad-x) + var(--no) / 2 - 1px);
+  width: 2px;
+  background-image: linear-gradient(180deg, var(--weld-cream-muted) 50%, transparent 50%);
+  background-size: 2px 8px;
+  opacity: 0.5;
+}
+
+.joint::before {
+  z-index: 1;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--weld-gold) 0%, #f2b705 50%, var(--weld-gold) 100%);
+  transform-origin: top;
+}
+
+.joint:first-child::before,
+.joint:first-child::after {
+  top: calc(var(--pad-y) + var(--no) / 2);
+}
+
+.joint:last-child::before,
+.joint:last-child::after {
+  bottom: calc(100% - var(--pad-y) - var(--no) / 2);
+}
+
+.joint__no {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: var(--no);
+  height: var(--no);
+  border: 2px solid var(--weld-ink);
+  border-radius: 50%;
+  background-color: var(--weld-gold);
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-black);
+  color: var(--weld-ink);
+}
+
+.joint__mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 18%;
+  box-shadow: 0 6px 12px -6px rgba(2, 26, 22, 0.6);
+}
+
+.joint__mark--tile {
+  padding: 7px;
+  background-color: var(--weld-tile);
+}
+
+.joint__part {
+  min-width: 0;
+}
+
+.joint__name {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+}
+
+.joint__role {
+  margin: 0.125rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--weld-cream-muted);
+}
+
+.joint__state {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--weld-cream-muted);
+  text-wrap: pretty;
+}
+
+.joint__state code {
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.875em;
+  color: var(--weld-ink);
+}
+
+/* Release, stamp and links sit in the last three columns on a wide sheet;
+   on a narrow one they share a line under the state. */
+.joint__meta {
+  display: contents;
+}
+
+.joint__rel,
+.joint__stamp,
+.joint__links {
+  margin: 0;
+}
+
+.joint__rel {
+  padding-top: 0.125rem;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.9375rem;
+  font-weight: var(--wsu-font-weight-black);
+  font-variant-numeric: tabular-nums;
+}
+
+/* A rubber stamp: outlined capitals, set a few degrees off square. Ink for
+   "In use", the WSU green with a double rule for "Stable", a dashed rule
+   for "Pilot". */
+.joint__stamp {
+  justify-self: start;
+  padding: 0.1875rem 0.4375rem;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  font-family: var(--wsu-font-family-mono);
+  font-size: 0.71875rem;
+  font-weight: var(--wsu-font-weight-black);
+  letter-spacing: 0.1em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--weld-ink);
+  transform: rotate(-4deg);
+}
+
+.joint__stamp--stable {
+  color: var(--weld-green);
+  border-style: double;
+  border-width: 4px;
+  padding: 0.0625rem 0.3125rem;
+}
+
+.joint__stamp--pilot {
+  border-style: dashed;
+}
+
+.joint__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.25rem;
+  margin-top: -0.25rem;
+}
+
+.joint__links a {
+  display: inline-block;
+  padding: 0.25rem 0.375rem;
+  font-size: 0.875rem;
+  font-weight: var(--wsu-font-weight-bold);
+  color: var(--weld-ink);
+  text-decoration-color: var(--weld-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+.joint__links a:hover {
+  color: var(--weld-green);
+  text-decoration-color: var(--weld-gold);
+}
+
+.log__fine {
+  max-width: 46rem;
+  margin: 1.25rem auto 0;
+  font-size: 0.875rem;
+  line-height: var(--wsu-font-lineHeight-base);
+  text-align: center;
+  color: var(--weld-cream-85);
+}
+
+/* A narrower sheet: the column heads go, and the state drops under the part. */
+@media (max-width: 959px) {
+  .log__cols {
+    display: none;
+  }
+
+  .joint {
+    grid-template-columns: var(--no) 2.5rem minmax(0, 1fr) auto;
+    grid-template-areas:
+      "no mark part meta"
+      "no .    state state";
+    row-gap: 0.375rem;
+  }
+
+  .joint__no { grid-area: no; }
+  .joint__mark { grid-area: mark; }
+  .joint__part { grid-area: part; }
+  .joint__state { grid-area: state; }
+
+  .joint__meta {
+    grid-area: meta;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.25rem 0.875rem;
+  }
+
+  .joint__links {
+    margin-top: 0;
+  }
+}
+
+/* A phone: everything after the part reads as its own line. */
+@media (max-width: 599px) {
+  .log {
+    --pad-x: 0.875rem;
+    --no: 2rem;
+  }
+
+  .joint {
+    grid-template-columns: var(--no) 2.25rem minmax(0, 1fr);
+    grid-template-areas:
+      "no mark part"
+      "no .    state"
+      "no .    meta";
+    column-gap: 0.75rem;
+  }
+
+  .joint__mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .joint__mark--tile {
+    padding: 6px;
+  }
+
+  .joint__state {
+    grid-column: 2 / -1;
+  }
+
+  .joint__meta {
+    grid-column: 2 / -1;
+    justify-content: flex-start;
+  }
+
+  .joint__links {
+    margin-left: auto;
+  }
+}
+
+/* Motion: each row starts cold (no bead, dashed joint, stamp up in the air)
+   and is tacked when weld.js adds .is-welded: the bead runs down the row,
+   the joint flashes and fills gold, and the stamp comes down. --d is the
+   row's place in the batch that scrolled into view, so a screenful tacks
+   top to bottom, about a sixth of a second apart. */
+@media (prefers-reduced-motion: no-preference) {
+  .motion .joint.is-armed::before {
+    transform: scaleY(0);
+  }
+
+  .motion .joint.is-armed .joint__no {
+    background-color: var(--weld-cream);
+    border-style: dashed;
+    border-color: var(--weld-cream-muted);
+  }
+
+  .motion .joint.is-armed .joint__stamp {
+    opacity: 0;
+    transform: translateY(-6px) scale(1.7) rotate(-16deg);
+  }
+
+  .motion .joint.is-armed.is-welded::before {
+    transform: scaleY(1);
+    transition: transform 240ms linear var(--d, 0ms);
+  }
+
+  .motion .joint.is-armed.is-welded .joint__no {
+    background-color: var(--weld-gold);
+    border-style: solid;
+    border-color: var(--weld-ink);
+    transition: background-color 160ms ease calc(var(--d, 0ms) + 200ms), border-color 160ms ease calc(var(--d, 0ms) + 200ms);
+    animation: joint-tack 700ms ease-out calc(var(--d, 0ms) + 200ms) backwards;
+  }
+
+  .motion .joint.is-armed.is-welded .joint__stamp {
+    opacity: 1;
+    transform: rotate(-4deg);
+    transition: opacity 120ms ease-out calc(var(--d, 0ms) + 380ms), transform 420ms var(--weld-ease-spring) calc(var(--d, 0ms) + 380ms);
+  }
+
+  @keyframes joint-tack {
+    0%   { box-shadow: 0 0 0 0 rgba(255, 204, 51, 0); }
+    20%  { box-shadow: 0 0 0 7px rgba(255, 204, 51, 0.55), 0 0 22px 6px rgba(255, 241, 184, 0.9); }
+    100% { box-shadow: 0 0 0 14px rgba(255, 204, 51, 0); }
+  }
 }

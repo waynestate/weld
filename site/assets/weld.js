@@ -10,7 +10,7 @@
    the start.
 
    Sections: 1. setup  2. spark layer  3. hero  4. typing  5. journey
-             6. cast  7. copy buttons  8. the torch (shh)
+             6. cast  6b. weld log  7. copy buttons  8. the torch (shh)
    ========================================================================== */
 (function () {
   "use strict";
@@ -518,6 +518,43 @@
         });
       });
     }
+  }
+
+  /* ------------------------------------------------------------ 6b. weld log */
+
+  // Each joint on the log is tacked as it scrolls into view: the bead runs
+  // down its row, the joint flashes and the stamp lands (the CSS does that
+  // from .is-welded and --d). Rows that arrive together tack top to bottom,
+  // 170ms apart, and each throws a small burst of sparks off its joint as
+  // the bead reaches it. Without motion none of this runs and the sheet is
+  // already filled in.
+  if (motionOn()) {
+    var joints = Array.prototype.slice.call(document.querySelectorAll("[data-log] .joint"));
+    joints.forEach(function (row) {
+      row.classList.add("is-armed");
+    });
+    var tackBatch = [];
+    var tackTimer = 0;
+    onceVisible(joints, 0.6, function (row) {
+      tackBatch.push(row);
+      clearTimeout(tackTimer);
+      tackTimer = setTimeout(function () {
+        tackBatch.forEach(function (r, n) {
+          var delay = n * 170;
+          r.style.setProperty("--d", delay + "ms");
+          r.classList.add("is-welded");
+          setTimeout(function () {
+            var dot = r.querySelector(".joint__no");
+            if (!dot) {
+              return;
+            }
+            var b = dot.getBoundingClientRect();
+            Sparks.emit(b.left + b.width / 2, b.top + b.height / 2, { count: 12, speed: 0.42, life: 620 });
+          }, delay + 220);
+        });
+        tackBatch = [];
+      }, 30);
+    });
   }
 
   /* -------------------------------------------------------- 7. copy buttons */

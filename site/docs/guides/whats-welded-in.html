@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>What is welded in | WELD docs</title>
-<meta name="description" content="The parts welded into WELD: WayneUI, CREED, Pinstripe, Preflight, PROCTOR, SESAME, HELMET and Ziggy, and what each does in the app.">
+<meta name="description" content="The parts welded into WELD: WayneUI, CREED, Pinstripe, Preflight, PROCTOR, SESAME, HELMET, ADVISOR, Squire and Ziggy, and what each does in the app.">
 <meta name="docs-version" content="0.1.5">
 <link rel="stylesheet" href="../../assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="../../assets/docs.css">
@@ -58,11 +58,11 @@
 </tr>
 <tr>
 <td>Pinstripe</td>
-<td>The coding standard: Pint, PHPStan level 8, ESLint and Prettier</td>
+<td>The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets</td>
 </tr>
 <tr>
 <td>Preflight</td>
-<td>The CI pipeline, from GitLab CI/CD components</td>
+<td>The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM and secret detection</td>
 </tr>
 <tr>
 <td>PROCTOR</td>
@@ -74,7 +74,15 @@
 </tr>
 <tr>
 <td>HELMET</td>
-<td>The baseline runtime: security headers and CSP, sessions, trusted proxies, <code>/up</code></td>
+<td>The baseline runtime: security headers and CSP, sessions, trusted proxies, <code>/up</code> and the <code>/ready</code> readiness route</td>
+</tr>
+<tr>
+<td>ADVISOR</td>
+<td>The stack's read-only MCP server for coding agents, in <code>require-dev</code></td>
+</tr>
+<tr>
+<td>Squire</td>
+<td>The deploy kit in <code>deploy/</code>, at 0.9.0: the Citadel image, an idempotent release script and one portable image for other hosts</td>
 </tr>
 <tr>
 <td>Ziggy</td>
@@ -85,15 +93,15 @@
 <p><img src="../readme/journey.svg" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys." /></p>
 <p>One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.</p>
 <h2 id="what-is-on-the-bench-today">What is on the bench today<a class="docs-heading-link" aria-label="Link to this section" href="#what-is-on-the-bench-today">#</a></h2>
-<p>HELMET, SESAME and PROCTOR are welded in from Packagist; the rest of the cast is on Packagist too and gets welded on in turn.</p>
+<p>Every part is welded in except one: HELMET and SESAME are in <code>require</code>; CREED, PROCTOR and ADVISOR are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.9.0. Pinstripe's presets are still copied rather than installed.</p>
 <ul>
 <li><code>composer.json</code> is <code>waynestate/weld</code>, requires PHP <code>^8.3</code>, and the lock file resolves for 8.3.0</li>
 <li><code>.env.example</code> sets <code>APP_NAME=WELD</code>, <code>LOG_CHANNEL=stderr</code> and <code>SESSION_DRIVER=database</code></li>
 <li><code>Schema::defaultStringLength(191)</code> keeps index keys under Citadel's MySQL 5.6 767-byte cap</li>
 <li><code>.gitattributes</code> sets <code>* text=auto eol=lf</code></li>
-<li><code>composer ci</code> is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on GitLab and GitHub</li>
-<li><code>pint.json</code> and <code>phpstan.neon</code> still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.1.4 is on Packagist (tagged), and they switch to <code>includes: vendor/waynestate/pinstripe/...</code> when WELD requires it</li>
-<li>HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies are a literal list in <code>bootstrap/app.php</code>; <code>/up</code> stays Laravel's built-in health route</li>
+<li><code>composer ci</code> is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub</li>
+<li><code>pint.json</code> and <code>phpstan.neon</code> still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on npm (Packagist still lists 0.1.4), and they switch to <code>includes: vendor/waynestate/pinstripe/...</code> when WELD requires it</li>
+<li>HELMET runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from <code>TRUSTED_PROXIES</code> (<code>bootstrap/app.php</code>); <code>/up</code> stays Laravel's built-in liveness route, and <code>/ready</code> checks the database, the cache and the scheduler heartbeat</li>
 <li>SESAME owns sign-in at <code>/login</code> and <code>/logout</code>; the fake driver stands in for the identity provider locally, and CAS is an env change away</li>
 <li>PROCTOR measures WELD against CREED's <code>policy.json</code> as a CI job (<code>composer proctor</code>): warnings pass, failures block</li>
 <li>The starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's</li>
