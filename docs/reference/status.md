@@ -39,7 +39,7 @@ These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/en
 
 - Preflight portability does not boot the image in CI yet (W8, W10, W12, W13, W16, W24), and Pinstripe (W32) is copied presets, not a dependency.
 - The deploy-time scheduler work (W23) is still a plan.
-- Still open: no test sends a forged `Host` to `/up`, so that half of W11 stays `Documented`. The other items that once sat on an "Unverified" list are pinned: the CSRF check (`tests/Feature/CsrfTest.php`), a random UID (W13), Pest 4 on the PHP 8.3 floor, and `/ready` without `spatie/laravel-health`.
+- `tests/Feature/HealthHostTest.php` sends a forged `Host` and an IP:port `Host` to `/up` and expects 200, no cookie and no redirect, so W11 is `Checked` in full. The other items that once sat on an "Unverified" list are pinned: the CSRF check (`tests/Feature/CsrfTest.php`), a random UID (W13), Pest 4 on the PHP 8.3 floor, and `/ready` without `spatie/laravel-health`.
 - Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap.
 - Decided: `/ready` is HELMET's `Route::helmetReady()` with app checks as invokable classes: the database and the cache (W11) and the scheduler heartbeat (W23).
 - Decision needed: whether WELD keeps Fortify for a non-SSO mode.
