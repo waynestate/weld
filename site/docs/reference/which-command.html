@@ -94,8 +94,14 @@
 <td>Deploy host</td>
 </tr>
 <tr>
+<td><code>sourdough adopt &lt;dir&gt; --shape &lt;shape&gt;</code></td>
+<td><strong>Can Sourdough keep an app it did not make current?</strong> Bakes the shape in a scratch folder, compares each template path the app has, and writes <code>.sourdough/manifest.json</code> and nothing else: a matching file becomes managed, a file that differs is recorded as yours and never overwritten, a seeded file stays yours, as in every Sourdough app, and a missing one arrives with the next feed. <code>--dry-run</code> writes nothing. Exit 1 on a refusal (a dirty tree, a manifest already there), 2 on a tool error.</td>
+<td>Once, on a clean commit of an existing app, before its first <code>sourdough feed</code>.</td>
+<td>App repo</td>
+</tr>
+<tr>
 <td><code>sourdough manifest --check</code></td>
-<td><strong>Which managed files did I change since Sourdough baked my app?</strong> Managed files that changed or are missing against <code>.sourdough/manifest.json</code>; seeded files are yours and never reported. Exit 1 on a change.</td>
+<td><strong>Which managed files did I change since Sourdough baked my app?</strong> Managed files that changed or are missing against <code>.sourdough/manifest.json</code>; seeded and yours files are never reported: the app owns them. Exit 1 on a change.</td>
 <td>Before <code>sourdough feed</code>.</td>
 <td>App repo, CI</td>
 </tr>
@@ -131,7 +137,7 @@
 </tr>
 <tr>
 <td><code>rollcall report</code></td>
-<td><strong>Where does the whole fleet stand?</strong> The latest scan's totals against CREED's policy: PHP, Laravel, the auth package, PROCTOR results and the end-of-life burn-down. Always exit 0; it never gates.</td>
+<td><strong>Where does the whole fleet stand?</strong> The latest scan's totals against CREED's policy: PHP, Laravel, the auth package, PROCTOR results and the end-of-life burn-down. Exit 0, or 2 on a tool error (no scan yet, a bad option, an unreadable policy); it never gates.</td>
 <td>After <code>rollcall scan</code>, on the scan's schedule.</td>
 <td>CI (a scheduled scan job)</td>
 </tr>
