@@ -61,6 +61,15 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 - **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a
   `no-dev-install` job (a `composer install --no-dev` that fails if Laravel Boost comes along), a `proctor` job (warnings pass, failures block), a `ziggy` drift job and a `regen-gate` job (new drift fails the job;
   `.sourdough/regen-baseline.json` records the drift already accepted).
+- **When the GitLab regen gate runs:** always on a tag (the release check, blocking), on a pipeline schedule and on
+  Run pipeline; on a push only when the push touches a path the gate compares or the gate itself (the `changes:`
+  lists in its `rules:`), so a docs-only or `site/`-only push skips it. When Sourdough starts writing a new top-level
+  path, add it to those lists. The job is `interruptible`, so a newer push cancels a superseded pipeline. Only the
+  network steps (both `composer install` lines and the Sourdough clone, still from the GitHub mirror) get three tries,
+  15 seconds apart; the bake and the check run once. A nightly schedule (Build > Pipeline schedules, `main`, an off-hour
+  cron such as `17 2 * * *`, owned by an account that stays) is pending the maintainer's approval; it would show drift WELD
+  did not cause (Sourdough's main or the Laravel skeleton moving) within a day. `.deploy` never runs from a schedule.
+  `tests/Unit/RegenGateRulesTest.php` holds the rules.
 - **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci` and runs the same
   `regen-gate` check (`continue-on-error` until the baseline is filled in).
 - Green means all of those pass; on GitLab the regen gate blocks on new drift, and on GitHub it may warn while the

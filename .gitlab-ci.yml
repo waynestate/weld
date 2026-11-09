@@ -138,13 +138,54 @@ ziggy:
 # REGEN GATE: is WELD still Sourdough's Inertia shape? It generates a fresh
 # app from Sourdough's main and compares it with WELD by SHA-256. New drift
 # blocks the pipeline: fix it, or record it as accepted with --write-baseline.
+# It runs on every tag (the release check), on the nightly schedule and Run
+# pipeline (drift WELD did not cause: Sourdough's main or the Laravel
+# skeleton moved), and on a push only when the push touches a path the gate
+# compares, or the gate itself. A docs or site push cannot cause drift, so it
+# skips the gate. When Sourdough starts writing a new top-level path, add it
+# to the changes lists; until then the nightly finds it within a day.
 regen-gate:
   extends: .composer-cache
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.10.3@sha256:2cf275428757e5435a667bfc0d038b14520ca02be2b1b70d44a05c8c19e2de48
+  interruptible: true
+  rules:
+    # A tag is a release: the gate always runs and always blocks.
+    - if: $CI_COMMIT_TAG
+    # The nightly schedule, and Run pipeline in the UI: WELD against whatever
+    # Sourdough's main and laravel/laravel ship today.
+    - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"
+    # A push (main, Renovate, any branch): only when it touches a path the gate
+    # compares, or the gate itself. Docs and site pushes skip it.
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        paths:
+          - "{.*,*.json,*.js,*.ts,*.xml,*.neon,*.lock,artisan,AGENTS.md,CLAUDE.md}"
+          - "{.ai,.sourdough,app,bootstrap,config,database,deploy,public,resources,routes,scripts,storage,stubs,tests,tools}/**/*"
+          - bin/regen-check.php
   script:
-    - composer install --no-interaction --no-progress --prefer-dist
-    - git clone --depth 1 --branch main https://github.com/waynestate/sourdough.git /tmp/sourdough
-    - cd /tmp/sourdough && composer install --no-interaction --no-progress --prefer-dist
+    # Only the network steps get three tries, 15 seconds apart: GitHub and
+    # Packagist drop a download now and then (curl 56), and GitLab's
+    # retry: when: cannot tell that from real drift (both are a
+    # script_failure). The bake and the check run once, so drift is never
+    # retried into green. Third time's the charm; a fourth is a real outage.
+    - |
+      retry3() {
+        try=1
+        until "$@"; do
+          if [ "$try" -ge 3 ]; then
+            echo "regen-gate: gave up after 3 tries: $*" >&2
+            return 1
+          fi
+          echo "regen-gate: try $try of 3 failed, trying again in 15s: $*" >&2
+          try=$((try + 1))
+          sleep 15
+        done
+      }
+    - retry3 composer install --no-interaction --no-progress --prefer-dist
+    # The GitHub mirror, for now: cloning git.wayne.edu with CI_JOB_TOKEN needs
+    # WELD on Sourdough's job token allowlist, which is not set yet.
+    - retry3 sh -c 'rm -rf /tmp/sourdough && git clone --depth 1 --branch main https://github.com/waynestate/sourdough.git /tmp/sourdough'
+    - cd /tmp/sourdough && retry3 composer install --no-interaction --no-progress --prefer-dist
     - php bin/sourdough new /tmp/regen --inertia --no-advisor --no-input
     - cd "$CI_PROJECT_DIR" && php bin/regen-check.php --generated /tmp/regen
 
@@ -233,6 +274,10 @@ a11y-app:
   resource_group: deploy
   interruptible: false
   rules:
+    # The nightly regen schedule runs the whole pipeline on protected main;
+    # it checks, it never deploys.
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_PROTECTED == "true"
