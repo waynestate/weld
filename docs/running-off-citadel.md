@@ -112,8 +112,8 @@ container runs `php artisan optimize` when it starts, so config is cached for it
 (W10), and `migrate` runs once before the others (W24). Every role stops gracefully on `SIGTERM` (W16). Squire's
 [portable image guide](https://squire.apps.wayne.edu/docs/guides/portable-image.html) has the whole contract.
 
-GitLab builds this image too, on `main` and on tags (on a merge request when you start the job by hand); the job
-does not block the pipeline yet. Preflight's `portability` job builds it with Buildah on the kit's
+GitLab builds this image too, on `main` and on tags (on a merge request when you start the job by hand), and a
+failed check fails the pipeline. Preflight's `portability` job builds it with Buildah on the kit's
 fallback base and boots the `web` role twice, side by side, as a uid with no name in group 0 with every capability
 dropped, the way OpenShift runs it. It fails when `/up` does not answer an IP `Host`, when the image carries a `.env`
 or a config cache, when forged `X-Forwarded-*` headers from an untrusted peer change the answer, when logs go

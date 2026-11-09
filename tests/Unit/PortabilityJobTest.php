@@ -100,10 +100,10 @@ it('runs on main and tags, waits for a click on a merge request, and never runs 
     ]);
 });
 
-it('does not block yet, can be cancelled by a newer push, and cleans its Buildah storage', function () {
+it('blocks, can be cancelled by a newer push, and cleans its Buildah storage', function () {
     $job = weldPortabilityCi()['portability'];
 
-    expect($job['allow_failure'])->toBeTrue()
+    expect($job)->not->toHaveKey('allow_failure')
         ->and($job['interruptible'])->toBeTrue()
         ->and($job['after_script'])->toBe([
             'buildah rm --all >/dev/null 2>&1 || true',

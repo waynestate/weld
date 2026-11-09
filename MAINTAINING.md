@@ -80,7 +80,7 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
   a `setsid` shim back: inside that launcher it forks Apache away from the replica's main process and `health`
   fails. Two image builds take a while on vfs, so the
   job gets 60 minutes. It runs on `main` and on tags, is manual on a merge request and never runs from the schedule;
-  it is `allow_failure` (not yet blocking) until its first green run on the runner, `interruptible`, and its
+  it blocks where it runs (its first run on the runner passed), it is `interruptible`, and its
   `after_script` deletes every container and image it left in Buildah's storage. `session-hop` is left out until the job
   starts a database both replicas share (W15). `tests/Unit/PortabilityJobTest.php` holds the include and the setup.
   To run it on this PC, run Preflight's probe (`templates/portability/probe.sh` at the pinned tag) in the same Buildah

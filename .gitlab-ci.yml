@@ -315,16 +315,15 @@ a11y-app:
 #
 # It is the heaviest job on the one shared arm64 runner (an hour, tens of GB
 # of vfs storage), so it runs on main and on tags, waits for a click on a
-# merge request, and never runs from the nightly regen schedule. It does not
-# block yet: it turns blocking after its first green run on the runner (lead
-# decision, 2026-11-09). A newer push cancels a superseded run. The Buildah
+# merge request, and never runs from the nightly regen schedule. Where it
+# runs, it blocks: a failed check fails the pipeline. A newer push cancels a
+# superseded run. The Buildah
 # image declares /var/lib/containers a volume, which the runner may keep as
 # a cache volume, and the probe removes only its containers, so after_script
 # deletes every container and image this job left in its own storage.
 portability:
   timeout: 60 minutes
   interruptible: true
-  allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never

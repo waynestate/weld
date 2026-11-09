@@ -184,7 +184,7 @@ job runs Gitleaks over the repository. Preflight's `portability` job builds the 
 twice as a uid with no name in group 0, the way OpenShift would: `/up` must answer an IP `Host`, nothing may be baked
 in from `.env` or a config cache, forged forwarded headers must change nothing, logs must reach stderr, writes must
 stay in `storage/` and `bootstrap/cache/`, and `SIGTERM` must stop it cleanly (BEST_PRACTICES W10, W13, W14, W16).
-It runs on `main` and on tags and is manual on a merge request, and it does not block the pipeline yet.
+It runs on `main` and on tags and is manual on a merge request, and where it runs, a failed check fails the pipeline.
 WELD deploys by Quick Update, so its pipeline holds no deploy credential. A
 deploy job added later extends `.deploy`, which never runs for a merge request and runs only on a protected branch
 or tag. The project settings a file cannot hold (protected `main` and tags, protected and masked variables, the job
@@ -887,6 +887,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the `portability` job blocks: its first run on the arm64 runner passed, so `allow_failure` is gone. Its rules (main and tags, manual on a merge request, never from the schedule), `interruptible` and the `after_script` cleanup stay, and `tests/Unit/PortabilityJobTest.php` fails if `allow_failure` comes back.
 - Changed: CI pins every Preflight component to 0.5.0 (was 0.4.0). The `portability` job drops its `start_command` shim (`setsid` and a `cat` pipe), because 0.5.0's probe starts each replica in its own session behind a stdio pipe the uid owns, and the old shim would fail `health`; it now runs the image's own entrypoint, as the platforms do. `composer-audit` drops its `image:` input, since 0.5.0 defaults to `composer:2.11.1` by digest. The local a11y scripts and `tests/Unit/A11yCheckerPinTest.php` name 0.5.0 (the checker did not change). The GitHub workflow stays on Preflight 0.1.4's commit SHA, because the GitHub mirror of Preflight has no 0.5.0 yet.
 - Changed: the deploy layer's PROCTOR job blocks: `proctor check` in `deploy/` passes on PROCTOR 0.11.1 (warnings only), so its `allow_failure` and the comment naming findings it no longer has are gone.
 - Changed: WELD takes the stack's current releases, matching Sourdough 0.3.0's Inertia bake: HELMET `^1.3` (locked 1.3.0, was `^1.1` at 1.1.0), SESAME `^0.7` (0.7.1, was `^0.6` at 0.6.2), CREED `^0.1.8` (0.1.8, was 0.1.7), PROCTOR `^0.11` (0.11.1, was `^0.9` at 0.9.0) and ADVISOR `^0.2` (0.2.0, was `^0.1` at 0.1.6). The deploy layer takes HELMET `^1.3` (1.3.0), PROCTOR `^0.11` (0.11.1) and CREED `^0.1.8` (0.1.8). MAINTAINING, BEST_PRACTICES W17 and W28 (with the HELMET config lines they cite), the configuration page, Running WELD off Citadel and the front page's weld log and cast name the new versions.
@@ -2427,7 +2428,7 @@ Every part of the stack is welded in except one: HELMET and SESAME are in `requi
 
 These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/enterprise-apps/weld/-/blob/main/BEST_PRACTICES.md).
 
-- Preflight's `portability` job builds the portable image and boots its `web` role in CI, on `main` and tags (manual on a merge request, not yet blocking) (W10, W14 and W16 are `Checked`; W8, W13 and W17 gain a CI check). It leaves out the `HEALTHCHECK` command (W12), a session shared across replicas (W15, which needs a database service in the job) and migrations once per release (W24). Pinstripe (W32) is copied presets, not a dependency.
+- Preflight's `portability` job builds the portable image and boots its `web` role in CI, on `main` and tags (manual on a merge request, blocking) (W10, W14 and W16 are `Checked`; W8, W13 and W17 gain a CI check). It leaves out the `HEALTHCHECK` command (W12), a session shared across replicas (W15, which needs a database service in the job) and migrations once per release (W24). Pinstripe (W32) is copied presets, not a dependency.
 - The deploy-time scheduler work (W23) is still a plan.
 - `tests/Feature/HealthHostTest.php` sends a forged `Host` and an IP:port `Host` to `/up` and expects 200, no cookie and no redirect, so W11 is `Checked` in full. The other items that once sat on an "Unverified" list are pinned: the CSRF check (`tests/Feature/CsrfTest.php`), a random UID (W13), Pest 4 on the PHP 8.3 floor, and `/ready` without `spatie/laravel-health`.
 - Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap.
@@ -2574,7 +2575,7 @@ docker compose -f docker-compose.squire.yml --env-file .env.squire --profile por
 
 The build runs the install-and-build half of the release (Composer without dev packages, the Vite build); each container runs `php artisan optimize` when it starts, so config is cached for its own environment, never at build (W10), and `migrate` runs once before the others (W24). Every role stops gracefully on `SIGTERM` (W16). Squire's [portable image guide](https://squire.apps.wayne.edu/docs/guides/portable-image.html) has the whole contract.
 
-GitLab builds this image too, on `main` and on tags (on a merge request when you start the job by hand); the job does not block the pipeline yet. Preflight's `portability` job builds it with Buildah on the kit's fallback base and boots the `web` role twice, side by side, as a uid with no name in group 0 with every capability dropped, the way OpenShift runs it. It fails when `/up` does not answer an IP `Host`, when the image carries a `.env` or a config cache, when forged `X-Forwarded-*` headers from an untrusted peer change the answer, when logs go anywhere but stdout and stderr, when the app writes outside `storage/`, `bootstrap/cache/` and the tmpfs paths, or when `SIGTERM` does not stop it by itself. If your platform's settings differ from the job's (`.gitlab-ci.yml`), the job's `env` input is where to try them first.
+GitLab builds this image too, on `main` and on tags (on a merge request when you start the job by hand), and a failed check fails the pipeline. Preflight's `portability` job builds it with Buildah on the kit's fallback base and boots the `web` role twice, side by side, as a uid with no name in group 0 with every capability dropped, the way OpenShift runs it. It fails when `/up` does not answer an IP `Host`, when the image carries a `.env` or a config cache, when forged `X-Forwarded-*` headers from an untrusted peer change the answer, when logs go anywhere but stdout and stderr, when the app writes outside `storage/`, `bootstrap/cache/` and the tmpfs paths, or when `SIGTERM` does not stop it by itself. If your platform's settings differ from the job's (`.gitlab-ci.yml`), the job's `env` input is where to try them first.
 
 Note
 
