@@ -12,6 +12,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the deploy kit is Squire 0.10.3 (was 0.10.2), refreshed with `squire update --path=deploy`: the kit's comments say in plain words what they used to point at with internal item IDs. Comments only; no setting, default or behavior changes, and `squire init --check` passes.
 - Docs: MAINTAINING's "Who maintains it" names a role, the stack maintainer, instead of a person, and says to reach them with an issue on git.wayne.edu.
 - Docs: Which command when gains a `sourdough adopt` row (Sourdough 0.3.0: it writes only the manifest, records a file that differs as yours, never overwritten, and exits 1 on a refusal, 2 on a tool error), the `sourdough manifest --check` row takes 0.3.0's "seeded and yours files are never reported" wording, and the `rollcall report` row gives its real exit codes, 0, or 2 on a tool error such as no scan yet (it said "Always exit 0"). The README's copy matches; the other READMEs copy it next.
 - Changed: the `portability` job blocks: its first run on the arm64 runner passed, so `allow_failure` is gone. Its rules (main and tags, manual on a merge request, never from the schedule), `interruptible` and the `after_script` cleanup stay, and `tests/Unit/PortabilityJobTest.php` fails if `allow_failure` comes back.

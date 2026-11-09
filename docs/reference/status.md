@@ -9,7 +9,7 @@ This page records what is on the bench today: the state of every part welded int
 
 Every part of the stack is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR
 are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.5.0; the deploy layer runs
-Squire's kit 0.10.2. Pinstripe's presets are still copied rather than installed. For what each part does in WELD, see
+Squire's kit 0.10.3. Pinstripe's presets are still copied rather than installed. For what each part does in WELD, see
 [What is welded in](../guides/whats-welded-in.md).
 
 ## What is on the bench today
@@ -28,7 +28,7 @@ Squire's kit 0.10.2. Pinstripe's presets are still copied rather than installed.
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |
 | PROCTOR | measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block |
 | ADVISOR | in `require-dev`; `php vendor/bin/advisor install --client=claude --write` points a coding agent at the stack's read-only MCP server |
-| Squire | the deploy kit in `deploy/` at 0.10.2: the Citadel image, an idempotent release script and one portable image for other hosts |
+| Squire | the deploy kit in `deploy/` at 0.10.3: the Citadel image, an idempotent release script and one portable image for other hosts |
 | Pinstripe presets | `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on npm (Packagist still lists 0.1.4), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it |
 | Password auth | the starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's |
 | License | MIT |
