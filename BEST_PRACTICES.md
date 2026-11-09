@@ -85,7 +85,7 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Practice:** Build time may run `route:cache`, `view:cache`, `event:cache`. `php artisan optimize` at start is acceptable if the build did not freeze config.
 - **Why:** A build-time `config:cache` freezes the build machine's environment into the image.
 - **Sources:** [Laravel deployment](https://laravel.com/docs/13.x/deployment).
-- **Stack:** `Documented`. The image build runs no artisan commands: `deploy/build.sh:49-51` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh:453-459`), so config is cached at deploy, never at build. Target `Checked`: PROCTOR scans the Dockerfile.
+- **Stack:** `Documented`. The image build runs no artisan commands: `deploy/build.sh:49-51` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh:555-561`), so config is cached at deploy, never at build. Target `Checked`: PROCTOR scans the Dockerfile.
 
 ### W11. `/up` is the liveness endpoint, and it never checks the database
 - **Practice:** Keep Laravel's `/up` (200 when the app boots). It must answer for any `Host`, over plain HTTP, before trusted hosts, redirects, sessions, CSP and auth. Put database and cache checks on a separate `/ready` endpoint, through the `DiagnosingHealth` event or a package.
@@ -159,7 +159,7 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Practice:** After a release run `php artisan queue:restart` (or `php artisan reload`), and `schedule:interrupt` when sub-minute tasks exist.
 - **Why:** Workers and a minute-long `schedule:run` keep the old code until they exit.
 - **Sources:** [Laravel queues](https://laravel.com/docs/13.x/queues), [deployment](https://laravel.com/docs/13.x/deployment), [scheduling](https://laravel.com/docs/13.x/scheduling).
-- **Stack:** `Checked`. The Squire 0.7.0 release step "laravel restart long-lived processes" (`deploy/scripts/release.sh:461`) runs `php artisan reload` where Laravel has it, otherwise `queue:restart` and `schedule:interrupt`, each when its own `--help` answers; report only, and `SQUIRE_ARTISAN_RESTART=0` turns the step off. `tests/Feature/ReleaseRestartTest.php` holds the commands and the switch in place.
+- **Stack:** `Checked`. The Squire release step "laravel restart long-lived processes" (`deploy/scripts/release.sh:563`) runs `php artisan reload` where Laravel has it, otherwise `queue:restart` and `schedule:interrupt`, each when its own `--help` answers; report only, and `SQUIRE_ARTISAN_RESTART=0` turns the step off. `tests/Feature/ReleaseRestartTest.php` holds the commands and the switch in place.
 
 ### W23. Make a silent scheduler visible
 - **Practice:** Record a heartbeat on every scheduler minute and fail `/ready` (not `/up`) when it is older than a few minutes. Export the age as a Prometheus gauge (off by default).
@@ -171,7 +171,7 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Practice:** Use a Job, a pre-deploy hook (Coolify "Pre-deployment Command"), or `migrate --isolated`. Never run `migrate` in a per-replica entrypoint.
 - **Why:** Parallel replicas race on schema changes.
 - **Sources:** [Coolify](https://coolify.io/docs/knowledge-base/health-checks) (rolling update overlap).
-- **Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:448`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh:25`) and the Quick Update post-script (`deploy/scripts/release.sh:7`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
+- **Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh:25`) and the Quick Update post-script (`deploy/scripts/release.sh:7`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
 
 ## 4. Security
 
@@ -185,7 +185,7 @@ The tags describe the repo as it stands on 2026-11-02. Since 2026-10-28 the Squi
 - **Practice:** `APP_DEBUG=false` in production. The debug page has had an XSS advisory (Low, 2026-09-10).
 - **Why:** Debug pages expose configuration values.
 - **Sources:** [Laravel deployment: debug mode](https://laravel.com/docs/13.x/deployment), and the framework advisories in W25.
-- **Stack:** `Enforced`. `.env.example:4` sets `APP_DEBUG=true` for the local default, and `app/Support/ProductionDebug.php:23-30` refuses to boot when the environment is production and debug is on; `app/Providers/AppServiceProvider.php:29` calls it in `boot()`, and `tests/Feature/ProductionDebugTest.php:17-30` covers both the refusal and the pass.
+- **Stack:** `Enforced`. `.env.example:4` sets `APP_DEBUG=true` for the local default, and `app/Support/ProductionDebug.php:23-30` refuses to boot when the environment is production and debug is on; `app/Providers/AppServiceProvider.php:29` calls it in `boot()`, and `tests/Feature/ProductionDebugTest.php:17-30` covers both the refusal and the pass. The release stops it earlier still: Squire 0.9.0's release script (`deploy/scripts/release.sh:271-289`) refuses a Laravel release with no `APP_KEY`, or with `APP_DEBUG` on in production, before anything installs, and `tests/Feature/ReleaseEnvGuardTest.php` fails when a kit update drops that guard.
 
 ### W27. CSRF uses the `PreventRequestForgery` middleware
 - **Practice:** Laravel 13 formalized request-forgery protection as `PreventRequestForgery` (origin-aware, still token-compatible). Any custom middleware stack or HELMET code must reference the new name.

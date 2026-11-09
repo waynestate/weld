@@ -43,6 +43,9 @@ Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `ph
 PROCTOR, Ziggy or the JS lint. `composer test` is Pest, running the PHPUnit class tests and the Pest tests side by side.
 The suite boots on a fixed dummy `APP_KEY` set in `phpunit.xml`; `App\Support\DummyAppKey` refuses that value when the app runs in production.
 Tests read `.env`, or `.env.example` when there is none (`tests/Support/SkipEnvFile.php`), so a bare CI container boots without warnings.
+A deprecation WELD's code raises or causes fails the suite: `phpunit.xml` sets `failOnDeprecation` (and ignores indirect ones, a
+package's to fix), and `tests/TestCase.php` hands deprecations back to PHPUnit (`tests/Support/ReportsDeprecationsToPhpUnit.php`),
+because Laravel's handler drops them while testing. Fix the deprecated call; never turn the gate off to get green.
 
 The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (`sourdough new <dir>
 --inertia`), then `php bin/regen-check.php --generated <dir>` (or `composer regen-check -- --generated <dir>`).

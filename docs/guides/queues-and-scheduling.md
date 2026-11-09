@@ -45,7 +45,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Workers and a minute-long `schedule:run` keep the old code until they exit.
 
-**Stack:** `Checked`. The Squire 0.7.0 release step "laravel restart long-lived processes" (`deploy/scripts/release.sh:461`) runs `php artisan reload` where Laravel has it, otherwise `queue:restart` and `schedule:interrupt`, each when its own `--help` answers; report only, and `SQUIRE_ARTISAN_RESTART=0` turns the step off. `tests/Feature/ReleaseRestartTest.php` holds the commands and the switch in place.
+**Stack:** `Checked`. The Squire release step "laravel restart long-lived processes" (`deploy/scripts/release.sh:563`) runs `php artisan reload` where Laravel has it, otherwise `queue:restart` and `schedule:interrupt`, each when its own `--help` answers; report only, and `SQUIRE_ARTISAN_RESTART=0` turns the step off. `tests/Feature/ReleaseRestartTest.php` holds the commands and the switch in place.
 
 ## W23. Make a silent scheduler visible
 
@@ -61,7 +61,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Parallel replicas race on schema changes.
 
-**Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:448`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh:25`) and the Quick Update post-script (`deploy/scripts/release.sh:7`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
+**Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh:25`) and the Quick Update post-script (`deploy/scripts/release.sh:7`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
 
 ## How to read the tags
 

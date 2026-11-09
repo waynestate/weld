@@ -44,9 +44,6 @@
     "resources/js/ziggy.js",
     "resources/views/app.blade.php",
     "routes/web.php",
-    "storage/framework/.gitignore",
-    "storage/framework/cache/.gitignore",
-    "storage/framework/cache/locks/.gitignore",
     "tests/Feature/SkeletonTest.php",
     "tests/Unit/ExampleTest.php"
 ]
