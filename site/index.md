@@ -133,7 +133,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 4. Joint 03
    ### Pinstripe
    The code style
-   Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On npm now; Packagist still lists 0.1.4.
+   Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist and npm.
    Release 0.3.0
    Inspection: In use
    [Site of Pinstripe](https://pinstripe.apps.wayne.edu/) [Docs for Pinstripe](https://pinstripe.apps.wayne.edu/docs/)
@@ -161,36 +161,36 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 8. Joint 07
    ### Sourdough
    The starter
-   Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app.
-   Release 0.2.0
+   Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. 0.3.0 adopts an app it did not make, so feed can keep it current.
+   Release 0.3.0
    Inspection: In use
    [Site of Sourdough](https://sourdough.apps.wayne.edu/) [Docs for Sourdough](https://sourdough.apps.wayne.edu/docs/)
 9. Joint 08
    ### Squire
    The deploy kit
    Citadel's build, release and health-check scripts from templates, `squire doctor`, local runs on Citadel's image, and one portable image for other hosts.
-   Release 0.9.0
+   Release 0.10.3
    Inspection: In use
    [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
 10. Joint 09
     ### Booster
     Upgrades
     Plans PHP and Laravel upgrades as hops on Rector and gates each hop with your tests on the target PHP. It never commits for you.
-    Release 1.12.0
+    Release 1.14.0
     Inspection: Stable
     [Site of Booster](https://booster.apps.wayne.edu/) [Docs for Booster](https://booster.apps.wayne.edu/docs/)
 11. Joint 10
     ### Rollcall
     The fleet report
     Scans the apps and reports each one's PHP, Laravel, sign-in package and PROCTOR result against CREED's dates, with an end-of-life burn-down. It only reports.
-    Release 1.0.0
+    Release 1.1.0
     Inspection: Stable
     [Site of Rollcall](https://rollcall.apps.wayne.edu/) [Docs for Rollcall](https://rollcall.apps.wayne.edu/docs/)
 12. Joint 11
     ### Drawbridge
     The sign-in gateway
     One OpenID Connect client for Entra ID in front of Citadel apps, passing a signed assertion SESAME checks. Not in front of any apps yet.
-    Release 0.4.0
+    Release 0.6.0
     Inspection: Pilot
     [Site of Drawbridge](https://drawbridge.apps.wayne.edu/) [Docs for Drawbridge](https://drawbridge.apps.wayne.edu/docs/)
 13. Joint 12
@@ -346,7 +346,7 @@ $
 
 ### [Booster](https://booster.apps.wayne.edu/)
 
-1.12.0 Sting | Mild
+1.14.0 Sting | Mild
 
 Plans an upgrade as hops, like Laravel 10 to 11, and runs them one at a time with Rector. Your tests have to pass on the new PHP before the next hop starts.
 
@@ -362,7 +362,7 @@ $
 
 ### [Rollcall](https://rollcall.apps.wayne.edu/)
 
-1.0.0 Attendance | Taken
+1.1.0 Attendance | Taken
 
 Every app answers “present”, with its PHP, Laravel and auth versions. Rollcall only reports. It never opens an issue or blocks a deploy.
 
@@ -378,7 +378,7 @@ $
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
-0.9.0 Armor | Carried
+0.10.3 Armor | Carried
 
 The deploy kit for Citadel: `build.sh`, a release script, a health check and local runs on the same images, plus one portable image for other hosts. This page deploys with it too.
 
@@ -394,7 +394,7 @@ $
 
 ### [Drawbridge](https://drawbridge.apps.wayne.edu/)
 
-0.4.0 Moat | Full
+0.6.0 Moat | Full
 
 One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app. Built and tested; not in front of any apps yet.
 
@@ -427,9 +427,9 @@ $
 
 ### [Sourdough](https://sourdough.apps.wayne.edu/)
 
-0.2.0 Rise | Daily
+0.3.0 Rise | Daily
 
-`sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
+`sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself, or run `sourdough adopt` on an app it did not make so `sourdough feed` keeps it current. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 
 ```
 $ sourdough new my-app --raw

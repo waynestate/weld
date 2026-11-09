@@ -12,6 +12,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Docs: stale text. The front page's weld log and cast name each part's latest release (Sourdough 0.3.0 with `sourdough adopt`, Squire 0.10.3, Booster 1.14.0, Rollcall 1.1.0, Drawbridge 0.6.0), the README, "What is welded in", the status page and the front page say Pinstripe 0.3.0 is on Packagist (they said Packagist still listed 0.1.4), BEST_PRACTICES W8 stops calling the portable image Unreleased, and the Unreleased notes drop internal decision IDs.
 - Changed: the deploy kit is Squire 0.10.3 (was 0.10.2), refreshed with `squire update --path=deploy`: the kit's comments say in plain words what they used to point at with internal item IDs. Comments only; no setting, default or behavior changes, and `squire init --check` passes.
 - Docs: MAINTAINING's "Who maintains it" names a role, the stack maintainer, instead of a person, and says to reach them with an issue on git.wayne.edu.
 - Docs: Which command when gains a `sourdough adopt` row (Sourdough 0.3.0: it writes only the manifest, records a file that differs as yours, never overwritten, and exits 1 on a refusal, 2 on a tool error), the `sourdough manifest --check` row takes 0.3.0's "seeded and yours files are never reported" wording, and the `rollcall report` row gives its real exit codes, 0, or 2 on a tool error such as no scan yet (it said "Always exit 0"). The README's copy matches; the other READMEs copy it next.
@@ -64,8 +65,8 @@ Notable changes to WELD, newest first.
 - Changed: the composer image in WELD's own CI jobs is pinned by its multi-arch digest, like the Node image already was.
 - Added: tests/Feature/CsrfTest.php proves a POST without a CSRF token gets 419, and that a matching token or a same-origin request passes (Sourdough's copy, W27).
 - Changed: the GitHub regen gate blocks like GitLab's (it only warned), now that the drift baseline is complete.
-- Changed: CI pins the Preflight components to 0.3.1 (fixed cache keys, and caches saved even when a job fails; D-072).
-- Changed: CI saves its Composer and npm caches even when a job fails, so a retry after a dropped download fetches only what is missing (D-072).
+- Changed: CI pins the Preflight components to 0.3.1 (fixed cache keys, and caches saved even when a job fails).
+- Changed: CI saves its Composer and npm caches even when a job fails, so a retry after a dropped download fetches only what is missing.
 - Added: the app refuses to boot in production with APP_DEBUG on (app/Support/ProductionDebug.php, Sourdough's guard).
 - Changed: WELD's own CI jobs cache Composer and npm downloads under a fixed key, so a lock change downloads only what changed.
 - Fixed: MAINTAINING.md and BEST_PRACTICES.md name the HELMET 1.0, SESAME 0.5 and Preflight 0.3.0 pins and the composer.json and CI lines they cite today.
@@ -76,7 +77,7 @@ Notable changes to WELD, newest first.
 - Fixed: the Which command when page reads as one ticket per command on a phone (640 px and narrower), each answer under its column's name, instead of a four-column table that scrolled sideways.
 - Changed: the pipeline pins every Preflight CI component to 0.3.0 ([preflight@0.3.0](mailto:preflight@0.3.0)); component image inputs are plain image names, since Preflight adds the Dependency Proxy prefix itself.
 - Changed: the app requires PROCTOR ^0.8 in require-dev (was ^0.7, locked 0.8.0), so its CI also runs the new crlf-deploy-script check, and the deploy layer requires PROCTOR ^0.8 (was ^0.4, locked 0.8.0).
-- Docs: a "Which command when" page (Reference) and README section put the look-alike commands side by side (`weld:doctor`, `squire doctor`, `proctor check`, `proctor gate`, `oracle:check` and the rest): what each checks, when to run it and where it runs. It is the canonical copy; the READMEs of Squire, PROCTOR, Sourdough, Booster and Rollcall carry it word for word (D-064).
+- Docs: a "Which command when" page (Reference) and README section put the look-alike commands side by side (`weld:doctor`, `squire doctor`, `proctor check`, `proctor gate`, `oracle:check` and the rest): what each checks, when to run it and where it runs. It is the canonical copy; the READMEs of Squire, PROCTOR, Sourdough, Booster and Rollcall carry it word for word.
 
 ## 0.1.5 (2026-11-07)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-5-2026-11-07)
 
