@@ -7,8 +7,8 @@ so most of the upkeep is keeping the parts it joins current.
 ## What WELD is and what it depends on
 
 - `waynestate/weld`, a Composer `project` (an app you clone), not a library. It is on Packagist, installed with `composer create-project waynestate/weld`.
-- **The stack parts it joins:** `waynestate/helmet` `^1.0` and `waynestate/sesame` `^0.6` at runtime;
-  `waynestate/creed` `^0.1` and `waynestate/proctor` `^0.8` for checks, and `waynestate/advisor` `^0.1` for coding
+- **The stack parts it joins:** `waynestate/helmet` `^1.1` and `waynestate/sesame` `^0.6` at runtime;
+  `waynestate/creed` `^0.1` and `waynestate/proctor` `^0.9` for checks, and `waynestate/advisor` `^0.1` for coding
   agents (all three `require-dev`). WayneUI provides the interface (npm, 2.0.8), Preflight's components run CI (0.4.0),
   and Squire's kit in `deploy/` deploys it (0.9.0). Pinstripe's presets are copied, not required.
 - Laravel 13, Inertia 3 with Vue 3, Ziggy for routes (a committed, generated `resources/js/ziggy.*`), Vite.

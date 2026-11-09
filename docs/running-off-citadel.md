@@ -15,8 +15,8 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 - The image is Squire's portable image, `deploy/.squire/portable.Dockerfile` (see "The portable image" below).
   `compose.yaml` is the local development stack (`artisan serve` on 8000 plus Vite on 5173, SQLite), not a deploy
   image.
-- HELMET (`^1.0`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and
-  HELMET 1.0 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front
+- HELMET (`^1.1`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and
+  HELMET 1.1 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front
   proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range.
   Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
 
@@ -112,10 +112,10 @@ container runs `php artisan optimize` when it starts, so config is cached for it
 (W10), and `migrate` runs once before the others (W24). Every role stops gracefully on `SIGTERM` (W16). Squire's
 [portable image guide](https://squire.apps.wayne.edu/docs/guides/portable-image.html) has the whole contract.
 
-> [!WARNING]
-> `php artisan optimize` fails today in WELD: SESAME 0.6.0 registers route closures that capture its service
-> provider, and serializing them for `route:cache` runs out of memory, so the container stops. Until SESAME's routes
-> move to controllers, start the containers with `SQUIRE_ARTISAN_OPTIMIZE=0`, which also skips the config cache. The
-> optimize step in `scripts/release.sh` would hit the same routes on Citadel.
+> [!NOTE]
+> `php artisan optimize` works in WELD since SESAME 0.6.1, whose `/login` and `/logout` are controller actions
+> instead of closures, so `route:cache` can serialize them (WELD locks SESAME 0.6.2). Under SESAME 0.6.0 the route
+> cache ran out of memory and the container stopped; an app still on 0.6.0 starts with `SQUIRE_ARTISAN_OPTIMIZE=0`
+> until it updates. The same holds for the optimize step in `scripts/release.sh` on Citadel.
 
 Four tables, one bead: if the joint passes `weld:doctor` on all of them, the seam holds.

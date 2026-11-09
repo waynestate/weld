@@ -148,7 +148,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### HELMET
    The runtime baseline
    Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
-   Release 1.0.1
+   Release 1.1.0
    Inspection: Stable
    [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
 7. Joint 06
@@ -265,7 +265,7 @@ $
 
 ### [HELMET](https://helmet.apps.wayne.edu/)
 
-1.0.1 Fit | Snug
+1.1.0 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 

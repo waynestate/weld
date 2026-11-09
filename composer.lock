@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f5737b4c5adeb66525696775419cdb0",
+    "content-hash": "60364951973ae521cbca2d590ea62986",
     "packages": [
         {
             "name": "brick/math",
@@ -7173,16 +7173,16 @@
         },
         {
             "name": "waynestate/helmet",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/helmet.git",
-                "reference": "96bdfa615a867e36a84710959378443963e7ae36"
+                "reference": "e139a8673e076c9457231441089a55152f961b4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/helmet/zipball/96bdfa615a867e36a84710959378443963e7ae36",
-                "reference": "96bdfa615a867e36a84710959378443963e7ae36",
+                "url": "https://api.github.com/repos/waynestate/helmet/zipball/e139a8673e076c9457231441089a55152f961b4c",
+                "reference": "e139a8673e076c9457231441089a55152f961b4c",
                 "shasum": ""
             },
             "require": {
@@ -7245,20 +7245,20 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/helmet/-/issues",
                 "source": "https://github.com/waynestate/helmet"
             },
-            "time": "2026-11-08T07:23:51+00:00"
+            "time": "2026-11-09T06:14:46+00:00"
         },
         {
             "name": "waynestate/sesame",
-            "version": "0.6.0",
+            "version": "0.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/sesame.git",
-                "reference": "f90277c10c034aab298281501d5c70d575c87262"
+                "reference": "6f657f1201d14965fb7988b07f4b42b0fee6cb6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/sesame/zipball/f90277c10c034aab298281501d5c70d575c87262",
-                "reference": "f90277c10c034aab298281501d5c70d575c87262",
+                "url": "https://api.github.com/repos/waynestate/sesame/zipball/6f657f1201d14965fb7988b07f4b42b0fee6cb6a",
+                "reference": "6f657f1201d14965fb7988b07f4b42b0fee6cb6a",
                 "shasum": ""
             },
             "require": {
@@ -7334,7 +7334,7 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/sesame/-/issues",
                 "source": "https://github.com/waynestate/sesame"
             },
-            "time": "2026-11-08T13:51:16+00:00"
+            "time": "2026-11-09T04:44:01+00:00"
         },
         {
             "name": "yajra/laravel-oci8",
@@ -11658,16 +11658,16 @@
         },
         {
             "name": "waynestate/advisor",
-            "version": "0.1.5",
+            "version": "0.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/advisor.git",
-                "reference": "7fb72bebab0f8fb9d057399c808bbf3121c56cd8"
+                "reference": "c3964c542670fbcba165ebb7919e8321b4c99c82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/advisor/zipball/7fb72bebab0f8fb9d057399c808bbf3121c56cd8",
-                "reference": "7fb72bebab0f8fb9d057399c808bbf3121c56cd8",
+                "url": "https://api.github.com/repos/waynestate/advisor/zipball/c3964c542670fbcba165ebb7919e8321b4c99c82",
+                "reference": "c3964c542670fbcba165ebb7919e8321b4c99c82",
                 "shasum": ""
             },
             "require": {
@@ -11679,12 +11679,13 @@
                 "opis/json-schema": "^2.4",
                 "php": "^8.3",
                 "psr/log": "^3.0",
-                "symfony/console": "^7.4",
-                "symfony/process": "^7.4"
+                "symfony/console": "^7.4 || ^8.0",
+                "symfony/process": "^7.4 || ^8.0"
             },
             "require-dev": {
                 "laravel/mcp": "1.1.2",
                 "laravel/pint": "^1.32",
+                "league/commonmark": "^2.10",
                 "orchestra/testbench": "^10.0",
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^11.5",
@@ -11728,20 +11729,20 @@
                 "issues": "https://nougat.snu.gs/enterprise-apps/advisor/-/issues",
                 "source": "https://nougat.snu.gs/enterprise-apps/advisor"
             },
-            "time": "2026-11-03T16:40:20+00:00"
+            "time": "2026-11-07T01:26:42+00:00"
         },
         {
             "name": "waynestate/creed",
-            "version": "0.1.6",
+            "version": "0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/creed.git",
-                "reference": "e1f9feefe6f57ea649b0c7ff3cd069cb793308af"
+                "reference": "58d9891122cb9abc98bc3270f03df845f23e121e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/creed/zipball/e1f9feefe6f57ea649b0c7ff3cd069cb793308af",
-                "reference": "e1f9feefe6f57ea649b0c7ff3cd069cb793308af",
+                "url": "https://api.github.com/repos/waynestate/creed/zipball/58d9891122cb9abc98bc3270f03df845f23e121e",
+                "reference": "58d9891122cb9abc98bc3270f03df845f23e121e",
                 "shasum": ""
             },
             "require": {
@@ -11778,23 +11779,23 @@
             "description": "The Wayne State app stack version policy as data, with a framework-free PHP reader.",
             "homepage": "https://creed.apps.wayne.edu/",
             "support": {
-                "issues": "https://nougat.snu.gs/enterprise-apps/creed/-/issues",
-                "source": "https://nougat.snu.gs/enterprise-apps/creed"
+                "issues": "https://git.wayne.edu/enterprise-apps/creed/-/issues",
+                "source": "https://github.com/waynestate/creed"
             },
-            "time": "2026-11-03T15:13:26+00:00"
+            "time": "2026-11-07T23:07:33+00:00"
         },
         {
             "name": "waynestate/proctor",
-            "version": "0.8.0",
+            "version": "0.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/proctor.git",
-                "reference": "29a9060e9929af73b0d23869a15fe73cbf46bf9b"
+                "reference": "e15deb315774e88c46141f844ccbeb7432f29641"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/proctor/zipball/29a9060e9929af73b0d23869a15fe73cbf46bf9b",
-                "reference": "29a9060e9929af73b0d23869a15fe73cbf46bf9b",
+                "url": "https://api.github.com/repos/waynestate/proctor/zipball/e15deb315774e88c46141f844ccbeb7432f29641",
+                "reference": "e15deb315774e88c46141f844ccbeb7432f29641",
                 "shasum": ""
             },
             "require": {
@@ -11845,7 +11846,7 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/proctor/-/issues",
                 "source": "https://github.com/waynestate/proctor"
             },
-            "time": "2026-11-08T08:00:24+00:00"
+            "time": "2026-11-08T22:59:48+00:00"
         },
         {
             "name": "webmozart/assert",

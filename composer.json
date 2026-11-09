@@ -20,7 +20,7 @@
         "laravel/framework": "^13.29",
         "laravel/tinker": "^3.0",
         "tightenco/ziggy": "^2.4",
-        "waynestate/helmet": "^1.0",
+        "waynestate/helmet": "^1.1",
         "waynestate/sesame": "^0.6",
         "yajra/laravel-oci8": "^13.14"
     },
@@ -40,7 +40,7 @@
         "phpunit/phpunit": "^12.0",
         "waynestate/advisor": "^0.1",
         "waynestate/creed": "^0.1",
-        "waynestate/proctor": "^0.8"
+        "waynestate/proctor": "^0.9"
     },
     "autoload": {
         "psr-4": {

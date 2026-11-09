@@ -47,8 +47,8 @@ written, which user runs it, how the platform knows it is alive, and what to run
 <li>The image is Squire's portable image, <code>deploy/.squire/portable.Dockerfile</code> (see &quot;The portable image&quot; below).
 <code>compose.yaml</code> is the local development stack (<code>artisan serve</code> on 8000 plus Vite on 5173, SQLite), not a deploy
 image.</li>
-<li>HELMET (<code>^1.0</code>) owns the trusted proxies (BEST_PRACTICES.md, W17). <code>HELMET_PRESET</code> picks a platform preset, and
-HELMET 1.0 ships two: <code>citadel</code> and <code>docker</code>. An unknown preset name throws at boot. Anywhere else, list the front
+<li>HELMET (<code>^1.1</code>) owns the trusted proxies (BEST_PRACTICES.md, W17). <code>HELMET_PRESET</code> picks a platform preset, and
+HELMET 1.1 ships two: <code>citadel</code> and <code>docker</code>. An unknown preset name throws at boot. Anywhere else, list the front
 proxy's address in <code>HELMET_PROXIES</code> (it wins over <code>HELMET_PRESET</code>), and never trust a whole private range.
 Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).</li>
 </ul>
@@ -282,10 +282,10 @@ docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=scheduler -e QUEUE
 container runs <code>php artisan optimize</code> when it starts, so config is cached for its own environment, never at build
 (W10), and <code>migrate</code> runs once before the others (W24). Every role stops gracefully on <code>SIGTERM</code> (W16). Squire's
 <a rel="noopener" href="https://squire.apps.wayne.edu/docs/guides/portable-image.html">portable image guide</a> has the whole contract.</p>
-<aside class="docs-callout docs-callout--warning" role="note"><p class="docs-callout__label">Warning</p><p><code>php artisan optimize</code> fails today in WELD: SESAME 0.6.0 registers route closures that capture its service
-provider, and serializing them for <code>route:cache</code> runs out of memory, so the container stops. Until SESAME's routes
-move to controllers, start the containers with <code>SQUIRE_ARTISAN_OPTIMIZE=0</code>, which also skips the config cache. The
-optimize step in <code>scripts/release.sh</code> would hit the same routes on Citadel.</p></aside>
+<aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p><code>php artisan optimize</code> works in WELD since SESAME 0.6.1, whose <code>/login</code> and <code>/logout</code> are controller actions
+instead of closures, so <code>route:cache</code> can serialize them (WELD locks SESAME 0.6.2). Under SESAME 0.6.0 the route
+cache ran out of memory and the container stopped; an app still on 0.6.0 starts with <code>SQUIRE_ARTISAN_OPTIMIZE=0</code>
+until it updates. The same holds for the optimize step in <code>scripts/release.sh</code> on Citadel.</p></aside>
 <p>Four tables, one bead: if the joint passes <code>weld:doctor</code> on all of them, the seam holds.</p>
 </article>
     </main>

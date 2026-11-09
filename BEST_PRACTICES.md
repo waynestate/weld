@@ -127,7 +127,7 @@ The tags describe the repo as it stands on 2026-11-09. The Laravel base has land
 - **Practice:** Select a HELMET preset (`citadel` or `docker`), or list the front proxy in `HELMET_PROXIES` on other platforms. Do not paste `trustProxies(at: '*')` from tutorials. Set `APP_URL` and trusted hosts; Laravel trusts subdomains of `APP_URL` unless `subdomains: false`.
 - **Why:** An app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks.
 - **Sources:** [Laravel requests: trusted proxies and hosts](https://laravel.com/docs/13.x/requests).
-- **Stack:** `Enforced` by HELMET 1.0 (required `^1.0`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Target `Checked`: a portability probe sends forged `X-Forwarded-Host` and `-Proto` from an untrusted peer.
+- **Stack:** `Enforced` by HELMET 1.1 (required `^1.1`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Target `Checked`: a portability probe sends forged `X-Forwarded-Host` and `-Proto` from an untrusted peer.
 
 ## 3. Queues and scheduling without Citadel workers
 
@@ -197,7 +197,7 @@ The tags describe the repo as it stands on 2026-11-09. The Laravel base has land
 - **Practice:** HELMET sets the CSP header and calls `Vite::useCspNonce()`; Laravel then adds the nonce to the tags `@vite` emits. Inertia 3 puts initial page data in a JSON script element. Run the policy in report-only first.
 - **Why:** Laravel has no first-party CSP config, and a policy that blocks the app's own bundle is worse than none.
 - **Sources:** [Inertia v3 upgrade guide](https://inertiajs.com/docs/v3/getting-started/upgrade-guide.md) (JSON script element); the nonce behavior is from search results, not the Laravel page, so treat as unverified.
-- **Stack:** `Checked`. HELMET `^1.0` is a dependency (`composer.json:23`) and its security headers and CSP run in the global chain: HELMET's own config defaults the scope to `global` (`vendor/waynestate/helmet/config/helmet.php:315`; WELD's `config/helmet.php` overrides only `policy_path` and the package merges the rest), `resources/views/app.blade.php:8` reads the per-request nonce and `:32` hands it to `Vite::useCspNonce()`, and `tests/Feature/HelmetHeadersTest.php:14-34` plus `tests/Feature/CspScriptTagsTest.php:23-60` fail the suite on header, nonce or `strict-dynamic` regression. The policy is enforced, not report-only (`vendor/waynestate/helmet/config/helmet.php:336`). Open: a real browser test under the enforced CSP.
+- **Stack:** `Checked`. HELMET `^1.1` is a dependency (`composer.json:23`) and its security headers and CSP run in the global chain: HELMET's own config defaults the scope to `global` (`vendor/waynestate/helmet/config/helmet.php:315`; WELD's `config/helmet.php` overrides only `policy_path` and the package merges the rest), `resources/views/app.blade.php:8` reads the per-request nonce and `:32` hands it to `Vite::useCspNonce()`, and `tests/Feature/HelmetHeadersTest.php:14-34` plus `tests/Feature/CspScriptTagsTest.php:23-60` fail the suite on header, nonce or `strict-dynamic` regression. The policy is enforced, not report-only (`vendor/waynestate/helmet/config/helmet.php:336`). Open: a real browser test under the enforced CSP.
 
 ### W29. Agent tooling stays out of production
 - **Practice:** Laravel Boost is `require-dev`. Its MCP server can write rules to disk and run database queries; its docs tool sends queries to a hosted service. Production images are built with `composer install --no-dev`; guard any `post-update-cmd` that calls `boost:update`.
