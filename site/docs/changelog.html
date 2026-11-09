@@ -42,6 +42,7 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased">Unreleased<a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></h2>
 <ul>
+<li>Changed: CI pins the Preflight components to 0.4.0 (the proctor job clones the full history, so the override-approver check can read git blame).</li>
 <li>Added: PortableImageTest proves the portable image builds <code>vendor/</code> without dev packages (the build context leaves <code>vendor/</code> out and its only Composer install is release.sh's <code>--no-dev</code> one), which closes W29's open item.</li>
 <li>Changed: the regen baseline no longer excuses <code>docker-compose.squire.yml</code>, <code>health.php</code> and <code>scripts/release.sh</code>: Sourdough bakes Squire 0.8.0 now, so a fresh bake matches WELD's kit.</li>
 <li>Changed: the deploy layer names Squire 0.8.0 (was 0.7.1), the release that ships the portable image WELD already carries; no kit file changed.</li>

@@ -159,7 +159,7 @@ Feature tests to the Laravel app and a fresh database. The suite reads `.env` wh
 (`tests/Support/SkipEnvFile.php`, the same file Sourdough ships), and runs on a fixed dummy `APP_KEY` set in `phpunit.xml`, so it boots
 with no `.env`; the app refuses that key in production, so a copied test config cannot ship. CI's `php-test` matrix runs `vendor/bin/pest`.
 The accessibility gate runs Preflight's own checker (vendored in `tools/a11y/check.mjs`, pinned to the CI tag
-0.3.1 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
+0.4.0 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
 light and dark, at 320 and 1280 px, plus the WCAG 1.4.10 reflow check), so a page that passes locally passes
 CI. It runs in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
@@ -764,6 +764,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: CI pins the Preflight components to 0.4.0 (the proctor job clones the full history, so the override-approver check can read git blame).
 - Added: PortableImageTest proves the portable image builds `vendor/` without dev packages (the build context leaves `vendor/` out and its only Composer install is release.sh's `--no-dev` one), which closes W29's open item.
 - Changed: the regen baseline no longer excuses `docker-compose.squire.yml`, `health.php` and `scripts/release.sh`: Sourdough bakes Squire 0.8.0 now, so a fresh bake matches WELD's kit.
 - Changed: the deploy layer names Squire 0.8.0 (was 0.7.1), the release that ships the portable image WELD already carries; no kit file changed.
@@ -1174,7 +1175,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Preflight components are referenced by commit SHA or a fixed tag, not a moving branch.
 
-**Stack:** `Checked`. `.gitlab-ci.yml` includes every Preflight component at the full release tag 0.3.1 (published tags never move) and `.github/workflows/ci.yml` pins the reusable workflow to a commit SHA (0.1.4, the tag in a trailing comment); the comment "Pinned to Preflight 0.3.1. Never use ~latest." sits at the top of `.gitlab-ci.yml`. PROCTOR's `preflight-pinned` check, run by the `proctor-root` job, warns on an include without a full release tag or a commit SHA.
+**Stack:** `Checked`. `.gitlab-ci.yml` includes every Preflight component at the full release tag 0.4.0 (published tags never move) and `.github/workflows/ci.yml` pins the reusable workflow to a commit SHA (0.1.4, the tag in a trailing comment); the comment "Pinned to Preflight 0.3.1. Never use ~latest." sits at the top of `.gitlab-ci.yml`. PROCTOR's `preflight-pinned` check, run by the `proctor-root` job, warns on an include without a full release tag or a commit SHA.
 
 ### Related[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#related)
 
