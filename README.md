@@ -194,6 +194,7 @@ job runs Gitleaks over the repository. Preflight's `portability` job builds the 
 twice as a uid with no name in group 0, the way OpenShift would: `/up` must answer an IP `Host`, nothing may be baked
 in from `.env` or a config cache, forged forwarded headers must change nothing, logs must reach stderr, writes must
 stay in `storage/` and `bootstrap/cache/`, and `SIGTERM` must stop it cleanly (BEST_PRACTICES W10, W13, W14, W16).
+It runs on `main` and on tags and is manual on a merge request, and it does not block the pipeline yet.
 WELD deploys by Quick Update, so its pipeline holds no deploy credential. A
 deploy job added later extends `.deploy`, which never runs for a merge request and runs only on a protected branch
 or tag. The project settings a file cannot hold (protected `main` and tags, protected and masked variables, the job

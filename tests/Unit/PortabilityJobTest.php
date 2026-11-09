@@ -71,6 +71,26 @@ it('starts the image\'s own entrypoint, in its own session, behind a pipe the ap
         ->toBe("exec setsid bash -c 'exec > >(exec cat) 2>&1; exec squire-entrypoint'");
 });
 
+it('runs on main and tags, waits for a click on a merge request, and never runs from the schedule', function () {
+    expect(weldPortabilityCi()['portability']['rules'])->toBe([
+        ['if' => '$CI_PIPELINE_SOURCE == "schedule"', 'when' => 'never'],
+        ['if' => '$CI_COMMIT_TAG'],
+        ['if' => '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'],
+        ['if' => '$CI_PIPELINE_SOURCE == "merge_request_event"', 'when' => 'manual'],
+    ]);
+});
+
+it('does not block yet, can be cancelled by a newer push, and cleans its Buildah storage', function () {
+    $job = weldPortabilityCi()['portability'];
+
+    expect($job['allow_failure'])->toBeTrue()
+        ->and($job['interruptible'])->toBeTrue()
+        ->and($job['after_script'])->toBe([
+            'buildah rm --all >/dev/null 2>&1 || true',
+            'buildah rmi --all --force >/dev/null 2>&1 || true',
+        ]);
+});
+
 it('runs every check but session-hop', function () {
     expect(weldPortabilityInputs()['inputs']['checks'])
         ->toBe(['health', 'env-only', 'forwarded-headers', 'logs', 'sigterm']);

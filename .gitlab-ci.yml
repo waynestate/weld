@@ -321,8 +321,29 @@ a11y-app:
 # variable, and the image never sees one. Two image builds on vfs storage
 # take longer than the template's 30 minutes allow on the arm64 runner, so
 # the job gets an hour. Measure twice, weld once.
+#
+# It is the heaviest job on the one shared arm64 runner (an hour, tens of GB
+# of vfs storage), so it runs on main and on tags, waits for a click on a
+# merge request, and never runs from the nightly regen schedule. It does not
+# block yet: it turns blocking after its first green run on the runner (lead
+# decision, 2026-11-09). A newer push cancels a superseded run. The Buildah
+# image declares /var/lib/containers a volume, which the runner may keep as
+# a cache volume, and the probe removes only its containers, so after_script
+# deletes every container and image this job left in its own storage.
 portability:
   timeout: 60 minutes
+  interruptible: true
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+  after_script:
+    - buildah rm --all >/dev/null 2>&1 || true
+    - buildah rmi --all --force >/dev/null 2>&1 || true
   before_script:
     - |
       set -eu
