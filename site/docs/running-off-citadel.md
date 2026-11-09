@@ -13,7 +13,7 @@ WELD deploys on Citadel through Squire: one container per app, and builds run at
 Two notes before the tables. Claims marked **(check)** depend on something not built yet:
 
 - The image is Squire's portable image, `deploy/.squire/portable.Dockerfile` (see "The portable image" below). `compose.yaml` is the local development stack (`artisan serve` on 8000 plus Vite on 5173, SQLite), not a deploy image.
-- HELMET (`^1.1`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and HELMET 1.1 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
+- HELMET (`^1.3`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and HELMET 1.3 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
 
 ## Common ground, every platform[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#common-ground-every-platform)
 
@@ -104,6 +104,6 @@ GitLab builds this image too, on `main` and on tags (on a merge request when you
 
 Note
 
-`php artisan optimize` works in WELD since SESAME 0.6.1, whose `/login` and `/logout` are controller actions instead of closures, so `route:cache` can serialize them (WELD locks SESAME 0.6.2). Under SESAME 0.6.0 the route cache ran out of memory and the container stopped; an app still on 0.6.0 starts with `SQUIRE_ARTISAN_OPTIMIZE=0` until it updates. The same holds for the optimize step in `scripts/release.sh` on Citadel.
+`php artisan optimize` works in WELD since SESAME 0.6.1, whose `/login` and `/logout` are controller actions instead of closures, so `route:cache` can serialize them (WELD locks SESAME 0.7.1). Under SESAME 0.6.0 the route cache ran out of memory and the container stopped; an app still on 0.6.0 starts with `SQUIRE_ARTISAN_OPTIMIZE=0` until it updates. The same holds for the optimize step in `scripts/release.sh` on Citadel.
 
 Four tables, one bead: if the joint passes `weld:doctor` on all of them, the seam holds.

@@ -120,14 +120,14 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### CREED
    The standard
    61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-08.
-   Release 0.1.7
+   Release 0.1.8
    Inspection: In use
    [Site of CREED](https://creed.apps.wayne.edu/) [Docs for CREED](https://creed.apps.wayne.edu/docs/)
 3. Joint 02
    ### PROCTOR
    The grader
-   Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.9.0 adds the dev-only package, case clash and override approver checks.
-   Release 0.9.0
+   Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.10 and 0.11 add the robots.txt, inline-script CSP, display_errors, directory listing and line-ending checks.
+   Release 0.11.1
    Inspection: In use
    [Site of PROCTOR](https://proctor.apps.wayne.edu/) [Docs for PROCTOR](https://proctor.apps.wayne.edu/docs/)
 4. Joint 03
@@ -148,14 +148,14 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### HELMET
    The runtime baseline
    Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
-   Release 1.1.0
+   Release 1.3.0
    Inspection: Stable
    [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
 7. Joint 06
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.6.2
+   Release 0.7.1
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
@@ -197,7 +197,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### ADVISOR
     The MCP server
     Nine read-only tools your coding agent can ask about the stack. Every answer names the file it came from.
-    Release 0.1.7
+    Release 0.2.0
     Inspection: In use
     [Site of ADVISOR](https://advisor.apps.wayne.edu/) [Docs for ADVISOR](https://advisor.apps.wayne.edu/docs/)
 14. Joint 13
@@ -248,7 +248,7 @@ $
 
 ### [CREED](https://creed.apps.wayne.edu/)
 
-0.1.7 Volume | Eleven
+0.1.8 Volume | Eleven
 
 The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 
@@ -265,7 +265,7 @@ $
 
 ### [HELMET](https://helmet.apps.wayne.edu/)
 
-1.1.0 Fit | Snug
+1.3.0 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
@@ -281,7 +281,7 @@ $
 
 ### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.6.2 Says | Open
+0.7.1 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -297,7 +297,7 @@ $
 
 ### [PROCTOR](https://proctor.apps.wayne.edu/)
 
-0.9.0 Strictness | Kind
+0.11.1 Strictness | Kind
 
 In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
@@ -411,9 +411,9 @@ $
 
 ### [ADVISOR](https://advisor.apps.wayne.edu/)
 
-0.1.7 Office hours | Always
+0.2.0 Office hours | Always
 
-Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only in 0.1: it can't write files or run shell commands.
+Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only: it can't write files or run shell commands.
 
 ```
 $ advisor mcp

@@ -441,14 +441,14 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### CREED
    The standard
    61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-08.
-   Release 0.1.7
+   Release 0.1.8
    Inspection: In use
    [Site of CREED](https://creed.apps.wayne.edu/) [Docs for CREED](https://creed.apps.wayne.edu/docs/)
 3. Joint 02
    ### PROCTOR
    The grader
-   Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.9.0 adds the dev-only package, case clash and override approver checks.
-   Release 0.9.0
+   Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.10 and 0.11 add the robots.txt, inline-script CSP, display_errors, directory listing and line-ending checks.
+   Release 0.11.1
    Inspection: In use
    [Site of PROCTOR](https://proctor.apps.wayne.edu/) [Docs for PROCTOR](https://proctor.apps.wayne.edu/docs/)
 4. Joint 03
@@ -469,14 +469,14 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### HELMET
    The runtime baseline
    Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
-   Release 1.1.0
+   Release 1.3.0
    Inspection: Stable
    [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
 7. Joint 06
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.6.2
+   Release 0.7.1
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
@@ -518,7 +518,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### ADVISOR
     The MCP server
     Nine read-only tools your coding agent can ask about the stack. Every answer names the file it came from.
-    Release 0.1.7
+    Release 0.2.0
     Inspection: In use
     [Site of ADVISOR](https://advisor.apps.wayne.edu/) [Docs for ADVISOR](https://advisor.apps.wayne.edu/docs/)
 14. Joint 13
@@ -569,7 +569,7 @@ $
 
 #### [CREED](https://creed.apps.wayne.edu/)
 
-0.1.7 Volume | Eleven
+0.1.8 Volume | Eleven
 
 The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 
@@ -586,7 +586,7 @@ $
 
 #### [HELMET](https://helmet.apps.wayne.edu/)
 
-1.1.0 Fit | Snug
+1.3.0 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
@@ -602,7 +602,7 @@ $
 
 #### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.6.2 Says | Open
+0.7.1 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -618,7 +618,7 @@ $
 
 #### [PROCTOR](https://proctor.apps.wayne.edu/)
 
-0.9.0 Strictness | Kind
+0.11.1 Strictness | Kind
 
 In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
@@ -732,9 +732,9 @@ $
 
 #### [ADVISOR](https://advisor.apps.wayne.edu/)
 
-0.1.7 Office hours | Always
+0.2.0 Office hours | Always
 
-Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only in 0.1: it can't write files or run shell commands.
+Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only: it can't write files or run shell commands.
 
 ```
 $ advisor mcp
@@ -887,6 +887,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: WELD takes the stack's current releases, matching Sourdough 0.3.0's Inertia bake: HELMET `^1.3` (locked 1.3.0, was `^1.1` at 1.1.0), SESAME `^0.7` (0.7.1, was `^0.6` at 0.6.2), CREED `^0.1.8` (0.1.8, was 0.1.7), PROCTOR `^0.11` (0.11.1, was `^0.9` at 0.9.0) and ADVISOR `^0.2` (0.2.0, was `^0.1` at 0.1.6). The deploy layer takes HELMET `^1.3` (1.3.0), PROCTOR `^0.11` (0.11.1) and CREED `^0.1.8` (0.1.8). MAINTAINING, BEST_PRACTICES W17 and W28 (with the HELMET config lines they cite), the configuration page, Running WELD off Citadel and the front page's weld log and cast name the new versions.
 - Changed: the deploy kit is Squire 0.10.2 (was 0.10.0), refreshed with `squire update --path=deploy`: the fallback base names its PHP, Node and Composer images in full (`docker.io/library/...`) and takes Composer 2.11.1 as a `COMPOSER_IMAGE` build argument, `.squire/php.ini` sets `session.cookie_samesite = Lax`, and the portable image drops `node_modules/` after the build (`SQUIRE_KEEP_NODE_MODULES=1` keeps it). The `portability` job's setup builds the kit's base as it ships and passes all three images through the Dependency Proxy with `docker.io/library/` swapped for the group prefix, as Squire's Image hardening guide shows, instead of rewriting a copy with `sed`; `tests/Unit/PortabilityJobTest.php` holds it.
 - Changed: WELD's own CI jobs and the local stack's `app` service run `composer:2.11.1`, pinned by its multi-arch list digest (was 2.10.3, which Squire 0.10.1 calls unmaintained); 2.11.1 fixes GHSA-c968-33g3-wh7p and GHSA-fm2w-xgf2-f9fh.
 - Added: Preflight's `portability` job (0.4.0) builds the portable image with Buildah and boots it twice as a uid with no name in group 0, the way OpenShift, Coolify and plain Docker run it, checking `/up` for an IP `Host`, no baked `.env` or config cache, forged forwarded headers, logs on stderr, writes only in `storage/` and `bootstrap/cache/`, and a clean stop on `SIGTERM`. WELD's `portability:` block builds the kit's fallback base in the same job first (from a copy that names the Composer `COPY --from` image in full, because Buildah refuses a short name there), resets the checkout's modes and makes a fresh `APP_KEY`, and its `start_command` runs the image's own entrypoint under `setsid` and behind a `cat` pipe, two shims for how Buildah runs a replica (a shared process group, root-owned stdio) that go once Preflight's probe handles them; `session-hop` waits for a shared database (W15). It runs on `main` and tags, is manual on a merge request and never runs from the schedule, does not block until its first green run on the runner, is `interruptible`, and its `after_script` deletes the containers and images it left in Buildah's storage. `tests/Unit/PortabilityJobTest.php` holds the job. BEST_PRACTICES W10, W14 and W16 move to `Checked`, W8, W13 and W17 cite the job, and W12, W15 and W24 say what it leaves out.
@@ -1457,7 +1458,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** An app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks.
 
-**Stack:** `Enforced` by HELMET 1.1 (required `^1.1`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. CI checks it too: Preflight's `portability` job (`.gitlab-ci.yml`) boots the image with `TRUSTED_PROXIES` and `HELMET_PROXIES` set empty, sends `/dashboard` forged `X-Forwarded-Host`, `-Proto`, `-Port` and `X-Forwarded-User` from that untrusted peer, and fails if the status or the `Location` of the guest redirect changes or a forged value shows up in the answer (its `forwarded-headers` check).
+**Stack:** `Enforced` by HELMET 1.3 (required `^1.3`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. CI checks it too: Preflight's `portability` job (`.gitlab-ci.yml`) boots the image with `TRUSTED_PROXIES` and `HELMET_PROXIES` set empty, sends `/dashboard` forged `X-Forwarded-Host`, `-Proto`, `-Port` and `X-Forwarded-User` from that untrusted peer, and fails if the status or the `Location` of the guest redirect changes or a forged value shows up in the answer (its `forwarded-headers` check).
 
 ### How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#how-to-read-the-tags)
 
@@ -1762,7 +1763,7 @@ Warning
 
 **Practice:** HELMET sets the CSP header and calls `Vite::useCspNonce()`; Laravel then adds the nonce to the tags `@vite` emits. Inertia 3 puts initial page data in a JSON script element. Run the policy in report-only first.
 
-**Stack:** `Checked`. HELMET `^1.1` is a dependency (`composer.json:23`) and its security headers and CSP run in the global chain: HELMET's own config defaults the scope to `global` (`vendor/waynestate/helmet/config/helmet.php:315`; WELD's `config/helmet.php` overrides only `policy_path` and the package merges the rest), `resources/views/app.blade.php:8` reads the per-request nonce and `:32` hands it to `Vite::useCspNonce()`, and `tests/Feature/HelmetHeadersTest.php:14-34` plus `tests/Feature/CspScriptTagsTest.php:23-60` fail the suite on header, nonce or `strict-dynamic` regression. The policy is enforced, not report-only (`vendor/waynestate/helmet/config/helmet.php:336`). Open: a real browser test under the enforced CSP.
+**Stack:** `Checked`. HELMET `^1.3` is a dependency (`composer.json:23`) and its security headers and CSP run in the global chain: HELMET's own config defaults the scope to `global` (`vendor/waynestate/helmet/config/helmet.php:331`; WELD's `config/helmet.php` overrides only `policy_path` and the package merges the rest), `resources/views/app.blade.php:8` reads the per-request nonce and `:32` hands it to `Vite::useCspNonce()`, and `tests/Feature/HelmetHeadersTest.php:14-34` plus `tests/Feature/CspScriptTagsTest.php:23-60` fail the suite on header, nonce or `strict-dynamic` regression. The policy is enforced, not report-only (`vendor/waynestate/helmet/config/helmet.php:352`). Open: a real browser test under the enforced CSP.
 
 ### W29: Agent tooling stays out of production[#](https://weld.apps.wayne.edu/docs/guides/security.html#w29-agent-tooling-stays-out-of-production)
 
@@ -2218,7 +2219,7 @@ This page lists every environment variable a WELD app reads, its default from `.
 
 ### Trusted proxies and HELMET_PRESET[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#trusted-proxies-and-helmet-preset)
 
-HELMET owns the trusted proxies (W17, `Enforced` by HELMET 1.1): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Pick a platform preset with `HELMET_PRESET`; HELMET 1.1 ships two, `citadel` and `docker`, and an unknown preset name throws at boot. On other platforms, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Do not paste `trustProxies(at: '*')` from tutorials: an app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks. Laravel's own proxy list has its own variable; set `TRUSTED_PROXIES` to the same address (unset means Citadel's `172.18.0.1`). In WELD, `bootstrap/app.php` reads that variable through `App\Support\TrustedProxies::fromEnv()`: set but empty trusts nothing.
+HELMET owns the trusted proxies (W17, `Enforced` by HELMET 1.3): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Pick a platform preset with `HELMET_PRESET`; HELMET 1.3 ships two, `citadel` and `docker`, and an unknown preset name throws at boot. On other platforms, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Do not paste `trustProxies(at: '*')` from tutorials: an app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks. Laravel's own proxy list has its own variable; set `TRUSTED_PROXIES` to the same address (unset means Citadel's `172.18.0.1`). In WELD, `bootstrap/app.php` reads that variable through `App\Support\TrustedProxies::fromEnv()`: set but empty trusts nothing.
 
 ### Keep .env out of version control[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#keep-env-out-of-version-control)
 
@@ -2484,7 +2485,7 @@ WELD deploys on Citadel through Squire: one container per app, and builds run at
 Two notes before the tables. Claims marked **(check)** depend on something not built yet:
 
 - The image is Squire's portable image, `deploy/.squire/portable.Dockerfile` (see "The portable image" below). `compose.yaml` is the local development stack (`artisan serve` on 8000 plus Vite on 5173, SQLite), not a deploy image.
-- HELMET (`^1.1`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and HELMET 1.1 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
+- HELMET (`^1.3`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and HELMET 1.3 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
 
 ### Common ground, every platform[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#common-ground-every-platform)
 
@@ -2575,7 +2576,7 @@ GitLab builds this image too, on `main` and on tags (on a merge request when you
 
 Note
 
-`php artisan optimize` works in WELD since SESAME 0.6.1, whose `/login` and `/logout` are controller actions instead of closures, so `route:cache` can serialize them (WELD locks SESAME 0.6.2). Under SESAME 0.6.0 the route cache ran out of memory and the container stopped; an app still on 0.6.0 starts with `SQUIRE_ARTISAN_OPTIMIZE=0` until it updates. The same holds for the optimize step in `scripts/release.sh` on Citadel.
+`php artisan optimize` works in WELD since SESAME 0.6.1, whose `/login` and `/logout` are controller actions instead of closures, so `route:cache` can serialize them (WELD locks SESAME 0.7.1). Under SESAME 0.6.0 the route cache ran out of memory and the container stopped; an app still on 0.6.0 starts with `SQUIRE_ARTISAN_OPTIMIZE=0` until it updates. The same holds for the optimize step in `scripts/release.sh` on Citadel.
 
 Four tables, one bead: if the joint passes `weld:doctor` on all of them, the seam holds.
 
