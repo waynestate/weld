@@ -64,8 +64,23 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 - **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a
   `no-dev-install` job (a `composer install --no-dev` that fails if Laravel Boost comes along), a `proctor` job (warnings pass, failures block), a `ziggy` drift job and a `regen-gate` job (new drift fails the job;
   `.sourdough/regen-baseline.json` records the drift already accepted). Preflight 0.4.0 also brings the `a11y` job
-  (axe over `site/`), the `a11y-app` job (axe over the app's own pages, saved by the `a11y-pages` job), `sbom` and
-  `secret-detection`, and a `frontend` job runs `npm run lint`, `npm run format:check`, the typecheck and the build.
+  (axe over `site/`), the `a11y-app` job (axe over the app's own pages, saved by the `a11y-pages` job), `sbom`,
+  `secret-detection` and `portability`, and a `frontend` job runs `npm run lint`, `npm run format:check`, the typecheck
+  and the build.
+- **The portability job:** Preflight's component builds `deploy/.squire/portable.Dockerfile` with Buildah (vfs storage,
+  no Docker daemon) and boots it twice as `100123:0` with every capability dropped. WELD's own `portability:` block in
+  `.gitlab-ci.yml` runs first, in the same shell: it resets the checkout's modes (`chmod -R go-w .`), builds the kit's
+  fallback base as `localhost/weld-portable-base:8.4` from a copy of `base-fallback.Dockerfile` that names its
+  `COPY --from` image in full (Buildah refuses a short name there), and makes a fresh
+  `APP_KEY`. The `start_command` input runs the image's own entrypoint behind two shims for how Buildah runs a
+  replica, which no platform shares: `setsid`, because the replica would otherwise share the job's process group and
+  Apache's graceful stop (a signal to its whole group) makes Buildah SIGKILL the main process; and a `cat` pipe,
+  because Buildah hands the app root-owned stdout and stderr that Apache, as the job's uid, may not reopen as
+  `/proc/self/fd/2`. Drop both when Preflight's probe does them itself. Two image builds take a while on vfs, so the
+  job gets 60 minutes. `session-hop` is left out until the job
+  starts a database both replicas share (W15). `tests/Unit/PortabilityJobTest.php` holds the include and the setup.
+  To run it on this PC, run Preflight's probe (`templates/portability/probe.sh` at the pinned tag) in the same Buildah
+  image with `--security-opt seccomp=unconfined`, after the setup block.
 - **When the GitLab regen gate runs:** always on a tag (the release check, blocking), on a pipeline schedule and on
   Run pipeline; on a push only when the push touches a path the gate compares or the gate itself (the `changes:`
   lists in its `rules:`), so a docs-only or `site/`-only push skips it. When Sourdough starts writing a new top-level

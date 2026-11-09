@@ -21,7 +21,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A build-time `config:cache` freezes the build machine's environment into the image.
 
-**Stack:** `Documented`. The image build runs no artisan commands: `deploy/build.sh:49-51` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh:555-561`), so config is cached at deploy, never at build. Target `Checked`: PROCTOR scans the Dockerfile.
+**Stack:** `Checked`. The image build runs no artisan commands: `deploy/build.sh:49-51` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh:555-561`), so config is cached at deploy, never at build. The portable image runs the release script with `SQUIRE_ARTISAN_OPTIMIZE=0` at build (`deploy/.squire/portable.Dockerfile`), and its entrypoint runs `php artisan optimize` when a container starts. Preflight's `portability` job (`.gitlab-ci.yml`) fails when that image ships `bootstrap/cache/config.php` or a `.env` (its `env-only` check), and then boots it on the environment alone; `tests/Unit/PortabilityJobTest.php` holds the include. Open: nothing scans the Citadel mirror's Dockerfile, which `build.sh`'s source check covers instead.
 
 ## W11. `/up` is the liveness endpoint, and it never checks the database
 
@@ -37,7 +37,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** Traefik will not route to an unhealthy container, and a missing tool makes a healthy app look dead.
 
-**Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile:47`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php:27`, `deploy/health.php:13`). Target `Checked`: Preflight portability runs `docker inspect` for a health status of `healthy`.
+**Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile:47`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php:27`, `deploy/health.php:13`); the portable image's `HEALTHCHECK` runs `squire-entrypoint health`, the same script. Preflight's `portability` job asks `/up` the way a platform's probe does, but Buildah does not run an image's `HEALTHCHECK`, so the command itself goes unchecked in CI. Target `Checked`: a CI step that runs the `HEALTHCHECK` command in the booted image.
 
 ## W13. Non-root, arbitrary UID in group 0, listen on 8080
 
@@ -45,7 +45,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** OpenShift runs a random UID in group 0 with all capabilities dropped.
 
-**Stack:** `Checked`, for the portable path. `deploy/.squire/portable.Dockerfile` declares `USER 10001:0` (no `/etc/passwd` entry, no `www-data`), hands Apache's run, lock and log folders and `storage/` and `bootstrap/cache/` to group 0 with `chmod -R g=u`, and Apache listens on `SQUIRE_PORT`, else `PORT`, else 8080 (`deploy/.squire/portable/ports.conf`, `deploy/.squire/portable/vhost.conf`); the entrypoint refuses a port below 1024 for a user that is not root. The compose profile runs it with `cap_drop: [ALL]` and `no-new-privileges`. `tests/Feature/PortableImageTest.php` holds the user, the group-0 folders and the port in WELD's copy, and Squire's `PortableImageTest` (`testThePortableImageRunsAsANumericNonRootUserInGroupZeroOn8080`, `testABadSettingStopsTheContainerWithAPlainMessage`) checks the kit. Run for real on 2026-11-08 as `--user 1000123:0`, the way OpenShift would: `/up` answered 200 on 8080 and `storage/` was writable. The Citadel image is not this image: it starts as root and drops to its own user, and its vhost stays on 80 (`deploy/.squire/vhost.conf:2`). Open: the base image's inherited `EXPOSE 80` still shows in the metadata; a read-only root filesystem is untested; Preflight portability does not run the image in CI yet.
+**Stack:** `Checked`, for the portable path. `deploy/.squire/portable.Dockerfile` declares `USER 10001:0` (no `/etc/passwd` entry, no `www-data`), hands Apache's run, lock and log folders and `storage/` and `bootstrap/cache/` to group 0 with `chmod -R g=u`, and Apache listens on `SQUIRE_PORT`, else `PORT`, else 8080 (`deploy/.squire/portable/ports.conf`, `deploy/.squire/portable/vhost.conf`); the entrypoint refuses a port below 1024 for a user that is not root. The compose profile runs it with `cap_drop: [ALL]` and `no-new-privileges`. `tests/Feature/PortableImageTest.php` holds the user, the group-0 folders and the port in WELD's copy, and Squire's `PortableImageTest` (`testThePortableImageRunsAsANumericNonRootUserInGroupZeroOn8080`, `testABadSettingStopsTheContainerWithAPlainMessage`) checks the kit. Run for real on 2026-11-08 as `--user 1000123:0`, the way OpenShift would: `/up` answered 200 on 8080 and `storage/` was writable. The Citadel image is not this image: it starts as root and drops to its own user, and its vhost stays on 80 (`deploy/.squire/vhost.conf:2`). In CI, Preflight's `portability` job (`.gitlab-ci.yml`) starts the image as `100123:0`, a uid with no `/etc/passwd` entry, with every capability dropped, and its `strict-boot` check fails when the app root is writable by that user, when `storage/` or `bootstrap/cache/` is not, when a second replica does not listen on `PORT=8081`, or when the app writes anywhere but those folders and the tmpfs paths. The job builds from a checkout whose files a Docker executor makes world-writable, so it puts the modes back first (`chmod -R go-w .`). Open: the base image's inherited `EXPOSE 80` still shows in the metadata; the job emulates a read-only root filesystem (it looks for writes after the run) rather than mounting one.
 
 ## W14. Logs go to stderr; the app writes only where it may
 
@@ -53,7 +53,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** Platforms collect stdout/stderr; local files vanish with the container.
 
-**Stack:** `Documented`. `.env.example:18` sets `LOG_CHANNEL=stderr`. Target `Checked`: the portability job fails when `storage/logs` is non-empty.
+**Stack:** `Checked`. `.env.example:18` sets `LOG_CHANNEL=stderr`, and the portable image's Apache logs to the container's stdout and stderr (`deploy/.squire/portable/vhost.conf`). Preflight's `portability` job (`.gitlab-ci.yml`) boots the image and fails when nothing reaches stdout or stderr, when anything is written under `storage/logs` (its `logs` check), or when anything is written outside `storage/`, `bootstrap/cache/` and the tmpfs paths (`strict-boot`); `tests/Unit/PortabilityJobTest.php` holds the include. Open: nothing checks that uploads go to object storage.
 
 ## W15. Sessions and cache live in a shared store
 
@@ -61,7 +61,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A login must survive a hop between replicas.
 
-**Stack:** `Documented`. `.env.example:38` sets `SESSION_DRIVER=database` and `.env.example:69` sets `CACHE_STORE=database`; `config/session.php:21` and `config/cache.php:18` default to the same. Target `Checked`: the portability job logs in on replica A and reads the session on replica B.
+**Stack:** `Documented`. `.env.example:38` sets `SESSION_DRIVER=database` and `.env.example:69` sets `CACHE_STORE=database`; `config/session.php:21` and `config/cache.php:18` default to the same. Preflight's `portability` job leaves its `session-hop` check out on purpose: database sessions need a database both replicas share, and the job starts none, so it boots with `SESSION_DRIVER=cookie`. Target `Checked`: the `portability` job with a database service, a `migrate` run before the replicas, and `session-hop` signing in on replica A and reading the session on replica B.
 
 ## W16. Stop cleanly on SIGTERM
 
@@ -69,7 +69,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A hard kill mid-job double-runs it after `retry_after`.
 
-**Stack:** `Documented`. The entrypoint replaces the shell with the server (`deploy/.squire/fallback/citadel-apache-entrypoint:58`), so `SIGTERM` reaches the foreground process directly. On the portable path the image sets `STOPSIGNAL SIGTERM`: the `web` role turns it into Apache's graceful stop and the `worker` and `scheduler` roles exec PHP, which finishes the current job (Squire's `testSigtermIsAGracefulStopForApacheAndItsStatusIsTheContainers`; on 2026-11-08 `docker stop` ended all three in about two seconds with exit 0). The grace period is a platform setting. Target `Checked`: the portability job sends `SIGTERM` and requires exit 0 within the grace period.
+**Stack:** `Checked`, for the portable `web` role. The entrypoint replaces the shell with the server (`deploy/.squire/fallback/citadel-apache-entrypoint:58`), so `SIGTERM` reaches the foreground process directly. On the portable path the image sets `STOPSIGNAL SIGTERM`: the `web` role turns it into Apache's graceful stop and the `worker` and `scheduler` roles exec PHP, which finishes the current job (Squire's `testSigtermIsAGracefulStopForApacheAndItsStatusIsTheContainers`; on 2026-11-08 `docker stop` ended all three in about two seconds with exit 0). Preflight's `portability` job (`.gitlab-ci.yml`) sends `SIGTERM` to the booted `web` role's main process and fails unless that process has a handler for it and exits by itself within 10 seconds (its `sigterm` check), which is what PID 1 needs. The job starts the entrypoint under `setsid`, because a Buildah replica shares the job's process group and Apache's graceful stop signals its whole group; a container is its own group, so the shim changes nothing the platforms see. `tests/Unit/PortabilityJobTest.php` holds the include. The grace period is a platform setting. Open: CI does not stop a `worker` or `scheduler` mid-job.
 
 ## W17. Trust proxies by preset, never `*`
 
@@ -77,7 +77,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** An app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks.
 
-**Stack:** `Enforced` by HELMET 1.1 (required `^1.1`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Target `Checked`: a portability probe sends forged `X-Forwarded-Host` and `-Proto` from an untrusted peer.
+**Stack:** `Enforced` by HELMET 1.1 (required `^1.1`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. CI checks it too: Preflight's `portability` job (`.gitlab-ci.yml`) boots the image with `TRUSTED_PROXIES` and `HELMET_PROXIES` set empty, sends `/dashboard` forged `X-Forwarded-Host`, `-Proto`, `-Port` and `X-Forwarded-User` from that untrusted peer, and fails if the status or the `Location` of the guest redirect changes or a forged value shows up in the answer (its `forwarded-headers` check).
 
 ## How to read the tags
 

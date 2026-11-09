@@ -49,6 +49,58 @@ include:
   # credential, with the finding redacted in the log and in gitleaks.json.
   # A secret belongs in Settings > CI/CD > Variables, never in a file.
   - component: $CI_SERVER_FQDN/enterprise-apps/preflight/secret-detection@0.4.0
+  # PORTABILITY (ADR-0010): WELD must run off Citadel too, on OpenShift,
+  # Coolify or plain Docker. The portability job builds the portable image
+  # (deploy/.squire/portable.Dockerfile) with Buildah, no Docker daemon and no
+  # privileged runner, boots it twice side by side as a uid with no name in
+  # group 0 with every capability dropped, and checks it: /up answers 200 to
+  # Host: 10.1.2.3:8080, no .env or config cache is baked in, forged
+  # X-Forwarded-* and X-Forwarded-User headers from an untrusted peer change
+  # nothing, logs reach stderr and never storage/logs, nothing is written
+  # outside storage/, bootstrap/cache/ and the tmpfs paths, and the main
+  # process stops by itself on SIGTERM. The base image is built in the same
+  # job (see the portability job below), so nothing is pulled from Citadel.
+  # The env is what a platform passes: production, a key made for this job
+  # only, sessions in the signed cookie, no database, and a CAS address
+  # SESAME insists on but the job never calls. TRUSTED_PROXIES and
+  # HELMET_PROXIES are set empty, so the job's own address is a stranger
+  # and the forged headers really come from an untrusted peer.
+  # session-hop is left out on purpose: WELD keeps sessions in the database,
+  # and two replicas need a database they share, which this job does not
+  # start. /dashboard is the forged-header probe because a guest is
+  # redirected from it, and a believed X-Forwarded-Host would show in the
+  # Location. The runner is arm64: the Buildah image and both bases are
+  # multi-arch, so no input names an architecture.
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.4.0
+    inputs:
+      context: .
+      dockerfile: deploy/.squire/portable.Dockerfile
+      build_args: ["SQUIRE_KIT_DIR=deploy", "BASE_IMAGE=localhost/weld-portable-base:8.4"]
+      app_root: /citadel/src
+      env:
+        - "APP_ENV=production"
+        - "APP_DEBUG=false"
+        - "APP_KEY=${PORTABILITY_APP_KEY}"
+        - "APP_URL=https://weld.example.edu"
+        - "LOG_CHANNEL=stderr"
+        - "SESSION_DRIVER=cookie"
+        - "CACHE_STORE=array"
+        - "TRUSTED_PROXIES="
+        - "HELMET_PROXIES="
+        - "SESAME_CAS_BASE_URL=https://cas.example.edu/cas"
+      # The image's own entrypoint, behind two shims for the way Buildah runs
+      # a replica, which no container platform shares. Drop them when
+      # Preflight's probe does both itself:
+      # - setsid: Buildah's chroot isolation starts no PID namespace and no
+      #   session, so the app shares the job's process group, and Apache's
+      #   graceful stop (a signal to its whole group) reaches Buildah, which
+      #   then SIGKILLs the main process. A real container is its own group.
+      # - the cat pipe: Buildah hands the app root-owned stdout and stderr,
+      #   and Apache, running as the job's uid, may not reopen
+      #   /proc/self/fd/2. runc and CRI-O give the app's uid its stdio.
+      start_command: "exec setsid bash -c 'exec > >(exec cat) 2>&1; exec squire-entrypoint'"
+      probe_path: /dashboard
+      checks: ["health", "env-only", "forwarded-headers", "logs", "sigterm"]
 
 # Every dependency download goes through a cache. The key is fixed per tool,
 # not a lock-file hash: Composer's and npm's caches are additive, so a lock
@@ -252,6 +304,46 @@ a11y-pages:
 
 a11y-app:
   needs: [a11y-pages]
+
+# The portability job's own setup, run before the component's probe in the
+# same shell. The portable image starts FROM a base image, and the real
+# Citadel one lives where CI cannot pull it, so this builds the kit's fallback
+# base (deploy/.squire/base-fallback.Dockerfile: the official PHP Apache
+# image plus Citadel's users, modules and extensions) into the job's own
+# Buildah storage as localhost/weld-portable-base:8.4, which the build_args
+# above name. Its PHP, Node and Composer images are read from the kit's file,
+# so a kit update moves them here too, and are pulled through the Dependency
+# Proxy.
+# The checkout comes with umask 0000 on a Docker executor, so every file is
+# world-writable and COPY would keep it that way; go-w puts the modes back
+# to what a plain git clone makes, before anything is copied into an image.
+# APP_KEY is made fresh for this job: no key sits in this file or in a CI
+# variable, and the image never sees one. Two image builds on vfs storage
+# take longer than the template's 30 minutes allow on the arm64 runner, so
+# the job gets an hour. Measure twice, weld once.
+portability:
+  timeout: 60 minutes
+  before_script:
+    - |
+      set -eu
+      chmod -R go-w .
+      if [ -n "${CI_DEPENDENCY_PROXY_SERVER:-}" ] && [ -n "${CI_DEPENDENCY_PROXY_USER:-}" ]; then
+        printf '%s' "${CI_DEPENDENCY_PROXY_PASSWORD:-}" | buildah login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER"
+      fi
+      base=deploy/.squire/base-fallback.Dockerfile
+      proxy=${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX:+$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/}
+      php_image=$(sed -n 's/^ARG PHP_IMAGE=//p' "$base")
+      node_image=$(sed -n 's/^ARG NODE_IMAGE=//p' "$base")
+      test -n "$php_image" && test -n "$node_image" || { echo "portability: no PHP_IMAGE or NODE_IMAGE default in $base" >&2; exit 1; }
+      # Buildah refuses a short image name in COPY --from (its short-name
+      # mode is enforcing), so the copy it builds names each one in full:
+      # through the Dependency Proxy, else Docker Hub. Tag and digest stay.
+      sed "s#--from=\([a-z0-9._-]*\):\([A-Za-z0-9._-]*@sha256:\)#--from=${proxy:-docker.io/library/}\1:\2#" "$base" > /tmp/weld-portable-base.Dockerfile
+      buildah bud --isolation chroot -f /tmp/weld-portable-base.Dockerfile \
+        --build-arg "PHP_IMAGE=$proxy$php_image" --build-arg "NODE_IMAGE=$proxy$node_image" \
+        -t localhost/weld-portable-base:8.4 deploy/.squire
+      PORTABILITY_APP_KEY="base64:$(head -c 32 /dev/urandom | base64)"
+      export PORTABILITY_APP_KEY
 
 # Deploy credentials. Citadel deploys WELD with a Quick Update, so the
 # pipeline holds no deploy credential and runs no deploy job. When one is

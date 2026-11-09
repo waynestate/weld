@@ -100,6 +100,8 @@ docker compose -f docker-compose.squire.yml --env-file .env.squire --profile por
 
 The build runs the install-and-build half of the release (Composer without dev packages, the Vite build); each container runs `php artisan optimize` when it starts, so config is cached for its own environment, never at build (W10), and `migrate` runs once before the others (W24). Every role stops gracefully on `SIGTERM` (W16). Squire's [portable image guide](https://squire.apps.wayne.edu/docs/guides/portable-image.html) has the whole contract.
 
+Every GitLab pipeline builds this image too. Preflight's `portability` job builds it with Buildah on the kit's fallback base and boots the `web` role twice, side by side, as a uid with no name in group 0 with every capability dropped, the way OpenShift runs it. It fails when `/up` does not answer an IP `Host`, when the image carries a `.env` or a config cache, when forged `X-Forwarded-*` headers from an untrusted peer change the answer, when logs go anywhere but stdout and stderr, when the app writes outside `storage/`, `bootstrap/cache/` and the tmpfs paths, or when `SIGTERM` does not stop it by itself. If your platform's settings differ from the job's (`.gitlab-ci.yml`), the job's `env` input is where to try them first.
+
 Note
 
 `php artisan optimize` works in WELD since SESAME 0.6.1, whose `/login` and `/logout` are controller actions instead of closures, so `route:cache` can serialize them (WELD locks SESAME 0.6.2). Under SESAME 0.6.0 the route cache ran out of memory and the container stopped; an app still on 0.6.0 starts with `SQUIRE_ARTISAN_OPTIMIZE=0` until it updates. The same holds for the optimize step in `scripts/release.sh` on Citadel.

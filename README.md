@@ -120,7 +120,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
 | Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets |
-| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM and secret detection |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
@@ -189,7 +189,12 @@ from the Inertia shape. The `a11y-pages` job boots WELD with SESAME's fake drive
 page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages`. Automated checks find only part of the
 problems, so try each page with a keyboard and a screen reader too. Preflight's `sbom` job keeps `sbom.cdx.json`
 (Composer) and the `frontend` job keeps `sbom-npm.cdx.json` (npm), each for 30 days. Preflight's `secret-detection`
-job runs Gitleaks over the repository. WELD deploys by Quick Update, so its pipeline holds no deploy credential. A
+job runs Gitleaks over the repository. Preflight's `portability` job builds the portable image
+(`deploy/.squire/portable.Dockerfile`) with Buildah, on the kit's fallback base built in the same job, and boots it
+twice as a uid with no name in group 0, the way OpenShift would: `/up` must answer an IP `Host`, nothing may be baked
+in from `.env` or a config cache, forged forwarded headers must change nothing, logs must reach stderr, writes must
+stay in `storage/` and `bootstrap/cache/`, and `SIGTERM` must stop it cleanly (BEST_PRACTICES W10, W13, W14, W16).
+WELD deploys by Quick Update, so its pipeline holds no deploy credential. A
 deploy job added later extends `.deploy`, which never runs for a merge request and runs only on a protected branch
 or tag. The project settings a file cannot hold (protected `main` and tags, protected and masked variables, the job
 token allowlist) are listed under "Pipeline" in the README Sourdough bakes.

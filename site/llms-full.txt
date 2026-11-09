@@ -121,7 +121,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
 | Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets |
-| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM and secret detection |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
@@ -179,7 +179,12 @@ from the Inertia shape. The `a11y-pages` job boots WELD with SESAME's fake drive
 page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages`. Automated checks find only part of the
 problems, so try each page with a keyboard and a screen reader too. Preflight's `sbom` job keeps `sbom.cdx.json`
 (Composer) and the `frontend` job keeps `sbom-npm.cdx.json` (npm), each for 30 days. Preflight's `secret-detection`
-job runs Gitleaks over the repository. WELD deploys by Quick Update, so its pipeline holds no deploy credential. A
+job runs Gitleaks over the repository. Preflight's `portability` job builds the portable image
+(`deploy/.squire/portable.Dockerfile`) with Buildah, on the kit's fallback base built in the same job, and boots it
+twice as a uid with no name in group 0, the way OpenShift would: `/up` must answer an IP `Host`, nothing may be baked
+in from `.env` or a config cache, forged forwarded headers must change nothing, logs must reach stderr, writes must
+stay in `storage/` and `bootstrap/cache/`, and `SIGTERM` must stop it cleanly (BEST_PRACTICES W10, W13, W14, W16).
+WELD deploys by Quick Update, so its pipeline holds no deploy credential. A
 deploy job added later extends `.deploy`, which never runs for a merge request and runs only on a protected branch
 or tag. The project settings a file cannot hold (protected `main` and tags, protected and masked variables, the job
 token allowlist) are listed under "Pipeline" in the README Sourdough bakes.
@@ -455,7 +460,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 5. Joint 04
    ### Preflight
    The CI runner
-   GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, Pint, PHPStan and ESLint.
+   GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, a portability boot of the image, Pint, PHPStan and ESLint.
    Release 0.4.0
    Inspection: In use
    [Site of Preflight](https://preflight.apps.wayne.edu/) [Docs for Preflight](https://preflight.apps.wayne.edu/docs/)
@@ -630,7 +635,7 @@ $
 
 0.4.0 Checklist | Long
 
-GitLab CI/CD components. WELD's pipeline pins them at 0.4.0 to run the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection and the accessibility gate.
+GitLab CI/CD components. WELD's pipeline pins them at 0.4.0 to run the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, the accessibility gate and a portability boot of the image.
 
 ```
 $ git push
@@ -881,6 +886,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Added: Preflight's `portability` job (0.4.0) builds the portable image with Buildah and boots it twice as a uid with no name in group 0, the way OpenShift, Coolify and plain Docker run it, checking `/up` for an IP `Host`, no baked `.env` or config cache, forged forwarded headers, logs on stderr, writes only in `storage/` and `bootstrap/cache/`, and a clean stop on `SIGTERM`. WELD's `portability:` block builds the kit's fallback base in the same job first (from a copy that names the Composer `COPY --from` image in full, because Buildah refuses a short name there), resets the checkout's modes and makes a fresh `APP_KEY`, and its `start_command` runs the image's own entrypoint under `setsid` and behind a `cat` pipe, two shims for how Buildah runs a replica (a shared process group, root-owned stdio) that go once Preflight's probe handles them; `session-hop` waits for a shared database (W15). `tests/Unit/PortabilityJobTest.php` holds the job. BEST_PRACTICES W10, W14 and W16 move to `Checked`, W8, W13 and W17 cite the job, and W12, W15 and W24 say what it leaves out.
 - Added: a feature test proves /up answers 200 for a forged or IP:port Host, sets no cookie and does not redirect (W11).
 - Changed: the deploy kit is Squire 0.10.0 (was 0.9.0): no kit file changed, so the record moves to 0.10.0.
 - Fixed: scripts/a11y.ps1 works on a Windows checkout with CRLF line endings; it strips the carriage returns from the shell command it hands to Docker, which sh rejected with a syntax error.
@@ -1257,7 +1263,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** One build means one tested artifact, and the process types stay identical in code.
 
-**Stack:** `Checked`, for the portable path. Squire's portable image (`deploy/.squire/portable.Dockerfile`, kit Unreleased) bakes the code in and runs as `web`, `worker` (`queue:work --tries=3 --max-time=3600 --sleep=3`), `scheduler` (`schedule:work`) or `migrate` by `SQUIRE_ROLE` or the first argument (`deploy/.squire/portable/squire-entrypoint.sh`), and the `portable` profile in `deploy/docker-compose.squire.yml` runs the four as services of one image, the scheduler with `QUEUE_WORKER_MODE: none`. `tests/Feature/PortableImageTest.php` fails when a role, the shared image or that switch goes, and Squire's `PortableImageTest` (`testThePortableProfileRunsOneImageAsFourRoles`, `testTheRolePicksTheProcess`) runs the entrypoint itself. Built and run for real on 2026-11-08: `migrate` exited 0, then `web`, `worker` and `scheduler` came up healthy and the worker ran a queued job. The Citadel mirror (`deploy/.squire/Dockerfile`) still runs Apache only, because Citadel has no worker process (W19). Open: no `ssr` role (SSR is off); Preflight portability does not boot the image in CI yet.
+**Stack:** `Checked`, for the portable path. Squire's portable image (`deploy/.squire/portable.Dockerfile`, kit Unreleased) bakes the code in and runs as `web`, `worker` (`queue:work --tries=3 --max-time=3600 --sleep=3`), `scheduler` (`schedule:work`) or `migrate` by `SQUIRE_ROLE` or the first argument (`deploy/.squire/portable/squire-entrypoint.sh`), and the `portable` profile in `deploy/docker-compose.squire.yml` runs the four as services of one image, the scheduler with `QUEUE_WORKER_MODE: none`. `tests/Feature/PortableImageTest.php` fails when a role, the shared image or that switch goes, and Squire's `PortableImageTest` (`testThePortableProfileRunsOneImageAsFourRoles`, `testTheRolePicksTheProcess`) runs the entrypoint itself. Built and run for real on 2026-11-08: `migrate` exited 0, then `web`, `worker` and `scheduler` came up healthy and the worker ran a queued job. The Citadel mirror (`deploy/.squire/Dockerfile`) still runs Apache only, because Citadel has no worker process (W19). In CI, Preflight's `portability` job (`.gitlab-ci.yml`, Preflight 0.4.0) builds this image and boots its `web` role, the image's default; `tests/Unit/PortabilityJobTest.php` holds the include. Open: no `ssr` role (SSR is off); the `portability` job boots only `web`, so `worker`, `scheduler` and `migrate` run only in the compose profile.
 
 ### How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#how-to-read-the-tags)
 
@@ -1392,7 +1398,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A build-time `config:cache` freezes the build machine's environment into the image.
 
-**Stack:** `Documented`. The image build runs no artisan commands: `deploy/build.sh:49-51` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh:555-561`), so config is cached at deploy, never at build. Target `Checked`: PROCTOR scans the Dockerfile.
+**Stack:** `Checked`. The image build runs no artisan commands: `deploy/build.sh:49-51` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh:555-561`), so config is cached at deploy, never at build. The portable image runs the release script with `SQUIRE_ARTISAN_OPTIMIZE=0` at build (`deploy/.squire/portable.Dockerfile`), and its entrypoint runs `php artisan optimize` when a container starts. Preflight's `portability` job (`.gitlab-ci.yml`) fails when that image ships `bootstrap/cache/config.php` or a `.env` (its `env-only` check), and then boots it on the environment alone; `tests/Unit/PortabilityJobTest.php` holds the include. Open: nothing scans the Citadel mirror's Dockerfile, which `build.sh`'s source check covers instead.
 
 ### W11. `/up` is the liveness endpoint, and it never checks the database[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w11-up-is-the-liveness-endpoint-and-it-never-checks-the-database)
 
@@ -1408,7 +1414,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** Traefik will not route to an unhealthy container, and a missing tool makes a healthy app look dead.
 
-**Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile:47`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php:27`, `deploy/health.php:13`). Target `Checked`: Preflight portability runs `docker inspect` for a health status of `healthy`.
+**Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile:47`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php:27`, `deploy/health.php:13`); the portable image's `HEALTHCHECK` runs `squire-entrypoint health`, the same script. Preflight's `portability` job asks `/up` the way a platform's probe does, but Buildah does not run an image's `HEALTHCHECK`, so the command itself goes unchecked in CI. Target `Checked`: a CI step that runs the `HEALTHCHECK` command in the booted image.
 
 ### W13. Non-root, arbitrary UID in group 0, listen on 8080[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w13-non-root-arbitrary-uid-in-group-0-listen-on-8080)
 
@@ -1416,7 +1422,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** OpenShift runs a random UID in group 0 with all capabilities dropped.
 
-**Stack:** `Checked`, for the portable path. `deploy/.squire/portable.Dockerfile` declares `USER 10001:0` (no `/etc/passwd` entry, no `www-data`), hands Apache's run, lock and log folders and `storage/` and `bootstrap/cache/` to group 0 with `chmod -R g=u`, and Apache listens on `SQUIRE_PORT`, else `PORT`, else 8080 (`deploy/.squire/portable/ports.conf`, `deploy/.squire/portable/vhost.conf`); the entrypoint refuses a port below 1024 for a user that is not root. The compose profile runs it with `cap_drop: [ALL]` and `no-new-privileges`. `tests/Feature/PortableImageTest.php` holds the user, the group-0 folders and the port in WELD's copy, and Squire's `PortableImageTest` (`testThePortableImageRunsAsANumericNonRootUserInGroupZeroOn8080`, `testABadSettingStopsTheContainerWithAPlainMessage`) checks the kit. Run for real on 2026-11-08 as `--user 1000123:0`, the way OpenShift would: `/up` answered 200 on 8080 and `storage/` was writable. The Citadel image is not this image: it starts as root and drops to its own user, and its vhost stays on 80 (`deploy/.squire/vhost.conf:2`). Open: the base image's inherited `EXPOSE 80` still shows in the metadata; a read-only root filesystem is untested; Preflight portability does not run the image in CI yet.
+**Stack:** `Checked`, for the portable path. `deploy/.squire/portable.Dockerfile` declares `USER 10001:0` (no `/etc/passwd` entry, no `www-data`), hands Apache's run, lock and log folders and `storage/` and `bootstrap/cache/` to group 0 with `chmod -R g=u`, and Apache listens on `SQUIRE_PORT`, else `PORT`, else 8080 (`deploy/.squire/portable/ports.conf`, `deploy/.squire/portable/vhost.conf`); the entrypoint refuses a port below 1024 for a user that is not root. The compose profile runs it with `cap_drop: [ALL]` and `no-new-privileges`. `tests/Feature/PortableImageTest.php` holds the user, the group-0 folders and the port in WELD's copy, and Squire's `PortableImageTest` (`testThePortableImageRunsAsANumericNonRootUserInGroupZeroOn8080`, `testABadSettingStopsTheContainerWithAPlainMessage`) checks the kit. Run for real on 2026-11-08 as `--user 1000123:0`, the way OpenShift would: `/up` answered 200 on 8080 and `storage/` was writable. The Citadel image is not this image: it starts as root and drops to its own user, and its vhost stays on 80 (`deploy/.squire/vhost.conf:2`). In CI, Preflight's `portability` job (`.gitlab-ci.yml`) starts the image as `100123:0`, a uid with no `/etc/passwd` entry, with every capability dropped, and its `strict-boot` check fails when the app root is writable by that user, when `storage/` or `bootstrap/cache/` is not, when a second replica does not listen on `PORT=8081`, or when the app writes anywhere but those folders and the tmpfs paths. The job builds from a checkout whose files a Docker executor makes world-writable, so it puts the modes back first (`chmod -R go-w .`). Open: the base image's inherited `EXPOSE 80` still shows in the metadata; the job emulates a read-only root filesystem (it looks for writes after the run) rather than mounting one.
 
 ### W14. Logs go to stderr; the app writes only where it may[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w14-logs-go-to-stderr-the-app-writes-only-where-it-may)
 
@@ -1424,7 +1430,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** Platforms collect stdout/stderr; local files vanish with the container.
 
-**Stack:** `Documented`. `.env.example:18` sets `LOG_CHANNEL=stderr`. Target `Checked`: the portability job fails when `storage/logs` is non-empty.
+**Stack:** `Checked`. `.env.example:18` sets `LOG_CHANNEL=stderr`, and the portable image's Apache logs to the container's stdout and stderr (`deploy/.squire/portable/vhost.conf`). Preflight's `portability` job (`.gitlab-ci.yml`) boots the image and fails when nothing reaches stdout or stderr, when anything is written under `storage/logs` (its `logs` check), or when anything is written outside `storage/`, `bootstrap/cache/` and the tmpfs paths (`strict-boot`); `tests/Unit/PortabilityJobTest.php` holds the include. Open: nothing checks that uploads go to object storage.
 
 ### W15. Sessions and cache live in a shared store[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w15-sessions-and-cache-live-in-a-shared-store)
 
@@ -1432,7 +1438,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A login must survive a hop between replicas.
 
-**Stack:** `Documented`. `.env.example:38` sets `SESSION_DRIVER=database` and `.env.example:69` sets `CACHE_STORE=database`; `config/session.php:21` and `config/cache.php:18` default to the same. Target `Checked`: the portability job logs in on replica A and reads the session on replica B.
+**Stack:** `Documented`. `.env.example:38` sets `SESSION_DRIVER=database` and `.env.example:69` sets `CACHE_STORE=database`; `config/session.php:21` and `config/cache.php:18` default to the same. Preflight's `portability` job leaves its `session-hop` check out on purpose: database sessions need a database both replicas share, and the job starts none, so it boots with `SESSION_DRIVER=cookie`. Target `Checked`: the `portability` job with a database service, a `migrate` run before the replicas, and `session-hop` signing in on replica A and reading the session on replica B.
 
 ### W16. Stop cleanly on SIGTERM[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w16-stop-cleanly-on-sigterm)
 
@@ -1440,7 +1446,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A hard kill mid-job double-runs it after `retry_after`.
 
-**Stack:** `Documented`. The entrypoint replaces the shell with the server (`deploy/.squire/fallback/citadel-apache-entrypoint:58`), so `SIGTERM` reaches the foreground process directly. On the portable path the image sets `STOPSIGNAL SIGTERM`: the `web` role turns it into Apache's graceful stop and the `worker` and `scheduler` roles exec PHP, which finishes the current job (Squire's `testSigtermIsAGracefulStopForApacheAndItsStatusIsTheContainers`; on 2026-11-08 `docker stop` ended all three in about two seconds with exit 0). The grace period is a platform setting. Target `Checked`: the portability job sends `SIGTERM` and requires exit 0 within the grace period.
+**Stack:** `Checked`, for the portable `web` role. The entrypoint replaces the shell with the server (`deploy/.squire/fallback/citadel-apache-entrypoint:58`), so `SIGTERM` reaches the foreground process directly. On the portable path the image sets `STOPSIGNAL SIGTERM`: the `web` role turns it into Apache's graceful stop and the `worker` and `scheduler` roles exec PHP, which finishes the current job (Squire's `testSigtermIsAGracefulStopForApacheAndItsStatusIsTheContainers`; on 2026-11-08 `docker stop` ended all three in about two seconds with exit 0). Preflight's `portability` job (`.gitlab-ci.yml`) sends `SIGTERM` to the booted `web` role's main process and fails unless that process has a handler for it and exits by itself within 10 seconds (its `sigterm` check), which is what PID 1 needs. The job starts the entrypoint under `setsid`, because a Buildah replica shares the job's process group and Apache's graceful stop signals its whole group; a container is its own group, so the shim changes nothing the platforms see. `tests/Unit/PortabilityJobTest.php` holds the include. The grace period is a platform setting. Open: CI does not stop a `worker` or `scheduler` mid-job.
 
 ### W17. Trust proxies by preset, never `*` [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w17-trust-proxies-by-preset-never)
 
@@ -1448,7 +1454,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** An app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks.
 
-**Stack:** `Enforced` by HELMET 1.1 (required `^1.1`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Target `Checked`: a portability probe sends forged `X-Forwarded-Host` and `-Proto` from an untrusted peer.
+**Stack:** `Enforced` by HELMET 1.1 (required `^1.1`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. CI checks it too: Preflight's `portability` job (`.gitlab-ci.yml`) boots the image with `TRUSTED_PROXIES` and `HELMET_PROXIES` set empty, sends `/dashboard` forged `X-Forwarded-Host`, `-Proto`, `-Port` and `X-Forwarded-User` from that untrusted peer, and fails if the status or the `Location` of the guest redirect changes or a forged value shows up in the answer (its `forwarded-headers` check).
 
 ### How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#how-to-read-the-tags)
 
@@ -1816,7 +1822,7 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
 | Pinstripe | The coding standard: Pint, PHPStan level 8, ESLint and Prettier, from a copy of its 0.1 Laravel presets |
-| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM and secret detection |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.4.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
@@ -2400,7 +2406,7 @@ Every part of the stack is welded in except one: HELMET and SESAME are in `requi
 | Index length | `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap |
 | `.gitattributes` | sets `* text=auto eol=lf` |
 | CI contract | `composer ci` runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub |
-| CI jobs | on GitLab, Preflight 0.4.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM and secret detection; the `frontend` job runs ESLint and Prettier |
+| CI jobs | on GitLab, Preflight 0.4.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM, secret detection and the portability job, which builds the portable image and boots it the way OpenShift would; the `frontend` job runs ESLint and Prettier |
 | WayneUI | an npm dependency at 2.0.8; it draws every page of the app and the site |
 | HELMET | runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays Laravel's built-in liveness route and `/ready` is HELMET's readiness route, checking the database, the cache and the scheduler heartbeat |
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |
@@ -2415,7 +2421,7 @@ Every part of the stack is welded in except one: HELMET and SESAME are in `requi
 
 These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/enterprise-apps/weld/-/blob/main/BEST_PRACTICES.md).
 
-- Preflight portability does not boot the image in CI yet (W8, W10, W12, W13, W16, W24), and Pinstripe (W32) is copied presets, not a dependency.
+- Preflight's `portability` job builds the portable image and boots its `web` role in CI (W10, W14 and W16 are `Checked`; W8, W13 and W17 gain a CI check). It leaves out the `HEALTHCHECK` command (W12), a session shared across replicas (W15, which needs a database service in the job) and migrations once per release (W24). Pinstripe (W32) is copied presets, not a dependency.
 - The deploy-time scheduler work (W23) is still a plan.
 - `tests/Feature/HealthHostTest.php` sends a forged `Host` and an IP:port `Host` to `/up` and expects 200, no cookie and no redirect, so W11 is `Checked` in full. The other items that once sat on an "Unverified" list are pinned: the CSRF check (`tests/Feature/CsrfTest.php`), a random UID (W13), Pest 4 on the PHP 8.3 floor, and `/ready` without `spatie/laravel-health`.
 - Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap.
@@ -2561,6 +2567,8 @@ docker compose -f docker-compose.squire.yml --env-file .env.squire --profile por
 ```
 
 The build runs the install-and-build half of the release (Composer without dev packages, the Vite build); each container runs `php artisan optimize` when it starts, so config is cached for its own environment, never at build (W10), and `migrate` runs once before the others (W24). Every role stops gracefully on `SIGTERM` (W16). Squire's [portable image guide](https://squire.apps.wayne.edu/docs/guides/portable-image.html) has the whole contract.
+
+Every GitLab pipeline builds this image too. Preflight's `portability` job builds it with Buildah on the kit's fallback base and boots the `web` role twice, side by side, as a uid with no name in group 0 with every capability dropped, the way OpenShift runs it. It fails when `/up` does not answer an IP `Host`, when the image carries a `.env` or a config cache, when forged `X-Forwarded-*` headers from an untrusted peer change the answer, when logs go anywhere but stdout and stderr, when the app writes outside `storage/`, `bootstrap/cache/` and the tmpfs paths, or when `SIGTERM` does not stop it by itself. If your platform's settings differ from the job's (`.gitlab-ci.yml`), the job's `env` input is where to try them first.
 
 Note
 
