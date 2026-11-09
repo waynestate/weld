@@ -82,7 +82,7 @@
 </tr>
 <tr>
 <td>Squire</td>
-<td>The deploy kit in <code>deploy/</code>, at 0.9.0: the Citadel image, an idempotent release script and one portable image for other hosts</td>
+<td>The deploy kit in <code>deploy/</code>, at 0.10.2: the Citadel image, an idempotent release script and one portable image for other hosts</td>
 </tr>
 <tr>
 <td>Ziggy</td>
@@ -93,7 +93,7 @@
 <p><img src="../readme/journey.svg" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys." /></p>
 <p>One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.</p>
 <h2 id="what-is-on-the-bench-today">What is on the bench today<a class="docs-heading-link" aria-label="Link to this section" href="#what-is-on-the-bench-today">#</a></h2>
-<p>Every part is welded in except one: HELMET and SESAME are in <code>require</code>; CREED, PROCTOR and ADVISOR are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.9.0. Pinstripe's presets are still copied rather than installed.</p>
+<p>Every part is welded in except one: HELMET and SESAME are in <code>require</code>; CREED, PROCTOR and ADVISOR are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.10.2. Pinstripe's presets are still copied rather than installed.</p>
 <ul>
 <li><code>composer.json</code> is <code>waynestate/weld</code>, requires PHP <code>^8.3</code>, and the lock file resolves for 8.3.0</li>
 <li><code>.env.example</code> sets <code>APP_NAME=WELD</code>, <code>LOG_CHANNEL=stderr</code> and <code>SESSION_DRIVER=database</code></li>

@@ -10,7 +10,7 @@ so most of the upkeep is keeping the parts it joins current.
 - **The stack parts it joins:** `waynestate/helmet` `^1.1` and `waynestate/sesame` `^0.6` at runtime;
   `waynestate/creed` `^0.1` and `waynestate/proctor` `^0.9` for checks, and `waynestate/advisor` `^0.1` for coding
   agents (all three `require-dev`). WayneUI provides the interface (npm, 2.0.8), Preflight's components run CI (0.4.0),
-  and Squire's kit in `deploy/` deploys it (0.9.0). Pinstripe's presets are copied, not required.
+  and Squire's kit in `deploy/` deploys it (0.10.2). Pinstripe's presets are copied, not required.
 - Laravel 13, Inertia 3 with Vue 3, Ziggy for routes (a committed, generated `resources/js/ziggy.*`), Vite.
 - WELD is the Laravel + Inertia/Vue shape that Sourdough's templates describe, already shaped. If every app should get
   a change, it belongs in Sourdough; if only this shape should, it lives here.
@@ -70,9 +70,11 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 - **The portability job:** Preflight's component builds `deploy/.squire/portable.Dockerfile` with Buildah (vfs storage,
   no Docker daemon) and boots it twice as `100123:0` with every capability dropped. WELD's own `portability:` block in
   `.gitlab-ci.yml` runs first, in the same shell: it resets the checkout's modes (`chmod -R go-w .`), builds the kit's
-  fallback base as `localhost/weld-portable-base:8.4` from a copy of `base-fallback.Dockerfile` that names its
-  `COPY --from` image in full (Buildah refuses a short name there), and makes a fresh
-  `APP_KEY`. The `start_command` input runs the image's own entrypoint behind two shims for how Buildah runs a
+  fallback base as `localhost/weld-portable-base:8.4` from `base-fallback.Dockerfile` as the kit ships it, and makes a
+  fresh `APP_KEY`. The kit names its three images (`PHP_IMAGE`, `NODE_IMAGE`, `COMPOSER_IMAGE`) in full, because
+  Buildah refuses a short name, and the setup passes each one as a build argument through the Dependency Proxy, with
+  `docker.io/library/` swapped for the group prefix and the tag and digest kept (Squire's Image hardening guide,
+  "Through a proxy or a mirror"). The `start_command` input runs the image's own entrypoint behind two shims for how Buildah runs a
   replica, which no platform shares: `setsid`, because the replica would otherwise share the job's process group and
   Apache's graceful stop (a signal to its whole group) makes Buildah SIGKILL the main process; and a `cat` pipe,
   because Buildah hands the app root-owned stdout and stderr that Apache, as the job's uid, may not reopen as

@@ -66,6 +66,24 @@ it('builds the portable image from the kit in deploy/, on the base the job build
         ->and($setup)->toContain('chmod -R go-w .');
 });
 
+it('passes all three kit images through the proxy by swapping only the registry part', function () {
+    $setup = implode("\n", weldPortabilityCi()['portability']['before_script']);
+
+    // Squire names each image in full (docker.io/library/php:...). Prefixing
+    // the proxy onto that would ask the proxy for docker.io/library/... and
+    // fail, so the Docker Hub part is cut first, as Squire's guide shows.
+    expect($setup)->toContain('for arg in PHP_IMAGE NODE_IMAGE COMPOSER_IMAGE; do')
+        ->and($setup)->toContain('ref="$proxy${ref#docker.io/library/}"')
+        ->and($setup)->toContain('-f "$base"')
+        // The kit file is built as it ships: no rewritten copy.
+        ->and($setup)->not->toContain('--from=');
+
+    expect((string) file_get_contents(dirname(__DIR__, 2).'/deploy/.squire/base-fallback.Dockerfile'))
+        ->toMatch('/^ARG PHP_IMAGE=docker\.io\/library\//m')
+        ->toMatch('/^ARG NODE_IMAGE=docker\.io\/library\//m')
+        ->toMatch('/^ARG COMPOSER_IMAGE=docker\.io\/library\//m');
+});
+
 it('starts the image\'s own entrypoint, in its own session, behind a pipe the app owns', function () {
     expect(weldPortabilityInputs()['inputs']['start_command'])
         ->toBe("exec setsid bash -c 'exec > >(exec cat) 2>&1; exec squire-entrypoint'");

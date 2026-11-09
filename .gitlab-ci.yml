@@ -353,15 +353,21 @@ portability:
       fi
       base=deploy/.squire/base-fallback.Dockerfile
       proxy=${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX:+$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/}
-      php_image=$(sed -n 's/^ARG PHP_IMAGE=//p' "$base")
-      node_image=$(sed -n 's/^ARG NODE_IMAGE=//p' "$base")
-      test -n "$php_image" && test -n "$node_image" || { echo "portability: no PHP_IMAGE or NODE_IMAGE default in $base" >&2; exit 1; }
-      # Buildah refuses a short image name in COPY --from (its short-name
-      # mode is enforcing), so the copy it builds names each one in full:
-      # through the Dependency Proxy, else Docker Hub. Tag and digest stay.
-      sed "s#--from=\([a-z0-9._-]*\):\([A-Za-z0-9._-]*@sha256:\)#--from=${proxy:-docker.io/library/}\1:\2#" "$base" > /tmp/weld-portable-base.Dockerfile
-      buildah bud --isolation chroot -f /tmp/weld-portable-base.Dockerfile \
-        --build-arg "PHP_IMAGE=$proxy$php_image" --build-arg "NODE_IMAGE=$proxy$node_image" \
+      # The kit names each image in full (docker.io/library/php:...), which
+      # Buildah's enforcing short-name mode needs, and takes all three as
+      # build arguments, so the file is built as it is. Through the Dependency
+      # Proxy, the Docker Hub part is swapped for the group prefix (Squire's
+      # Image hardening guide, "Through a proxy or a mirror"); without it,
+      # the full name stays. Tag and digest stay either way.
+      args=""
+      for arg in PHP_IMAGE NODE_IMAGE COMPOSER_IMAGE; do
+        ref=$(sed -n "s/^ARG $arg=//p" "$base")
+        test -n "$ref" || { echo "portability: no $arg default in $base" >&2; exit 1; }
+        if [ -n "$proxy" ]; then ref="$proxy${ref#docker.io/library/}"; fi
+        args="$args --build-arg $arg=$ref"
+      done
+      # $args is split on purpose: one flag and one value per word.
+      buildah bud --isolation chroot -f "$base" $args \
         -t localhost/weld-portable-base:8.4 deploy/.squire
       PORTABILITY_APP_KEY="base64:$(head -c 32 /dev/urandom | base64)"
       export PORTABILITY_APP_KEY

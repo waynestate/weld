@@ -126,14 +126,14 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
 | ADVISOR | Dev only: the stack's read-only MCP server, so your coding agent knows the stack's rules and versions |
-| Squire | The deploy kit in `deploy/`, at 0.9.0: the Citadel image, an idempotent release script and one portable image for other hosts |
+| Squire | The deploy kit in `deploy/`, at 0.10.2: the Citadel image, an idempotent release script and one portable image for other hosts |
 | Laravel Boost | Dev only: the MCP server, guidelines and skills that teach your coding agent Laravel, with WELD's conventions in `.ai/` |
 | Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ### Status
 
 Every part is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in
-`require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.9.0.
+`require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.10.2.
 Pinstripe's presets are still copied rather than installed. The bead is nearly closed.
 What is on the bench today:
 
@@ -887,6 +887,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the deploy kit is Squire 0.10.2 (was 0.10.0), refreshed with `squire update --path=deploy`: the fallback base names its PHP, Node and Composer images in full (`docker.io/library/...`) and takes Composer 2.11.1 as a `COMPOSER_IMAGE` build argument, `.squire/php.ini` sets `session.cookie_samesite = Lax`, and the portable image drops `node_modules/` after the build (`SQUIRE_KEEP_NODE_MODULES=1` keeps it). The `portability` job's setup builds the kit's base as it ships and passes all three images through the Dependency Proxy with `docker.io/library/` swapped for the group prefix, as Squire's Image hardening guide shows, instead of rewriting a copy with `sed`; `tests/Unit/PortabilityJobTest.php` holds it.
 - Changed: WELD's own CI jobs and the local stack's `app` service run `composer:2.11.1`, pinned by its multi-arch list digest (was 2.10.3, which Squire 0.10.1 calls unmaintained); 2.11.1 fixes GHSA-c968-33g3-wh7p and GHSA-fm2w-xgf2-f9fh.
 - Added: Preflight's `portability` job (0.4.0) builds the portable image with Buildah and boots it twice as a uid with no name in group 0, the way OpenShift, Coolify and plain Docker run it, checking `/up` for an IP `Host`, no baked `.env` or config cache, forged forwarded headers, logs on stderr, writes only in `storage/` and `bootstrap/cache/`, and a clean stop on `SIGTERM`. WELD's `portability:` block builds the kit's fallback base in the same job first (from a copy that names the Composer `COPY --from` image in full, because Buildah refuses a short name there), resets the checkout's modes and makes a fresh `APP_KEY`, and its `start_command` runs the image's own entrypoint under `setsid` and behind a `cat` pipe, two shims for how Buildah runs a replica (a shared process group, root-owned stdio) that go once Preflight's probe handles them; `session-hop` waits for a shared database (W15). It runs on `main` and tags, is manual on a merge request and never runs from the schedule, does not block until its first green run on the runner, is `interruptible`, and its `after_script` deletes the containers and images it left in Buildah's storage. `tests/Unit/PortabilityJobTest.php` holds the job. BEST_PRACTICES W10, W14 and W16 move to `Checked`, W8, W13 and W17 cite the job, and W12, W15 and W24 say what it leaves out.
 - Added: a feature test proves /up answers 200 for a forged or IP:port Host, sets no cookie and does not redirect (W11).
@@ -1829,7 +1830,7 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
 | ADVISOR | The stack's read-only MCP server for coding agents, in `require-dev` |
-| Squire | The deploy kit in `deploy/`, at 0.9.0: the Citadel image, an idempotent release script and one portable image for other hosts |
+| Squire | The deploy kit in `deploy/`, at 0.10.2: the Citadel image, an idempotent release script and one portable image for other hosts |
 | Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ![WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys.](https://weld.apps.wayne.edu/docs/readme/journey.svg)
@@ -1838,7 +1839,7 @@ One request, six stops, one seam. The bead runs the length of it; with reduced m
 
 ### What is on the bench today[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
-Every part is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.9.0. Pinstripe's presets are still copied rather than installed.
+Every part is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.4.0; the deploy layer runs Squire's kit 0.10.2. Pinstripe's presets are still copied rather than installed.
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
 - `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
@@ -2396,7 +2397,7 @@ Source: https://weld.apps.wayne.edu/docs/reference/status.html
 
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
-Every part of the stack is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.4.0; the deploy layer runs Squire's kit 0.9.0. Pinstripe's presets are still copied rather than installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
+Every part of the stack is welded in except one: HELMET and SESAME are in `require`; CREED, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.4.0; the deploy layer runs Squire's kit 0.10.2. Pinstripe's presets are still copied rather than installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
 ### What is on the bench today[#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
@@ -2414,7 +2415,7 @@ Every part of the stack is welded in except one: HELMET and SESAME are in `requi
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |
 | PROCTOR | measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block |
 | ADVISOR | in `require-dev`; `php vendor/bin/advisor install --client=claude --write` points a coding agent at the stack's read-only MCP server |
-| Squire | the deploy kit in `deploy/` at 0.9.0: the Citadel image, an idempotent release script and one portable image for other hosts |
+| Squire | the deploy kit in `deploy/` at 0.10.2: the Citadel image, an idempotent release script and one portable image for other hosts |
 | Pinstripe presets | `pint.json` and `phpstan.neon` still copy Pinstripe's 0.1 Laravel presets; Pinstripe 0.3.0 is on npm (Packagist still lists 0.1.4), and they switch to `includes: vendor/waynestate/pinstripe/...` when WELD requires it |
 | Password auth | the starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's |
 | License | MIT |
