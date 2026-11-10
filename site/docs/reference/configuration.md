@@ -6,11 +6,11 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Configuration[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#configuration)
+# Configuration [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#configuration)
 
 This page lists every environment variable a WELD app reads, its default from `.env.example`, and what the sources say about it.
 
-## Environment variables[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#environment-variables)
+## Environment variables [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#environment-variables)
 
 | Name | Default | Notes |
 | --- | --- | --- |
@@ -79,17 +79,17 @@ This page lists every environment variable a WELD app reads, its default from `.
 | `AWS_USE_PATH_STYLE_ENDPOINT` | `false` |  |
 | `VITE_APP_NAME` | `${APP_NAME}` | Follows `APP_NAME` through `${APP_NAME}`. |
 
-## Trusted proxies and HELMET_PRESET[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#trusted-proxies-and-helmet-preset)
+## Trusted proxies and HELMET_PRESET [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#trusted-proxies-and-helmet-preset)
 
 HELMET owns the trusted proxies (W17, `Enforced` by HELMET 1.3): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Pick a platform preset with `HELMET_PRESET`; HELMET 1.3 ships two, `citadel` and `docker`, and an unknown preset name throws at boot. On other platforms, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Do not paste `trustProxies(at: '*')` from tutorials: an app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks. Laravel's own proxy list has its own variable; set `TRUSTED_PROXIES` to the same address (unset means Citadel's `172.18.0.1`). In WELD, `bootstrap/app.php` reads that variable through `App\Support\TrustedProxies::fromEnv()`: set but empty trusts nothing.
 
-## Keep .env out of version control[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#keep-env-out-of-version-control)
+## Keep .env out of version control [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#keep-env-out-of-version-control)
 
 Warning
 
 `.env` never goes into version control. On a server, set values in the app's environment settings, never in a file in git.
 
-## Related[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#related)
+## Related [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#related)
 
 - [Security](https://weld.apps.wayne.edu/docs/guides/security.html)
 - [Build and supply chain](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html)

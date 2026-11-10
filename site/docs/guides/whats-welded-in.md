@@ -6,11 +6,11 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# What is welded in[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-welded-in)
+# What is welded in [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-welded-in)
 
 This page lists the parts welded into WELD, what each one does in the app, and what is on the bench today.
 
-## The parts[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#the-parts)
+## The parts [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#the-parts)
 
 | Part | What it does in WELD |
 | --- | --- |
@@ -29,7 +29,7 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 
 One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.
 
-## What is on the bench today[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
+## What is on the bench today [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
 Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.5. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is on npm ([the steps](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)).
 
@@ -46,7 +46,7 @@ Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, P
 - WayneUI draws the Vue pages: `resources/css/app.css` imports its layered stylesheet, the pages use `@waynestate/wayne-ui-vue` components, and the appearance setting is WayneUI's own theme switch (`wsu-theme`), with the bar's sun and moon button in step. The starter kit's Tailwind theme and shadcn-vue copies are gone, and `npm run lint` fails on an import from a `components/ui` folder
 - The license is MIT
 
-## Related[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#related)
+## Related [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#related)
 
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
 - [Oracle](https://weld.apps.wayne.edu/docs/guides/oracle.html)

@@ -6,7 +6,7 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Running WELD off Citadel[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#running-weld-off-citadel)
+# Running WELD off Citadel [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#running-weld-off-citadel)
 
 WELD deploys on Citadel through Squire: one container per app, and builds run at release time inside the app container. The stack rule (ADR-0010, portable beyond Citadel) says the same app must also run on OpenShift, Coolify and plain Docker. This page is the per-platform contract: how traffic reaches the app, where logs go, what may be written, which user runs it, how the platform knows it is alive, and what to run after every deploy.
 
@@ -15,7 +15,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 - The image is Squire's portable image, `deploy/.squire/portable.Dockerfile` (see "The portable image" below). `compose.yaml` is the local development stack (`artisan serve` on 8000 plus Vite on 5173, SQLite), not a deploy image.
 - HELMET (`^1.3`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and HELMET 1.3 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
 
-## Common ground, every platform[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#common-ground-every-platform)
+## Common ground, every platform [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#common-ground-every-platform)
 
 | Concern | Contract |
 | --- | --- |
@@ -28,7 +28,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Health | `/up`, registered in `bootstrap/app.php`: 200 when the framework boots, and it never checks the database, so a database blip cannot kill every replica (W11). |
 | After every deploy | Run `php artisan weld:doctor` in the app container. One PASS, WARN or FAIL line per check; exit code 1 when anything FAILs, so it works as a gate. |
 
-## Citadel (for comparison)[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#citadel-for-comparison)
+## Citadel (for comparison) [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#citadel-for-comparison)
 
 | Concern | How it works |
 | --- | --- |
@@ -41,7 +41,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Queue | No queue workers on Citadel. `QUEUE_WORKER_MODE=scheduler` (the `.env.example` default) schedules a short `queue:work --stop-when-empty --max-time=50 --tries=3` every minute (W19). |
 | After deploy | `php artisan weld:doctor` in the app container. |
 
-## OpenShift[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#openshift)
+## OpenShift [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#openshift)
 
 | Concern | How it works |
 | --- | --- |
@@ -54,7 +54,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Health | Liveness probe: HTTP GET `/up` on 8080. It answers for any `Host` over plain HTTP, before trusted hosts, sessions and auth (W11). |
 | After deploy | `oc exec deploy/<app> -- php artisan weld:doctor`. |
 
-## Coolify[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#coolify)
+## Coolify [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#coolify)
 
 | Concern | How it works |
 | --- | --- |
@@ -67,7 +67,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Health | A Dockerfile `HEALTHCHECK` takes precedence over the dashboard check (W12). The portable image's runs `squire-entrypoint health`: `health.php` asks the web role's `/up`, and the other roles are healthy while they run. A dashboard check instead needs `curl` or `wget` in the image. Traefik stops routing to an unhealthy container. |
 | After deploy | Exec into the app container and run `php artisan weld:doctor`. |
 
-## Plain Docker compose[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#plain-docker-compose)
+## Plain Docker compose [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#plain-docker-compose)
 
 | Concern | How it works |
 | --- | --- |
@@ -81,7 +81,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 
 The `compose.yaml` in this repository is the local development stack, not a production image.
 
-## The portable image[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#the-portable-image)
+## The portable image [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#the-portable-image)
 
 Squire's kit in `deploy/` carries the image for every platform above but Citadel. Build it from the repository root (the app), with the kit's folder named:
 

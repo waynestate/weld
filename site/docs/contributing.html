@@ -37,12 +37,12 @@
   <nav class="docs-nav docs-nav--sidebar" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../docs/index.html">Overview</a></li><li><a href="../docs/install.html">Install</a></li><li><a href="../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../docs/guides/oracle.html">Oracle</a></li><li><a href="../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../docs/guides/app-structure.html">App structure</a></li><li><a href="../docs/guides/container-contract.html">The container contract</a></li><li><a href="../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../docs/guides/security.html">Security</a></li><li><a href="../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../docs/reference/status.html">Status</a></li><li><a href="../docs/reference/commands.html">Commands</a></li><li><a href="../docs/reference/which-command.html">Which command when</a></li><li><a href="../docs/reference/configuration.html">Configuration</a></li><li><a href="../docs/reference/proof.html">Proof</a></li></ul></li><li><a href="../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../docs/upgrading.html">Upgrading</a></li><li><a href="../docs/contributing.html" aria-current="page">Contributing</a></li><li><a href="../docs/changelog.html">Changelog</a></li></ul></nav>
   <div class="docs-content">
     <main id="main">
-      <article class="docs-article"><h1 id="contributing">Contributing<a class="docs-heading-link" aria-label="Link to this section" href="#contributing">#</a></h1>
+      <article class="docs-article"><h1 id="contributing"><span class="docs-heading-tail"><span>Contributing</span><a class="docs-heading-link" aria-label="Link to this section" href="#contributing">#</a></span></h1>
 <p>This page tells you how to build, test, keep current and release WELD, and where each piece of work belongs.</p>
-<h2 id="where-it-lives">Where it lives<a class="docs-heading-link" aria-label="Link to this section" href="#where-it-lives">#</a></h2>
+<h2 id="where-it-lives">Where it <span class="docs-heading-tail"><span>lives</span><a class="docs-heading-link" aria-label="Link to this section" href="#where-it-lives">#</a></span></h2>
 <p>Development happens on git.wayne.edu, the canonical repository: <a rel="noopener" href="https://git.wayne.edu/enterprise-apps/weld">enterprise-apps/weld</a>. Changes, issues and merge requests go there; tags are made there, by the maintainer, with an approver. The GitHub repository (<a rel="noopener" href="https://github.com/waynestate/weld">waynestate/weld</a>) is a read-only push mirror: <code>main</code> and tags are copied automatically, nobody pushes to it, and Packagist reads from it.</p>
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>The weld is made on git.wayne.edu; the mirrors only get the polished bead.</p></aside>
-<h2 id="build-and-test">Build and test<a class="docs-heading-link" aria-label="Link to this section" href="#build-and-test">#</a></h2>
+<h2 id="build-and-test">Build and <span class="docs-heading-tail"><span>test</span><a class="docs-heading-link" aria-label="Link to this section" href="#build-and-test">#</a></span></h2>
 <p>The Docker path installs, migrates and serves in one command:</p>
 <div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh up
 </code></pre></div>
@@ -66,7 +66,7 @@ bin/weld.sh down
 .\bin\weld.ps1 down
 </code></pre></div></div>
 <p>Without Docker: run <code>composer install</code>, <code>npm ci</code>, copy <code>.env.example</code> to <code>.env</code>, <code>php artisan key:generate</code>, then <code>composer ci</code>.</p>
-<h3 id="other-checks">Other checks<a class="docs-heading-link" aria-label="Link to this section" href="#other-checks">#</a></h3>
+<h3 id="other-checks">Other <span class="docs-heading-tail"><span>checks</span><a class="docs-heading-link" aria-label="Link to this section" href="#other-checks">#</a></span></h3>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
 <tr>
@@ -96,20 +96,20 @@ bin/weld.sh down
 <p><code>composer ci</code> runs <code>composer validate --strict</code>, the tests, Pint, PHPStan and <code>composer audit</code>. It does not run PROCTOR, Ziggy or the JS lint.</p>
 <p>The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a fresh app (<code>sourdough new &lt;dir&gt; --inertia</code>), then <code>php bin/regen-check.php --generated &lt;dir&gt;</code> (or <code>composer regen-check -- --generated &lt;dir&gt;</code>). It skips the product files listed in <code>.sourdough/product-files.json</code> and any <code>vendor</code> or <code>node_modules</code> path, and fails only on drift that is not already recorded in <code>.sourdough/regen-baseline.json</code>; <code>--write-baseline</code> records the current drift as accepted. It is not part of <code>composer ci</code>; CI runs it as a separate job that blocks on new drift.</p>
 <p>Pint skips <code>deploy/</code>. That folder is the stack's shared front-page deploy layer (Squire kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.</p>
-<h2 id="ci">CI<a class="docs-heading-link" aria-label="Link to this section" href="#ci">#</a></h2>
+<h2 id="ci"><span class="docs-heading-tail"><span>CI</span><a class="docs-heading-link" aria-label="Link to this section" href="#ci">#</a></span></h2>
 <ul>
 <li><strong>GitLab:</strong> Preflight's <code>php-test</code> (PHP 8.3, 8.4, 8.5, running <code>vendor/bin/pest</code>) and <code>composer-audit</code> components, a <code>composer-ci</code> job, a <code>no-dev-install</code> job (a <code>composer install --no-dev</code> that fails if Laravel Boost comes along), a <code>proctor</code> job (warnings pass, failures block), a <code>frontend</code> job (<code>npm ci</code>, lint, Prettier, vue-tsc and the build), a <code>ziggy</code> drift job and a <code>regen-gate</code> job (new drift fails the job; <code>.sourdough/regen-baseline.json</code> records the drift already accepted).</li>
 <li><strong>GitHub:</strong> <code>.github/workflows/ci.yml</code> calls Preflight's reusable workflow with <code>composer ci</code>, runs the same <code>frontend</code> and <code>no-dev-install</code> jobs, and runs the same <code>regen-gate</code> check (<code>continue-on-error</code> until the baseline is filled in).</li>
 </ul>
 <p>Green means all of those pass; on GitLab the regen gate blocks on new drift, and on GitHub it may warn while the baseline is being filled in.</p>
-<h2 id="keeping-the-joints-current">Keeping the joints current<a class="docs-heading-link" aria-label="Link to this section" href="#keeping-the-joints-current">#</a></h2>
+<h2 id="keeping-the-joints-current">Keeping the joints <span class="docs-heading-tail"><span>current</span><a class="docs-heading-link" aria-label="Link to this section" href="#keeping-the-joints-current">#</a></span></h2>
 <ul>
 <li>When HELMET, SESAME, CREED or PROCTOR release, raise the constraint here (<code>composer require waynestate/&lt;part&gt;:^0.x</code>), run all the checks above, and commit the lock file.</li>
 <li>When Laravel, Inertia or Vue release, Booster's hops are the way to move; WELD is a good first test for them.</li>
 <li>After route changes, regenerate Ziggy and commit the result.</li>
 <li>When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in Sourdough; if the drift is accepted as intended, record it with <code>--write-baseline</code> and commit <code>.sourdough/regen-baseline.json</code>.</li>
 </ul>
-<h2 id="releasing">Releasing<a class="docs-heading-link" aria-label="Link to this section" href="#releasing">#</a></h2>
+<h2 id="releasing"><span class="docs-heading-tail"><span>Releasing</span><a class="docs-heading-link" aria-label="Link to this section" href="#releasing">#</a></span></h2>
 <p>WELD has no tags yet. When it gets one:</p>
 <ol>
 <li>Move the lines under <code>## Unreleased</code> in <code>CHANGELOG.md</code> to a new <code>## X.Y.Z (YYYY-MM-DD)</code> heading.</li>
@@ -118,17 +118,17 @@ bin/weld.sh down
 <li>Tag <code>X.Y.Z</code> (no <code>v</code>) on git.wayne.edu, with an approver. The push mirror carries the tag to GitHub.</li>
 <li>A release needs a maintainer's approval. Never move or delete a published tag.</li>
 </ol>
-<h2 id="running-it-elsewhere">Running it elsewhere<a class="docs-heading-link" aria-label="Link to this section" href="#running-it-elsewhere">#</a></h2>
+<h2 id="running-it-elsewhere">Running it <span class="docs-heading-tail"><span>elsewhere</span><a class="docs-heading-link" aria-label="Link to this section" href="#running-it-elsewhere">#</a></span></h2>
 <p>WELD targets Citadel first. <a href="running-off-citadel.html">Running WELD off Citadel</a> covers OpenShift, Coolify and plain Docker, with Citadel for comparison.</p>
-<h2 id="the-front-page">The front page<a class="docs-heading-link" aria-label="Link to this section" href="#the-front-page">#</a></h2>
+<h2 id="the-front-page">The front <span class="docs-heading-tail"><span>page</span><a class="docs-heading-link" aria-label="Link to this section" href="#the-front-page">#</a></span></h2>
 <p><code>site/</code> is the stack's front page, for <code>https://weld.apps.wayne.edu/</code> on Citadel, served through a small raw-PHP <code>deploy/</code> layer generated with Squire (separate from the WELD app itself).</p>
-<h2 id="the-docs-site">The docs site<a class="docs-heading-link" aria-label="Link to this section" href="#the-docs-site">#</a></h2>
+<h2 id="the-docs-site">The docs <span class="docs-heading-tail"><span>site</span><a class="docs-heading-link" aria-label="Link to this section" href="#the-docs-site">#</a></span></h2>
 <p>The docs site is built from <code>docs/</code> by the shared docs builder (<code>composer docs</code>) and checked by <code>composer docs:check</code>. Sources live in <code>docs/</code>; the page you read is the page that ships: same source, same bead.</p>
 <p>The pages wear the front page's look. The header on every docs page is <code>docs/_header.html</code> (keep its links in step with
 the front page's main menu), and colors, type, callouts and motion live in <code>docs/theme/weld.css</code>; <code>docs/docs.json</code> names
 both under <code>theme</code>. Change the look there, never in the kit files (<code>site/assets/docs.css</code>, <code>site/assets/docs.js</code>), which
 the builder pins by hash.</p>
-<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<h2 id="related"><span class="docs-heading-tail"><span>Related</span><a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></span></h2>
 <ul>
 <li><a href="running-off-citadel.html">Running WELD off Citadel</a></li>
 </ul>

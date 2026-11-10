@@ -37,11 +37,11 @@
   <nav class="docs-nav docs-nav--sidebar" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html" aria-current="page">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/which-command.html">Which command when</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li><li><a href="../../docs/reference/proof.html">Proof</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
   <div class="docs-content">
     <main id="main">
-      <article class="docs-article"><h1 id="quick-start">Quick start<a class="docs-heading-link" aria-label="Link to this section" href="#quick-start">#</a></h1>
+      <article class="docs-article"><h1 id="quick-start">Quick <span class="docs-heading-tail"><span>start</span><a class="docs-heading-link" aria-label="Link to this section" href="#quick-start">#</a></span></h1>
 <p>This page takes a fresh copy of WELD from a folder to a running, checked app on your machine.</p>
 <p>One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the
 containers, so the host needs neither.</p>
-<h2 id="steps">Steps<a class="docs-heading-link" aria-label="Link to this section" href="#steps">#</a></h2>
+<h2 id="steps"><span class="docs-heading-tail"><span>Steps</span><a class="docs-heading-link" aria-label="Link to this section" href="#steps">#</a></span></h2>
 <ol>
 <li>
 <p>Bring the stack up:</p>
@@ -74,7 +74,7 @@ all PASS and nothing to say.</p>
 and audit.</p>
 </li>
 </ol>
-<h2 id="the-subcommands">The subcommands<a class="docs-heading-link" aria-label="Link to this section" href="#the-subcommands">#</a></h2>
+<h2 id="the-subcommands">The <span class="docs-heading-tail"><span>subcommands</span><a class="docs-heading-link" aria-label="Link to this section" href="#the-subcommands">#</a></span></h2>
 <p>The same subcommands work on every OS:</p>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
@@ -106,7 +106,7 @@ and audit.</p>
 </tr>
 </tbody>
 </table></div>
-<h2 id="run-it-like-citadel">Run it like Citadel<a class="docs-heading-link" aria-label="Link to this section" href="#run-it-like-citadel">#</a></h2>
+<h2 id="run-it-like-citadel">Run it like <span class="docs-heading-tail"><span>Citadel</span><a class="docs-heading-link" aria-label="Link to this section" href="#run-it-like-citadel">#</a></span></h2>
 <p>The steps above are the everyday bench: the stock PHP image, SQLite and Vite reloading as you type, and Sail or plain
 Docker Compose work too. Parity does not replace them. When &quot;it works here&quot; has to mean &quot;it works on Citadel&quot;, run the same folder on
 Citadel's own machinery with <a rel="noopener" href="https://parity.apps.wayne.edu/">Parity</a>: Citadel's PHP image with its
@@ -166,12 +166,12 @@ byte for byte, and <code>parity up --fallback</code> builds a labeled stand-in f
 is live, and <a rel="noopener" href="https://parity.apps.wayne.edu/docs/">its docs</a> have the rest. It takes over local runs from the parity
 kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood, because it
 is the same hood.</p>
-<h2 id="what-you-built">What you built<a class="docs-heading-link" aria-label="Link to this section" href="#what-you-built">#</a></h2>
+<h2 id="what-you-built">What you <span class="docs-heading-tail"><span>built</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-you-built">#</a></span></h2>
 <p>You have WELD running locally in Docker: the app and Vite in containers, <code>.env</code> copied from <code>.env.example</code>, the app key
 generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in,
 security headers, checks, coding standards, CI and the WayneUI interface already hooked up. Open the app and every page
 you see (the welcome page, the dashboard, settings) is drawn by WayneUI's components, light or dark to match your device.</p>
-<h2 id="next-steps">Next steps<a class="docs-heading-link" aria-label="Link to this section" href="#next-steps">#</a></h2>
+<h2 id="next-steps">Next <span class="docs-heading-tail"><span>steps</span><a class="docs-heading-link" aria-label="Link to this section" href="#next-steps">#</a></span></h2>
 <ul>
 <li>Make it yours: rename the four things that still say WELD (the composer name, the app name, the site title and the
 git remote), give the copy its own key, and re-run the checks.</li>
@@ -180,7 +180,7 @@ git remote), give the copy its own key, and re-run the checks.</li>
 <li><a href="#run-it-like-citadel">Run it like Citadel</a>: the same folder on Citadel's image, proxy and MySQL 5.6, through Parity.</li>
 <li><a href="../running-off-citadel.html">Running WELD off Citadel</a>: for when the destination is somewhere other than a laptop.</li>
 </ul>
-<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<h2 id="related"><span class="docs-heading-tail"><span>Related</span><a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></span></h2>
 <ul>
 <li><a href="../index.html">Overview</a></li>
 <li><a href="../install.html">Install</a></li>

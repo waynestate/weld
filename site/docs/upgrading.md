@@ -6,11 +6,11 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Upgrading[#](https://weld.apps.wayne.edu/docs/upgrading.html#upgrading)
+# Upgrading [#](https://weld.apps.wayne.edu/docs/upgrading.html#upgrading)
 
 This page shows how to keep a WELD app current: how to take stack changes, how to read the CHANGELOG, what a release does, and whether any released version breaks your app.
 
-## Take stack changes[#](https://weld.apps.wayne.edu/docs/upgrading.html#take-stack-changes)
+## Take stack changes [#](https://weld.apps.wayne.edu/docs/upgrading.html#take-stack-changes)
 
 WELD owns its app code. The wiring files are marked and refreshed by `sourdough feed`, not hand-edited, so the app does not fork from the stack. Sourdough is not a dependency yet, so there is no feed to run today; the target is for WELD's CI to run `sourdough feed` against each stack release and fail on drift.
 
@@ -43,11 +43,11 @@ git diff --exit-code resources/js/ziggy.*
 
 When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in Sourdough; if the drift is accepted as intended, record it with `--write-baseline` and commit `.sourdough/regen-baseline.json`.
 
-## Read the CHANGELOG[#](https://weld.apps.wayne.edu/docs/upgrading.html#read-the-changelog)
+## Read the CHANGELOG [#](https://weld.apps.wayne.edu/docs/upgrading.html#read-the-changelog)
 
 The CHANGELOG lists notable changes to WELD, newest first. Pending work sits under `## Unreleased`; each released version sits under a `## X.Y.Z (YYYY-MM-DD)` heading. To find what moved, read the entries between your current version and the one you are moving to.
 
-## What a release does[#](https://weld.apps.wayne.edu/docs/upgrading.html#what-a-release-does)
+## What a release does [#](https://weld.apps.wayne.edu/docs/upgrading.html#what-a-release-does)
 
 WELD is tagged (0.1.0 through 0.2.1 so far). A release:
 
@@ -57,7 +57,7 @@ WELD is tagged (0.1.0 through 0.2.1 so far). A release:
 4. Tags `X.Y.Z` (no `v`) on git.wayne.edu, with an approver; the push mirror carries the tag to GitHub.
 5. Needs a maintainer's approval. Never move or delete a published tag.
 
-## Breaking changes[#](https://weld.apps.wayne.edu/docs/upgrading.html#breaking-changes)
+## Breaking changes [#](https://weld.apps.wayne.edu/docs/upgrading.html#breaking-changes)
 
 0.1.0 through 0.1.5 carry no breaking change, so moving between them is just taking in the new release:
 
@@ -76,7 +76,7 @@ Then run all the checks and commit the lock file.
 
 0.2.1 carries no breaking change. An app built from 0.2.0 that keeps WELD's `bin/weld.ps1` and `bin/weld.sh` copies their `down` from WELD, so it clears `public/hot` too.
 
-## Related[#](https://weld.apps.wayne.edu/docs/upgrading.html#related)
+## Related [#](https://weld.apps.wayne.edu/docs/upgrading.html#related)
 
 - [Install](https://weld.apps.wayne.edu/docs/install.html)
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)

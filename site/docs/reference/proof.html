@@ -37,10 +37,10 @@
   <nav class="docs-nav docs-nav--sidebar" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/which-command.html">Which command when</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li><li><a href="../../docs/reference/proof.html" aria-current="page">Proof</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
   <div class="docs-content">
     <main id="main">
-      <article class="docs-article"><h1 id="proof">Proof<a class="docs-heading-link" aria-label="Link to this section" href="#proof">#</a></h1>
+      <article class="docs-article"><h1 id="proof"><span class="docs-heading-tail"><span>Proof</span><a class="docs-heading-link" aria-label="Link to this section" href="#proof">#</a></span></h1>
 <p>This page says how WELD was proven on 2026-11-06: a new app made from a clean folder the way this site tells you to, every gate WELD ships run against it, and one small Wayne State app ported onto it. It lists what held, what broke, what was fixed that night, and what it does not prove yet. Next, see the <a href="../guides/quick-start.html">Quick start</a> for the steps the run followed and <a href="../troubleshooting.html">Troubleshooting</a> for the fixes it produced.</p>
 <p>Welders prove a joint with a bend test: cut a strip across the seam, bend it double, and look for cracks. WELD's promise is that a Wayne State developer gets a full, working, accessible app quickly with the whole stack already joined. So the strip was a brand-new app, and the bending was done by a stopwatch, the app's own gates and a browser.</p>
-<h2 id="last-run">Last run<a class="docs-heading-link" aria-label="Link to this section" href="#last-run">#</a></h2>
+<h2 id="last-run">Last <span class="docs-heading-tail"><span>run</span><a class="docs-heading-link" aria-label="Link to this section" href="#last-run">#</a></span></h2>
 <p>Run on one Windows machine with Docker Desktop; durations are wall clock, including dependency installs where a command makes them.</p>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
@@ -105,7 +105,7 @@
 </tbody>
 </table></div>
 <p>Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with <code>composer docs</code> and <code>composer site:agent-ready</code>. The <code>composer ci</code>, accessibility and regen rows above are from this refresh at <code>e555f03</code>: the regen gate now passes against Sourdough's current main (<code>323a82b</code>), with no new drift beyond the recorded baseline, and the accessibility gate runs as <code>scripts/a11y.ps1</code> is written on Docker Desktop, checking all 23 committed pages with 0 violations. The <code>create-project</code> path, the signed-in app-page accessibility checks and the <code>up</code> timings are not in the table: the first installs the newest public tag instead of this commit, and the rest need the running stack and a browser.</p>
-<h2 id="what-ran">What ran<a class="docs-heading-link" aria-label="Link to this section" href="#what-ran">#</a></h2>
+<h2 id="what-ran">What <span class="docs-heading-tail"><span>ran</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-ran">#</a></span></h2>
 <p>One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the <a href="../guides/quick-start.html">Quick start</a> says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.</p>
 <ol>
 <li><strong>The <code>create-project</code> path</strong> from <a href="../install.html">Install</a>: <code>composer create-project waynestate/weld</code> (run in the <code>composer:2.10.3</code> image, since the host has no Composer), <code>npm ci</code>, then <code>bin\weld.ps1 up</code> and <code>test</code>.</li>
@@ -121,7 +121,7 @@
 </li>
 <li><strong>A port</strong> onto the fresh clone: one small app from the stack's proof corpus, below.</li>
 </ol>
-<h2 id="results">Results<a class="docs-heading-link" aria-label="Link to this section" href="#results">#</a></h2>
+<h2 id="results"><span class="docs-heading-tail"><span>Results</span><a class="docs-heading-link" aria-label="Link to this section" href="#results">#</a></span></h2>
 <p>The clone path, the one the Quick start teaches:</p>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
@@ -228,9 +228,9 @@
 </tbody>
 </table></div>
 <p>That is PROCTOR doing its job on a three-day-old lock: the gate caught advisories nobody had to go looking for. It is also a reason not to start from 0.1.2; 0.1.3, tagged later the same day, carries the patched lock and WayneUI.</p>
-<h2 id="wayneui-in-the-pages">WayneUI in the pages<a class="docs-heading-link" aria-label="Link to this section" href="#wayneui-in-the-pages">#</a></h2>
+<h2 id="wayneui-in-the-pages">WayneUI in the <span class="docs-heading-tail"><span>pages</span><a class="docs-heading-link" aria-label="Link to this section" href="#wayneui-in-the-pages">#</a></span></h2>
 <p>After the fix, every page of the new app was WayneUI's: the app bar with the shield and the theme switch, the sidebar that turns into a drawer on a phone, breadcrumbs, cards, the form fields and the footer, in light and dark. Tab moved through the bar with a visible gold focus ring. The axe gate, run with reduced motion on, found nothing to report on any page, at either width, in either scheme.</p>
-<h2 id="a-port-one-small-app-onto-weld">A port: one small app onto WELD<a class="docs-heading-link" aria-label="Link to this section" href="#a-port-one-small-app-onto-weld">#</a></h2>
+<h2 id="a-port-one-small-app-onto-weld">A port: one small app onto <span class="docs-heading-tail"><span>WELD</span><a class="docs-heading-link" aria-label="Link to this section" href="#a-port-one-small-app-onto-weld">#</a></span></h2>
 <p>The second workload asked a plainer question: how much of a real app's work is left once WELD has done its part? The app was the smallest useful one in the stack's proof corpus: a read-only JSON feed, about 100 lines of raw PHP with no framework, one Oracle query and two optional filters, with its own error shape for bad input.</p>
 <p>On the fresh clone it became:</p>
 <ul>
@@ -275,7 +275,7 @@
 </table></div>
 <p>What WELD supplied without a line of the port's own: sign-in in front of the page, HELMET's security headers on every response (the JSON included), the database connection for the real query, WayneUI for every pixel, and the gates that judged the result.</p>
 <p>Two honest differences from the old app. A POST now gets Laravel's own 405 body instead of the old JSON one. And the Oracle source was never run: the proof never connects to Oracle or Banner, so the real query is only shown to be wired, not to work.</p>
-<h2 id="what-it-caught-in-weld">What it caught in WELD<a class="docs-heading-link" aria-label="Link to this section" href="#what-it-caught-in-weld">#</a></h2>
+<h2 id="what-it-caught-in-weld">What it caught in <span class="docs-heading-tail"><span>WELD</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-it-caught-in-weld">#</a></span></h2>
 <p>A run that only finds praise was not looking hard enough. This one found these, and every finding is about WELD, not the ported app:</p>
 <ul>
 <li><strong>Fixed: a blank page on the first open.</strong> The Vite container ran <code>vite --host</code>, so Laravel's Vite plugin wrote the address it listened on, <code>http://[::]:5173</code>, into <code>public/hot</code>, and every page asked the browser to load its scripts from an address it cannot reach. <code>compose.yaml</code> now sets <code>LARAVEL_SAIL=1</code> instead, which makes the plugin listen on all addresses in the container and hand the browser <code>http://localhost:5173</code>. Checked by <code>tests/Unit/LocalStackTest.php</code> and by the pages rendering on the next run.</li>
@@ -286,7 +286,7 @@
 <li><strong>Open: a warm <code>up</code> still reinstalls.</strong> The second <code>up</code> took 188 seconds because it runs <code>composer install</code>, ADVISOR's install and a full <code>npm ci</code> again. It is correct, just slow; a faster path for an app that is already up is worth having.</li>
 <li><strong>Open, small: Sign in lands on the welcome page.</strong> SESAME signs the user in and returns them to <code>/</code>, where the button now reads Open the dashboard. One more click than it needs.</li>
 </ul>
-<h2 id="what-this-does-not-prove">What this does not prove<a class="docs-heading-link" aria-label="Link to this section" href="#what-this-does-not-prove">#</a></h2>
+<h2 id="what-this-does-not-prove">What this does not <span class="docs-heading-tail"><span>prove</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-this-does-not-prove">#</a></span></h2>
 <ul>
 <li>Only Windows ran. <code>bin/weld.sh</code> on macOS and Linux was not exercised, apart from reading that it creates the SQLite file with <code>touch</code>.</li>
 <li>Nothing was deployed. Citadel, Squire's release script and the container contract are proven elsewhere, not here.</li>
@@ -295,7 +295,7 @@
 <li>One port of one small app is a sample of one. A larger app, with forms that write, would take longer and find more.</li>
 <li>The timings are from one machine on one night. Treat them as the shape, not a promise.</li>
 </ul>
-<h2 id="run-it-yourself">Run it yourself<a class="docs-heading-link" aria-label="Link to this section" href="#run-it-yourself">#</a></h2>
+<h2 id="run-it-yourself">Run it <span class="docs-heading-tail"><span>yourself</span><a class="docs-heading-link" aria-label="Link to this section" href="#run-it-yourself">#</a></span></h2>
 <p>The same bend test on your machine, from an empty folder:</p>
 <div class="docs-tabs" data-tabs="windows|macos / linux"><div class="docs-tabs__panel" data-tab-label="Windows"><p class="docs-tabs__label">Windows</p><pre tabindex="0"><code class="language-powershell">git clone https://github.com/waynestate/weld.git my-app
 cd my-app
@@ -312,7 +312,7 @@ bin/weld.sh test
 docker compose run --rm app composer proctor
 </code></pre></div></div>
 <p>Then open <a rel="noopener" href="http://localhost:8000">http://localhost:8000</a>, sign in, and run <code>bin\weld.ps1 up</code> (or <code>bin/weld.sh up</code>) a second time: your data should still be there.</p>
-<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<h2 id="related"><span class="docs-heading-tail"><span>Related</span><a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></span></h2>
 <ul>
 <li><a href="../guides/quick-start.html">Quick start</a></li>
 <li><a href="../install.html">Install</a></li>

@@ -37,9 +37,9 @@
   <nav class="docs-nav docs-nav--sidebar" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html" aria-current="page">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/which-command.html">Which command when</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li><li><a href="../../docs/reference/proof.html">Proof</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
   <div class="docs-content">
     <main id="main">
-      <article class="docs-article"><h1 id="is-weld-still-sourdough-s-shape">Is WELD still Sourdough's shape?<a class="docs-heading-link" aria-label="Link to this section" href="#is-weld-still-sourdough-s-shape">#</a></h1>
+      <article class="docs-article"><h1 id="is-weld-still-sourdough-s-shape">Is WELD still Sourdough's <span class="docs-heading-tail"><span>shape?</span><a class="docs-heading-link" aria-label="Link to this section" href="#is-weld-still-sourdough-s-shape">#</a></span></h1>
 <p>This page shows how the regen gate proves that WELD is still Sourdough's Inertia shape, and how to run it against your own generation.</p>
-<h2 id="how-the-check-works">How the check works<a class="docs-heading-link" aria-label="Link to this section" href="#how-the-check-works">#</a></h2>
+<h2 id="how-the-check-works">How the check <span class="docs-heading-tail"><span>works</span><a class="docs-heading-link" aria-label="Link to this section" href="#how-the-check-works">#</a></span></h2>
 <p>Sourdough writes a manifest of every file it generates (<code>.sourdough/manifest.json</code>: each path with its SHA-256).
 <code>bin/regen-check.php</code> compares that manifest with WELD file by file, skipping the product files WELD adds on top
 (listed in <code>.sourdough/product-files.json</code>) and any path with a <code>vendor</code> or <code>node_modules</code> segment. Each remaining
@@ -48,13 +48,13 @@ path is reported as IDENTICAL, DIFFERS or MISSING_IN_WELD.</p>
 generates (files maps path to <code>{class, sha256}</code>). Paths listed in <code>.sourdough/product-files.json</code> (exact paths or
 <code>dir/</code> prefixes) and every path with a <code>vendor</code> or <code>node_modules</code> segment at any depth are skipped. A DIFFERS path
 means the WELD file exists with another SHA-256.</p>
-<h2 id="the-ratchet-baseline">The ratchet baseline<a class="docs-heading-link" aria-label="Link to this section" href="#the-ratchet-baseline">#</a></h2>
+<h2 id="the-ratchet-baseline">The ratchet <span class="docs-heading-tail"><span>baseline</span><a class="docs-heading-link" aria-label="Link to this section" href="#the-ratchet-baseline">#</a></span></h2>
 <p>The gate is a ratchet: <code>.sourdough/regen-baseline.json</code> records the drift already known and accepted, and the check
 fails only on new drift. CI runs it against a fresh <code>sourdough new --inertia</code> generation from Sourdough's main, and
 the GitLab <code>regen-gate</code> job blocks on new drift; locally, point it at your own generation. When it reports new drift,
 fix it here or upstream in Sourdough; if the drift is accepted as intended, record the current drift as accepted with
 <code>--write-baseline</code> and commit <code>.sourdough/regen-baseline.json</code>.</p>
-<h2 id="running-the-check">Running the check<a class="docs-heading-link" aria-label="Link to this section" href="#running-the-check">#</a></h2>
+<h2 id="running-the-check">Running the <span class="docs-heading-tail"><span>check</span><a class="docs-heading-link" aria-label="Link to this section" href="#running-the-check">#</a></span></h2>
 <p>Run the check:</p>
 <pre tabindex="0"><code class="language-sh">php bin/regen-check.php --generated &lt;dir&gt;
 </code></pre>
@@ -64,7 +64,7 @@ fix it here or upstream in Sourdough; if the drift is accepted as intended, reco
 <p>Record the current drift as accepted: add <code>--write-baseline</code>.</p>
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>Exit codes: 0 no new drift (or the baseline was written), 1 new drift, listed on stderr, 2 usage error. The script
 is plain PHP 8.3 with no Composer packages, so it runs on Windows, macOS and Linux the same way.</p></aside>
-<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<h2 id="related"><span class="docs-heading-tail"><span>Related</span><a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></span></h2>
 <ul>
 <li><a href="sourdough.html">WELD and Sourdough</a></li>
 <li><a href="../reference/status.html">Status</a></li>

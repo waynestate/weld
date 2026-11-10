@@ -6,7 +6,7 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Which command when[#](https://weld.apps.wayne.edu/docs/reference/which-command.html#which-command-when)
+# Which command when [#](https://weld.apps.wayne.edu/docs/reference/which-command.html#which-command-when)
 
 This page is the canonical copy of the "which command when" table. Every README of a stack project that ships one of these commands carries the same table, word for word; change it here first, then copy it into those READMEs (WELD, Squire, PROCTOR, Sourdough, Booster and Rollcall).
 
@@ -30,7 +30,7 @@ Several stack commands sound alike (`weld:doctor`, `squire doctor`, `proctor che
 | `php bin/regen-check.php --generated <dir>` | **Is WELD still Sourdough's Inertia shape?** WELD, file by file, against a fresh `sourdough new --inertia`; fails only on drift that `.sourdough/regen-baseline.json` does not already accept. | When Sourdough's Inertia shape or WELD changes. | WELD repo, CI |
 | `rollcall report` | **Where does the whole fleet stand?** The latest scan's totals against CREED's policy: PHP, Laravel, the auth package, PROCTOR results and the end-of-life burn-down. Exit 0, or 2 on a tool error (no scan yet, a bad option, an unreadable policy); it never gates. | After `rollcall scan`, on the scan's schedule. | CI (a scheduled scan job) |
 
-## Related[#](https://weld.apps.wayne.edu/docs/reference/which-command.html#related)
+## Related [#](https://weld.apps.wayne.edu/docs/reference/which-command.html#related)
 
 - [Commands](https://weld.apps.wayne.edu/docs/reference/commands.html)
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)

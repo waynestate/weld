@@ -982,24 +982,25 @@ The agent reads the same pages you do: [llms.txt](https://weld.apps.wayne.edu/ll
 
 Source: https://weld.apps.wayne.edu/docs/changelog.html
 
-## Changelog[#](https://weld.apps.wayne.edu/docs/changelog.html#changelog)
+## Changelog [#](https://weld.apps.wayne.edu/docs/changelog.html#changelog)
 
 Notable changes to WELD, newest first.
 
-### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
+### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the docs, agent-ready and deploy kits are Squire 0.10.6 (was 0.10.5): the docs builder and agent-ready generator see every file on Docker Desktop mounts.
 - Site: `assets/stack-env.js` knows Parity, so a pre-production page links Parity's pre-production site and a dev page links its local `site/` folder. Until now Parity, of all parts, was the one link that ignored its environment.
 - Docs: Parity is live at [https://parity.apps.wayne.edu/](https://parity.apps.wayne.edu/). The front page's weld log gives it Site and Docs links like the other live parts, its cast card, the Citadel pick and the "Want it the way Citadel runs it?" line link its site instead of its repo, and "Run it like Citadel" (README and the quick start) gains its install lines (`irm https://parity.apps.wayne.edu/install.ps1 | iex` on Windows, `curl -fsSL https://parity.apps.wayne.edu/install.sh | sh` on macOS and Linux) in place of "until its site is up". Which command when links its site too.
 - Version mentions refreshed: ADVISOR ^0.3, Squire kit 0.10.5, lock moved to current tags.
 - Docs: the front page's weld log and cast name each part's latest tag, checked on November 10, 2026: CREED 0.1.9, PROCTOR 0.11.2, Pinstripe 0.3.1, HELMET 1.3.1, SESAME 0.7.3, Sourdough 0.4.2, Squire 0.10.5, Booster 1.17.0, Rollcall 1.1.1, Drawbridge 0.6.1 and ADVISOR 0.3.0. Where WELD locks a part (CREED, PROCTOR, Pinstripe, HELMET, SESAME, ADVISOR), the lock is that same version. Content only; the sheet's design and motion are unchanged.
 
-### 0.2.1 (2026-11-09)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-1-2026-11-09)
+### 0.2.1 (2026-11-09) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-1-2026-11-09)
 
 - Fixed: `bin/weld.ps1 down` and `bin/weld.sh down` clear `public/hot`. Vite's dev server writes it so pages load their scripts from `http://localhost:5173`, and stopping its container left it behind, so the first real run of "Run it like Citadel" served WELD through Parity as a blank page. `tests/Unit/LocalStackTest.php` fails if either script stops clearing it.
 - Docs: "Run it like Citadel" (README and the quick start) was run word for word on Parity 0.1.0 with Citadel's own `citadel/php-apache:8.5r3`, and now says what it takes: one `health_check` line in `parity.json` that asks Laravel's `/up`, as Squire's `health.php` does on Citadel, because Parity's default asks the front page and the front page needs the sessions table the migration makes (without it the first `parity up` waited five minutes and failed); on a fresh database the first `parity up` ends on the front page's 500 (on Windows its proxy step can time out on it) until the migration runs; and a folder on the Windows disk is slow inside the container (about 10 seconds a page). Parity 0.1.0 is out, so the docs and the front page's weld log and cast card say 0.1.0 (they said 0.1.0-rc.2) and point at its release on git.wayne.edu until its site is up. The commands reference says what `down` now clears.
 - Docs: Which command when stops saying `squire doctor` checks "the local parity setup": the parity kit is deprecated, and local runs on Citadel's image are Parity's job (`parity check`). The other READMEs copy the row next.
 
-### 0.2.0 (2026-11-09)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-0-2026-11-09)
+### 0.2.0 (2026-11-09) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-0-2026-11-09)
 
 - Docs: Parity joins the party. Parity runs Citadel on your own computer (Citadel's PHP image, its proxy and MySQL 5.6) as one program for Windows, macOS and Linux, on Podman or Docker; it takes over local runs from the parity kit in Squire. The README and the quick start gain "Run it like Citadel": build the front end, then `parity check`, `parity init --mysql`, `parity up`, a migration as the `citadel` user and `parity test`, with `bin/weld.ps1 up`, Sail and plain Docker Compose kept as the everyday bench. The README and the Oracle guide add that Citadel's own image carries `oci8`. The README cast seats Parity next to Squire with its spirit-level mark (fifteen parts now, in the docs overview too). The front page lists it as joint 09 of the weld log (0.1.0-rc.2, Pilot, linked to its repository until its site is up), as Squire's partner under "I'm deploying to Citadel", in a line under "Start here", and as a cast card: the shop floor is now two stacked rows, Booster, Rollcall and ADVISOR, then the Citadel row of Squire, Parity and Drawbridge. Squire's lines stop promising local runs. No app code changes. The bubble sits dead center; the weld is level.
 - Changed: WELD locks SESAME 0.7.2 (was 0.7.1; `composer update waynestate/sesame`, the constraint stays `^0.7`). 0.7.2 fixes docs only: the CAS server's address is `https://academica.aws.wayne.edu/cas`, not a `login.wayne.edu` one. No code WELD runs changes.
@@ -1075,13 +1076,13 @@ Notable changes to WELD, newest first.
 - Changed: the app requires PROCTOR ^0.8 in require-dev (was ^0.7, locked 0.8.0), so its CI also runs the new crlf-deploy-script check, and the deploy layer requires PROCTOR ^0.8 (was ^0.4, locked 0.8.0).
 - Docs: a "Which command when" page (Reference) and README section put the look-alike commands side by side (`weld:doctor`, `squire doctor`, `proctor check`, `proctor gate`, `oracle:check` and the rest): what each checks, when to run it and where it runs. It is the canonical copy; the READMEs of Squire, PROCTOR, Sourdough, Booster and Rollcall carry it word for word.
 
-### 0.1.5 (2026-11-07)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-5-2026-11-07)
+### 0.1.5 (2026-11-07) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-5-2026-11-07)
 
 - Fixed: the committed Ziggy route list (`resources/js/ziggy.js` and `ziggy.d.ts`) includes SESAME 0.5's `sesame.status` route, so the `ziggy` job is green again.
 - Fixed: `composer proctor` and `ProctorCheckTest` run plain `proctor check`; PROCTOR 0.7 refuses `--policy` in CI, which turned `proctor-root` and every `php-test` job red.
 - Fixed: the pipeline's PROCTOR jobs no longer pass `--policy`, which PROCTOR 0.7 refuses in CI; PROCTOR checks against the CREED policy it bundles.
 
-### 0.1.4 (2026-11-07)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-4-2026-11-07)
+### 0.1.4 (2026-11-07) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-4-2026-11-07)
 
 - Changed: the front page deploy layer (`deploy/`) runs Squire's kit 0.6.0 (was 0.5.0): `scripts/release.sh` now asks PROCTOR for a go or no-go right after `composer audit`, before the front end builds and the migrations run (the verdict lands in `proctor-gate.json` under `SQUIRE_PROCTOR_RECORD_DIR`, ratcheted against the last release that went on; `SQUIRE_PROCTOR=enforce` stops the release on a no-go, the default is report only), and `.env.squire.example` gains `SQUIRE_PROCTOR_RECORD_DIR`. The squire holds the gate; the proctor says who may pass.
 - Changed: the GitLab pipeline pins the Preflight components to the 0.2.0 release SHA (was 0.1.4).
@@ -1099,7 +1100,7 @@ Notable changes to WELD, newest first.
 - Added: an accessibility gate for the site: `scripts/a11y.sh` (Git Bash, Linux, macOS) and `scripts/a11y.ps1` (Windows) run axe-core (WCAG 2.2 AA, light and dark, at 360 px and 1280 px) in Docker over every committed HTML page under `site/`, so the Proof page's hand-run check is repeatable with one command; the first full run checked all 23 pages with 0 violations.
 - Added: The Proof page records its last run.
 
-### 0.1.3 (2026-11-06)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-3-2026-11-06)
+### 0.1.3 (2026-11-06) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-3-2026-11-06)
 
 - Changed: the Proof page marks the 0.1.2 install and the regen drift as fixed.
 - Fixed: every `php-test` job in the GitLab pipeline (PHP 8.3, 8.4, 8.5) crashed with exit 255 since the move to Pest. Preflight's component runs `vendor/bin/phpunit` unless told otherwise, and PHPUnit refuses to load a Pest file ("Please run ./vendor/bin/pest instead"); the jobs now run `vendor/bin/pest`, which runs the PHPUnit class tests too. Sourdough's Laravel templates got the same fix.
@@ -1139,7 +1140,7 @@ Notable changes to WELD, newest first.
 - Changed: CI pins Preflight 0.1.4 (GitLab component includes and the GitHub reusable workflow at its tag commit); the deploy layer sets minimum-stability to stable.
 - Changed: HELMET moves to ^0.3 and PROCTOR to ^0.4 (lock: HELMET 0.3.0, PROCTOR 0.4.x, CREED 0.1.6, ADVISOR 0.1.5), so the newest PROCTOR checks run on WELD itself; an empty `HELMET_PROXIES=` now trusts nobody. Tests, style, analysis and PROCTOR pass unchanged.
 
-### 0.1.2 (2026-11-03)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-2-2026-11-03)
+### 0.1.2 (2026-11-03) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-2-2026-11-03)
 
 - Changed: SESAME moves from 0.2 to 0.4 (`^0.4`). It now logs sign-in events (`sesame.login`, `sesame.logout`, with a per sign-in `session_ref`; turn off with `SESAME_LOG=false`), re-reads the signed-in user when the resolver asks for it, and the gateway driver refuses an `at+jwt` access token. WELD itself needed no code change.
 - Fixed: the user menu gains a Sign out item on SESAME's logout route, the app bar branding drops the Laravel Starter Kit name and links (WELD logo text, waynestate/weld repository, weld.apps.wayne.edu documentation), .editorconfig covers compose.yaml and its variants, ExampleTest stops booting the framework, and UiBrandingTest pins the branding.
@@ -1158,7 +1159,7 @@ Notable changes to WELD, newest first.
 - Changed: BEST_PRACTICES.md re-checked against the code on 2026-11-02: the Squire kit's Dockerfile, entrypoint and release script move W10, W12, W16 and W24 from `Not yet` to `Documented`, W8/W13/W22 sentences name the new deploy files, and the shifted line numbers in composer.json, .env.example and bootstrap/app.php are corrected.
 - Added: the regen gate, which makes "WELD is the prebuilt Inertia shape" checkable: `bin/regen-check.php` compares a freshly generated Sourdough Inertia app (its `.sourdough/manifest.json`, path to SHA-256) with WELD file by file, skipping `.sourdough/product-files.json` entries and any `vendor` or `node_modules` path, and fails only on drift not already recorded in `.sourdough/regen-baseline.json` (a ratchet; `--write-baseline` records the current drift). The logic lives in `App\Support\RegenCheck` with unit tests, `composer regen-check` passes arguments through (not part of `ci`), and warning-only `regen-gate` jobs in both pipelines generate a fresh app from Sourdough's main and run the gate.
 
-### 0.1.1 (2026-10-29)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-1-2026-10-29)
+### 0.1.1 (2026-10-29) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-1-2026-10-29)
 
 - Added: agent-ready site (prompt blocks, Markdown twins, llms.txt), from Squire's kit.
 - Fixed: stale capability claims in the site and docs.
@@ -1173,7 +1174,7 @@ Notable changes to WELD, newest first.
 - TextLink's optional `method` prop takes Inertia's `Method` union instead of `string`.
 - Welcome reads the signed-in state from `usePage<SharedData>()` instead of `$page`, which vue-tsc does not recognize on the component instance.
 
-### 0.1.0 (2026-10-29)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-0-2026-10-29)
+### 0.1.0 (2026-10-29) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-0-2026-10-29)
 
 - `waynestate/helmet` moves from `^0.1` to `^0.2` (locked at 0.2.3). The published `config/helmet.php` re-syncs with the package: `HELMET_PRESET` fills the proxy list (an unknown name throws at boot), and the security headers middleware joins the global chain, so every response carries the baseline. The trusted-header set narrows to `X-Forwarded-For` and `X-Forwarded-Proto`; `X-Forwarded-Port` is no longer trusted, because Citadel's HA-Proxy never sends it.
 - `php artisan weld:doctor`: local setup only: the app key, writable storage, the database and pending migrations. The standards checks (PHP version, debug in production, secure session cookies) belong to PROCTOR, and the report points at `composer proctor`.
@@ -1194,11 +1195,11 @@ Notable changes to WELD, newest first.
 
 Source: https://weld.apps.wayne.edu/docs/contributing.html
 
-## Contributing[#](https://weld.apps.wayne.edu/docs/contributing.html#contributing)
+## Contributing [#](https://weld.apps.wayne.edu/docs/contributing.html#contributing)
 
 This page tells you how to build, test, keep current and release WELD, and where each piece of work belongs.
 
-### Where it lives[#](https://weld.apps.wayne.edu/docs/contributing.html#where-it-lives)
+### Where it lives [#](https://weld.apps.wayne.edu/docs/contributing.html#where-it-lives)
 
 Development happens on git.wayne.edu, the canonical repository: [enterprise-apps/weld](https://git.wayne.edu/enterprise-apps/weld). Changes, issues and merge requests go there; tags are made there, by the maintainer, with an approver. The GitHub repository ([waynestate/weld](https://github.com/waynestate/weld)) is a read-only push mirror: `main` and tags are copied automatically, nobody pushes to it, and Packagist reads from it.
 
@@ -1206,7 +1207,7 @@ Note
 
 The weld is made on git.wayne.edu; the mirrors only get the polished bead.
 
-### Build and test[#](https://weld.apps.wayne.edu/docs/contributing.html#build-and-test)
+### Build and test [#](https://weld.apps.wayne.edu/docs/contributing.html#build-and-test)
 
 The Docker path installs, migrates and serves in one command:
 
@@ -1268,7 +1269,7 @@ PowerShell
 
 Without Docker: run `composer install`, `npm ci`, copy `.env.example` to `.env`, `php artisan key:generate`, then `composer ci`.
 
-#### Other checks[#](https://weld.apps.wayne.edu/docs/contributing.html#other-checks)
+#### Other checks [#](https://weld.apps.wayne.edu/docs/contributing.html#other-checks)
 
 | Check | Command |
 | --- | --- |
@@ -1283,21 +1284,21 @@ The regen gate checks that WELD is still Sourdough's Inertia shape. Generate a f
 
 Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer (Squire kit plus HELMET front controller), kept byte-identical in PER style across every stack repo, so WELD's Laravel preset must not reformat it. Its style is checked where it is made.
 
-### CI[#](https://weld.apps.wayne.edu/docs/contributing.html#ci)
+### CI [#](https://weld.apps.wayne.edu/docs/contributing.html#ci)
 
 - **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a `no-dev-install` job (a `composer install --no-dev` that fails if Laravel Boost comes along), a `proctor` job (warnings pass, failures block), a `frontend` job (`npm ci`, lint, Prettier, vue-tsc and the build), a `ziggy` drift job and a `regen-gate` job (new drift fails the job; `.sourdough/regen-baseline.json` records the drift already accepted).
 - **GitHub:** `.github/workflows/ci.yml` calls Preflight's reusable workflow with `composer ci`, runs the same `frontend` and `no-dev-install` jobs, and runs the same `regen-gate` check (`continue-on-error` until the baseline is filled in).
 
 Green means all of those pass; on GitLab the regen gate blocks on new drift, and on GitHub it may warn while the baseline is being filled in.
 
-### Keeping the joints current[#](https://weld.apps.wayne.edu/docs/contributing.html#keeping-the-joints-current)
+### Keeping the joints current [#](https://weld.apps.wayne.edu/docs/contributing.html#keeping-the-joints-current)
 
 - When HELMET, SESAME, CREED or PROCTOR release, raise the constraint here (`composer require waynestate/<part>:^0.x`), run all the checks above, and commit the lock file.
 - When Laravel, Inertia or Vue release, Booster's hops are the way to move; WELD is a good first test for them.
 - After route changes, regenerate Ziggy and commit the result.
 - When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in Sourdough; if the drift is accepted as intended, record it with `--write-baseline` and commit `.sourdough/regen-baseline.json`.
 
-### Releasing[#](https://weld.apps.wayne.edu/docs/contributing.html#releasing)
+### Releasing [#](https://weld.apps.wayne.edu/docs/contributing.html#releasing)
 
 WELD has no tags yet. When it gets one:
 
@@ -1307,21 +1308,21 @@ WELD has no tags yet. When it gets one:
 4. Tag `X.Y.Z` (no `v`) on git.wayne.edu, with an approver. The push mirror carries the tag to GitHub.
 5. A release needs a maintainer's approval. Never move or delete a published tag.
 
-### Running it elsewhere[#](https://weld.apps.wayne.edu/docs/contributing.html#running-it-elsewhere)
+### Running it elsewhere [#](https://weld.apps.wayne.edu/docs/contributing.html#running-it-elsewhere)
 
 WELD targets Citadel first. [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html) covers OpenShift, Coolify and plain Docker, with Citadel for comparison.
 
-### The front page[#](https://weld.apps.wayne.edu/docs/contributing.html#the-front-page)
+### The front page [#](https://weld.apps.wayne.edu/docs/contributing.html#the-front-page)
 
 `site/` is the stack's front page, for `https://weld.apps.wayne.edu/` on Citadel, served through a small raw-PHP `deploy/` layer generated with Squire (separate from the WELD app itself).
 
-### The docs site[#](https://weld.apps.wayne.edu/docs/contributing.html#the-docs-site)
+### The docs site [#](https://weld.apps.wayne.edu/docs/contributing.html#the-docs-site)
 
 The docs site is built from `docs/` by the shared docs builder (`composer docs`) and checked by `composer docs:check`. Sources live in `docs/`; the page you read is the page that ships: same source, same bead.
 
 The pages wear the front page's look. The header on every docs page is `docs/_header.html` (keep its links in step with the front page's main menu), and colors, type, callouts and motion live in `docs/theme/weld.css`; `docs/docs.json` names both under `theme`. Change the look there, never in the kit files (`site/assets/docs.css`, `site/assets/docs.js`), which the builder pins by hash.
 
-### Related[#](https://weld.apps.wayne.edu/docs/contributing.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/contributing.html#related)
 
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)
 
@@ -1329,11 +1330,11 @@ The pages wear the front page's look. The header on every docs page is `docs/_he
 
 Source: https://weld.apps.wayne.edu/docs/guides/app-structure.html
 
-## App structure[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#app-structure)
+## App structure [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#app-structure)
 
 This page lists the app structure practices for WELD, from the BEST_PRACTICES guide, with the tag that says whether the stack holds each one today.
 
-### W1. One owner of authentication: SESAME[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w1-one-owner-of-authentication-sesame)
+### W1. One owner of authentication: SESAME [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w1-one-owner-of-authentication-sesame)
 
 **Practice:** Remove the Laravel starter kit's Fortify routes and actions (`/login`, `/register`, `/forgot-password`, 2FA). SESAME's `findOrImportUser(Identity)` is the only way in.
 
@@ -1341,7 +1342,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Stack:** `Checked`. SESAME is a dependency (`composer.json:24`), the starter kit's Fortify routes are removed, and `tests/Feature/AuthRoutesTest.php` fails if WELD grows its own auth routes: no register, password, two-factor, forgot, reset, verify or confirm URIs (`:17-30`), no `Laravel\Fortify` actions (`:32-43`), and `/login` and `/logout` owned by SESAME exactly once each (`:45-64`). Open: a PROCTOR check over `php artisan route:list --json`.
 
-### W2. WayneUI is the only component source[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w2-wayneui-is-the-only-component-source)
+### W2. WayneUI is the only component source [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w2-wayneui-is-the-only-component-source)
 
 **Practice:** Pages use WayneUI components and tokens. Do not keep the kit's shadcn-vue components or Tailwind theme as a second design system.
 
@@ -1357,7 +1358,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Stack:** `Checked`. Sourdough is still not a Composer dependency, but a drift gate runs: `bin/regen-check.php` compares WELD file by file by SHA-256 against a fresh `sourdough new --inertia` generation, skips the product files in `.sourdough/product-files.json`, and fails only on new drift versus `.sourdough/regen-baseline.json`. The `regen-gate` jobs in `.gitlab-ci.yml:147-190` and `.github/workflows/ci.yml:56-73` block on new drift. On GitLab the gate always runs on a tag (the release check), on a pipeline schedule and on Run pipeline, and on a push only when the push touches a path the gate compares or the gate itself (`rules:` at `.gitlab-ci.yml:151-164`), so a docs or site push, which cannot cause drift, skips it; the job is `interruptible`, and only its network steps (WELD's and Sourdough's `composer install`, the Sourdough clone) get three tries, so drift is never retried into green. `tests/Unit/RegenGateRulesTest.php` holds the rules. Open: the nightly pipeline schedule on `main` that catches upstream drift (Sourdough's main or the Laravel skeleton moving) when nobody pushes is pending the maintainer's approval, and until it exists that drift shows at WELD's next code push or tag; the gate clones Sourdough's `main` from the GitHub mirror (the job-token clone from git.wayne.edu waits on Sourdough's allowlist), not a pinned stack release.
 
-### W4. Inertia 3 only; migrate off the removed APIs[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w4-inertia-3-only-migrate-off-the-removed-apis)
+### W4. Inertia 3 only; migrate off the removed APIs [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w4-inertia-3-only-migrate-off-the-removed-apis)
 
 **Practice:** Use `@inertiajs/vue3` ^3 and `inertiajs/inertia-laravel` ^3. Do not import Axios, call `Inertia::lazy()` (use `Inertia::optional()`), read `data-page`, or `require()` Inertia packages.
 
@@ -1365,7 +1366,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Stack:** `Checked`. WELD is on Inertia 3: `composer.json:19` requires `inertiajs/inertia-laravel: ^3.0` and `package.json:26` requires `@inertiajs/vue3: ^3.0`. `tests/Feature/CspScriptTagsTest.php:53-60` pins the Inertia 3 JSON page island, so a regression to the Inertia 2 layout fails the suite. Open: an ESLint restriction on `axios` and a grep guard for `Inertia::lazy`.
 
-### W5. Commit `.ai/rules`; ignore what Boost regenerates[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w5-commit-ai-rules-ignore-what-boost-regenerates)
+### W5. Commit `.ai/rules`; ignore what Boost regenerates [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w5-commit-ai-rules-ignore-what-boost-regenerates)
 
 **Practice:** Laravel Boost is a `require-dev` package. Commit `.ai/`: project rules in `.ai/rules/` (with Boost's `index.md`) and WELD's own conventions in `.ai/guidelines/`. Ignore what `boost:install` and `boost:update` write: `.mcp.json`, `boost.json`, `CLAUDE.md`, `AGENTS.md`, `.claude/skills/` and `.junie/`. Git cannot ignore only the generated block inside `CLAUDE.md`, so the whole file is ignored and team guidance goes in `.ai/guidelines/`, which Boost folds into every agent's file. `.agents/` stays tracked (Booster's playbooks live there). Each stack package may ship `resources/boost/guidelines/core.blade.php` and `resources/boost/skills/*/SKILL.md`.
 
@@ -1373,7 +1374,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Stack:** `Checked`. `composer.json` requires `laravel/boost: ^2.10` in `require-dev`; `.ai/guidelines/wayne-state.md` and `.ai/rules/` (`index.md`, `migrations.md`, `routes.md`) are committed as Sourdough's Inertia template ships them, and the `.gitignore` carries Sourdough's Boost block. `tests/Feature/BoostDevOnlyTest.php` "ignores what Boost regenerates and keeps what the team shares" fails CI when an ignore line or a committed `.ai` file goes missing, and the regen gate keeps the `.ai` files equal to Sourdough's. Open: a PROCTOR check for apps Sourdough did not bake.
 
-### W6. Sail is local development only[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w6-sail-is-local-development-only)
+### W6. Sail is local development only [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w6-sail-is-local-development-only)
 
 **Practice:** Sail's own description is "Laravel's default Docker development environment". It is not a production image and WELD never deploys it.
 
@@ -1381,7 +1382,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Stack:** `Documented`. `composer.json:33` keeps `laravel/sail` in `require-dev`, so it is a local tool, not a runtime dependency. Target `Checked`: PROCTOR flags `laravel/sail` outside `require-dev` and any `vendor/laravel/sail` path in a production Dockerfile.
 
-### W7. The supported dev path is Compose driven by native scripts, not Sail[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w7-the-supported-dev-path-is-compose-driven-by-native-scripts-not-sail)
+### W7. The supported dev path is Compose driven by native scripts, not Sail [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w7-the-supported-dev-path-is-compose-driven-by-native-scripts-not-sail)
 
 **Practice:** Sail runs on Windows "via WSL2". The stack rule is that Windows needs no bash and no WSL. Ship `weld.ps1` and `weld.sh` (or one PHP command) over a plain `compose.yaml`; Sail stays an unsupported convenience.
 
@@ -1389,7 +1390,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Stack:** `Checked`. `compose.yaml` and the `bin/weld.ps1` / `bin/weld.sh` pair exist, and `tests/Unit/LocalStackTest.php:10-47` pins the pair's shared behavior: the SQLite file is created only when missing and never truncated, and the Vite service writes a reachable listen address.
 
-### W8. One image, several process types[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w8-one-image-several-process-types)
+### W8. One image, several process types [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w8-one-image-several-process-types)
 
 **Practice:** Build one image. Run it as `web`, `worker` and `scheduler` by changing the command only (plus `ssr` when Inertia SSR is on). On Compose these are services; on OpenShift a Deployment, a Deployment and a CronJob.
 
@@ -1397,7 +1398,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Stack:** `Checked`, for the portable path. Squire's portable image (`deploy/.squire/portable.Dockerfile`) bakes the code in and runs as `web`, `worker` (`queue:work --tries=3 --max-time=3600 --sleep=3`), `scheduler` (`schedule:work`) or `migrate` by `SQUIRE_ROLE` or the first argument (`deploy/.squire/portable/squire-entrypoint.sh`), and the `portable` profile in `deploy/docker-compose.squire.yml` runs the four as services of one image, the scheduler with `QUEUE_WORKER_MODE: none`. `tests/Feature/PortableImageTest.php` fails when a role, the shared image or that switch goes, and Squire's `PortableImageTest` (`testThePortableProfileRunsOneImageAsFourRoles`, `testTheRolePicksTheProcess`) runs the entrypoint itself. Built and run for real on 2026-11-08: `migrate` exited 0, then `web`, `worker` and `scheduler` came up healthy and the worker ran a queued job. The Citadel mirror (`deploy/.squire/Dockerfile`) still runs Apache only, because Citadel has no worker process (W19). In CI, Preflight's `portability` job (`.gitlab-ci.yml`, Preflight 0.5.0) builds this image and boots its `web` role, the image's default; `tests/Unit/PortabilityJobTest.php` holds the include. Open: no `ssr` role (SSR is off); the `portability` job boots only `web`, so `worker`, `scheduler` and `migrate` run only in the compose profile.
 
-### How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#how-to-read-the-tags)
+### How to read the tags [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#how-to-read-the-tags)
 
 Each practice ends with exactly one tag.
 
@@ -1408,7 +1409,7 @@ Each practice ends with exactly one tag.
 | `Documented` | Written down in the README or a config file, with no check behind it. |
 | `Not yet` | A gap. |
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#related)
 
 - [The container contract](https://weld.apps.wayne.edu/docs/guides/container-contract.html)
 - [Queues and scheduling](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html)
@@ -1418,35 +1419,35 @@ Each practice ends with exactly one tag.
 
 Source: https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html
 
-## Build and supply chain[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#build-and-supply-chain)
+## Build and supply chain [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#build-and-supply-chain)
 
 This page states WELD's build and supply chain practices, one per heading, each with the rule and the tag that shows whether the stack holds it today.
 
-### W30: Support only PHP versions that are not end of life[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w30-support-only-php-versions-that-are-not-end-of-life)
+### W30: Support only PHP versions that are not end of life [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w30-support-only-php-versions-that-are-not-end-of-life)
 
 **Practice:** `composer.json` requires `php: ^8.3` with `config.platform.php` `8.3.0`. Tests run on 8.3, 8.4 and 8.5. Laravel 13 needs 8.3 or newer.
 
 **Stack:** `Checked`. `composer.json:18` requires `php: ^8.3`, `composer.json:134` sets `config.platform.php` to `8.3.0`, and the CI matrix runs on 8.3, 8.4 and 8.5 (`.gitlab-ci.yml:9` and `.github/workflows/ci.yml:18`).
 
-### W31: Keep dev tools inside the PHP floor[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w31-keep-dev-tools-inside-the-php-floor)
+### W31: Keep dev tools inside the PHP floor [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w31-keep-dev-tools-inside-the-php-floor)
 
 **Practice:** Pest 5 requires PHP `^8.4`. On a `^8.3` floor use Pest 4 or PHPUnit and cap the constraint.
 
 **Stack:** `Checked`. WELD adopted Pest 4 on 2026-11-03: `composer.json` requires `pestphp/pest ^4` (Pest 5 needs PHP `^8.4`), and the CI matrix starts at 8.3 (`.gitlab-ci.yml:9`), so `composer install` runs on 8.3 and fails if a dev tool requires 8.4 or newer. The PHPUnit class tests still run unchanged, under Pest, and new tests are written in Pest.
 
-### W32: Pinstripe owns style and static analysis[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w32-pinstripe-owns-style-and-static-analysis)
+### W32: Pinstripe owns style and static analysis [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w32-pinstripe-owns-style-and-static-analysis)
 
 **Practice:** Use Pinstripe's Pint preset, PHPStan level 8 through Larastan, ESLint (flat config) and Prettier. No local overrides without a recorded reason.
 
 **Stack:** `Checked`, for the PHP side. `waynestate/pinstripe` `^0.3` is a dev dependency (`composer.json:43`), and `phpstan.neon:10` includes its `phpstan/laravel.neon`, so level 8, the ignore rules and the banned calls (SQL joined from strings among them) come from the package; WELD's code passes with no new ignore and no baseline. `composer.json:60` runs `pint --test`, `composer.json:63` runs `phpstan analyse`, and both are in the `ci` script (`composer.json:68-77`), which CI runs. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's `deploy/` kit and `bin/docs-site.php`, since Pint cannot extend a config file; `tests/Unit/PinstripeWiringTest.php` fails on any other drift in either file. The JS side runs in CI too, on WELD's own config until `@waynestate/pinstripe` 0.3.0 is on npm: the `frontend` job (`.gitlab-ci.yml`, `.github/workflows/ci.yml`) runs `npm run lint` (`eslint.config.js`, flat config) and `npm run format:check` (`.prettierrc`).
 
-### W33: Pin shared CI components to a commit[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w33-pin-shared-ci-components-to-a-commit)
+### W33: Pin shared CI components to a commit [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w33-pin-shared-ci-components-to-a-commit)
 
 **Practice:** Preflight components are referenced by commit SHA or a fixed tag, not a moving branch.
 
 **Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.5.0 release tag (`@0.5.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:72`; published tags in the stack never move), and `.github/workflows/ci.yml:16` pins the reusable workflow to Preflight 0.1.4's commit SHA until that mirror carries a release tag. PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#related)
 
 - [Security](https://weld.apps.wayne.edu/docs/guides/security.html)
 - [Configuration](https://weld.apps.wayne.edu/docs/reference/configuration.html)
@@ -1456,11 +1457,11 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 Source: https://weld.apps.wayne.edu/docs/guides/check-your-setup.html
 
-## Check your setup[#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#check-your-setup)
+## Check your setup [#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#check-your-setup)
 
 Use `weld:doctor` to strike an arc across the local setup and see, one line per check, whether every joint holds.
 
-### What it checks[#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#what-it-checks)
+### What it checks [#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#what-it-checks)
 
 `weld:doctor` strikes an arc across the local setup and reports every joint: the app key, writable storage, the database and pending migrations. One line per check, PASS or WARN or FAIL. The checks, by name:
 
@@ -1469,7 +1470,7 @@ Use `weld:doctor` to strike an arc across the local setup and see, one line per 
 - `database`: PASS when the connection is up; FAIL names the exception class only, never the DSN, host or password.
 - `migrations`: PASS when there are no pending migrations; WARN when some are pending (it lists them) or when it could not inspect them.
 
-### Run it[#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#run-it)
+### Run it [#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#run-it)
 
 Run it through the OS scripts or straight to the container:
 
@@ -1491,7 +1492,7 @@ Container
 docker compose run --rm app php artisan weld:doctor
 ```
 
-### Read the report[#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#read-the-report)
+### Read the report [#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#read-the-report)
 
 Each check prints one line: PASS, WARN or FAIL. The exit code is 1 when anything FAILs and 0 otherwise, so it works as a gate. Add `--json` to any of them for a machine-readable report. A good bead is a quiet one: all PASS and nothing to say.
 
@@ -1501,7 +1502,7 @@ The standards checks (PHP version, debug in production, secure session cookies) 
 
 Not sure whether you want `weld:doctor`, `squire doctor` or `proctor check`? [Which command when](https://weld.apps.wayne.edu/docs/reference/which-command.html) puts every look-alike side by side.
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html#related)
 
 - [Which command when](https://weld.apps.wayne.edu/docs/reference/which-command.html)
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html)
@@ -1512,11 +1513,11 @@ Not sure whether you want `weld:doctor`, `squire doctor` or `proctor check`? [Wh
 
 Source: https://weld.apps.wayne.edu/docs/guides/container-contract.html
 
-## The container contract[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#the-container-contract)
+## The container contract [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#the-container-contract)
 
 This page lists the container contract practices for WELD, from the BEST_PRACTICES guide, with the tag that says whether the stack holds each one today.
 
-### W9. Config comes from the environment only[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w9-config-comes-from-the-environment-only)
+### W9. Config comes from the environment only [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w9-config-comes-from-the-environment-only)
 
 **Practice:** No `.env` in the image. Call `env()` only inside `config/*.php`.
 
@@ -1524,7 +1525,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Stack:** `Checked`. Every `env()` call is inside `config/*.php` except one documented exception: `bootstrap/app.php:44` reads `TRUSTED_PROXIES` because the middleware closure runs before config is loaded, and carries a `@phpstan-ignore` for `larastan.noEnvCallsOutsideOfConfig`. That rule is live (`phpstan.neon:10` sets `reportUnmatchedIgnoredErrors: true`), and `phpstan analyse` runs in the `ci` script (`composer.json:61`, `:66-75`), so a new `env()` outside `config/` fails CI.
 
-### W10. `config:cache` runs at container start, never at image build[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w10-config-cache-runs-at-container-start-never-at-image-build)
+### W10. `config:cache` runs at container start, never at image build [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w10-config-cache-runs-at-container-start-never-at-image-build)
 
 **Practice:** Build time may run `route:cache`, `view:cache`, `event:cache`. `php artisan optimize` at start is acceptable if the build did not freeze config.
 
@@ -1532,7 +1533,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Stack:** `Checked`. The image build runs no artisan commands: `deploy/build.sh:49-51` fails if app source is present at build time, and the release step runs `php artisan optimize` once the environment is in place (`deploy/scripts/release.sh:555-561`), so config is cached at deploy, never at build. The portable image runs the release script with `SQUIRE_ARTISAN_OPTIMIZE=0` at build (`deploy/.squire/portable.Dockerfile`), and its entrypoint runs `php artisan optimize` when a container starts. Preflight's `portability` job (`.gitlab-ci.yml`) fails when that image ships `bootstrap/cache/config.php` or a `.env` (its `env-only` check), and then boots it on the environment alone; `tests/Unit/PortabilityJobTest.php` holds the include. Open: nothing scans the Citadel mirror's Dockerfile, which `build.sh`'s source check covers instead.
 
-### W11. `/up` is the liveness endpoint, and it never checks the database[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w11-up-is-the-liveness-endpoint-and-it-never-checks-the-database)
+### W11. `/up` is the liveness endpoint, and it never checks the database [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w11-up-is-the-liveness-endpoint-and-it-never-checks-the-database)
 
 **Practice:** Keep Laravel's `/up` (200 when the app boots). It must answer for any `Host`, over plain HTTP, before trusted hosts, redirects, sessions, CSP and auth. Put database and cache checks on a separate `/ready` endpoint, through the `DiagnosingHealth` event or a package.
 
@@ -1540,7 +1541,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Stack:** `Checked`. `bootstrap/app.php:20` sets the health route to `/up`, and `tests/Feature/HelmetHeadersTest.php:41-51` fails the suite when `/up` stops answering 200, and `tests/Feature/HealthHostTest.php` proves it answers 200 for a forged or IP `Host` with no cookie and no redirect. `/ready` is a separate route, HELMET's `Route::helmetReady()` registered in the routing `then:` callback outside the web group (`bootstrap/app.php:27-33`), so a probe writes no session row and sets no cookie. It checks the database (`app/Health/DatabaseReady.php` opens the default connection), the cache (`app/Health/CacheReady.php` writes a key, reads it back and forgets it) and the scheduler heartbeat (W23), and answers 503 when one fails. `tests/Feature/ReadyChecksTest.php` proves it: "answers 503 on /ready when the database cannot be reached" (a missing SQLite file), "answers 503 on /ready when the cache store fails" (a store with no driver), "serves /ready outside the web group, with no session cookie" and "keeps /up free of the readiness checks" (the same broken database, and `/up` still answers 200). The checks and the test are byte for byte from Sourdough's Inertia shape; the route lines join WELD's own `bootstrap/app.php` and `routes/web.php`, which the regen baseline already accepts as drift. The checks use Laravel's own `DB` and `Cache` rather than the `DiagnosingHealth` event or a package, because HELMET's route already gives each check a name, a status and a logged reason.
 
-### W12. Image health check matches the platform[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w12-image-health-check-matches-the-platform)
+### W12. Image health check matches the platform [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w12-image-health-check-matches-the-platform)
 
 **Practice:** Put a `HEALTHCHECK` in the Dockerfile that calls `/up` with a tool the image has (`curl` or `wget`). On Coolify a Dockerfile `HEALTHCHECK` takes precedence over the dashboard check, and a dashboard check needs `curl` or `wget` inside the container.
 
@@ -1548,7 +1549,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile:47`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php:27`, `deploy/health.php:13`); the portable image's `HEALTHCHECK` runs `squire-entrypoint health`, the same script. Preflight's `portability` job asks `/up` the way a platform's probe does, but Buildah does not run an image's `HEALTHCHECK`, so the command itself goes unchecked in CI. Target `Checked`: a CI step that runs the `HEALTHCHECK` command in the booted image.
 
-### W13. Non-root, arbitrary UID in group 0, listen on 8080[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w13-non-root-arbitrary-uid-in-group-0-listen-on-8080)
+### W13. Non-root, arbitrary UID in group 0, listen on 8080 [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w13-non-root-arbitrary-uid-in-group-0-listen-on-8080)
 
 **Practice:** Declare a non-root `USER`. Make writable paths group 0 and group-writable (`chgrp -R 0`, `chmod -R g=u`) for `storage/` and `bootstrap/cache/`. Do not depend on a `www-data` entry. Honor `PORT`.
 
@@ -1556,7 +1557,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Stack:** `Checked`, for the portable path. `deploy/.squire/portable.Dockerfile` declares `USER 10001:0` (no `/etc/passwd` entry, no `www-data`), hands Apache's run, lock and log folders and `storage/` and `bootstrap/cache/` to group 0 with `chmod -R g=u`, and Apache listens on `SQUIRE_PORT`, else `PORT`, else 8080 (`deploy/.squire/portable/ports.conf`, `deploy/.squire/portable/vhost.conf`); the entrypoint refuses a port below 1024 for a user that is not root. The compose profile runs it with `cap_drop: [ALL]` and `no-new-privileges`. `tests/Feature/PortableImageTest.php` holds the user, the group-0 folders and the port in WELD's copy, and Squire's `PortableImageTest` (`testThePortableImageRunsAsANumericNonRootUserInGroupZeroOn8080`, `testABadSettingStopsTheContainerWithAPlainMessage`) checks the kit. Run for real on 2026-11-08 as `--user 1000123:0`, the way OpenShift would: `/up` answered 200 on 8080 and `storage/` was writable. The Citadel image is not this image: it starts as root and drops to its own user, and its vhost stays on 80 (`deploy/.squire/vhost.conf:2`). In CI, Preflight's `portability` job (`.gitlab-ci.yml`) starts the image as `100123:0`, a uid with no `/etc/passwd` entry, with every capability dropped, and its `strict-boot` check fails when the app root is writable by that user, when `storage/` or `bootstrap/cache/` is not, when a second replica does not listen on `PORT=8081`, or when the app writes anywhere but those folders and the tmpfs paths. The job builds from a checkout whose files a Docker executor makes world-writable, so it puts the modes back first (`chmod -R go-w .`). Open: the base image's inherited `EXPOSE 80` still shows in the metadata; the job emulates a read-only root filesystem (it looks for writes after the run) rather than mounting one.
 
-### W14. Logs go to stderr; the app writes only where it may[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w14-logs-go-to-stderr-the-app-writes-only-where-it-may)
+### W14. Logs go to stderr; the app writes only where it may [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w14-logs-go-to-stderr-the-app-writes-only-where-it-may)
 
 **Practice:** Set `LOG_CHANNEL=stderr`. Nothing under `storage/logs`. Writes go to `storage/`, `bootstrap/cache/`, `/tmp` and declared volumes. Uploads go to object storage.
 
@@ -1564,7 +1565,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Stack:** `Checked`. `.env.example:18` sets `LOG_CHANNEL=stderr`, and the portable image's Apache logs to the container's stdout and stderr (`deploy/.squire/portable/vhost.conf`). Preflight's `portability` job (`.gitlab-ci.yml`) boots the image and fails when nothing reaches stdout or stderr, when anything is written under `storage/logs` (its `logs` check), or when anything is written outside `storage/`, `bootstrap/cache/` and the tmpfs paths (`strict-boot`); `tests/Unit/PortabilityJobTest.php` holds the include. Open: nothing checks that uploads go to object storage.
 
-### W15. Sessions and cache live in a shared store[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w15-sessions-and-cache-live-in-a-shared-store)
+### W15. Sessions and cache live in a shared store [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w15-sessions-and-cache-live-in-a-shared-store)
 
 **Practice:** Use `SESSION_DRIVER=database` (or Redis) and a shared cache, even for one replica. Every host overlaps old and new containers during a deploy.
 
@@ -1572,7 +1573,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Stack:** `Documented`. `.env.example:38` sets `SESSION_DRIVER=database` and `.env.example:69` sets `CACHE_STORE=database`; `config/session.php:21` and `config/cache.php:18` default to the same. Preflight's `portability` job leaves its `session-hop` check out on purpose: database sessions need a database both replicas share, and the job starts none, so it boots with `SESSION_DRIVER=cookie`. Target `Checked`: the `portability` job with a database service, a `migrate` run before the replicas, and `session-hop` signing in on replica A and reading the session on replica B.
 
-### W16. Stop cleanly on SIGTERM[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w16-stop-cleanly-on-sigterm)
+### W16. Stop cleanly on SIGTERM [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w16-stop-cleanly-on-sigterm)
 
 **Practice:** Run PHP as PID 1 under a small init, or an entrypoint that `exec`s the server. Queue workers finish the current job on `SIGTERM`. Set the platform's grace period above the longest job `#[Timeout]`.
 
@@ -1588,7 +1589,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Stack:** `Enforced` by HELMET 1.3 (required `^1.3`): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. CI checks it too: Preflight's `portability` job (`.gitlab-ci.yml`) boots the image with `TRUSTED_PROXIES` and `HELMET_PROXIES` set empty, sends `/dashboard` forged `X-Forwarded-Host`, `-Proto`, `-Port` and `X-Forwarded-User` from that untrusted peer, and fails if the status or the `Location` of the guest redirect changes or a forged value shows up in the answer (its `forwarded-headers` check).
 
-### How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#how-to-read-the-tags)
+### How to read the tags [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#how-to-read-the-tags)
 
 Each practice ends with exactly one tag.
 
@@ -1599,7 +1600,7 @@ Each practice ends with exactly one tag.
 | `Documented` | Written down in the README or a config file, with no check behind it. |
 | `Not yet` | A gap. |
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#related)
 
 - [App structure](https://weld.apps.wayne.edu/docs/guides/app-structure.html)
 - [Queues and scheduling](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html)
@@ -1609,19 +1610,19 @@ Each practice ends with exactly one tag.
 
 Source: https://weld.apps.wayne.edu/docs/guides/oracle.html
 
-## Oracle[#](https://weld.apps.wayne.edu/docs/guides/oracle.html#oracle)
+## Oracle [#](https://weld.apps.wayne.edu/docs/guides/oracle.html#oracle)
 
 Set up and check WELD's Oracle connection: the settings, the plain-language check, and the parity image for a real connection from your machine.
 
-### The wiring[#](https://weld.apps.wayne.edu/docs/guides/oracle.html#the-wiring)
+### The wiring [#](https://weld.apps.wayne.edu/docs/guides/oracle.html#the-wiring)
 
 WELD speaks Oracle through `yajra/laravel-oci8`, and the wiring is already in: an `oracle` connection in `config/database.php`, a check command, and plain-language sentences for the common errors. Until you set the Oracle settings it stays dormant: nothing connects and nothing errors.
 
-### Set the settings[#](https://weld.apps.wayne.edu/docs/guides/oracle.html#set-the-settings)
+### Set the settings [#](https://weld.apps.wayne.edu/docs/guides/oracle.html#set-the-settings)
 
 Fill in one set of names in `.env` (the commented block in `.env.example`): `ORACLE_USERNAME`, `ORACLE_PASSWORD`, and either `ORACLE_TNS` (an Easy Connect string, `host:port/service`, or a full descriptor) or `ORACLE_HOST`, `ORACLE_PORT` and `ORACLE_SERVICE_NAME`. Leave them empty if your app does not use Oracle; nothing connects until they are set. On a server, set them in the app's environment settings, never in a file in git.
 
-### Check the connection[#](https://weld.apps.wayne.edu/docs/guides/oracle.html#check-the-connection)
+### Check the connection [#](https://weld.apps.wayne.edu/docs/guides/oracle.html#check-the-connection)
 
 Check the settings and the connection in plain language, one line per finding:
 
@@ -1631,7 +1632,7 @@ php artisan oracle:check
 
 `oracle:check` is a thin wire to Squire's shared check file: it runs `deploy/oracle-check.php` with the current environment, streams the plain-language lines straight through, and returns the check's exit code, 0 when Oracle is not configured or all passed and 1 when a problem was found. The check file promises to never print a setting value. WELD does not own the check; a kit refresh (`vendor/bin/squire update`) puts the file here. If the check file is not there yet, the command tells you to run `vendor/bin/squire update` to get it.
 
-### A real connection from your machine[#](https://weld.apps.wayne.edu/docs/guides/oracle.html#a-real-connection-from-your-machine)
+### A real connection from your machine [#](https://weld.apps.wayne.edu/docs/guides/oracle.html#a-real-connection-from-your-machine)
 
 The local `app` container runs the stock Composer image, which has no Oracle driver. When you need a real connection from your machine, the Oracle-ready image is opt-in through `compose.oracle.yaml`:
 
@@ -1654,7 +1655,7 @@ The overlay swaps only the app's image and passes the `ORACLE_*` settings throug
 
 Or skip the overlay: Citadel's own PHP image carries `oci8`, so [running WELD like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel) with Parity reaches Oracle the way the deployed app will (Parity's `--fallback` stand-in leaves `oci8` out).
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/oracle.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/oracle.html#related)
 
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html)
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
@@ -1664,11 +1665,11 @@ Or skip the overlay: Citadel's own PHP image carries `oci8`, so [running WELD li
 
 Source: https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html
 
-## Queues and scheduling[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#queues-and-scheduling)
+## Queues and scheduling [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#queues-and-scheduling)
 
 This page lists the queue and scheduling practices for WELD without Citadel workers, from the BEST_PRACTICES guide, with the tag that says whether the stack holds each one today.
 
-### W18. Database queue by default; the worker is a process type[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w18-database-queue-by-default-the-worker-is-a-process-type)
+### W18. Database queue by default; the worker is a process type [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w18-database-queue-by-default-the-worker-is-a-process-type)
 
 **Practice:** `QUEUE_CONNECTION=database`; run `php artisan queue:work --max-time=3600 --tries=3` as the `worker` process where the platform allows one. Use `#[Tries]`, `#[Timeout]` and `#[Backoff]` on jobs.
 
@@ -1676,7 +1677,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Stack:** `Checked` for the job attributes. `.env.example:67` sets `QUEUE_CONNECTION=database`, `config/queue.php:16` defaults to it, and the jobs tables are migrated by `database/migrations/0001_01_01_000002_create_jobs_table.php:14`. `tests/Feature/JobLimitsTest.php` fails the suite on a queued job under `app/Jobs` without `#[Tries]` and `#[Timeout]` (on the class, a parent or a trait; the older `$tries` and `$timeout` properties count too), proves the guard on fixture jobs, and passes while there are no jobs, which is WELD today. `stubs/job.queued.stub` and `stubs/job.batched.queued.stub` make `php artisan make:job` write `#[Tries(3)]` and `#[Timeout(45)]`. Byte for byte from Sourdough's Inertia shape, held by the regen gate. The worker process type is the portable image's `worker` role (`queue:work --tries=3 --max-time=3600`, W8). Open: nothing asks for `#[Backoff]`, so a failed job retries at once unless it sets one.
 
-### W19. Where no worker can run, run the queue from the scheduler[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w19-where-no-worker-can-run-run-the-queue-from-the-scheduler)
+### W19. Where no worker can run, run the queue from the scheduler [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w19-where-no-worker-can-run-run-the-queue-from-the-scheduler)
 
 **Practice:** On Citadel (no queue workers), schedule `queue:work --stop-when-empty --max-time=50 --timeout=45 --tries=3` every minute with `withoutOverlapping` and a short expiry. Select it with `QUEUE_WORKER_MODE=scheduler` (`none` leaves the queue to a supervisor).
 
@@ -1692,7 +1693,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Stack:** `Checked`. `routes/console.php` passes `--timeout=45`, and `tests/Feature/QueueWorkerScheduleTest.php` fails when that is not below the default connection's `retry_after` (or, for `sync`, below every connection's; Laravel's default is 90). Each job's own timeout is held the same way: `tests/Feature/JobLimitsTest.php` fails on a job under `app/Jobs` whose `#[Timeout]` (or `$timeout`) is at or above that `retry_after` ("keeps every job timeout below the queue connection retry_after"; "catches a job timeout at or above retry_after" proves it on a 600-second fixture), and holds the `make:job` stubs' 45 below it too. The deploy image installs `pcntl` (`deploy/.squire/base-fallback.Dockerfile`). Byte for byte from Sourdough, held by the regen gate.
 
-### W21. One scheduler entry; one run per task[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w21-one-scheduler-entry-one-run-per-task)
+### W21. One scheduler entry; one run per task [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w21-one-scheduler-entry-one-run-per-task)
 
 **Practice:** Run `php artisan schedule:run` every minute (cron, or a CronJob), or `schedule:work` for a single long-lived container. With more than one scheduler, mark tasks `onOneServer()` (shared cache) and name closures.
 
@@ -1700,7 +1701,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Stack:** `Checked`. `tests/Feature/SchedulerNamingTest.php` (Sourdough's copy) fails the suite on any scheduled closure without `->name()`, and its second case proves the guard catches one.
 
-### W22. Interrupt and restart long-lived processes at deploy[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w22-interrupt-and-restart-long-lived-processes-at-deploy)
+### W22. Interrupt and restart long-lived processes at deploy [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w22-interrupt-and-restart-long-lived-processes-at-deploy)
 
 **Practice:** After a release run `php artisan queue:restart` (or `php artisan reload`), and `schedule:interrupt` when sub-minute tasks exist.
 
@@ -1708,7 +1709,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Stack:** `Checked`. The Squire release step "laravel restart long-lived processes" (`deploy/scripts/release.sh:563`) runs `php artisan reload` where Laravel has it, otherwise `queue:restart` and `schedule:interrupt`, each when its own `--help` answers; report only, and `SQUIRE_ARTISAN_RESTART=0` turns the step off. `tests/Feature/ReleaseRestartTest.php` holds the commands and the switch in place.
 
-### W23. Make a silent scheduler visible[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w23-make-a-silent-scheduler-visible)
+### W23. Make a silent scheduler visible [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w23-make-a-silent-scheduler-visible)
 
 **Practice:** Record a heartbeat on every scheduler minute and fail `/ready` (not `/up`) when it is older than a few minutes. Export the age as a Prometheus gauge (off by default).
 
@@ -1716,7 +1717,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Stack:** `Checked` for the heartbeat. `routes/console.php:17-19` stamps the cache every minute in a closure named `scheduler-heartbeat`, and `bootstrap/app.php:31` puts `App\Health\SchedulerHeartbeat` on HELMET's `/ready` beside the database and cache checks (W11), which answers 503 while the stamp is missing or older than `worker.heartbeat_max_age` (`config/worker.php:31`, env `WORKER_HEARTBEAT_MAX_AGE`, default 180 seconds; 0 turns the check off for an app that runs no scheduler). `tests/Feature/SchedulerHeartbeatTest.php` proves it: "answers 503 on /ready when the scheduler has not written a heartbeat", "answers 200 on /ready right after the heartbeat closure runs", "answers 503 on /ready again once the clock moves past the max age" (the fake clock), "answers 200 on /ready with no heartbeat when the check is turned off" and "schedules the heartbeat every minute under its own name". Byte for byte from Sourdough, held by the regen gate. Open: the Prometheus gauge is not built, and nothing probes `/ready` yet: Squire's `health.php` (Citadel's Health Check and the compose healthcheck) asks `/up`, so only point a traffic probe at `/ready` where `schedule:run` really runs.
 
-### W24. Run migrations exactly once per release[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w24-run-migrations-exactly-once-per-release)
+### W24. Run migrations exactly once per release [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#w24-run-migrations-exactly-once-per-release)
 
 **Practice:** Use a Job, a pre-deploy hook (Coolify "Pre-deployment Command"), or `migrate --isolated`. Never run `migrate` in a per-replica entrypoint.
 
@@ -1724,7 +1725,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh:25`) and the Quick Update post-script (`deploy/scripts/release.sh:7`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
 
-### How to read the tags[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#how-to-read-the-tags)
+### How to read the tags [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#how-to-read-the-tags)
 
 Each practice ends with exactly one tag.
 
@@ -1735,7 +1736,7 @@ Each practice ends with exactly one tag.
 | `Documented` | Written down in the README or a config file, with no check behind it. |
 | `Not yet` | A gap. |
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#related)
 
 - [App structure](https://weld.apps.wayne.edu/docs/guides/app-structure.html)
 - [The container contract](https://weld.apps.wayne.edu/docs/guides/container-contract.html)
@@ -1745,13 +1746,13 @@ Each practice ends with exactly one tag.
 
 Source: https://weld.apps.wayne.edu/docs/guides/quick-start.html
 
-## Quick start[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#quick-start)
+## Quick start [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#quick-start)
 
 This page takes a fresh copy of WELD from a folder to a running, checked app on your machine.
 
 One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither.
 
-### Steps[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#steps)
+### Steps [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#steps)
 
 1. Bring the stack up:
    PowerShell
@@ -1785,7 +1786,7 @@ One command strikes the spark; the containers do the welding. Docker is the only
    ```
    Expected: `composer ci` runs in the app container: validate, tests, Pint, PHPStan level 8, the agent-ready check and audit.
 
-### The subcommands[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#the-subcommands)
+### The subcommands [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#the-subcommands)
 
 The same subcommands work on every OS:
 
@@ -1797,7 +1798,7 @@ The same subcommands work on every OS:
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs |
 
-### Run it like Citadel[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel)
+### Run it like Citadel [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel)
 
 The steps above are the everyday bench: the stock PHP image, SQLite and Vite reloading as you type, and Sail or plain Docker Compose work too. Parity does not replace them. When "it works here" has to mean "it works on Citadel", run the same folder on Citadel's own machinery with [Parity](https://parity.apps.wayne.edu/): Citadel's PHP image with its `php.ini` and `vhost.conf`, Citadel's proxy in front adding `X-Forwarded-For` and `X-Forwarded-Proto`, and MySQL 5.6, the version of Citadel's shared database server. Parity is one program for Windows, macOS and Linux on Podman (recommended) or Docker. It needs no PHP on your computer and adds one file to the app, `parity.json`. Install it once from [its site](https://parity.apps.wayne.edu/), with no administrator needed. On Windows, in PowerShell:
 
@@ -1839,11 +1840,11 @@ A folder on the Windows disk is slow inside the container: in the 2026-11-09 pro
 
 No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks it byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity 0.1.0 is live, and [its docs](https://parity.apps.wayne.edu/docs/) have the rest. It takes over local runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood, because it is the same hood.
 
-### What you built[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#what-you-built)
+### What you built [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#what-you-built)
 
 You have WELD running locally in Docker: the app and Vite in containers, `.env` copied from `.env.example`, the app key generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in, security headers, checks, coding standards, CI and the WayneUI interface already hooked up. Open the app and every page you see (the welcome page, the dashboard, settings) is drawn by WayneUI's components, light or dark to match your device.
 
-### Next steps[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#next-steps)
+### Next steps [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#next-steps)
 
 - Make it yours: rename the four things that still say WELD (the composer name, the app name, the site title and the git remote), give the copy its own key, and re-run the checks.
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html): what the doctor reports, joint by joint.
@@ -1851,7 +1852,7 @@ You have WELD running locally in Docker: the app and Vite in containers, `.env` 
 - [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel): the same folder on Citadel's image, proxy and MySQL 5.6, through Parity.
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html): for when the destination is somewhere other than a laptop.
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#related)
 
 - [Overview](https://weld.apps.wayne.edu/docs/index.html)
 - [Install](https://weld.apps.wayne.edu/docs/install.html)
@@ -1862,21 +1863,21 @@ You have WELD running locally in Docker: the app and Vite in containers, `.env` 
 
 Source: https://weld.apps.wayne.edu/docs/guides/regen-check.html
 
-## Is WELD still Sourdough's shape?[#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#is-weld-still-sourdough-s-shape)
+## Is WELD still Sourdough's shape? [#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#is-weld-still-sourdough-s-shape)
 
 This page shows how the regen gate proves that WELD is still Sourdough's Inertia shape, and how to run it against your own generation.
 
-### How the check works[#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#how-the-check-works)
+### How the check works [#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#how-the-check-works)
 
 Sourdough writes a manifest of every file it generates (`.sourdough/manifest.json`: each path with its SHA-256). `bin/regen-check.php` compares that manifest with WELD file by file, skipping the product files WELD adds on top (listed in `.sourdough/product-files.json`) and any path with a `vendor` or `node_modules` segment. Each remaining path is reported as IDENTICAL, DIFFERS or MISSING_IN_WELD.
 
 The generated app folder must contain `.sourdough/manifest.json`, the file list Sourdough writes into every app it generates (files maps path to `{class, sha256}`). Paths listed in `.sourdough/product-files.json` (exact paths or `dir/` prefixes) and every path with a `vendor` or `node_modules` segment at any depth are skipped. A DIFFERS path means the WELD file exists with another SHA-256.
 
-### The ratchet baseline[#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#the-ratchet-baseline)
+### The ratchet baseline [#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#the-ratchet-baseline)
 
 The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift. CI runs it against a fresh `sourdough new --inertia` generation from Sourdough's main, and the GitLab `regen-gate` job blocks on new drift; locally, point it at your own generation. When it reports new drift, fix it here or upstream in Sourdough; if the drift is accepted as intended, record the current drift as accepted with `--write-baseline` and commit `.sourdough/regen-baseline.json`.
 
-### Running the check[#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#running-the-check)
+### Running the check [#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#running-the-check)
 
 Run the check:
 
@@ -1896,7 +1897,7 @@ Note
 
 Exit codes: 0 no new drift (or the baseline was written), 1 new drift, listed on stderr, 2 usage error. The script is plain PHP 8.3 with no Composer packages, so it runs on Windows, macOS and Linux the same way.
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/regen-check.html#related)
 
 - [WELD and Sourdough](https://weld.apps.wayne.edu/docs/guides/sourdough.html)
 - [Status](https://weld.apps.wayne.edu/docs/reference/status.html)
@@ -1906,17 +1907,17 @@ Exit codes: 0 no new drift (or the baseline was written), 1 new drift, listed on
 
 Source: https://weld.apps.wayne.edu/docs/guides/security.html
 
-## Security[#](https://weld.apps.wayne.edu/docs/guides/security.html#security)
+## Security [#](https://weld.apps.wayne.edu/docs/guides/security.html#security)
 
 This page states WELD's security practices, one per heading, each with the rule and the tag that shows whether the stack holds it today.
 
-### W25: Keep the framework above the published security floor[#](https://weld.apps.wayne.edu/docs/guides/security.html#w25-keep-the-framework-above-the-published-security-floor)
+### W25: Keep the framework above the published security floor [#](https://weld.apps.wayne.edu/docs/guides/security.html#w25-keep-the-framework-above-the-published-security-floor)
 
 **Practice:** Require `laravel/framework` at or above the latest patched release, run `composer audit` in CI, and let CREED's `policy.json` name the minimum patch level. A critical TokenGuard authentication bypass was published on 2026-10-19 (fixed in 13.29.0 and 12.68.0).
 
 **Stack:** `Checked`. `composer.json:20` pins `laravel/framework: ^13.29` (at or above the patched release), `composer.json:74` runs `@composer audit` inside the `ci` script, and `.gitlab-ci.yml:14` includes the Preflight `composer-audit` component, so the audit runs in CI. CREED's `policy.json` is a dependency and PROCTOR measures against it, now also inside the test suite (`tests/Feature/ProctorCheckTest.php`).
 
-### W26: Debug is off outside local[#](https://weld.apps.wayne.edu/docs/guides/security.html#w26-debug-is-off-outside-local)
+### W26: Debug is off outside local [#](https://weld.apps.wayne.edu/docs/guides/security.html#w26-debug-is-off-outside-local)
 
 Warning
 
@@ -1926,19 +1927,19 @@ Warning
 
 **Stack:** `Enforced`. `.env.example:4` sets `APP_DEBUG=true` for the local default, and `app/Support/ProductionDebug.php:23-30` refuses to boot when the environment is production and debug is on; `app/Providers/AppServiceProvider.php:29` calls it in `boot()`, and `tests/Feature/ProductionDebugTest.php:17-30` covers both the refusal and the pass. The release stops it earlier still: Squire 0.10.5's release script (`deploy/scripts/release.sh:271-289`) refuses a Laravel release with no `APP_KEY`, or with `APP_DEBUG` on in production, before anything installs, and `tests/Feature/ReleaseEnvGuardTest.php` fails when a kit update drops that guard.
 
-### W27: CSRF uses the PreventRequestForgery middleware[#](https://weld.apps.wayne.edu/docs/guides/security.html#w27-csrf-uses-the-preventrequestforgery-middleware)
+### W27: CSRF uses the PreventRequestForgery middleware [#](https://weld.apps.wayne.edu/docs/guides/security.html#w27-csrf-uses-the-preventrequestforgery-middleware)
 
 **Practice:** Laravel 13 formalized request-forgery protection as `PreventRequestForgery` (origin-aware, still token-compatible). Any custom middleware stack or HELMET code must reference the new name.
 
 **Stack:** `Checked`. `bootstrap/app.php:48-51` appends to the default `web` middleware group. `tests/Feature/CsrfTest.php:15-19` posts without a token and expects 419, `:21-29` lets the session token through, and `:31-37` lets a same-origin `Sec-Fetch-Site` request through.
 
-### W28: CSP works with Inertia 3 and Vite[#](https://weld.apps.wayne.edu/docs/guides/security.html#w28-csp-works-with-inertia-3-and-vite)
+### W28: CSP works with Inertia 3 and Vite [#](https://weld.apps.wayne.edu/docs/guides/security.html#w28-csp-works-with-inertia-3-and-vite)
 
 **Practice:** HELMET sets the CSP header and calls `Vite::useCspNonce()`; Laravel then adds the nonce to the tags `@vite` emits. Inertia 3 puts initial page data in a JSON script element. Run the policy in report-only first.
 
 **Stack:** `Checked`. HELMET `^1.3` is a dependency (`composer.json:23`) and its security headers and CSP run in the global chain: HELMET's own config defaults the scope to `global` (`vendor/waynestate/helmet/config/helmet.php:331`; WELD's `config/helmet.php` overrides only `policy_path` and the package merges the rest), `resources/views/app.blade.php:8` reads the per-request nonce and `:32` hands it to `Vite::useCspNonce()`, and `tests/Feature/HelmetHeadersTest.php:14-34` plus `tests/Feature/CspScriptTagsTest.php:23-60` fail the suite on header, nonce or `strict-dynamic` regression. The policy is enforced, not report-only (`vendor/waynestate/helmet/config/helmet.php:352`). Open: a real browser test under the enforced CSP.
 
-### W29: Agent tooling stays out of production[#](https://weld.apps.wayne.edu/docs/guides/security.html#w29-agent-tooling-stays-out-of-production)
+### W29: Agent tooling stays out of production [#](https://weld.apps.wayne.edu/docs/guides/security.html#w29-agent-tooling-stays-out-of-production)
 
 Warning
 
@@ -1948,7 +1949,7 @@ A dev tool with write and query abilities is attack surface. Its MCP server can 
 
 **Stack:** `Checked`. Boost is in `require-dev` only and `composer.lock` lists it under `packages-dev`; `tests/Feature/BoostDevOnlyTest.php` "keeps Boost in require-dev only" and "locks Boost as a dev package, so composer install --no-dev leaves it out" fail the suite otherwise. The `no-dev-install` CI job (GitLab and GitHub) installs with `composer install --no-dev`, as Squire's `release.sh` does, fails when `vendor/laravel/boost` exists, and boots `php artisan`. The `post-update-cmd` hook calls `composer boost-update`, which runs `boost:update` only when `vendor/laravel/boost` is installed and `boost.json` names an agent ("skips the refresh where Boost is not set up", "runs boost:update and keeps its exit code where Boost is set up"). The portable image is held too: its build context leaves `vendor/` out (`portable.Dockerfile.dockerignore`) and its only Composer install is `scripts/release.sh`'s `--no-dev` one, so Boost cannot reach the image; `tests/Feature/PortableImageTest.php` "builds vendor/ without dev packages, so Boost never reaches the image (W29)" fails the suite if either of those facts drifts.
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/security.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/security.html#related)
 
 - [Build and supply chain](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html)
 - [Configuration](https://weld.apps.wayne.edu/docs/reference/configuration.html)
@@ -1958,15 +1959,15 @@ A dev tool with write and query abilities is attack surface. Its MCP server can 
 
 Source: https://weld.apps.wayne.edu/docs/guides/sourdough.html
 
-## WELD and Sourdough[#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#weld-and-sourdough)
+## WELD and Sourdough [#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#weld-and-sourdough)
 
 This page explains how Sourdough and WELD divide the work of starting a Wayne State app, and which one to pick for your project.
 
-### What Sourdough does[#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#what-sourdough-does)
+### What Sourdough does [#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#what-sourdough-does)
 
 Sourdough is the starter tool for every shape of Wayne State app. It bakes all five: raw PHP, raw PHP with a Vue SPA, Laravel with Blade, Laravel with Blade plus Vue islands, and Laravel with Inertia and Vue.
 
-### Where WELD sits[#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#where-weld-sits)
+### Where WELD sits [#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#where-weld-sits)
 
 WELD is one of those shapes, Laravel with Inertia and Vue, with every part already joined and proved to work together. In other words, WELD is the Laravel + Inertia/Vue shape that Sourdough's templates describe, already shaped.
 
@@ -1974,11 +1975,11 @@ Note
 
 Pick Sourdough when you want a starter you shape yourself. Pick WELD when you want the finished piece.
 
-### Where changes belong[#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#where-changes-belong)
+### Where changes belong [#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#where-changes-belong)
 
 If every app should get a change, it belongs in Sourdough; if only this shape should, it lives here.
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/sourdough.html#related)
 
 - [Is WELD still Sourdough's shape?](https://weld.apps.wayne.edu/docs/guides/regen-check.html)
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html)
@@ -1988,11 +1989,11 @@ If every app should get a change, it belongs in Sourdough; if only this shape sh
 
 Source: https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html
 
-## What is welded in[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-welded-in)
+## What is welded in [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-welded-in)
 
 This page lists the parts welded into WELD, what each one does in the app, and what is on the bench today.
 
-### The parts[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#the-parts)
+### The parts [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#the-parts)
 
 | Part | What it does in WELD |
 | --- | --- |
@@ -2011,7 +2012,7 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 
 One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.
 
-### What is on the bench today[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
+### What is on the bench today [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
 Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.5. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is on npm ([the steps](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)).
 
@@ -2028,7 +2029,7 @@ Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, P
 - WayneUI draws the Vue pages: `resources/css/app.css` imports its layered stylesheet, the pages use `@waynestate/wayne-ui-vue` components, and the appearance setting is WayneUI's own theme switch (`wsu-theme`), with the bar's sun and moon button in step. The starter kit's Tailwind theme and shadcn-vue copies are gone, and `npm run lint` fails on an import from a `components/ui` folder
 - The license is MIT
 
-### Related[#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#related)
 
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
 - [Oracle](https://weld.apps.wayne.edu/docs/guides/oracle.html)
@@ -2038,7 +2039,7 @@ Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, P
 
 Source: https://weld.apps.wayne.edu/docs/
 
-## Overview[#](https://weld.apps.wayne.edu/docs/#overview)
+## Overview [#](https://weld.apps.wayne.edu/docs/#overview)
 
 This page orients you to WELD: what it is, which path to pick first, and where the project stands today.
 
@@ -2052,14 +2053,14 @@ This page orients you to WELD: what it is, which path to pick first, and where t
 
 WELD is the whole Wayne State app stack joined into one application. Install it, deploy it, and every part is already hooked up: sign-in, security headers, checks, coding standards, CI and the WayneUI interface. Think of it as the Megazord, except it comes with a deploy script and nobody has to shout to make it combine. Fifteen parts, one bead.
 
-### Pick your path[#](https://weld.apps.wayne.edu/docs/#pick-your-path)
+### Pick your path [#](https://weld.apps.wayne.edu/docs/#pick-your-path)
 
 - [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html): bring the whole stack up with one Docker command, then run it like Citadel with Parity.
 - [Install](https://weld.apps.wayne.edu/docs/install.html): get a copy with composer create-project, or clone it if you want the history too.
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html): the parts and what each does in the app.
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html): OpenShift, Coolify and plain Docker, with Citadel for comparison.
 
-### Status[#](https://weld.apps.wayne.edu/docs/#status)
+### Status [#](https://weld.apps.wayne.edu/docs/#status)
 
 Latest release: 0.2.1 (2026-11-09). The license is MIT.
 
@@ -2067,7 +2068,7 @@ Latest release: 0.2.1 (2026-11-09). The license is MIT.
 
 Agents: fetch [https://weld.apps.wayne.edu/llms.txt](https://weld.apps.wayne.edu/llms.txt).
 
-### Related[#](https://weld.apps.wayne.edu/docs/#related)
+### Related [#](https://weld.apps.wayne.edu/docs/#related)
 
 - [Install](https://weld.apps.wayne.edu/docs/install.html)
 - [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html)
@@ -2078,11 +2079,11 @@ Agents: fetch [https://weld.apps.wayne.edu/llms.txt](https://weld.apps.wayne.edu
 
 Source: https://weld.apps.wayne.edu/docs/install.html
 
-## Install[#](https://weld.apps.wayne.edu/docs/install.html#install)
+## Install [#](https://weld.apps.wayne.edu/docs/install.html#install)
 
 This page gets you a working copy of WELD: what it needs, the two ways to get it, and how to verify the result.
 
-### Requirements[#](https://weld.apps.wayne.edu/docs/install.html#requirements)
+### Requirements [#](https://weld.apps.wayne.edu/docs/install.html#requirements)
 
 - PHP `^8.3`
 - Laravel `^13.29`
@@ -2093,7 +2094,7 @@ Note
 
 To run WELD locally, Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither.
 
-### Get it[#](https://weld.apps.wayne.edu/docs/install.html#get-it)
+### Get it [#](https://weld.apps.wayne.edu/docs/install.html#get-it)
 
 WELD is an app you start from, not a library you require. The Megazord ships in a repo, not a box. Composer makes you a fresh copy, writes `.env`, generates the app key and runs the first migration:
 
@@ -2126,19 +2127,19 @@ Note
 
 The `advisor install` line writes `.mcp.json`, the MCP config that points Claude Code at ADVISOR's server; the file is git-ignored, because a committed `.mcp.json` would run a program on whoever opens the project. Set `ADVISOR_ENABLED=1` in `.env` to switch the advisor on.
 
-### Verify[#](https://weld.apps.wayne.edu/docs/install.html#verify)
+### Verify [#](https://weld.apps.wayne.edu/docs/install.html#verify)
 
 Run the checks the way CI does. `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on GitLab and GitHub. The `test` subcommand runs it in the app container: `.\bin\weld.ps1 test` on Windows (PowerShell), `bin/weld.sh test` on macOS / Linux.
 
 The doctor strikes an arc across the local setup: `.\bin\weld.ps1 doctor` on Windows (PowerShell), `bin/weld.sh doctor` on macOS / Linux. It reports one line per check, PASS or WARN or FAIL, and exits with code 1 when anything FAILs, so it works as a gate. A good bead is a quiet one: all PASS and nothing to say.
 
-### Next steps[#](https://weld.apps.wayne.edu/docs/install.html#next-steps)
+### Next steps [#](https://weld.apps.wayne.edu/docs/install.html#next-steps)
 
 - [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html): bring the stack up with one command and open the app.
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html): the parts already hooked up in your copy.
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html): what the doctor reports, joint by joint.
 
-### Related[#](https://weld.apps.wayne.edu/docs/install.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/install.html#related)
 
 - [Overview](https://weld.apps.wayne.edu/docs/index.html)
 - [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html)
@@ -2149,11 +2150,11 @@ The doctor strikes an arc across the local setup: `.\bin\weld.ps1 doctor` on Win
 
 Source: https://weld.apps.wayne.edu/docs/reference/commands.html
 
-## Commands[#](https://weld.apps.wayne.edu/docs/reference/commands.html#commands)
+## Commands [#](https://weld.apps.wayne.edu/docs/reference/commands.html#commands)
 
 This page is the reference for every command a WELD app runs: the `bin/weld` subcommands, the composer scripts, and the artisan and bin PHP commands, with what each one does.
 
-### The bin/weld subcommands[#](https://weld.apps.wayne.edu/docs/reference/commands.html#the-bin-weld-subcommands)
+### The bin/weld subcommands [#](https://weld.apps.wayne.edu/docs/reference/commands.html#the-bin-weld-subcommands)
 
 One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither. The same subcommands work on every OS.
 
@@ -2239,7 +2240,7 @@ sh
 bin/weld.sh down
 ```
 
-### Composer scripts[#](https://weld.apps.wayne.edu/docs/reference/commands.html#composer-scripts)
+### Composer scripts [#](https://weld.apps.wayne.edu/docs/reference/commands.html#composer-scripts)
 
 | Script | What it does |
 | --- | --- |
@@ -2257,7 +2258,7 @@ bin/weld.sh down
 | `composer docs` | Write site/docs/ from docs/ with the shared docs builder, and generate docs/changelog.md from CHANGELOG.md |
 | `composer docs:check` | Fail when the committed docs site is stale or the docs carry findings; writes nothing |
 
-### Artisan and bin PHP commands[#](https://weld.apps.wayne.edu/docs/reference/commands.html#artisan-and-bin-php-commands)
+### Artisan and bin PHP commands [#](https://weld.apps.wayne.edu/docs/reference/commands.html#artisan-and-bin-php-commands)
 
 #### `php artisan weld:doctor` [#](https://weld.apps.wayne.edu/docs/reference/commands.html#php-artisan-weld-doctor)
 
@@ -2304,7 +2305,7 @@ These run as `composer site:agent-ready` and `composer site:agent-ready-check`.
 
 These run as `composer docs` and `composer docs:check`. The docs are built from `docs/` by the shared docs builder and checked in `composer ci`, so the page you read is the page that ships.
 
-### Related[#](https://weld.apps.wayne.edu/docs/reference/commands.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/reference/commands.html#related)
 
 - [Which command when](https://weld.apps.wayne.edu/docs/reference/which-command.html): `weld:doctor`, `squire doctor`, `proctor check` and the other look-alikes side by side
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
@@ -2318,11 +2319,11 @@ These run as `composer docs` and `composer docs:check`. The docs are built from 
 
 Source: https://weld.apps.wayne.edu/docs/reference/configuration.html
 
-## Configuration[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#configuration)
+## Configuration [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#configuration)
 
 This page lists every environment variable a WELD app reads, its default from `.env.example`, and what the sources say about it.
 
-### Environment variables[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#environment-variables)
+### Environment variables [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#environment-variables)
 
 | Name | Default | Notes |
 | --- | --- | --- |
@@ -2391,17 +2392,17 @@ This page lists every environment variable a WELD app reads, its default from `.
 | `AWS_USE_PATH_STYLE_ENDPOINT` | `false` |  |
 | `VITE_APP_NAME` | `${APP_NAME}` | Follows `APP_NAME` through `${APP_NAME}`. |
 
-### Trusted proxies and HELMET_PRESET[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#trusted-proxies-and-helmet-preset)
+### Trusted proxies and HELMET_PRESET [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#trusted-proxies-and-helmet-preset)
 
 HELMET owns the trusted proxies (W17, `Enforced` by HELMET 1.3): it trusts only the preset or listed proxies and drops `X-Forwarded-Port`. Pick a platform preset with `HELMET_PRESET`; HELMET 1.3 ships two, `citadel` and `docker`, and an unknown preset name throws at boot. On other platforms, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Do not paste `trustProxies(at: '*')` from tutorials: an app that trusts all proxies lets a client forge `X-Forwarded-*` and the host used in callbacks. Laravel's own proxy list has its own variable; set `TRUSTED_PROXIES` to the same address (unset means Citadel's `172.18.0.1`). In WELD, `bootstrap/app.php` reads that variable through `App\Support\TrustedProxies::fromEnv()`: set but empty trusts nothing.
 
-### Keep .env out of version control[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#keep-env-out-of-version-control)
+### Keep .env out of version control [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#keep-env-out-of-version-control)
 
 Warning
 
 `.env` never goes into version control. On a server, set values in the app's environment settings, never in a file in git.
 
-### Related[#](https://weld.apps.wayne.edu/docs/reference/configuration.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/reference/configuration.html#related)
 
 - [Security](https://weld.apps.wayne.edu/docs/guides/security.html)
 - [Build and supply chain](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html)
@@ -2411,13 +2412,13 @@ Warning
 
 Source: https://weld.apps.wayne.edu/docs/reference/proof.html
 
-## Proof[#](https://weld.apps.wayne.edu/docs/reference/proof.html#proof)
+## Proof [#](https://weld.apps.wayne.edu/docs/reference/proof.html#proof)
 
 This page says how WELD was proven on 2026-11-06: a new app made from a clean folder the way this site tells you to, every gate WELD ships run against it, and one small Wayne State app ported onto it. It lists what held, what broke, what was fixed that night, and what it does not prove yet. Next, see the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html) for the steps the run followed and [Troubleshooting](https://weld.apps.wayne.edu/docs/troubleshooting.html) for the fixes it produced.
 
 Welders prove a joint with a bend test: cut a strip across the seam, bend it double, and look for cracks. WELD's promise is that a Wayne State developer gets a full, working, accessible app quickly with the whole stack already joined. So the strip was a brand-new app, and the bending was done by a stopwatch, the app's own gates and a browser.
 
-### Last run[#](https://weld.apps.wayne.edu/docs/reference/proof.html#last-run)
+### Last run [#](https://weld.apps.wayne.edu/docs/reference/proof.html#last-run)
 
 Run on one Windows machine with Docker Desktop; durations are wall clock, including dependency installs where a command makes them.
 
@@ -2433,7 +2434,7 @@ Run on one Windows machine with Docker Desktop; durations are wall clock, includ
 
 Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with `composer docs` and `composer site:agent-ready`. The `composer ci`, accessibility and regen rows above are from this refresh at `e555f03`: the regen gate now passes against Sourdough's current main (`323a82b`), with no new drift beyond the recorded baseline, and the accessibility gate runs as `scripts/a11y.ps1` is written on Docker Desktop, checking all 23 committed pages with 0 violations. The `create-project` path, the signed-in app-page accessibility checks and the `up` timings are not in the table: the first installs the newest public tag instead of this commit, and the rest need the running stack and a browser.
 
-### What ran[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-ran)
+### What ran [#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-ran)
 
 One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html) says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.
 
@@ -2447,7 +2448,7 @@ One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on th
    - an accessibility gate: axe-core with the WCAG 2.0, 2.1 and 2.2 A and AA rules on the welcome page, the dashboard and both settings pages, signed in through SESAME's fake driver, at desktop and phone width, light and dark, with reduced motion on (16 page checks).
 3. **A port** onto the fresh clone: one small app from the stack's proof corpus, below.
 
-### Results[#](https://weld.apps.wayne.edu/docs/reference/proof.html#results)
+### Results [#](https://weld.apps.wayne.edu/docs/reference/proof.html#results)
 
 The clone path, the one the Quick start teaches:
 
@@ -2479,11 +2480,11 @@ The `create-project` path:
 
 That is PROCTOR doing its job on a three-day-old lock: the gate caught advisories nobody had to go looking for. It is also a reason not to start from 0.1.2; 0.1.3, tagged later the same day, carries the patched lock and WayneUI.
 
-### WayneUI in the pages[#](https://weld.apps.wayne.edu/docs/reference/proof.html#wayneui-in-the-pages)
+### WayneUI in the pages [#](https://weld.apps.wayne.edu/docs/reference/proof.html#wayneui-in-the-pages)
 
 After the fix, every page of the new app was WayneUI's: the app bar with the shield and the theme switch, the sidebar that turns into a drawer on a phone, breadcrumbs, cards, the form fields and the footer, in light and dark. Tab moved through the bar with a visible gold focus ring. The axe gate, run with reduced motion on, found nothing to report on any page, at either width, in either scheme.
 
-### A port: one small app onto WELD[#](https://weld.apps.wayne.edu/docs/reference/proof.html#a-port-one-small-app-onto-weld)
+### A port: one small app onto WELD [#](https://weld.apps.wayne.edu/docs/reference/proof.html#a-port-one-small-app-onto-weld)
 
 The second workload asked a plainer question: how much of a real app's work is left once WELD has done its part? The app was the smallest useful one in the stack's proof corpus: a read-only JSON feed, about 100 lines of raw PHP with no framework, one Oracle query and two optional filters, with its own error shape for bad input.
 
@@ -2507,7 +2508,7 @@ What WELD supplied without a line of the port's own: sign-in in front of the pag
 
 Two honest differences from the old app. A POST now gets Laravel's own 405 body instead of the old JSON one. And the Oracle source was never run: the proof never connects to Oracle or Banner, so the real query is only shown to be wired, not to work.
 
-### What it caught in WELD[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-it-caught-in-weld)
+### What it caught in WELD [#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-it-caught-in-weld)
 
 A run that only finds praise was not looking hard enough. This one found these, and every finding is about WELD, not the ported app:
 
@@ -2519,7 +2520,7 @@ A run that only finds praise was not looking hard enough. This one found these, 
 - **Open: a warm `up` still reinstalls.** The second `up` took 188 seconds because it runs `composer install`, ADVISOR's install and a full `npm ci` again. It is correct, just slow; a faster path for an app that is already up is worth having.
 - **Open, small: Sign in lands on the welcome page.** SESAME signs the user in and returns them to `/`, where the button now reads Open the dashboard. One more click than it needs.
 
-### What this does not prove[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-this-does-not-prove)
+### What this does not prove [#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-this-does-not-prove)
 
 - Only Windows ran. `bin/weld.sh` on macOS and Linux was not exercised, apart from reading that it creates the SQLite file with `touch`.
 - Nothing was deployed. Citadel, Squire's release script and the container contract are proven elsewhere, not here.
@@ -2528,7 +2529,7 @@ A run that only finds praise was not looking hard enough. This one found these, 
 - One port of one small app is a sample of one. A larger app, with forms that write, would take longer and find more.
 - The timings are from one machine on one night. Treat them as the shape, not a promise.
 
-### Run it yourself[#](https://weld.apps.wayne.edu/docs/reference/proof.html#run-it-yourself)
+### Run it yourself [#](https://weld.apps.wayne.edu/docs/reference/proof.html#run-it-yourself)
 
 The same bend test on your machine, from an empty folder:
 
@@ -2556,7 +2557,7 @@ docker compose run --rm app composer proctor
 
 Then open [http://localhost:8000](http://localhost:8000), sign in, and run `bin\weld.ps1 up` (or `bin/weld.sh up`) a second time: your data should still be there.
 
-### Related[#](https://weld.apps.wayne.edu/docs/reference/proof.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/reference/proof.html#related)
 
 - [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html)
 - [Install](https://weld.apps.wayne.edu/docs/install.html)
@@ -2568,13 +2569,13 @@ Then open [http://localhost:8000](http://localhost:8000), sign in, and run `bin\
 
 Source: https://weld.apps.wayne.edu/docs/reference/status.html
 
-## Status[#](https://weld.apps.wayne.edu/docs/reference/status.html#status)
+## Status [#](https://weld.apps.wayne.edu/docs/reference/status.html#status)
 
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
 Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.5.0; the deploy layer runs Squire's kit 0.10.5. Pinstripe's PHP presets are installed; its npm half is [the next step](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half). For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
-### What is on the bench today[#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
+### What is on the bench today [#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
 | Item | Value |
 | --- | --- |
@@ -2595,7 +2596,7 @@ Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED,
 | Password auth | the starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's |
 | License | MIT |
 
-### Gaps for the backlog[#](https://weld.apps.wayne.edu/docs/reference/status.html#gaps-for-the-backlog)
+### Gaps for the backlog [#](https://weld.apps.wayne.edu/docs/reference/status.html#gaps-for-the-backlog)
 
 These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/enterprise-apps/weld/-/blob/main/BEST_PRACTICES.md).
 
@@ -2607,7 +2608,7 @@ These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/en
 - Decision needed: whether WELD keeps Fortify for a non-SSO mode.
 - Decision needed: SSR on by default or off.
 
-### Pinstripe's npm half[#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
+### Pinstripe's npm half [#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
 
 WELD takes Pinstripe's PHP side from Composer today. The JS side, `@waynestate/pinstripe` (ESLint and Prettier presets for Vue), waits for 0.3.0 on npm, because npm still has 0.1.4. The presets inside have not changed since 0.1.4, but the move is a real refit, not a version bump: Pinstripe's presets need ESLint 10 (WELD runs 9), print at 100 columns with 2-space indents where WELD's `.prettierrc` prints at 150 with 4, and add eslint-plugin-vuejs-accessibility, so every Vue file is reformatted once and the accessibility rules may report findings. Once 0.3.0 is on npm:
 
@@ -2619,7 +2620,7 @@ WELD takes Pinstripe's PHP side from Composer today. The JS side, `@waynestate/p
 
 One tailor, two fittings: the trousers are done, the jacket waits for the cloth to arrive.
 
-### Related[#](https://weld.apps.wayne.edu/docs/reference/status.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/reference/status.html#related)
 
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html)
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)
@@ -2629,7 +2630,7 @@ One tailor, two fittings: the trousers are done, the jacket waits for the cloth 
 
 Source: https://weld.apps.wayne.edu/docs/reference/which-command.html
 
-## Which command when[#](https://weld.apps.wayne.edu/docs/reference/which-command.html#which-command-when)
+## Which command when [#](https://weld.apps.wayne.edu/docs/reference/which-command.html#which-command-when)
 
 This page is the canonical copy of the "which command when" table. Every README of a stack project that ships one of these commands carries the same table, word for word; change it here first, then copy it into those READMEs (WELD, Squire, PROCTOR, Sourdough, Booster and Rollcall).
 
@@ -2653,7 +2654,7 @@ Several stack commands sound alike (`weld:doctor`, `squire doctor`, `proctor che
 | `php bin/regen-check.php --generated <dir>` | **Is WELD still Sourdough's Inertia shape?** WELD, file by file, against a fresh `sourdough new --inertia`; fails only on drift that `.sourdough/regen-baseline.json` does not already accept. | When Sourdough's Inertia shape or WELD changes. | WELD repo, CI |
 | `rollcall report` | **Where does the whole fleet stand?** The latest scan's totals against CREED's policy: PHP, Laravel, the auth package, PROCTOR results and the end-of-life burn-down. Exit 0, or 2 on a tool error (no scan yet, a bad option, an unreadable policy); it never gates. | After `rollcall scan`, on the scan's schedule. | CI (a scheduled scan job) |
 
-### Related[#](https://weld.apps.wayne.edu/docs/reference/which-command.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/reference/which-command.html#related)
 
 - [Commands](https://weld.apps.wayne.edu/docs/reference/commands.html)
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
@@ -2665,7 +2666,7 @@ Several stack commands sound alike (`weld:doctor`, `squire doctor`, `proctor che
 
 Source: https://weld.apps.wayne.edu/docs/running-off-citadel.html
 
-## Running WELD off Citadel[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#running-weld-off-citadel)
+## Running WELD off Citadel [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#running-weld-off-citadel)
 
 WELD deploys on Citadel through Squire: one container per app, and builds run at release time inside the app container. The stack rule (ADR-0010, portable beyond Citadel) says the same app must also run on OpenShift, Coolify and plain Docker. This page is the per-platform contract: how traffic reaches the app, where logs go, what may be written, which user runs it, how the platform knows it is alive, and what to run after every deploy.
 
@@ -2674,7 +2675,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 - The image is Squire's portable image, `deploy/.squire/portable.Dockerfile` (see "The portable image" below). `compose.yaml` is the local development stack (`artisan serve` on 8000 plus Vite on 5173, SQLite), not a deploy image.
 - HELMET (`^1.3`) owns the trusted proxies (BEST_PRACTICES.md, W17). `HELMET_PRESET` picks a platform preset, and HELMET 1.3 ships two: `citadel` and `docker`. An unknown preset name throws at boot. Anywhere else, list the front proxy's address in `HELMET_PROXIES` (it wins over `HELMET_PRESET`), and never trust a whole private range. Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same address (unset means Citadel's 172.18.0.1).
 
-### Common ground, every platform[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#common-ground-every-platform)
+### Common ground, every platform [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#common-ground-every-platform)
 
 | Concern | Contract |
 | --- | --- |
@@ -2687,7 +2688,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Health | `/up`, registered in `bootstrap/app.php`: 200 when the framework boots, and it never checks the database, so a database blip cannot kill every replica (W11). |
 | After every deploy | Run `php artisan weld:doctor` in the app container. One PASS, WARN or FAIL line per check; exit code 1 when anything FAILs, so it works as a gate. |
 
-### Citadel (for comparison)[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#citadel-for-comparison)
+### Citadel (for comparison) [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#citadel-for-comparison)
 
 | Concern | How it works |
 | --- | --- |
@@ -2700,7 +2701,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Queue | No queue workers on Citadel. `QUEUE_WORKER_MODE=scheduler` (the `.env.example` default) schedules a short `queue:work --stop-when-empty --max-time=50 --tries=3` every minute (W19). |
 | After deploy | `php artisan weld:doctor` in the app container. |
 
-### OpenShift[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#openshift)
+### OpenShift [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#openshift)
 
 | Concern | How it works |
 | --- | --- |
@@ -2713,7 +2714,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Health | Liveness probe: HTTP GET `/up` on 8080. It answers for any `Host` over plain HTTP, before trusted hosts, sessions and auth (W11). |
 | After deploy | `oc exec deploy/<app> -- php artisan weld:doctor`. |
 
-### Coolify[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#coolify)
+### Coolify [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#coolify)
 
 | Concern | How it works |
 | --- | --- |
@@ -2726,7 +2727,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Health | A Dockerfile `HEALTHCHECK` takes precedence over the dashboard check (W12). The portable image's runs `squire-entrypoint health`: `health.php` asks the web role's `/up`, and the other roles are healthy while they run. A dashboard check instead needs `curl` or `wget` in the image. Traefik stops routing to an unhealthy container. |
 | After deploy | Exec into the app container and run `php artisan weld:doctor`. |
 
-### Plain Docker compose[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#plain-docker-compose)
+### Plain Docker compose [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#plain-docker-compose)
 
 | Concern | How it works |
 | --- | --- |
@@ -2740,7 +2741,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 
 The `compose.yaml` in this repository is the local development stack, not a production image.
 
-### The portable image[#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#the-portable-image)
+### The portable image [#](https://weld.apps.wayne.edu/docs/running-off-citadel.html#the-portable-image)
 
 Squire's kit in `deploy/` carries the image for every platform above but Citadel. Build it from the repository root (the app), with the kit's folder named:
 
@@ -2771,15 +2772,15 @@ Four tables, one bead: if the joint passes `weld:doctor` on all of them, the sea
 
 Source: https://weld.apps.wayne.edu/docs/troubleshooting.html
 
-## Troubleshooting[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#troubleshooting)
+## Troubleshooting [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#troubleshooting)
 
 This page covers the failures that trip people up in WELD, with the cause of each, the fix, and a command to check that it holds again.
 
-### Symptoms[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#symptoms)
+### Symptoms [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#symptoms)
 
 Each entry follows the same shape: what you see, why it happens, how to fix it, and the command that proves it holds.
 
-#### The page is blank except the `local` ribbon[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-page-is-blank-except-the-local-ribbon)
+#### The page is blank except the `local` ribbon [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-page-is-blank-except-the-local-ribbon)
 
 **Cause.** The page's scripts come from the Vite dev server, at the address Laravel's Vite plugin writes into `public/hot`. Copies of WELD from before 2026-11-06 ran `vite --host` in the container, so the plugin wrote the address it listened on, `http://[::]:5173`, which the browser cannot reach. On any copy, the very first load after `up` also waits while Vite compiles every module for the first time, which takes 10 to 20 seconds on a Windows bind mount.
 
@@ -2797,7 +2798,7 @@ docker compose exec vite cat public/hot
 
 Expected: `http://localhost:5173`.
 
-#### A new page says "Page not found" (Windows)[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#a-new-page-says-page-not-found-windows)
+#### A new page says "Page not found" (Windows) [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#a-new-page-says-page-not-found-windows)
 
 **Cause.** Docker Desktop on Windows passes edits to existing files into the Vite container, but not new files. Vite builds the list of pages when it starts, so a page added after `up` is missing from it, and Inertia throws `Page not found: ./pages/YourPage.vue` in the browser console.
 
@@ -2809,7 +2810,7 @@ docker compose restart vite
 
 **Check.** Reload the page: it draws, and the console is quiet.
 
-#### The local database was empty after `up` (Windows)[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-local-database-was-empty-after-up-windows)
+#### The local database was empty after `up` (Windows) [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-local-database-was-empty-after-up-windows)
 
 **Cause.** Copies of `bin/weld.ps1` from before 2026-11-06 created `database/database.sqlite` with `New-Item -Force` on every `up`, which empties a file that already exists. `bin/weld.sh` uses `touch` and never did.
 
@@ -2817,7 +2818,7 @@ docker compose restart vite
 
 **Check.** Sign in, run `.\bin\weld.ps1 up` again, and sign in once more: your user is still there.
 
-#### `composer ci` fails because the docs site is stale[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#composer-ci-fails-because-the-docs-site-is-stale)
+#### `composer ci` fails because the docs site is stale [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#composer-ci-fails-because-the-docs-site-is-stale)
 
 **Cause.** The docs at `site/docs/` are built from `docs/` by the shared docs builder, and `composer ci` runs `composer docs:check`, which fails when the committed docs site is stale or the docs carry findings. Change a page in `docs/` or `CHANGELOG.md` without rebuilding, and the check fails.
 
@@ -2835,7 +2836,7 @@ composer docs
 composer docs:check
 ```
 
-#### The agent-ready files are stale[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-agent-ready-files-are-stale)
+#### The agent-ready files are stale [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-agent-ready-files-are-stale)
 
 **Cause.** The agent-ready site (prompt blocks, Markdown twins, llms.txt) comes from Squire's kit and is generated into `site/`. `composer ci` runs `composer site:agent-ready-check`, which fails when the agent-ready files are stale, a page lacks its Markdown link, a prompt drifts from the docs, or the kit was edited here.
 
@@ -2853,7 +2854,7 @@ That rewrites the Markdown twins, llms.txt, llms-full.txt, robots.txt and sitema
 composer site:agent-ready-check
 ```
 
-#### regen-check reports new drift[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#regen-check-reports-new-drift)
+#### regen-check reports new drift [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#regen-check-reports-new-drift)
 
 **Cause.** The regen gate compares a freshly generated Sourdough Inertia app with WELD file by file, from Sourdough's `.sourdough/manifest.json` (each path with its SHA-256). It skips the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path, and reports each remaining path as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED (a Squire kit file WELD keeps byte-identical under `deploy/`). The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift, so a change in what Sourdough generates surfaces here.
 
@@ -2875,7 +2876,7 @@ php bin/regen-check.php --generated <dir>
 
 Through Composer the same check is `composer regen-check -- --generated <dir>`.
 
-### Related[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#related)
 
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)
 - [Is WELD still Sourdough's shape?](https://weld.apps.wayne.edu/docs/guides/regen-check.html)
@@ -2886,11 +2887,11 @@ Through Composer the same check is `composer regen-check -- --generated <dir>`.
 
 Source: https://weld.apps.wayne.edu/docs/upgrading.html
 
-## Upgrading[#](https://weld.apps.wayne.edu/docs/upgrading.html#upgrading)
+## Upgrading [#](https://weld.apps.wayne.edu/docs/upgrading.html#upgrading)
 
 This page shows how to keep a WELD app current: how to take stack changes, how to read the CHANGELOG, what a release does, and whether any released version breaks your app.
 
-### Take stack changes[#](https://weld.apps.wayne.edu/docs/upgrading.html#take-stack-changes)
+### Take stack changes [#](https://weld.apps.wayne.edu/docs/upgrading.html#take-stack-changes)
 
 WELD owns its app code. The wiring files are marked and refreshed by `sourdough feed`, not hand-edited, so the app does not fork from the stack. Sourdough is not a dependency yet, so there is no feed to run today; the target is for WELD's CI to run `sourdough feed` against each stack release and fail on drift.
 
@@ -2923,11 +2924,11 @@ git diff --exit-code resources/js/ziggy.*
 
 When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in Sourdough; if the drift is accepted as intended, record it with `--write-baseline` and commit `.sourdough/regen-baseline.json`.
 
-### Read the CHANGELOG[#](https://weld.apps.wayne.edu/docs/upgrading.html#read-the-changelog)
+### Read the CHANGELOG [#](https://weld.apps.wayne.edu/docs/upgrading.html#read-the-changelog)
 
 The CHANGELOG lists notable changes to WELD, newest first. Pending work sits under `## Unreleased`; each released version sits under a `## X.Y.Z (YYYY-MM-DD)` heading. To find what moved, read the entries between your current version and the one you are moving to.
 
-### What a release does[#](https://weld.apps.wayne.edu/docs/upgrading.html#what-a-release-does)
+### What a release does [#](https://weld.apps.wayne.edu/docs/upgrading.html#what-a-release-does)
 
 WELD is tagged (0.1.0 through 0.2.1 so far). A release:
 
@@ -2937,7 +2938,7 @@ WELD is tagged (0.1.0 through 0.2.1 so far). A release:
 4. Tags `X.Y.Z` (no `v`) on git.wayne.edu, with an approver; the push mirror carries the tag to GitHub.
 5. Needs a maintainer's approval. Never move or delete a published tag.
 
-### Breaking changes[#](https://weld.apps.wayne.edu/docs/upgrading.html#breaking-changes)
+### Breaking changes [#](https://weld.apps.wayne.edu/docs/upgrading.html#breaking-changes)
 
 0.1.0 through 0.1.5 carry no breaking change, so moving between them is just taking in the new release:
 
@@ -2956,7 +2957,7 @@ Then run all the checks and commit the lock file.
 
 0.2.1 carries no breaking change. An app built from 0.2.0 that keeps WELD's `bin/weld.ps1` and `bin/weld.sh` copies their `down` from WELD, so it clears `public/hot` too.
 
-### Related[#](https://weld.apps.wayne.edu/docs/upgrading.html#related)
+### Related [#](https://weld.apps.wayne.edu/docs/upgrading.html#related)
 
 - [Install](https://weld.apps.wayne.edu/docs/install.html)
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)

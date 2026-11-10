@@ -6,11 +6,11 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Commands[#](https://weld.apps.wayne.edu/docs/reference/commands.html#commands)
+# Commands [#](https://weld.apps.wayne.edu/docs/reference/commands.html#commands)
 
 This page is the reference for every command a WELD app runs: the `bin/weld` subcommands, the composer scripts, and the artisan and bin PHP commands, with what each one does.
 
-## The bin/weld subcommands[#](https://weld.apps.wayne.edu/docs/reference/commands.html#the-bin-weld-subcommands)
+## The bin/weld subcommands [#](https://weld.apps.wayne.edu/docs/reference/commands.html#the-bin-weld-subcommands)
 
 One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither. The same subcommands work on every OS.
 
@@ -96,7 +96,7 @@ sh
 bin/weld.sh down
 ```
 
-## Composer scripts[#](https://weld.apps.wayne.edu/docs/reference/commands.html#composer-scripts)
+## Composer scripts [#](https://weld.apps.wayne.edu/docs/reference/commands.html#composer-scripts)
 
 | Script | What it does |
 | --- | --- |
@@ -114,7 +114,7 @@ bin/weld.sh down
 | `composer docs` | Write site/docs/ from docs/ with the shared docs builder, and generate docs/changelog.md from CHANGELOG.md |
 | `composer docs:check` | Fail when the committed docs site is stale or the docs carry findings; writes nothing |
 
-## Artisan and bin PHP commands[#](https://weld.apps.wayne.edu/docs/reference/commands.html#artisan-and-bin-php-commands)
+## Artisan and bin PHP commands [#](https://weld.apps.wayne.edu/docs/reference/commands.html#artisan-and-bin-php-commands)
 
 ### `php artisan weld:doctor` [#](https://weld.apps.wayne.edu/docs/reference/commands.html#php-artisan-weld-doctor)
 
@@ -161,7 +161,7 @@ These run as `composer site:agent-ready` and `composer site:agent-ready-check`.
 
 These run as `composer docs` and `composer docs:check`. The docs are built from `docs/` by the shared docs builder and checked in `composer ci`, so the page you read is the page that ships.
 
-## Related[#](https://weld.apps.wayne.edu/docs/reference/commands.html#related)
+## Related [#](https://weld.apps.wayne.edu/docs/reference/commands.html#related)
 
 - [Which command when](https://weld.apps.wayne.edu/docs/reference/which-command.html): `weld:doctor`, `squire doctor`, `proctor check` and the other look-alikes side by side
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)

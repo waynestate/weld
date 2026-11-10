@@ -6,15 +6,15 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Troubleshooting[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#troubleshooting)
+# Troubleshooting [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#troubleshooting)
 
 This page covers the failures that trip people up in WELD, with the cause of each, the fix, and a command to check that it holds again.
 
-## Symptoms[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#symptoms)
+## Symptoms [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#symptoms)
 
 Each entry follows the same shape: what you see, why it happens, how to fix it, and the command that proves it holds.
 
-### The page is blank except the `local` ribbon[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-page-is-blank-except-the-local-ribbon)
+### The page is blank except the `local` ribbon [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-page-is-blank-except-the-local-ribbon)
 
 **Cause.** The page's scripts come from the Vite dev server, at the address Laravel's Vite plugin writes into `public/hot`. Copies of WELD from before 2026-11-06 ran `vite --host` in the container, so the plugin wrote the address it listened on, `http://[::]:5173`, which the browser cannot reach. On any copy, the very first load after `up` also waits while Vite compiles every module for the first time, which takes 10 to 20 seconds on a Windows bind mount.
 
@@ -32,7 +32,7 @@ docker compose exec vite cat public/hot
 
 Expected: `http://localhost:5173`.
 
-### A new page says "Page not found" (Windows)[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#a-new-page-says-page-not-found-windows)
+### A new page says "Page not found" (Windows) [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#a-new-page-says-page-not-found-windows)
 
 **Cause.** Docker Desktop on Windows passes edits to existing files into the Vite container, but not new files. Vite builds the list of pages when it starts, so a page added after `up` is missing from it, and Inertia throws `Page not found: ./pages/YourPage.vue` in the browser console.
 
@@ -44,7 +44,7 @@ docker compose restart vite
 
 **Check.** Reload the page: it draws, and the console is quiet.
 
-### The local database was empty after `up` (Windows)[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-local-database-was-empty-after-up-windows)
+### The local database was empty after `up` (Windows) [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-local-database-was-empty-after-up-windows)
 
 **Cause.** Copies of `bin/weld.ps1` from before 2026-11-06 created `database/database.sqlite` with `New-Item -Force` on every `up`, which empties a file that already exists. `bin/weld.sh` uses `touch` and never did.
 
@@ -52,7 +52,7 @@ docker compose restart vite
 
 **Check.** Sign in, run `.\bin\weld.ps1 up` again, and sign in once more: your user is still there.
 
-### `composer ci` fails because the docs site is stale[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#composer-ci-fails-because-the-docs-site-is-stale)
+### `composer ci` fails because the docs site is stale [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#composer-ci-fails-because-the-docs-site-is-stale)
 
 **Cause.** The docs at `site/docs/` are built from `docs/` by the shared docs builder, and `composer ci` runs `composer docs:check`, which fails when the committed docs site is stale or the docs carry findings. Change a page in `docs/` or `CHANGELOG.md` without rebuilding, and the check fails.
 
@@ -70,7 +70,7 @@ composer docs
 composer docs:check
 ```
 
-### The agent-ready files are stale[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-agent-ready-files-are-stale)
+### The agent-ready files are stale [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#the-agent-ready-files-are-stale)
 
 **Cause.** The agent-ready site (prompt blocks, Markdown twins, llms.txt) comes from Squire's kit and is generated into `site/`. `composer ci` runs `composer site:agent-ready-check`, which fails when the agent-ready files are stale, a page lacks its Markdown link, a prompt drifts from the docs, or the kit was edited here.
 
@@ -88,7 +88,7 @@ That rewrites the Markdown twins, llms.txt, llms-full.txt, robots.txt and sitema
 composer site:agent-ready-check
 ```
 
-### regen-check reports new drift[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#regen-check-reports-new-drift)
+### regen-check reports new drift [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#regen-check-reports-new-drift)
 
 **Cause.** The regen gate compares a freshly generated Sourdough Inertia app with WELD file by file, from Sourdough's `.sourdough/manifest.json` (each path with its SHA-256). It skips the product files listed in `.sourdough/product-files.json` and any `vendor` or `node_modules` path, and reports each remaining path as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED (a Squire kit file WELD keeps byte-identical under `deploy/`). The gate is a ratchet: `.sourdough/regen-baseline.json` records the drift already known and accepted, and the check fails only on new drift, so a change in what Sourdough generates surfaces here.
 
@@ -110,7 +110,7 @@ php bin/regen-check.php --generated <dir>
 
 Through Composer the same check is `composer regen-check -- --generated <dir>`.
 
-## Related[#](https://weld.apps.wayne.edu/docs/troubleshooting.html#related)
+## Related [#](https://weld.apps.wayne.edu/docs/troubleshooting.html#related)
 
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)
 - [Is WELD still Sourdough's shape?](https://weld.apps.wayne.edu/docs/guides/regen-check.html)

@@ -37,9 +37,9 @@
   <nav class="docs-nav docs-nav--sidebar" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html" aria-current="page">Commands</a></li><li><a href="../../docs/reference/which-command.html">Which command when</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li><li><a href="../../docs/reference/proof.html">Proof</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
   <div class="docs-content">
     <main id="main">
-      <article class="docs-article"><h1 id="commands">Commands<a class="docs-heading-link" aria-label="Link to this section" href="#commands">#</a></h1>
+      <article class="docs-article"><h1 id="commands"><span class="docs-heading-tail"><span>Commands</span><a class="docs-heading-link" aria-label="Link to this section" href="#commands">#</a></span></h1>
 <p>This page is the reference for every command a WELD app runs: the <code>bin/weld</code> subcommands, the composer scripts, and the artisan and bin PHP commands, with what each one does.</p>
-<h2 id="the-bin-weld-subcommands">The bin/weld subcommands<a class="docs-heading-link" aria-label="Link to this section" href="#the-bin-weld-subcommands">#</a></h2>
+<h2 id="the-bin-weld-subcommands">The bin/weld <span class="docs-heading-tail"><span>subcommands</span><a class="docs-heading-link" aria-label="Link to this section" href="#the-bin-weld-subcommands">#</a></span></h2>
 <p>One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither. The same subcommands work on every OS.</p>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
@@ -97,7 +97,7 @@
 </code></pre></div>
 <div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh down
 </code></pre></div></div>
-<h2 id="composer-scripts">Composer scripts<a class="docs-heading-link" aria-label="Link to this section" href="#composer-scripts">#</a></h2>
+<h2 id="composer-scripts">Composer <span class="docs-heading-tail"><span>scripts</span><a class="docs-heading-link" aria-label="Link to this section" href="#composer-scripts">#</a></span></h2>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
 <tr>
@@ -160,8 +160,8 @@
 </tr>
 </tbody>
 </table></div>
-<h2 id="artisan-and-bin-php-commands">Artisan and bin PHP commands<a class="docs-heading-link" aria-label="Link to this section" href="#artisan-and-bin-php-commands">#</a></h2>
-<h3 id="php-artisan-weld-doctor"><code>php artisan weld:doctor</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-artisan-weld-doctor">#</a></h3>
+<h2 id="artisan-and-bin-php-commands">Artisan and bin PHP <span class="docs-heading-tail"><span>commands</span><a class="docs-heading-link" aria-label="Link to this section" href="#artisan-and-bin-php-commands">#</a></span></h2>
+<h3 id="php-artisan-weld-doctor"><span class="docs-heading-tail"><code>php artisan weld:doctor</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-artisan-weld-doctor">#</a></span></h3>
 <p><code>weld:doctor</code> strikes an arc across the local setup and reports every joint: the app key, writable storage, the database and pending migrations. One line per check, PASS or WARN or FAIL; exit code 1 when anything FAILs, so it works as a gate. The standards checks (PHP version, debug in production, secure session cookies) belong to PROCTOR: run <code>composer proctor</code>, and the doctor report says so. A good bead is a quiet one: all PASS and nothing to say.</p>
 <p>Add <code>--json</code> to any of these for a machine-readable report. Run it through the <code>doctor</code> subcommand above, or straight to the container:</p>
 <div class="docs-tabs" data-tabs="powershell|sh|docker"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 doctor
@@ -170,25 +170,25 @@
 </code></pre></div>
 <div class="docs-tabs__panel" data-tab-label="Docker"><p class="docs-tabs__label">Docker</p><pre tabindex="0"><code class="language-sh">docker compose run --rm app php artisan weld:doctor
 </code></pre></div></div>
-<h3 id="php-bin-regen-check-php"><code>php bin/regen-check.php</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-bin-regen-check-php">#</a></h3>
+<h3 id="php-bin-regen-check-php"><span class="docs-heading-tail"><code>php bin/regen-check.php</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-bin-regen-check-php">#</a></span></h3>
 <p><code>bin/regen-check.php</code> compares a freshly generated Sourdough Inertia app (its <code>.sourdough/manifest.json</code>, each path with its SHA-256) with WELD file by file, skipping the product files listed in <code>.sourdough/product-files.json</code> and any <code>vendor</code> or <code>node_modules</code> path. Each remaining path is reported as IDENTICAL, DIFFERS, MISSING_IN_WELD or RELOCATED. The gate is a ratchet: <code>.sourdough/regen-baseline.json</code> records the drift already known and accepted, and the check fails only on new drift. It is not part of <code>composer ci</code>; CI runs it as a separate job that blocks on new drift.</p>
 <ul>
 <li>Run the check: <code>php bin/regen-check.php --generated &lt;dir&gt;</code> (or <code>composer regen-check -- --generated &lt;dir&gt;</code>)</li>
 <li>Record the current drift as accepted: add <code>--write-baseline</code></li>
 </ul>
-<h3 id="php-bin-agent-ready-php"><code>php bin/agent-ready.php</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-bin-agent-ready-php">#</a></h3>
+<h3 id="php-bin-agent-ready-php"><span class="docs-heading-tail"><code>php bin/agent-ready.php</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-bin-agent-ready-php">#</a></span></h3>
 <ul>
 <li><code>php bin/agent-ready.php</code>: rewrite the Markdown twins, llms.txt, llms-full.txt, robots.txt and sitemap.xml in site/ (Squire's agent-ready kit).</li>
 <li><code>php bin/agent-ready.php --check</code>: fail when the agent-ready files are stale, a page lacks its Markdown link, a prompt drifts from the docs, or the kit was edited here.</li>
 </ul>
 <p>These run as <code>composer site:agent-ready</code> and <code>composer site:agent-ready-check</code>.</p>
-<h3 id="php-bin-docs-site-php"><code>php bin/docs-site.php</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-bin-docs-site-php">#</a></h3>
+<h3 id="php-bin-docs-site-php"><span class="docs-heading-tail"><code>php bin/docs-site.php</code><a class="docs-heading-link" aria-label="Link to this section" href="#php-bin-docs-site-php">#</a></span></h3>
 <ul>
 <li><code>php bin/docs-site.php</code>: write site/docs/ from docs/ with the shared docs builder, and generate docs/changelog.md from CHANGELOG.md.</li>
 <li><code>php bin/docs-site.php --check</code>: fail when the committed docs site is stale or the docs carry findings; writes nothing.</li>
 </ul>
 <p>These run as <code>composer docs</code> and <code>composer docs:check</code>. The docs are built from <code>docs/</code> by the shared docs builder and checked in <code>composer ci</code>, so the page you read is the page that ships.</p>
-<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<h2 id="related"><span class="docs-heading-tail"><span>Related</span><a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></span></h2>
 <ul>
 <li><a href="which-command.html">Which command when</a>: <code>weld:doctor</code>, <code>squire doctor</code>, <code>proctor check</code> and the other look-alikes side by side</li>
 <li><a href="../guides/check-your-setup.html">Check your setup</a></li>

@@ -6,7 +6,7 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Overview[#](https://weld.apps.wayne.edu/docs/#overview)
+# Overview [#](https://weld.apps.wayne.edu/docs/#overview)
 
 This page orients you to WELD: what it is, which path to pick first, and where the project stands today.
 
@@ -20,14 +20,14 @@ This page orients you to WELD: what it is, which path to pick first, and where t
 
 WELD is the whole Wayne State app stack joined into one application. Install it, deploy it, and every part is already hooked up: sign-in, security headers, checks, coding standards, CI and the WayneUI interface. Think of it as the Megazord, except it comes with a deploy script and nobody has to shout to make it combine. Fifteen parts, one bead.
 
-## Pick your path[#](https://weld.apps.wayne.edu/docs/#pick-your-path)
+## Pick your path [#](https://weld.apps.wayne.edu/docs/#pick-your-path)
 
 - [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html): bring the whole stack up with one Docker command, then run it like Citadel with Parity.
 - [Install](https://weld.apps.wayne.edu/docs/install.html): get a copy with composer create-project, or clone it if you want the history too.
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html): the parts and what each does in the app.
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html): OpenShift, Coolify and plain Docker, with Citadel for comparison.
 
-## Status[#](https://weld.apps.wayne.edu/docs/#status)
+## Status [#](https://weld.apps.wayne.edu/docs/#status)
 
 Latest release: 0.2.1 (2026-11-09). The license is MIT.
 
@@ -35,7 +35,7 @@ Latest release: 0.2.1 (2026-11-09). The license is MIT.
 
 Agents: fetch [https://weld.apps.wayne.edu/llms.txt](https://weld.apps.wayne.edu/llms.txt).
 
-## Related[#](https://weld.apps.wayne.edu/docs/#related)
+## Related [#](https://weld.apps.wayne.edu/docs/#related)
 
 - [Install](https://weld.apps.wayne.edu/docs/install.html)
 - [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html)

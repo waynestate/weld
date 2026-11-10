@@ -6,24 +6,25 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Changelog[#](https://weld.apps.wayne.edu/docs/changelog.html#changelog)
+# Changelog [#](https://weld.apps.wayne.edu/docs/changelog.html#changelog)
 
 Notable changes to WELD, newest first.
 
-## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
+## Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the docs, agent-ready and deploy kits are Squire 0.10.6 (was 0.10.5): the docs builder and agent-ready generator see every file on Docker Desktop mounts.
 - Site: `assets/stack-env.js` knows Parity, so a pre-production page links Parity's pre-production site and a dev page links its local `site/` folder. Until now Parity, of all parts, was the one link that ignored its environment.
 - Docs: Parity is live at [https://parity.apps.wayne.edu/](https://parity.apps.wayne.edu/). The front page's weld log gives it Site and Docs links like the other live parts, its cast card, the Citadel pick and the "Want it the way Citadel runs it?" line link its site instead of its repo, and "Run it like Citadel" (README and the quick start) gains its install lines (`irm https://parity.apps.wayne.edu/install.ps1 | iex` on Windows, `curl -fsSL https://parity.apps.wayne.edu/install.sh | sh` on macOS and Linux) in place of "until its site is up". Which command when links its site too.
 - Version mentions refreshed: ADVISOR ^0.3, Squire kit 0.10.5, lock moved to current tags.
 - Docs: the front page's weld log and cast name each part's latest tag, checked on November 10, 2026: CREED 0.1.9, PROCTOR 0.11.2, Pinstripe 0.3.1, HELMET 1.3.1, SESAME 0.7.3, Sourdough 0.4.2, Squire 0.10.5, Booster 1.17.0, Rollcall 1.1.1, Drawbridge 0.6.1 and ADVISOR 0.3.0. Where WELD locks a part (CREED, PROCTOR, Pinstripe, HELMET, SESAME, ADVISOR), the lock is that same version. Content only; the sheet's design and motion are unchanged.
 
-## 0.2.1 (2026-11-09)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-1-2026-11-09)
+## 0.2.1 (2026-11-09) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-1-2026-11-09)
 
 - Fixed: `bin/weld.ps1 down` and `bin/weld.sh down` clear `public/hot`. Vite's dev server writes it so pages load their scripts from `http://localhost:5173`, and stopping its container left it behind, so the first real run of "Run it like Citadel" served WELD through Parity as a blank page. `tests/Unit/LocalStackTest.php` fails if either script stops clearing it.
 - Docs: "Run it like Citadel" (README and the quick start) was run word for word on Parity 0.1.0 with Citadel's own `citadel/php-apache:8.5r3`, and now says what it takes: one `health_check` line in `parity.json` that asks Laravel's `/up`, as Squire's `health.php` does on Citadel, because Parity's default asks the front page and the front page needs the sessions table the migration makes (without it the first `parity up` waited five minutes and failed); on a fresh database the first `parity up` ends on the front page's 500 (on Windows its proxy step can time out on it) until the migration runs; and a folder on the Windows disk is slow inside the container (about 10 seconds a page). Parity 0.1.0 is out, so the docs and the front page's weld log and cast card say 0.1.0 (they said 0.1.0-rc.2) and point at its release on git.wayne.edu until its site is up. The commands reference says what `down` now clears.
 - Docs: Which command when stops saying `squire doctor` checks "the local parity setup": the parity kit is deprecated, and local runs on Citadel's image are Parity's job (`parity check`). The other READMEs copy the row next.
 
-## 0.2.0 (2026-11-09)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-0-2026-11-09)
+## 0.2.0 (2026-11-09) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-0-2026-11-09)
 
 - Docs: Parity joins the party. Parity runs Citadel on your own computer (Citadel's PHP image, its proxy and MySQL 5.6) as one program for Windows, macOS and Linux, on Podman or Docker; it takes over local runs from the parity kit in Squire. The README and the quick start gain "Run it like Citadel": build the front end, then `parity check`, `parity init --mysql`, `parity up`, a migration as the `citadel` user and `parity test`, with `bin/weld.ps1 up`, Sail and plain Docker Compose kept as the everyday bench. The README and the Oracle guide add that Citadel's own image carries `oci8`. The README cast seats Parity next to Squire with its spirit-level mark (fifteen parts now, in the docs overview too). The front page lists it as joint 09 of the weld log (0.1.0-rc.2, Pilot, linked to its repository until its site is up), as Squire's partner under "I'm deploying to Citadel", in a line under "Start here", and as a cast card: the shop floor is now two stacked rows, Booster, Rollcall and ADVISOR, then the Citadel row of Squire, Parity and Drawbridge. Squire's lines stop promising local runs. No app code changes. The bubble sits dead center; the weld is level.
 - Changed: WELD locks SESAME 0.7.2 (was 0.7.1; `composer update waynestate/sesame`, the constraint stays `^0.7`). 0.7.2 fixes docs only: the CAS server's address is `https://academica.aws.wayne.edu/cas`, not a `login.wayne.edu` one. No code WELD runs changes.
@@ -99,13 +100,13 @@ Notable changes to WELD, newest first.
 - Changed: the app requires PROCTOR ^0.8 in require-dev (was ^0.7, locked 0.8.0), so its CI also runs the new crlf-deploy-script check, and the deploy layer requires PROCTOR ^0.8 (was ^0.4, locked 0.8.0).
 - Docs: a "Which command when" page (Reference) and README section put the look-alike commands side by side (`weld:doctor`, `squire doctor`, `proctor check`, `proctor gate`, `oracle:check` and the rest): what each checks, when to run it and where it runs. It is the canonical copy; the READMEs of Squire, PROCTOR, Sourdough, Booster and Rollcall carry it word for word.
 
-## 0.1.5 (2026-11-07)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-5-2026-11-07)
+## 0.1.5 (2026-11-07) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-5-2026-11-07)
 
 - Fixed: the committed Ziggy route list (`resources/js/ziggy.js` and `ziggy.d.ts`) includes SESAME 0.5's `sesame.status` route, so the `ziggy` job is green again.
 - Fixed: `composer proctor` and `ProctorCheckTest` run plain `proctor check`; PROCTOR 0.7 refuses `--policy` in CI, which turned `proctor-root` and every `php-test` job red.
 - Fixed: the pipeline's PROCTOR jobs no longer pass `--policy`, which PROCTOR 0.7 refuses in CI; PROCTOR checks against the CREED policy it bundles.
 
-## 0.1.4 (2026-11-07)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-4-2026-11-07)
+## 0.1.4 (2026-11-07) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-4-2026-11-07)
 
 - Changed: the front page deploy layer (`deploy/`) runs Squire's kit 0.6.0 (was 0.5.0): `scripts/release.sh` now asks PROCTOR for a go or no-go right after `composer audit`, before the front end builds and the migrations run (the verdict lands in `proctor-gate.json` under `SQUIRE_PROCTOR_RECORD_DIR`, ratcheted against the last release that went on; `SQUIRE_PROCTOR=enforce` stops the release on a no-go, the default is report only), and `.env.squire.example` gains `SQUIRE_PROCTOR_RECORD_DIR`. The squire holds the gate; the proctor says who may pass.
 - Changed: the GitLab pipeline pins the Preflight components to the 0.2.0 release SHA (was 0.1.4).
@@ -123,7 +124,7 @@ Notable changes to WELD, newest first.
 - Added: an accessibility gate for the site: `scripts/a11y.sh` (Git Bash, Linux, macOS) and `scripts/a11y.ps1` (Windows) run axe-core (WCAG 2.2 AA, light and dark, at 360 px and 1280 px) in Docker over every committed HTML page under `site/`, so the Proof page's hand-run check is repeatable with one command; the first full run checked all 23 pages with 0 violations.
 - Added: The Proof page records its last run.
 
-## 0.1.3 (2026-11-06)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-3-2026-11-06)
+## 0.1.3 (2026-11-06) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-3-2026-11-06)
 
 - Changed: the Proof page marks the 0.1.2 install and the regen drift as fixed.
 - Fixed: every `php-test` job in the GitLab pipeline (PHP 8.3, 8.4, 8.5) crashed with exit 255 since the move to Pest. Preflight's component runs `vendor/bin/phpunit` unless told otherwise, and PHPUnit refuses to load a Pest file ("Please run ./vendor/bin/pest instead"); the jobs now run `vendor/bin/pest`, which runs the PHPUnit class tests too. Sourdough's Laravel templates got the same fix.
@@ -163,7 +164,7 @@ Notable changes to WELD, newest first.
 - Changed: CI pins Preflight 0.1.4 (GitLab component includes and the GitHub reusable workflow at its tag commit); the deploy layer sets minimum-stability to stable.
 - Changed: HELMET moves to ^0.3 and PROCTOR to ^0.4 (lock: HELMET 0.3.0, PROCTOR 0.4.x, CREED 0.1.6, ADVISOR 0.1.5), so the newest PROCTOR checks run on WELD itself; an empty `HELMET_PROXIES=` now trusts nobody. Tests, style, analysis and PROCTOR pass unchanged.
 
-## 0.1.2 (2026-11-03)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-2-2026-11-03)
+## 0.1.2 (2026-11-03) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-2-2026-11-03)
 
 - Changed: SESAME moves from 0.2 to 0.4 (`^0.4`). It now logs sign-in events (`sesame.login`, `sesame.logout`, with a per sign-in `session_ref`; turn off with `SESAME_LOG=false`), re-reads the signed-in user when the resolver asks for it, and the gateway driver refuses an `at+jwt` access token. WELD itself needed no code change.
 - Fixed: the user menu gains a Sign out item on SESAME's logout route, the app bar branding drops the Laravel Starter Kit name and links (WELD logo text, waynestate/weld repository, weld.apps.wayne.edu documentation), .editorconfig covers compose.yaml and its variants, ExampleTest stops booting the framework, and UiBrandingTest pins the branding.
@@ -182,7 +183,7 @@ Notable changes to WELD, newest first.
 - Changed: BEST_PRACTICES.md re-checked against the code on 2026-11-02: the Squire kit's Dockerfile, entrypoint and release script move W10, W12, W16 and W24 from `Not yet` to `Documented`, W8/W13/W22 sentences name the new deploy files, and the shifted line numbers in composer.json, .env.example and bootstrap/app.php are corrected.
 - Added: the regen gate, which makes "WELD is the prebuilt Inertia shape" checkable: `bin/regen-check.php` compares a freshly generated Sourdough Inertia app (its `.sourdough/manifest.json`, path to SHA-256) with WELD file by file, skipping `.sourdough/product-files.json` entries and any `vendor` or `node_modules` path, and fails only on drift not already recorded in `.sourdough/regen-baseline.json` (a ratchet; `--write-baseline` records the current drift). The logic lives in `App\Support\RegenCheck` with unit tests, `composer regen-check` passes arguments through (not part of `ci`), and warning-only `regen-gate` jobs in both pipelines generate a fresh app from Sourdough's main and run the gate.
 
-## 0.1.1 (2026-10-29)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-1-2026-10-29)
+## 0.1.1 (2026-10-29) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-1-2026-10-29)
 
 - Added: agent-ready site (prompt blocks, Markdown twins, llms.txt), from Squire's kit.
 - Fixed: stale capability claims in the site and docs.
@@ -197,7 +198,7 @@ Notable changes to WELD, newest first.
 - TextLink's optional `method` prop takes Inertia's `Method` union instead of `string`.
 - Welcome reads the signed-in state from `usePage<SharedData>()` instead of `$page`, which vue-tsc does not recognize on the component instance.
 
-## 0.1.0 (2026-10-29)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-0-2026-10-29)
+## 0.1.0 (2026-10-29) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-1-0-2026-10-29)
 
 - `waynestate/helmet` moves from `^0.1` to `^0.2` (locked at 0.2.3). The published `config/helmet.php` re-syncs with the package: `HELMET_PRESET` fills the proxy list (an unknown name throws at boot), and the security headers middleware joins the global chain, so every response carries the baseline. The trusted-header set narrows to `X-Forwarded-For` and `X-Forwarded-Proto`; `X-Forwarded-Port` is no longer trusted, because Citadel's HA-Proxy never sends it.
 - `php artisan weld:doctor`: local setup only: the app key, writable storage, the database and pending migrations. The standards checks (PHP version, debug in production, secure session cookies) belong to PROCTOR, and the report points at `composer proctor`.

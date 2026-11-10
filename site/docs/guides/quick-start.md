@@ -6,13 +6,13 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Quick start[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#quick-start)
+# Quick start [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#quick-start)
 
 This page takes a fresh copy of WELD from a folder to a running, checked app on your machine.
 
 One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither.
 
-## Steps[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#steps)
+## Steps [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#steps)
 
 1. Bring the stack up:
    PowerShell
@@ -46,7 +46,7 @@ One command strikes the spark; the containers do the welding. Docker is the only
    ```
    Expected: `composer ci` runs in the app container: validate, tests, Pint, PHPStan level 8, the agent-ready check and audit.
 
-## The subcommands[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#the-subcommands)
+## The subcommands [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#the-subcommands)
 
 The same subcommands work on every OS:
 
@@ -58,7 +58,7 @@ The same subcommands work on every OS:
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs |
 
-## Run it like Citadel[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel)
+## Run it like Citadel [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel)
 
 The steps above are the everyday bench: the stock PHP image, SQLite and Vite reloading as you type, and Sail or plain Docker Compose work too. Parity does not replace them. When "it works here" has to mean "it works on Citadel", run the same folder on Citadel's own machinery with [Parity](https://parity.apps.wayne.edu/): Citadel's PHP image with its `php.ini` and `vhost.conf`, Citadel's proxy in front adding `X-Forwarded-For` and `X-Forwarded-Proto`, and MySQL 5.6, the version of Citadel's shared database server. Parity is one program for Windows, macOS and Linux on Podman (recommended) or Docker. It needs no PHP on your computer and adds one file to the app, `parity.json`. Install it once from [its site](https://parity.apps.wayne.edu/), with no administrator needed. On Windows, in PowerShell:
 
@@ -100,11 +100,11 @@ A folder on the Windows disk is slow inside the container: in the 2026-11-09 pro
 
 No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks it byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity 0.1.0 is live, and [its docs](https://parity.apps.wayne.edu/docs/) have the rest. It takes over local runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood, because it is the same hood.
 
-## What you built[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#what-you-built)
+## What you built [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#what-you-built)
 
 You have WELD running locally in Docker: the app and Vite in containers, `.env` copied from `.env.example`, the app key generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in, security headers, checks, coding standards, CI and the WayneUI interface already hooked up. Open the app and every page you see (the welcome page, the dashboard, settings) is drawn by WayneUI's components, light or dark to match your device.
 
-## Next steps[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#next-steps)
+## Next steps [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#next-steps)
 
 - Make it yours: rename the four things that still say WELD (the composer name, the app name, the site title and the git remote), give the copy its own key, and re-run the checks.
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html): what the doctor reports, joint by joint.
@@ -112,7 +112,7 @@ You have WELD running locally in Docker: the app and Vite in containers, `.env` 
 - [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel): the same folder on Citadel's image, proxy and MySQL 5.6, through Parity.
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html): for when the destination is somewhere other than a laptop.
 
-## Related[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#related)
+## Related [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#related)
 
 - [Overview](https://weld.apps.wayne.edu/docs/index.html)
 - [Install](https://weld.apps.wayne.edu/docs/install.html)

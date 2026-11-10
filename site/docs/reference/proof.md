@@ -6,13 +6,13 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Proof[#](https://weld.apps.wayne.edu/docs/reference/proof.html#proof)
+# Proof [#](https://weld.apps.wayne.edu/docs/reference/proof.html#proof)
 
 This page says how WELD was proven on 2026-11-06: a new app made from a clean folder the way this site tells you to, every gate WELD ships run against it, and one small Wayne State app ported onto it. It lists what held, what broke, what was fixed that night, and what it does not prove yet. Next, see the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html) for the steps the run followed and [Troubleshooting](https://weld.apps.wayne.edu/docs/troubleshooting.html) for the fixes it produced.
 
 Welders prove a joint with a bend test: cut a strip across the seam, bend it double, and look for cracks. WELD's promise is that a Wayne State developer gets a full, working, accessible app quickly with the whole stack already joined. So the strip was a brand-new app, and the bending was done by a stopwatch, the app's own gates and a browser.
 
-## Last run[#](https://weld.apps.wayne.edu/docs/reference/proof.html#last-run)
+## Last run [#](https://weld.apps.wayne.edu/docs/reference/proof.html#last-run)
 
 Run on one Windows machine with Docker Desktop; durations are wall clock, including dependency installs where a command makes them.
 
@@ -28,7 +28,7 @@ Run on one Windows machine with Docker Desktop; durations are wall clock, includ
 
 Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with `composer docs` and `composer site:agent-ready`. The `composer ci`, accessibility and regen rows above are from this refresh at `e555f03`: the regen gate now passes against Sourdough's current main (`323a82b`), with no new drift beyond the recorded baseline, and the accessibility gate runs as `scripts/a11y.ps1` is written on Docker Desktop, checking all 23 committed pages with 0 violations. The `create-project` path, the signed-in app-page accessibility checks and the `up` timings are not in the table: the first installs the newest public tag instead of this commit, and the rest need the running stack and a browser.
 
-## What ran[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-ran)
+## What ran [#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-ran)
 
 One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html) says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.
 
@@ -42,7 +42,7 @@ One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on th
    - an accessibility gate: axe-core with the WCAG 2.0, 2.1 and 2.2 A and AA rules on the welcome page, the dashboard and both settings pages, signed in through SESAME's fake driver, at desktop and phone width, light and dark, with reduced motion on (16 page checks).
 3. **A port** onto the fresh clone: one small app from the stack's proof corpus, below.
 
-## Results[#](https://weld.apps.wayne.edu/docs/reference/proof.html#results)
+## Results [#](https://weld.apps.wayne.edu/docs/reference/proof.html#results)
 
 The clone path, the one the Quick start teaches:
 
@@ -74,11 +74,11 @@ The `create-project` path:
 
 That is PROCTOR doing its job on a three-day-old lock: the gate caught advisories nobody had to go looking for. It is also a reason not to start from 0.1.2; 0.1.3, tagged later the same day, carries the patched lock and WayneUI.
 
-## WayneUI in the pages[#](https://weld.apps.wayne.edu/docs/reference/proof.html#wayneui-in-the-pages)
+## WayneUI in the pages [#](https://weld.apps.wayne.edu/docs/reference/proof.html#wayneui-in-the-pages)
 
 After the fix, every page of the new app was WayneUI's: the app bar with the shield and the theme switch, the sidebar that turns into a drawer on a phone, breadcrumbs, cards, the form fields and the footer, in light and dark. Tab moved through the bar with a visible gold focus ring. The axe gate, run with reduced motion on, found nothing to report on any page, at either width, in either scheme.
 
-## A port: one small app onto WELD[#](https://weld.apps.wayne.edu/docs/reference/proof.html#a-port-one-small-app-onto-weld)
+## A port: one small app onto WELD [#](https://weld.apps.wayne.edu/docs/reference/proof.html#a-port-one-small-app-onto-weld)
 
 The second workload asked a plainer question: how much of a real app's work is left once WELD has done its part? The app was the smallest useful one in the stack's proof corpus: a read-only JSON feed, about 100 lines of raw PHP with no framework, one Oracle query and two optional filters, with its own error shape for bad input.
 
@@ -102,7 +102,7 @@ What WELD supplied without a line of the port's own: sign-in in front of the pag
 
 Two honest differences from the old app. A POST now gets Laravel's own 405 body instead of the old JSON one. And the Oracle source was never run: the proof never connects to Oracle or Banner, so the real query is only shown to be wired, not to work.
 
-## What it caught in WELD[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-it-caught-in-weld)
+## What it caught in WELD [#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-it-caught-in-weld)
 
 A run that only finds praise was not looking hard enough. This one found these, and every finding is about WELD, not the ported app:
 
@@ -114,7 +114,7 @@ A run that only finds praise was not looking hard enough. This one found these, 
 - **Open: a warm `up` still reinstalls.** The second `up` took 188 seconds because it runs `composer install`, ADVISOR's install and a full `npm ci` again. It is correct, just slow; a faster path for an app that is already up is worth having.
 - **Open, small: Sign in lands on the welcome page.** SESAME signs the user in and returns them to `/`, where the button now reads Open the dashboard. One more click than it needs.
 
-## What this does not prove[#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-this-does-not-prove)
+## What this does not prove [#](https://weld.apps.wayne.edu/docs/reference/proof.html#what-this-does-not-prove)
 
 - Only Windows ran. `bin/weld.sh` on macOS and Linux was not exercised, apart from reading that it creates the SQLite file with `touch`.
 - Nothing was deployed. Citadel, Squire's release script and the container contract are proven elsewhere, not here.
@@ -123,7 +123,7 @@ A run that only finds praise was not looking hard enough. This one found these, 
 - One port of one small app is a sample of one. A larger app, with forms that write, would take longer and find more.
 - The timings are from one machine on one night. Treat them as the shape, not a promise.
 
-## Run it yourself[#](https://weld.apps.wayne.edu/docs/reference/proof.html#run-it-yourself)
+## Run it yourself [#](https://weld.apps.wayne.edu/docs/reference/proof.html#run-it-yourself)
 
 The same bend test on your machine, from an empty folder:
 
@@ -151,7 +151,7 @@ docker compose run --rm app composer proctor
 
 Then open [http://localhost:8000](http://localhost:8000), sign in, and run `bin\weld.ps1 up` (or `bin/weld.sh up`) a second time: your data should still be there.
 
-## Related[#](https://weld.apps.wayne.edu/docs/reference/proof.html#related)
+## Related [#](https://weld.apps.wayne.edu/docs/reference/proof.html#related)
 
 - [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html)
 - [Install](https://weld.apps.wayne.edu/docs/install.html)

@@ -37,9 +37,9 @@
   <nav class="docs-nav docs-nav--sidebar" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html" aria-current="page">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/which-command.html">Which command when</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li><li><a href="../../docs/reference/proof.html">Proof</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
   <div class="docs-content">
     <main id="main">
-      <article class="docs-article"><h1 id="what-is-welded-in">What is welded in<a class="docs-heading-link" aria-label="Link to this section" href="#what-is-welded-in">#</a></h1>
+      <article class="docs-article"><h1 id="what-is-welded-in">What is welded <span class="docs-heading-tail"><span>in</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-is-welded-in">#</a></span></h1>
 <p>This page lists the parts welded into WELD, what each one does in the app, and what is on the bench today.</p>
-<h2 id="the-parts">The parts<a class="docs-heading-link" aria-label="Link to this section" href="#the-parts">#</a></h2>
+<h2 id="the-parts">The <span class="docs-heading-tail"><span>parts</span><a class="docs-heading-link" aria-label="Link to this section" href="#the-parts">#</a></span></h2>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
 <tr>
@@ -92,7 +92,7 @@
 </table></div>
 <p><img src="../readme/journey.svg" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys." /></p>
 <p>One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.</p>
-<h2 id="what-is-on-the-bench-today">What is on the bench today<a class="docs-heading-link" aria-label="Link to this section" href="#what-is-on-the-bench-today">#</a></h2>
+<h2 id="what-is-on-the-bench-today">What is on the bench <span class="docs-heading-tail"><span>today</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-is-on-the-bench-today">#</a></span></h2>
 <p>Every part is welded in: HELMET and SESAME are in <code>require</code>; CREED, Pinstripe, PROCTOR and ADVISOR are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.5. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once <code>@waynestate/pinstripe</code> 0.3.0 is on npm (<a href="../reference/status.html#pinstripe-s-npm-half">the steps</a>).</p>
 <ul>
 <li><code>composer.json</code> is <code>waynestate/weld</code>, requires PHP <code>^8.3</code>, and the lock file resolves for 8.3.0</li>
@@ -108,7 +108,7 @@
 <li>WayneUI draws the Vue pages: <code>resources/css/app.css</code> imports its layered stylesheet, the pages use <code>@waynestate/wayne-ui-vue</code> components, and the appearance setting is WayneUI's own theme switch (<code>wsu-theme</code>), with the bar's sun and moon button in step. The starter kit's Tailwind theme and shadcn-vue copies are gone, and <code>npm run lint</code> fails on an import from a <code>components/ui</code> folder</li>
 <li>The license is MIT</li>
 </ul>
-<h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
+<h2 id="related"><span class="docs-heading-tail"><span>Related</span><a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></span></h2>
 <ul>
 <li><a href="check-your-setup.html">Check your setup</a></li>
 <li><a href="oracle.html">Oracle</a></li>

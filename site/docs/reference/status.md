@@ -6,13 +6,13 @@ llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
 ---
 
-# Status[#](https://weld.apps.wayne.edu/docs/reference/status.html#status)
+# Status [#](https://weld.apps.wayne.edu/docs/reference/status.html#status)
 
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
 Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.5.0; the deploy layer runs Squire's kit 0.10.5. Pinstripe's PHP presets are installed; its npm half is [the next step](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half). For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
-## What is on the bench today[#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
+## What is on the bench today [#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
 | Item | Value |
 | --- | --- |
@@ -33,7 +33,7 @@ Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED,
 | Password auth | the starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's |
 | License | MIT |
 
-## Gaps for the backlog[#](https://weld.apps.wayne.edu/docs/reference/status.html#gaps-for-the-backlog)
+## Gaps for the backlog [#](https://weld.apps.wayne.edu/docs/reference/status.html#gaps-for-the-backlog)
 
 These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/enterprise-apps/weld/-/blob/main/BEST_PRACTICES.md).
 
@@ -45,7 +45,7 @@ These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/en
 - Decision needed: whether WELD keeps Fortify for a non-SSO mode.
 - Decision needed: SSR on by default or off.
 
-## Pinstripe's npm half[#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
+## Pinstripe's npm half [#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
 
 WELD takes Pinstripe's PHP side from Composer today. The JS side, `@waynestate/pinstripe` (ESLint and Prettier presets for Vue), waits for 0.3.0 on npm, because npm still has 0.1.4. The presets inside have not changed since 0.1.4, but the move is a real refit, not a version bump: Pinstripe's presets need ESLint 10 (WELD runs 9), print at 100 columns with 2-space indents where WELD's `.prettierrc` prints at 150 with 4, and add eslint-plugin-vuejs-accessibility, so every Vue file is reformatted once and the accessibility rules may report findings. Once 0.3.0 is on npm:
 
@@ -57,7 +57,7 @@ WELD takes Pinstripe's PHP side from Composer today. The JS side, `@waynestate/p
 
 One tailor, two fittings: the trousers are done, the jacket waits for the cloth to arrive.
 
-## Related[#](https://weld.apps.wayne.edu/docs/reference/status.html#related)
+## Related [#](https://weld.apps.wayne.edu/docs/reference/status.html#related)
 
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html)
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)
