@@ -45,5 +45,6 @@
     "resources/views/app.blade.php",
     "routes/web.php",
     "tests/Feature/SkeletonTest.php",
-    "tests/Unit/ExampleTest.php"
+    "tests/Unit/ExampleTest.php",
+    "tests/Unit/PinstripeWiringTest.php"
 ]

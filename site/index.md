@@ -155,14 +155,14 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.7.1
+   Release 0.7.2
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
    ### Sourdough
    The starter
-   Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. 0.3.0 adopts an app it did not make, so feed can keep it current.
-   Release 0.3.0
+   Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. It adopts an app it did not make, so feed can keep it current, and 0.4.0 puts Pinstripe 0.3 in every shape.
+   Release 0.4.0
    Inspection: In use
    [Site of Sourdough](https://sourdough.apps.wayne.edu/) [Docs for Sourdough](https://sourdough.apps.wayne.edu/docs/)
 9. Joint 08
@@ -281,7 +281,7 @@ $
 
 ### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.7.1 Says | Open
+0.7.2 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -427,7 +427,7 @@ $
 
 ### [Sourdough](https://sourdough.apps.wayne.edu/)
 
-0.3.0 Rise | Daily
+0.4.0 Rise | Daily
 
 `sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself, or run `sourdough adopt` on an app it did not make so `sourdough feed` keeps it current. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 

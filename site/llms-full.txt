@@ -482,14 +482,14 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.7.1
+   Release 0.7.2
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
    ### Sourdough
    The starter
-   Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. 0.3.0 adopts an app it did not make, so feed can keep it current.
-   Release 0.3.0
+   Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. It adopts an app it did not make, so feed can keep it current, and 0.4.0 puts Pinstripe 0.3 in every shape.
+   Release 0.4.0
    Inspection: In use
    [Site of Sourdough](https://sourdough.apps.wayne.edu/) [Docs for Sourdough](https://sourdough.apps.wayne.edu/docs/)
 9. Joint 08
@@ -608,7 +608,7 @@ $
 
 #### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.7.1 Says | Open
+0.7.2 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -754,7 +754,7 @@ $
 
 #### [Sourdough](https://sourdough.apps.wayne.edu/)
 
-0.3.0 Rise | Daily
+0.4.0 Rise | Daily
 
 `sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself, or run `sourdough adopt` on an app it did not make so `sourdough feed` keeps it current. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 
@@ -893,6 +893,9 @@ Notable changes to WELD, newest first.
 
 ### Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: WELD locks SESAME 0.7.2 (was 0.7.1; `composer update waynestate/sesame`, the constraint stays `^0.7`). 0.7.2 fixes docs only: the CAS server's address is `https://academica.aws.wayne.edu/cas`, not a `login.wayne.edu` one. No code WELD runs changes.
+- Changed: the regen gate passes against Sourdough's main after it gave its Laravel shapes WELD's Pinstripe extras. The extras themselves (`composer lint:gitlab`, the `composer-ci` Code Quality report, the `.gitignore` line) were already in WELD; the one new path, `tests/Unit/PinstripeWiringTest.php`, is in the baseline, because WELD's copy records WELD's own Pint excludes (`bin/docs-site.php`) where Sourdough's records `health.php` and `oracle-check.php`.
+- Docs: stale text. The front page's weld log and cast name Sourdough 0.4.0 (Pinstripe 0.3 in every shape) and SESAME 0.7.2, "Running off Citadel" says WELD locks SESAME 0.7.2, and BEST_PRACTICES W26 (with the security guide) and the release guard test name the current Squire kit's release script instead of 0.9.0's.
 - Added: WELD requires Pinstripe 0.3 (`waynestate/pinstripe` `^0.3` in `require-dev`), so its coding standard is installed, not copied. `phpstan.neon` includes `vendor/waynestate/pinstripe/phpstan/laravel.neon` and keeps only WELD's paths: level 8, the ignore rules and the banned calls (`eval()`, `extract()`, `var_dump()`, `dd()`, `dump()`, TLS checks turned off, and SQL joined from strings through `DB::select()`, PDO, mysqli or oci8) now come from the package. WELD's own code passes the new rules with no new ignore and no baseline (it runs no raw SQL at all, and its one existing ignore is the documented `env()` read in `bootstrap/app.php`); a planted `DB::select('... ' . $id)` and a `dd()` both fail. `pint.json` stays as Pinstripe's `pint/laravel.json` plus two recorded excludes (Squire's `deploy/` kit and `bin/docs-site.php`), because Pint cannot extend another config file and Pinstripe's preset would restyle the vendored kit; `tests/Unit/PinstripeWiringTest.php` fails if either file drifts from the package. The lock adds `spaze/phpstan-disallowed-calls`, `phpstan/phpstan-strict-rules`, `phpstan/phpstan-deprecation-rules` and `nette/neon`, and moves PHPStan to 2.3.5. Fitted at last: the suit is off the rack, not run up from a pattern.
 - Added: `composer lint:gitlab` writes Pint's findings as GitLab Code Quality JSON (Pinstripe's documented setup), and the `composer-ci` job runs it in `after_script`, so a style failure shows in the merge request widget. `pint-codequality.json` is gitignored.
 - Docs: the README, "What is welded in", the status page, MAINTAINING, BEST_PRACTICES W32, the commands reference and the front page say Pinstripe is a dependency. The status page gains "Pinstripe's npm half", the steps for the ESLint and Prettier presets once `@waynestate/pinstripe` 0.3.0 is on npm (it has 0.1.4 today; the move needs ESLint 10 and one reformat). The front page's weld log stops saying Pinstripe 0.3.0 is on npm.
@@ -1767,7 +1770,7 @@ Warning
 
 **Practice:** `APP_DEBUG=false` in production. The debug page has had an XSS advisory (Low, 2026-09-10).
 
-**Stack:** `Enforced`. `.env.example:4` sets `APP_DEBUG=true` for the local default, and `app/Support/ProductionDebug.php:23-30` refuses to boot when the environment is production and debug is on; `app/Providers/AppServiceProvider.php:29` calls it in `boot()`, and `tests/Feature/ProductionDebugTest.php:17-30` covers both the refusal and the pass. The release stops it earlier still: Squire 0.9.0's release script (`deploy/scripts/release.sh:271-289`) refuses a Laravel release with no `APP_KEY`, or with `APP_DEBUG` on in production, before anything installs, and `tests/Feature/ReleaseEnvGuardTest.php` fails when a kit update drops that guard.
+**Stack:** `Enforced`. `.env.example:4` sets `APP_DEBUG=true` for the local default, and `app/Support/ProductionDebug.php:23-30` refuses to boot when the environment is production and debug is on; `app/Providers/AppServiceProvider.php:29` calls it in `boot()`, and `tests/Feature/ProductionDebugTest.php:17-30` covers both the refusal and the pass. The release stops it earlier still: Squire 0.10.3's release script (`deploy/scripts/release.sh:271-289`) refuses a Laravel release with no `APP_KEY`, or with `APP_DEBUG` on in production, before anything installs, and `tests/Feature/ReleaseEnvGuardTest.php` fails when a kit update drops that guard.
 
 ### W27: CSRF uses the PreventRequestForgery middleware[#](https://weld.apps.wayne.edu/docs/guides/security.html#w27-csrf-uses-the-preventrequestforgery-middleware)
 
@@ -2606,7 +2609,7 @@ GitLab builds this image too, on `main` and on tags (on a merge request when you
 
 Note
 
-`php artisan optimize` works in WELD since SESAME 0.6.1, whose `/login` and `/logout` are controller actions instead of closures, so `route:cache` can serialize them (WELD locks SESAME 0.7.1). Under SESAME 0.6.0 the route cache ran out of memory and the container stopped; an app still on 0.6.0 starts with `SQUIRE_ARTISAN_OPTIMIZE=0` until it updates. The same holds for the optimize step in `scripts/release.sh` on Citadel.
+`php artisan optimize` works in WELD since SESAME 0.6.1, whose `/login` and `/logout` are controller actions instead of closures, so `route:cache` can serialize them (WELD locks SESAME 0.7.2). Under SESAME 0.6.0 the route cache ran out of memory and the container stopped; an app still on 0.6.0 starts with `SQUIRE_ARTISAN_OPTIMIZE=0` until it updates. The same holds for the optimize step in `scripts/release.sh` on Citadel.
 
 Four tables, one bead: if the joint passes `weld:doctor` on all of them, the seam holds.
 

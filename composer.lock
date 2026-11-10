@@ -7289,16 +7289,16 @@
         },
         {
             "name": "waynestate/sesame",
-            "version": "0.7.1",
+            "version": "0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/sesame.git",
-                "reference": "f8aadc57f1a3129458dd1027fe069354b3876362"
+                "reference": "70dcab16b3ed513819308f7f647316e94f63bca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/sesame/zipball/f8aadc57f1a3129458dd1027fe069354b3876362",
-                "reference": "f8aadc57f1a3129458dd1027fe069354b3876362",
+                "url": "https://api.github.com/repos/waynestate/sesame/zipball/70dcab16b3ed513819308f7f647316e94f63bca2",
+                "reference": "70dcab16b3ed513819308f7f647316e94f63bca2",
                 "shasum": ""
             },
             "require": {
@@ -7374,8 +7374,8 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/sesame/-/issues",
                 "source": "https://github.com/waynestate/sesame"
             },
-            "time": "2026-11-09T21:17:43+00:00",
-            "published-time": "2026-11-09T21:24:52+00:00"
+            "time": "2026-11-09T23:09:03+00:00",
+            "published-time": "2026-11-09T23:19:55+00:00"
         },
         {
             "name": "yajra/laravel-oci8",

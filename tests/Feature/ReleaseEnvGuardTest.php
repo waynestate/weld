@@ -5,7 +5,7 @@
 | The release refuses a bad production environment
 |--------------------------------------------------------------------------
 |
-| Squire 0.9.0's release script checks a Laravel release's environment
+| Squire's release script (since kit 0.9.0) checks a Laravel release's environment
 | before anything installs: no APP_KEY stops it, APP_DEBUG on in
 | production stops it, and an APP_ENV that is not production is a
 | warning (WELD W26, Sourdough practice 4.14). The kit is Squire's byte

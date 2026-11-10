@@ -43,6 +43,15 @@
 <h2 id="unreleased">Unreleased<a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></h2>
 <ul>
 <li>
+<p>Changed: WELD locks SESAME 0.7.2 (was 0.7.1; <code>composer update waynestate/sesame</code>, the constraint stays <code>^0.7</code>). 0.7.2 fixes docs only: the CAS server's address is <code>https://academica.aws.wayne.edu/cas</code>, not a <code>login.wayne.edu</code> one. No code WELD runs changes.</p>
+</li>
+<li>
+<p>Changed: the regen gate passes against Sourdough's main after it gave its Laravel shapes WELD's Pinstripe extras. The extras themselves (<code>composer lint:gitlab</code>, the <code>composer-ci</code> Code Quality report, the <code>.gitignore</code> line) were already in WELD; the one new path, <code>tests/Unit/PinstripeWiringTest.php</code>, is in the baseline, because WELD's copy records WELD's own Pint excludes (<code>bin/docs-site.php</code>) where Sourdough's records <code>health.php</code> and <code>oracle-check.php</code>.</p>
+</li>
+<li>
+<p>Docs: stale text. The front page's weld log and cast name Sourdough 0.4.0 (Pinstripe 0.3 in every shape) and SESAME 0.7.2, &quot;Running off Citadel&quot; says WELD locks SESAME 0.7.2, and BEST_PRACTICES W26 (with the security guide) and the release guard test name the current Squire kit's release script instead of 0.9.0's.</p>
+</li>
+<li>
 <p>Added: WELD requires Pinstripe 0.3 (<code>waynestate/pinstripe</code> <code>^0.3</code> in <code>require-dev</code>), so its coding standard is installed, not copied. <code>phpstan.neon</code> includes <code>vendor/waynestate/pinstripe/phpstan/laravel.neon</code> and keeps only WELD's paths: level 8, the ignore rules and the banned calls (<code>eval()</code>, <code>extract()</code>, <code>var_dump()</code>, <code>dd()</code>, <code>dump()</code>, TLS checks turned off, and SQL joined from strings through <code>DB::select()</code>, PDO, mysqli or oci8) now come from the package. WELD's own code passes the new rules with no new ignore and no baseline (it runs no raw SQL at all, and its one existing ignore is the documented <code>env()</code> read in <code>bootstrap/app.php</code>); a planted <code>DB::select('... ' . $id)</code> and a <code>dd()</code> both fail. <code>pint.json</code> stays as Pinstripe's <code>pint/laravel.json</code> plus two recorded excludes (Squire's <code>deploy/</code> kit and <code>bin/docs-site.php</code>), because Pint cannot extend another config file and Pinstripe's preset would restyle the vendored kit; <code>tests/Unit/PinstripeWiringTest.php</code> fails if either file drifts from the package. The lock adds <code>spaze/phpstan-disallowed-calls</code>, <code>phpstan/phpstan-strict-rules</code>, <code>phpstan/phpstan-deprecation-rules</code> and <code>nette/neon</code>, and moves PHPStan to 2.3.5. Fitted at last: the suit is off the rack, not run up from a pattern.</p>
 </li>
 <li>
