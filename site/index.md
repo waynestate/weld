@@ -121,15 +121,15 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 2. Joint 01
    ### CREED
    The standard
-   61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-08.
-   Release 0.1.10
+   61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-10, now with the Composer release cooldown.
+   Release 0.1.11
    Inspection: In use
    [Site of CREED](https://creed.apps.wayne.edu/) [Docs for CREED](https://creed.apps.wayne.edu/docs/)
 3. Joint 02
    ### PROCTOR
    The grader
-   Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.12 adds warnings for a missing Composer release cooldown and a lock file git does not track.
-   Release 0.12.0
+   Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.15 warns when an app has migrations its pipeline never runs against MySQL 5.6.
+   Release 0.15.1
    Inspection: In use
    [Site of PROCTOR](https://proctor.apps.wayne.edu/) [Docs for PROCTOR](https://proctor.apps.wayne.edu/docs/)
 4. Joint 03
@@ -142,15 +142,15 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 5. Joint 04
    ### Preflight
    The CI runner
-   GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, a portability boot of the image, Pint, PHPStan and ESLint.
-   Release 0.5.0
+   GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, the migrations on MySQL 5.6, a portability boot of the image with its own health check, Pint, PHPStan and ESLint.
+   Release 0.6.0
    Inspection: In use
    [Site of Preflight](https://preflight.apps.wayne.edu/) [Docs for Preflight](https://preflight.apps.wayne.edu/docs/)
 6. Joint 05
    ### HELMET
    The runtime baseline
    Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
-   Release 1.4.0
+   Release 1.4.1
    Inspection: Stable
    [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
 7. Joint 06
@@ -171,7 +171,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Squire
    The deploy kit
    Citadel's build, release and health-check scripts from templates, `squire doctor`, and one portable image for other hosts. Local runs on Citadel's image move to Parity, next joint down.
-   Release 0.10.7
+   Release 0.10.8
    Inspection: In use
    [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
 10. Joint 09
@@ -185,7 +185,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Booster
     Upgrades
     Plans PHP and Laravel upgrades as hops on Rector and gates each hop with your tests on the target PHP. It never commits for you.
-    Release 1.17.0
+    Release 1.18.0
     Inspection: Stable
     [Site of Booster](https://booster.apps.wayne.edu/) [Docs for Booster](https://booster.apps.wayne.edu/docs/)
 12. Joint 11
@@ -257,7 +257,7 @@ $
 
 ### [CREED](https://creed.apps.wayne.edu/)
 
-0.1.10 Volume | Eleven
+0.1.11 Volume | Eleven
 
 The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 
@@ -274,7 +274,7 @@ $
 
 ### [HELMET](https://helmet.apps.wayne.edu/)
 
-1.4.0 Fit | Snug
+1.4.1 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
@@ -306,7 +306,7 @@ $
 
 ### [PROCTOR](https://proctor.apps.wayne.edu/)
 
-0.12.0 Strictness | Kind
+0.15.1 Strictness | Kind
 
 In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
@@ -322,14 +322,15 @@ $
 
 ### [Preflight](https://preflight.apps.wayne.edu/)
 
-0.5.0 Checklist | Long
+0.6.0 Checklist | Long
 
-GitLab CI/CD components. WELD's pipeline pins them at 0.5.0 to run the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, the accessibility gate and a portability boot of the image.
+GitLab CI/CD components. WELD's pipeline pins them at 0.6.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
 ```
 $ git push
-✓ php-test     8.3, 8.4, 8.5
+✓ php-test     8.3 to 8.5
 ✓ proctor      pass
+✓ mysql 5.6    migrated
 ✓ a11y         0 violations
 $
 ```
@@ -355,7 +356,7 @@ $
 
 ### [Booster](https://booster.apps.wayne.edu/)
 
-1.17.0 Sting | Mild
+1.18.0 Sting | Mild
 
 Plans an upgrade as hops, like Laravel 10 to 11, and runs them one at a time with Rector. Your tests have to pass on the new PHP before the next hop starts.
 
@@ -403,7 +404,7 @@ $
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
-0.10.7 Armor | Carried
+0.10.8 Armor | Carried
 
 The deploy kit for Citadel: `build.sh`, a release script and a health check, plus one portable image for other hosts. This page deploys with it too.
 
