@@ -38,7 +38,7 @@
         "pestphp/pest-plugin-laravel": "^4.0",
         "phpstan/extension-installer": "^1.4",
         "phpunit/phpunit": "^12.0",
-        "waynestate/advisor": "^0.2",
+        "waynestate/advisor": "^0.3",
         "waynestate/creed": "^0.1.8",
         "waynestate/pinstripe": "^0.3",
         "waynestate/proctor": "^0.11"
