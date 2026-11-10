@@ -11,6 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Site: `assets/stack-env.js` knows Parity, so a pre-production page links Parity's pre-production site and a dev page links its local `site/` folder. Until now Parity, of all parts, was the one link that ignored its environment.
 - Docs: Parity is live at https://parity.apps.wayne.edu/. The front page's weld log gives it Site and Docs links like the other live parts, its cast card, the Citadel pick and the "Want it the way Citadel runs it?" line link its site instead of its repo, and "Run it like Citadel" (README and the quick start) gains its install lines (`irm https://parity.apps.wayne.edu/install.ps1 | iex` on Windows, `curl -fsSL https://parity.apps.wayne.edu/install.sh | sh` on macOS and Linux) in place of "until its site is up". Which command when links its site too.
 - Version mentions refreshed: ADVISOR ^0.3, Squire kit 0.10.5, lock moved to current tags.
 - Docs: the front page's weld log and cast name each part's latest tag, checked on November 10, 2026: CREED 0.1.9, PROCTOR 0.11.2, Pinstripe 0.3.1, HELMET 1.3.1, SESAME 0.7.3, Sourdough 0.4.2, Squire 0.10.5, Booster 1.17.0, Rollcall 1.1.1, Drawbridge 0.6.1 and ADVISOR 0.3.0. Where WELD locks a part (CREED, PROCTOR, Pinstripe, HELMET, SESAME, ADVISOR), the lock is that same version. Content only; the sheet's design and motion are unchanged.
