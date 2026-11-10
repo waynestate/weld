@@ -327,9 +327,9 @@ bin/weld.sh up
               <h3 class="joint__name">PROCTOR</h3>
               <p class="joint__role">The grader</p>
             </div>
-            <p class="joint__state">Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.10 and 0.11 add the robots.txt, inline-script CSP, display_errors, directory listing and line-ending checks.</p>
+            <p class="joint__state">Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.12 adds warnings for a missing Composer release cooldown and a lock file git does not track.</p>
             <div class="joint__meta">
-              <p class="joint__rel"><span class="wsu-sr-only">Release </span>0.11.2</p>
+              <p class="joint__rel"><span class="wsu-sr-only">Release </span>0.12.0</p>
               <p class="joint__stamp"><span class="wsu-sr-only">Inspection: </span>In use</p>
               <p class="joint__links"><a href="https://proctor.apps.wayne.edu/">Site<span class="wsu-sr-only"> of PROCTOR</span></a> <a href="https://proctor.apps.wayne.edu/docs/">Docs<span class="wsu-sr-only"> for PROCTOR</span></a></p>
             </div>
@@ -371,7 +371,7 @@ bin/weld.sh up
             </div>
             <p class="joint__state">Security headers and a nonce CSP, a hardened session, the proxy check, <code>/up</code> and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.</p>
             <div class="joint__meta">
-              <p class="joint__rel"><span class="wsu-sr-only">Release </span>1.3.1</p>
+              <p class="joint__rel"><span class="wsu-sr-only">Release </span>1.4.0</p>
               <p class="joint__stamp joint__stamp--stable"><span class="wsu-sr-only">Inspection: </span>Stable</p>
               <p class="joint__links"><a href="https://helmet.apps.wayne.edu/">Site<span class="wsu-sr-only"> of HELMET</span></a> <a href="https://helmet.apps.wayne.edu/docs/">Docs<span class="wsu-sr-only"> for HELMET</span></a></p>
             </div>
@@ -413,7 +413,7 @@ bin/weld.sh up
             </div>
             <p class="joint__state">Citadel's build, release and health-check scripts from templates, <code>squire doctor</code>, and one portable image for other hosts. Local runs on Citadel's image move to Parity, next joint down.</p>
             <div class="joint__meta">
-              <p class="joint__rel"><span class="wsu-sr-only">Release </span>0.10.5</p>
+              <p class="joint__rel"><span class="wsu-sr-only">Release </span>0.10.7</p>
               <p class="joint__stamp"><span class="wsu-sr-only">Inspection: </span>In use</p>
               <p class="joint__links"><a href="https://squire.apps.wayne.edu/">Site<span class="wsu-sr-only"> of Squire</span></a> <a href="https://squire.apps.wayne.edu/docs/">Docs<span class="wsu-sr-only"> for Squire</span></a></p>
             </div>
@@ -615,7 +615,7 @@ bin/weld.sh up
             <img class="cast-card__mark" src="assets/marks/helmet.png" width="56" height="56" alt="HELMET logo: a white football helmet with a gold facemask">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://helmet.apps.wayne.edu/">HELMET</a></h3>
             <p class="cast-card__chips">
-              <span class="chip chip--version">1.3.1</span>
+              <span class="chip chip--version">1.4.0</span>
               <span class="chip chip--joke">Fit | Snug</span>
             </p>
             <p class="cast-card__line">In WELD it runs in the global middleware, so every response carries the security headers and CSP.</p>
@@ -653,7 +653,7 @@ bin/weld.sh up
             <img class="cast-card__mark" src="assets/marks/proctor.png" width="56" height="56" alt="PROCTOR logo: an eye with a gold square pupil">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://proctor.apps.wayne.edu/">PROCTOR</a></h3>
             <p class="cast-card__chips">
-              <span class="chip chip--version">0.11.2</span>
+              <span class="chip chip--version">0.12.0</span>
               <span class="chip chip--joke">Strictness | Kind</span>
             </p>
             <p class="cast-card__line">In WELD it's <code>composer proctor</code>. In CI, warnings pass and failures block.</p>
@@ -776,7 +776,7 @@ bin/weld.sh up
             <img class="cast-card__mark" src="assets/marks/squire.png" width="56" height="56" alt="Squire logo: a satchel with a gold buckle">
             <h3 class="cast-card__name"><a class="cast-card__link" href="https://squire.apps.wayne.edu/">Squire</a></h3>
             <p class="cast-card__chips">
-              <span class="chip chip--version">0.10.5</span>
+              <span class="chip chip--version">0.10.7</span>
               <span class="chip chip--joke">Armor | Carried</span>
             </p>
             <p class="cast-card__line">The deploy kit for Citadel: <code>build.sh</code>, a release script and a health check, plus one portable image for other hosts. This page deploys with it too.</p>

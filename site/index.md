@@ -128,8 +128,8 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 3. Joint 02
    ### PROCTOR
    The grader
-   Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.10 and 0.11 add the robots.txt, inline-script CSP, display_errors, directory listing and line-ending checks.
-   Release 0.11.2
+   Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.12 adds warnings for a missing Composer release cooldown and a lock file git does not track.
+   Release 0.12.0
    Inspection: In use
    [Site of PROCTOR](https://proctor.apps.wayne.edu/) [Docs for PROCTOR](https://proctor.apps.wayne.edu/docs/)
 4. Joint 03
@@ -150,7 +150,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### HELMET
    The runtime baseline
    Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
-   Release 1.3.1
+   Release 1.4.0
    Inspection: Stable
    [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
 7. Joint 06
@@ -171,7 +171,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Squire
    The deploy kit
    Citadel's build, release and health-check scripts from templates, `squire doctor`, and one portable image for other hosts. Local runs on Citadel's image move to Parity, next joint down.
-   Release 0.10.5
+   Release 0.10.7
    Inspection: In use
    [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
 10. Joint 09
@@ -274,7 +274,7 @@ $
 
 ### [HELMET](https://helmet.apps.wayne.edu/)
 
-1.3.1 Fit | Snug
+1.4.0 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
@@ -306,7 +306,7 @@ $
 
 ### [PROCTOR](https://proctor.apps.wayne.edu/)
 
-0.11.2 Strictness | Kind
+0.12.0 Strictness | Kind
 
 In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
@@ -403,7 +403,7 @@ $
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
-0.10.5 Armor | Carried
+0.10.7 Armor | Carried
 
 The deploy kit for Citadel: `build.sh`, a release script and a health check, plus one portable image for other hosts. This page deploys with it too.
 
