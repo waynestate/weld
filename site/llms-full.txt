@@ -988,6 +988,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the GitHub workflow calls Preflight 0.5.0's reusable workflow (pinned to its release commit), the same release as the GitLab pipeline; it was on 0.1.4 because GitHub's copy of Preflight had no later tag.
 - Changed: the lock holds CREED 0.1.10 and HELMET 1.4.0 (were 0.1.9 and 1.3.1), the newest releases.
 - Fixed: `regen-check` forgives line endings, as Sourdough's feed does, so `deploy/scripts/parity.ps1` (CRLF since Squire 0.10.7's `.gitattributes`) counts as relocated again and the `regen-gate` job passes.
 - Docs: the front page's weld log and cast name each part's latest tag, checked again on November 10, 2026: CREED 0.1.10 (was 0.1.9), PROCTOR 0.12.0 (was 0.11.2; its weld log line names 0.12's cooldown and tracked-lock warnings), HELMET 1.4.0 (was 1.3.1) and Squire 0.10.7 (was 0.10.5); WayneUI 2.0.8, Pinstripe 0.3.1, SESAME 0.7.3, Sourdough 0.4.2, Booster 1.17.0, Rollcall 1.1.1, Drawbridge 0.6.1 and ADVISOR 0.3.0 are unchanged. The sheet's "Inspected" stamp reads 2026-11-10 (it said 2026-11-09). WELD's lock matches the tag for PROCTOR, Pinstripe, SESAME and ADVISOR; two locks trail by one release: CREED is required `^0.1.8` and locked at 0.1.9, HELMET is required `^1.3` and locked at 1.3.1. Content only; the sheet's design and motion are unchanged.
@@ -1453,7 +1454,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Preflight components are referenced by commit SHA or a fixed tag, not a moving branch.
 
-**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.5.0 release tag (`@0.5.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:72`; published tags in the stack never move), and `.github/workflows/ci.yml:16` pins the reusable workflow to Preflight 0.1.4's commit SHA until that mirror carries a release tag. PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
+**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.5.0 release tag (`@0.5.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:72`; published tags in the stack never move), and `.github/workflows/ci.yml:16` calls Preflight 0.5.0's reusable workflow at its release commit (`60314791565a264e97cb210813ef4f3e76512402`). PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
 
 ### Related [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#related)
 
