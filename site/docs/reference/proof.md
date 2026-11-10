@@ -32,7 +32,7 @@ Refresh it by re-running those seven checks at the current HEAD, writing down th
 
 One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html) says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.
 
-1. **The `create-project` path** from [Install](https://weld.apps.wayne.edu/docs/install.html): `composer create-project waynestate/weld` (run in the `composer:2.10.3` image, since the host has no Composer), `npm ci`, then `bin\weld.ps1 up` and `test`.
+1. **The `create-project` path** from [Install](https://weld.apps.wayne.edu/docs/install.html): `composer create-project waynestate/weld` (run in the `composer:2.10.3` image on that run, since the host has no Composer; the pipeline now uses `composer:2.11.1`), `npm ci`, then `bin\weld.ps1 up` and `test`.
 2. **The clone path** from the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html): `git clone` from the GitHub mirror at `main` (`6da94b9`), `bin\weld.ps1 up`, then the pages in a browser and every gate WELD ships, run locally the way its CI runs them:
    - `bin\weld.ps1 doctor` and `bin\weld.ps1 test` (`composer ci`: validate, Pest, Pint, PHPStan level 8, the agent-ready and docs checks, audit);
    - `composer proctor` against CREED's policy, the `proctor-root` CI job;
