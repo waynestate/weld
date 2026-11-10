@@ -42,6 +42,7 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased"><span class="docs-heading-tail"><span>Unreleased</span><a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></span></h2>
 <ul>
+<li>Docs: BEST_PRACTICES says the deploy kit is Squire 0.10.7 (it said 0.10.5).</li>
 <li>Changed: CI pins Preflight 0.6.0; the new mysql56-migrate job runs the migrations against MySQL 5.6.51 (D-078), and the portability job runs the image's own HEALTHCHECK (W12, now Checked).</li>
 <li>Docs: the proof page carries the 2026-11-10 run of all seven checks at <code>9bda984</code> (189 tests, 24 pages with 0 accessibility violations, no regen drift against Sourdough <code>f4f3736</code>).</li>
 <li>Changed: requires PROCTOR ^0.15 (locked 0.15.0, was ^0.12), and so does the deploy layer: 0.13 checks the release cooldown against the CREED policy and 0.14 adds <code>script-pair</code>; 0.15 adds <code>mysql56-ci</code>; all of these only warn, nothing breaks.</li>
