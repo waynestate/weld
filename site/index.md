@@ -122,21 +122,21 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### CREED
    The standard
    61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-08.
-   Release 0.1.8
+   Release 0.1.9
    Inspection: In use
    [Site of CREED](https://creed.apps.wayne.edu/) [Docs for CREED](https://creed.apps.wayne.edu/docs/)
 3. Joint 02
    ### PROCTOR
    The grader
    Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.10 and 0.11 add the robots.txt, inline-script CSP, display_errors, directory listing and line-ending checks.
-   Release 0.11.1
+   Release 0.11.2
    Inspection: In use
    [Site of PROCTOR](https://proctor.apps.wayne.edu/) [Docs for PROCTOR](https://proctor.apps.wayne.edu/docs/)
 4. Joint 03
    ### Pinstripe
    The code style
    Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist; npm still has 0.1.4.
-   Release 0.3.0
+   Release 0.3.1
    Inspection: In use
    [Site of Pinstripe](https://pinstripe.apps.wayne.edu/) [Docs for Pinstripe](https://pinstripe.apps.wayne.edu/docs/)
 5. Joint 04
@@ -150,28 +150,28 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### HELMET
    The runtime baseline
    Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
-   Release 1.3.0
+   Release 1.3.1
    Inspection: Stable
    [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
 7. Joint 06
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.7.2
+   Release 0.7.3
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
    ### Sourdough
    The starter
    Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. It adopts an app it did not make, so feed can keep it current, and 0.4.0 puts Pinstripe 0.3 in every shape.
-   Release 0.4.0
+   Release 0.4.2
    Inspection: In use
    [Site of Sourdough](https://sourdough.apps.wayne.edu/) [Docs for Sourdough](https://sourdough.apps.wayne.edu/docs/)
 9. Joint 08
    ### Squire
    The deploy kit
    Citadel's build, release and health-check scripts from templates, `squire doctor`, and one portable image for other hosts. Local runs on Citadel's image move to Parity, next joint down.
-   Release 0.10.3
+   Release 0.10.5
    Inspection: In use
    [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
 10. Joint 09
@@ -185,28 +185,28 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Booster
     Upgrades
     Plans PHP and Laravel upgrades as hops on Rector and gates each hop with your tests on the target PHP. It never commits for you.
-    Release 1.14.0
+    Release 1.17.0
     Inspection: Stable
     [Site of Booster](https://booster.apps.wayne.edu/) [Docs for Booster](https://booster.apps.wayne.edu/docs/)
 12. Joint 11
     ### Rollcall
     The fleet report
     Scans the apps and reports each one's PHP, Laravel, sign-in package and PROCTOR result against CREED's dates, with an end-of-life burn-down. It only reports.
-    Release 1.1.0
+    Release 1.1.1
     Inspection: Stable
     [Site of Rollcall](https://rollcall.apps.wayne.edu/) [Docs for Rollcall](https://rollcall.apps.wayne.edu/docs/)
 13. Joint 12
     ### Drawbridge
     The sign-in gateway
     One OpenID Connect client for Entra ID in front of Citadel apps, passing a signed assertion SESAME checks. Not in front of any apps yet.
-    Release 0.6.0
+    Release 0.6.1
     Inspection: Pilot
     [Site of Drawbridge](https://drawbridge.apps.wayne.edu/) [Docs for Drawbridge](https://drawbridge.apps.wayne.edu/docs/)
 14. Joint 13
     ### ADVISOR
     The MCP server
     Nine read-only tools your coding agent can ask about the stack. Every answer names the file it came from.
-    Release 0.2.0
+    Release 0.3.0
     Inspection: In use
     [Site of ADVISOR](https://advisor.apps.wayne.edu/) [Docs for ADVISOR](https://advisor.apps.wayne.edu/docs/)
 15. Joint 14
@@ -217,7 +217,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     Inspection: In use
     [Docs for WELD](https://weld.apps.wayne.edu/docs/index.html) [Changes in WELD](https://weld.apps.wayne.edu/docs/changelog.html)
 
-Stable: released at 1.0 or later. In use: a 0.x release that WELD or the apps Sourdough bakes already run on. Pilot: built and tested, and not yet in front of a real app. Each release is the latest tag on that project's main branch, checked on November 9, 2026.
+Stable: released at 1.0 or later. In use: a 0.x release that WELD or the apps Sourdough bakes already run on. Pilot: built and tested, and not yet in front of a real app. Each release is the latest tag on that project's main branch, checked on November 10, 2026.
 
 ## The journey
 
@@ -257,7 +257,7 @@ $
 
 ### [CREED](https://creed.apps.wayne.edu/)
 
-0.1.8 Volume | Eleven
+0.1.9 Volume | Eleven
 
 The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 
@@ -274,7 +274,7 @@ $
 
 ### [HELMET](https://helmet.apps.wayne.edu/)
 
-1.3.0 Fit | Snug
+1.3.1 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
@@ -290,7 +290,7 @@ $
 
 ### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.7.2 Says | Open
+0.7.3 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -306,7 +306,7 @@ $
 
 ### [PROCTOR](https://proctor.apps.wayne.edu/)
 
-0.11.1 Strictness | Kind
+0.11.2 Strictness | Kind
 
 In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
@@ -338,7 +338,7 @@ $
 
 ### [Pinstripe](https://pinstripe.apps.wayne.edu/)
 
-0.3.0 Creases | Sharp
+0.3.1 Creases | Sharp
 
 The code style presets, now banning SQL joined from strings. WELD requires 0.3 and runs Pint and PHPStan at level 8 straight from its Laravel preset, banned calls and all; ESLint and Prettier run in CI on WELD's own config until the npm half moves in.
 
@@ -355,7 +355,7 @@ $
 
 ### [Booster](https://booster.apps.wayne.edu/)
 
-1.14.0 Sting | Mild
+1.17.0 Sting | Mild
 
 Plans an upgrade as hops, like Laravel 10 to 11, and runs them one at a time with Rector. Your tests have to pass on the new PHP before the next hop starts.
 
@@ -371,7 +371,7 @@ $
 
 ### [Rollcall](https://rollcall.apps.wayne.edu/)
 
-1.1.0 Attendance | Taken
+1.1.1 Attendance | Taken
 
 Every app answers “present”, with its PHP, Laravel and auth versions. Rollcall only reports. It never opens an issue or blocks a deploy.
 
@@ -387,7 +387,7 @@ $
 
 ### [ADVISOR](https://advisor.apps.wayne.edu/)
 
-0.2.0 Office hours | Always
+0.3.0 Office hours | Always
 
 Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only: it can't write files or run shell commands.
 
@@ -403,7 +403,7 @@ $
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
-0.10.3 Armor | Carried
+0.10.5 Armor | Carried
 
 The deploy kit for Citadel: `build.sh`, a release script and a health check, plus one portable image for other hosts. This page deploys with it too.
 
@@ -436,7 +436,7 @@ $
 
 ### [Drawbridge](https://drawbridge.apps.wayne.edu/)
 
-0.6.0 Moat | Full
+0.6.1 Moat | Full
 
 One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app. Built and tested; not in front of any apps yet.
 
@@ -453,7 +453,7 @@ $
 
 ### [Sourdough](https://sourdough.apps.wayne.edu/)
 
-0.4.0 Rise | Daily
+0.4.2 Rise | Daily
 
 `sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself, or run `sourdough adopt` on an app it did not make so `sourdough feed` keeps it current. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 

@@ -13,6 +13,7 @@ Notable changes to WELD, newest first.
 ## Unreleased[#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
 - Version mentions refreshed: ADVISOR ^0.3, Squire kit 0.10.5, lock moved to current tags.
+- Docs: the front page's weld log and cast name each part's latest tag, checked on November 10, 2026: CREED 0.1.9, PROCTOR 0.11.2, Pinstripe 0.3.1, HELMET 1.3.1, SESAME 0.7.3, Sourdough 0.4.2, Squire 0.10.5, Booster 1.17.0, Rollcall 1.1.1, Drawbridge 0.6.1 and ADVISOR 0.3.0. Where WELD locks a part (CREED, PROCTOR, Pinstripe, HELMET, SESAME, ADVISOR), the lock is that same version. Content only; the sheet's design and motion are unchanged.
 
 ## 0.2.1 (2026-11-09)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-1-2026-11-09)
 
