@@ -7212,16 +7212,16 @@
         },
         {
             "name": "waynestate/helmet",
-            "version": "1.3.1",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/helmet.git",
-                "reference": "a8031f59f0f392f03cb397cba048520edbddb8ce"
+                "reference": "6967f4bfd6cbc1b1af0acc716b1ed9fcd3ba23a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/helmet/zipball/a8031f59f0f392f03cb397cba048520edbddb8ce",
-                "reference": "a8031f59f0f392f03cb397cba048520edbddb8ce",
+                "url": "https://api.github.com/repos/waynestate/helmet/zipball/6967f4bfd6cbc1b1af0acc716b1ed9fcd3ba23a8",
+                "reference": "6967f4bfd6cbc1b1af0acc716b1ed9fcd3ba23a8",
                 "shasum": ""
             },
             "require": {
@@ -7241,7 +7241,7 @@
                 "orchestra/testbench": "^10.0 || ^11.0",
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^11.5",
-                "waynestate/advisor": "^0.2",
+                "waynestate/advisor": "^0.3",
                 "waynestate/pinstripe": "^0.3"
             },
             "suggest": {
@@ -7284,8 +7284,8 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/helmet/-/issues",
                 "source": "https://github.com/waynestate/helmet"
             },
-            "time": "2026-11-10T01:48:28+00:00",
-            "published-time": "2026-11-10T02:03:04+00:00"
+            "time": "2026-11-10T14:00:39+00:00",
+            "published-time": "2026-11-10T14:07:58+00:00"
         },
         {
             "name": "waynestate/sesame",
@@ -12031,16 +12031,16 @@
         },
         {
             "name": "waynestate/creed",
-            "version": "0.1.9",
+            "version": "0.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/creed.git",
-                "reference": "c6fdd00277ee6e19a1a87ec44b4179638c4ecf7b"
+                "reference": "44fce577a824f162f0bcaafcb6c8a48c3373412c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/creed/zipball/c6fdd00277ee6e19a1a87ec44b4179638c4ecf7b",
-                "reference": "c6fdd00277ee6e19a1a87ec44b4179638c4ecf7b",
+                "url": "https://api.github.com/repos/waynestate/creed/zipball/44fce577a824f162f0bcaafcb6c8a48c3373412c",
+                "reference": "44fce577a824f162f0bcaafcb6c8a48c3373412c",
                 "shasum": ""
             },
             "require": {
@@ -12080,8 +12080,8 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/creed/-/issues",
                 "source": "https://github.com/waynestate/creed"
             },
-            "time": "2026-11-10T01:43:19+00:00",
-            "published-time": "2026-11-10T01:54:52+00:00"
+            "time": "2026-11-10T14:19:43+00:00",
+            "published-time": "2026-11-10T14:54:10+00:00"
         },
         {
             "name": "waynestate/pinstripe",
