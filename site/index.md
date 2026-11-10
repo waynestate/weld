@@ -136,14 +136,14 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Pinstripe
    The code style
    Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist; npm still has 0.1.4.
-   Release 0.3.1
+   Release 0.3.2
    Inspection: In use
    [Site of Pinstripe](https://pinstripe.apps.wayne.edu/) [Docs for Pinstripe](https://pinstripe.apps.wayne.edu/docs/)
 5. Joint 04
    ### Preflight
    The CI runner
    GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, the migrations on MySQL 5.6, a portability boot of the image with its own health check, Pint, PHPStan and ESLint.
-   Release 0.6.0
+   Release 0.8.0
    Inspection: In use
    [Site of Preflight](https://preflight.apps.wayne.edu/) [Docs for Preflight](https://preflight.apps.wayne.edu/docs/)
 6. Joint 05
@@ -157,7 +157,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.7.3
+   Release 0.7.4
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
@@ -199,7 +199,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Drawbridge
     The sign-in gateway
     One OpenID Connect client for Entra ID in front of Citadel apps, passing a signed assertion SESAME checks. Not in front of any apps yet.
-    Release 0.6.1
+    Release 0.6.2
     Inspection: Pilot
     [Site of Drawbridge](https://drawbridge.apps.wayne.edu/) [Docs for Drawbridge](https://drawbridge.apps.wayne.edu/docs/)
 14. Joint 13
@@ -290,7 +290,7 @@ $
 
 ### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.7.3 Says | Open
+0.7.4 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -322,7 +322,7 @@ $
 
 ### [Preflight](https://preflight.apps.wayne.edu/)
 
-0.6.0 Checklist | Long
+0.8.0 Checklist | Long
 
 GitLab CI/CD components. WELD's pipeline pins them at 0.6.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
@@ -339,7 +339,7 @@ $
 
 ### [Pinstripe](https://pinstripe.apps.wayne.edu/)
 
-0.3.1 Creases | Sharp
+0.3.2 Creases | Sharp
 
 The code style presets, now banning SQL joined from strings. WELD requires 0.3 and runs Pint and PHPStan at level 8 straight from its Laravel preset, banned calls and all; ESLint and Prettier run in CI on WELD's own config until the npm half moves in.
 
@@ -437,7 +437,7 @@ $
 
 ### [Drawbridge](https://drawbridge.apps.wayne.edu/)
 
-0.6.1 Moat | Full
+0.6.2 Moat | Full
 
 One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app. Built and tested; not in front of any apps yet.
 

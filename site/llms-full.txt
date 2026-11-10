@@ -532,14 +532,14 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Pinstripe
    The code style
    Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist; npm still has 0.1.4.
-   Release 0.3.1
+   Release 0.3.2
    Inspection: In use
    [Site of Pinstripe](https://pinstripe.apps.wayne.edu/) [Docs for Pinstripe](https://pinstripe.apps.wayne.edu/docs/)
 5. Joint 04
    ### Preflight
    The CI runner
    GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, the migrations on MySQL 5.6, a portability boot of the image with its own health check, Pint, PHPStan and ESLint.
-   Release 0.6.0
+   Release 0.8.0
    Inspection: In use
    [Site of Preflight](https://preflight.apps.wayne.edu/) [Docs for Preflight](https://preflight.apps.wayne.edu/docs/)
 6. Joint 05
@@ -553,7 +553,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.7.3
+   Release 0.7.4
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
@@ -595,7 +595,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Drawbridge
     The sign-in gateway
     One OpenID Connect client for Entra ID in front of Citadel apps, passing a signed assertion SESAME checks. Not in front of any apps yet.
-    Release 0.6.1
+    Release 0.6.2
     Inspection: Pilot
     [Site of Drawbridge](https://drawbridge.apps.wayne.edu/) [Docs for Drawbridge](https://drawbridge.apps.wayne.edu/docs/)
 14. Joint 13
@@ -686,7 +686,7 @@ $
 
 #### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.7.3 Says | Open
+0.7.4 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -718,7 +718,7 @@ $
 
 #### [Preflight](https://preflight.apps.wayne.edu/)
 
-0.6.0 Checklist | Long
+0.8.0 Checklist | Long
 
 GitLab CI/CD components. WELD's pipeline pins them at 0.6.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
@@ -735,7 +735,7 @@ $
 
 #### [Pinstripe](https://pinstripe.apps.wayne.edu/)
 
-0.3.1 Creases | Sharp
+0.3.2 Creases | Sharp
 
 The code style presets, now banning SQL joined from strings. WELD requires 0.3 and runs Pint and PHPStan at level 8 straight from its Laravel preset, banned calls and all; ESLint and Prettier run in CI on WELD's own config until the npm half moves in.
 
@@ -833,7 +833,7 @@ $
 
 #### [Drawbridge](https://drawbridge.apps.wayne.edu/)
 
-0.6.1 Moat | Full
+0.6.2 Moat | Full
 
 One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app. Built and tested; not in front of any apps yet.
 
@@ -989,6 +989,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Site: the weld log and the cast name four more latest tags: SESAME 0.7.4, Pinstripe 0.3.2, Drawbridge 0.6.2 and Preflight 0.8.0. They still said 0.7.3, 0.3.1, 0.6.1 and 0.6.0. Preflight's cast line still says WELD's pipeline pins its components at 0.6.0, which is what `.gitlab-ci.yml` holds. Content only; the page's design and motion are unchanged.
 - Added: `tests/Feature/MigrateOncePerReleaseTest.php` holds W24: on Citadel only the release script runs `migrate`, and the portable image runs it only in its one-shot `migrate` role, which the web, worker and scheduler services wait for. W24 moves from `Documented` to `Checked`. PROCTOR's `entrypoint-migrate` still warns on that role (it does not follow the role into Squire's `run_migrate` function), so BEST_PRACTICES names the warning as expected.
 - Docs: the status page's gaps list mirrors BEST_PRACTICES again: W12 is `Checked` (Preflight 0.6.0's `healthcheck`), the scheduler heartbeat is built (it said W23 was still a plan), and W24 is `Checked`.
 - Site: the weld log and the cast name each part's latest tag again: CREED 0.1.11, PROCTOR 0.15.1 (its line names 0.15's MySQL 5.6 warning), Preflight 0.6.0 (the MySQL 5.6 migrations join its weld log line, its cast line and its terminal, and the image's own health check its weld log line), HELMET 1.4.1, Squire 0.10.8 and Booster 1.18.0. They still said 0.1.10, 0.12.0, 0.5.0, 1.4.0, 0.10.7 and 1.17.0.
