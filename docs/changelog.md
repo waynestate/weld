@@ -9,6 +9,10 @@ description: All notable changes to this project.
 
 Notable changes to WELD, newest first.
 
+## Unreleased
+
+- Version mentions refreshed: ADVISOR ^0.3, Squire kit 0.10.5, lock moved to current tags.
+
 ## 0.2.1 (2026-11-09)
 
 - Fixed: `bin/weld.ps1 down` and `bin/weld.sh down` clear `public/hot`. Vite's dev server writes it so pages load their scripts from `http://localhost:5173`, and stopping its container left it behind, so the first real run of "Run it like Citadel" served WELD through Parity as a blank page. `tests/Unit/LocalStackTest.php` fails if either script stops clearing it.
