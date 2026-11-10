@@ -213,7 +213,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### WELD
     All of the above
     You are here: Laravel 13 with Inertia 3 and Vue, every joint above already made. Clone it and rename it.
-    Release 0.1.5
+    Release 0.2.0
     Inspection: In use
     [Docs for WELD](https://weld.apps.wayne.edu/docs/index.html) [Changes in WELD](https://weld.apps.wayne.edu/docs/changelog.html)
 

@@ -42,7 +42,7 @@ The CHANGELOG lists notable changes to WELD, newest first. Pending work sits und
 
 ## What a release does
 
-WELD is tagged (0.1.0 through 0.1.5 so far). A release:
+WELD is tagged (0.1.0 through 0.2.0 so far). A release:
 
 1. Moves the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. Needs all the checks green locally, then both pipelines green for that commit.
@@ -52,13 +52,23 @@ WELD is tagged (0.1.0 through 0.1.5 so far). A release:
 
 ## Breaking changes
 
-No released version (0.1.0 through 0.1.5) carries a breaking change yet, so upgrading is just taking in the new release:
+0.1.0 through 0.1.5 carry no breaking change, so moving between them is just taking in the new release:
 
 ```sh
 composer require waynestate/<part>:^0.x
 ```
 
 Then run all the checks and commit the lock file.
+
+0.2.0 is the first release to move majors under you. An app built from 0.1.x takes these by hand (the
+[changelog](changelog.md) has each one in full):
+
+- **Inertia 3**: `inertiajs/inertia-laravel` and `@inertiajs/vue3` move to `^3.0`.
+- **HELMET's config**: `config/helmet.php` becomes a thin override (only `policy_path`); copy it from WELD and move
+  any setting you changed into `.env` or that file.
+- **Part constraints**: HELMET `^1.3`, SESAME `^0.7` (its CAS protocol defaults to 2.0), PROCTOR `^0.11`, CREED
+  `^0.1.8` and ADVISOR `^0.2`.
+- **Deprecations fail the tests**: `phpunit.xml` sets `failOnDeprecation`, so fix what it reports before you merge.
 
 ## Related
 

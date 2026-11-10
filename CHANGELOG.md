@@ -2,7 +2,7 @@
 
 Notable changes to WELD, newest first.
 
-## Unreleased
+## 0.2.0 (2026-11-09)
 
 - Docs: Parity joins the party. Parity runs Citadel on your own computer (Citadel's PHP image, its proxy and MySQL 5.6) as one program for Windows, macOS and Linux, on Podman or Docker; it takes over local runs from the parity kit in Squire. The README and the quick start gain "Run it like Citadel": build the front end, then `parity check`, `parity init --mysql`, `parity up`, a migration as the `citadel` user and `parity test`, with `bin/weld.ps1 up`, Sail and plain Docker Compose kept as the everyday bench. The README and the Oracle guide add that Citadel's own image carries `oci8`. The README cast seats Parity next to Squire with its spirit-level mark (fifteen parts now, in the docs overview too). The front page lists it as joint 09 of the weld log (0.1.0-rc.2, Pilot, linked to its repository until its site is up), as Squire's partner under "I'm deploying to Citadel", in a line under "Start here", and as a cast card: the shop floor is now two stacked rows, Booster, Rollcall and ADVISOR, then the Citadel row of Squire, Parity and Drawbridge. Squire's lines stop promising local runs. No app code changes. The bubble sits dead center; the weld is level.
 - Changed: WELD locks SESAME 0.7.2 (was 0.7.1; `composer update waynestate/sesame`, the constraint stays `^0.7`). 0.7.2 fixes docs only: the CAS server's address is `https://academica.aws.wayne.edu/cas`, not a `login.wayne.edu` one. No code WELD runs changes.
