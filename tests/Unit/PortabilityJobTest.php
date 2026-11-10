@@ -47,7 +47,7 @@ function weldPortabilityInputs(): array
 
 it('pins the portability component at the Preflight tag every other component uses', function () {
     expect(weldPortabilityInputs()['component'])
-        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.5.0');
+        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.6.0');
 });
 
 it('builds the portable image from the kit in deploy/, on the base the job builds first', function () {
@@ -113,7 +113,14 @@ it('blocks, can be cancelled by a newer push, and cleans its Buildah storage', f
 
 it('runs every check but session-hop', function () {
     expect(weldPortabilityInputs()['inputs']['checks'])
-        ->toBe(['health', 'env-only', 'forwarded-headers', 'logs', 'sigterm']);
+        ->toBe(['health', 'env-only', 'forwarded-headers', 'logs', 'sigterm', 'healthcheck']);
+});
+
+it('runs the image HEALTHCHECK and fails if the Dockerfile drops it', function () {
+    $inputs = weldPortabilityInputs()['inputs'];
+
+    expect($inputs['checks'])->toContain('healthcheck')
+        ->and($inputs['require_healthcheck'])->toBeTrue();
 });
 
 it('boots in production on a key made for the job, trusting no proxy', function () {

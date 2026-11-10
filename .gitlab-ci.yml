@@ -1,21 +1,21 @@
 # WELD's pipeline, built from the Preflight components on this GitLab.
-# Pinned to Preflight 0.5.0. Never use ~latest.
+# Pinned to Preflight 0.6.0. Never use ~latest.
 # WELD requires PHP ^8.3, so the test matrix starts at 8.3.
 # composer ci is the contract: every check runs from the "ci" script in composer.json.
 # Docker Hub images go through the GitLab Dependency Proxy to avoid the anonymous pull limit.
 include:
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.5.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.6.0
     inputs:
       php_versions: ["8.3", "8.4", "8.5"]
       image: "php:${PHP_VERSION}-cli-trixie"
       # The tests are Pest files, and PHPUnit refuses to load them ("Please run
       # ./vendor/bin/pest instead"). Pest runs the PHPUnit class tests too.
       test_command: vendor/bin/pest
-  # Preflight 0.5.0 runs it on composer:2.11.1 by digest, so no image input.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@0.5.0
+  # Preflight 0.6.0 runs it on composer:2.11.1 by digest, so no image input.
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@0.6.0
   # The front page deploy layer (ADR-0017): PROCTOR checks deploy/ against CREED's policy.
   # Warnings pass and failures block, as in the proctor-root job.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@0.5.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@0.6.0
     inputs:
       working_dir: deploy
       proctor_command: vendor/bin/proctor check --format=codequality
@@ -23,7 +23,7 @@ include:
   # Accessibility: Preflight's a11y component serves site/ and checks every page with axe-core 4.14.0, light and
   # dark, at 320 and 1280 px, plus WCAG 1.4.10 reflow, at WCAG 2.2 AA. Its Playwright image comes from
   # mcr.microsoft.com, which the Dependency Proxy does not front, so it takes no image_prefix.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.5.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.6.0
     inputs:
       site_dir: site
       pages: ["**/*.html"]
@@ -32,7 +32,7 @@ include:
   # it: the a11y-pages job saves them into a11y-site/, signed in by SESAME's
   # fake driver. Named a11y-app so it sits beside the site's a11y job. The
   # pages list is the a11y-pages job's A11Y_PATHS: change the two together.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.5.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.6.0
     inputs:
       job_name: a11y-app
       site_dir: a11y-site
@@ -42,11 +42,18 @@ include:
   # composer.lock installs, dev packages left out, kept as sbom.cdx.json for
   # 30 days. When the next advisory lands, finding out whether WELD has the
   # package is one search instead of one guess.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/sbom@0.5.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/sbom@0.6.0
   # Gitleaks reads the checkout and fails on anything shaped like a
   # credential, with the finding redacted in the log and in gitleaks.json.
   # A secret belongs in Settings > CI/CD > Variables, never in a file.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/secret-detection@0.5.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/secret-detection@0.6.0
+  # Migrations meet the MySQL 5.6.51 that Citadel shares (CREED databases.md,
+  # a MUST). The tests run on SQLite, which takes a JSON column or a long
+  # utf8mb4 index that 5.6 rejects at deploy. This job runs php artisan
+  # migrate against a real 5.6.51 service instead. The official 5.6 images
+  # are amd64 only, so the job carries the amd64 runner tag. Test the weld
+  # on the metal you will hang the gate from.
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/mysql56-migrate@0.6.0
   # PORTABILITY (ADR-0010): WELD must run off Citadel too, on OpenShift,
   # Coolify or plain Docker. The portability job builds the portable image
   # (deploy/.squire/portable.Dockerfile) with Buildah, no Docker daemon and no
@@ -69,7 +76,7 @@ include:
   # redirected from it, and a believed X-Forwarded-Host would show in the
   # Location. The runner is arm64: the Buildah image and both bases are
   # multi-arch, so no input names an architecture.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.5.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.6.0
     inputs:
       context: .
       dockerfile: deploy/.squire/portable.Dockerfile
@@ -90,8 +97,13 @@ include:
       # platforms do. Since Preflight 0.5.0 it starts each replica in a session
       # of its own with stdio the uid owns, so a setsid shim here would fork
       # Apache away from the replica's main process and fail health.
+      # Preflight 0.6.0 builds with --format docker, so the image keeps its
+      # HEALTHCHECK (squire-entrypoint health), and healthcheck runs that
+      # command in replica A as the job's uid. require_healthcheck fails the
+      # job if a future Dockerfile drops it.
       probe_path: /dashboard
-      checks: ["health", "env-only", "forwarded-headers", "logs", "sigterm"]
+      checks: ["health", "env-only", "forwarded-headers", "logs", "sigterm", "healthcheck"]
+      require_healthcheck: true
 
 # Every dependency download goes through a cache. The key is fixed per tool,
 # not a lock-file hash: Composer's and npm's caches are additive, so a lock
