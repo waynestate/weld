@@ -13,6 +13,7 @@ Notable changes to WELD, newest first.
 
 - Docs: the README, What's welded in and Status pages name the deploy kit at Squire 0.10.7 (they said 0.10.5), and Contributing no longer says WELD has no tags.
 - Changed: WELD sets Sourdough's two new Laravel defaults: Composer's release cooldown (`config.policy.cooldown`, 3 days, `waynestate/*` exempt) and HELMET's fixed 4xx pages (`helmet.error_pages` on, `HELMET_ERROR_PAGES=false` turns them off).
+- Changed: requires PROCTOR ^0.12 (locked 0.12.0, was ^0.11), and so does the deploy layer.
 - Changed: the deploy kit is Squire 0.10.7 (was 0.10.6): it ships a `.gitattributes` that pins line endings, so the deploy layer clears PROCTOR's line-ending warnings.
 - Changed: the docs, agent-ready and deploy kits are Squire 0.10.6 (was 0.10.5): the docs builder and agent-ready generator see every file on Docker Desktop mounts.
 - Site: `assets/stack-env.js` knows Parity, so a pre-production page links Parity's pre-production site and a dev page links its local `site/` folder. Until now Parity, of all parts, was the one link that ignored its environment.
