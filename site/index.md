@@ -49,6 +49,8 @@ Yes, this is a lot of packages. Most of you can ignore that. Install WELD, run t
    composer ci
    ```
 
+Want it the way Citadel runs it? [Parity](https://git.wayne.edu/enterprise-apps/parity) runs the same folder on Citadel's own PHP image, behind its proxy, with MySQL 5.6: `parity init --mysql`, then `parity up`. Step 2 stays the everyday bench; [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel) has the rest.
+
 [Sourdough](https://sourdough.apps.wayne.edu/) makes the other shapes: `sourdough new my-app` for raw PHP, `sourdough new my-app --laravel` for Laravel with Blade, `sourdough new my-app --laravel --vue` for Vue islands. WELD is the Inertia and Vue shape, ready-made.
 
 Already have an app?
@@ -67,8 +69,8 @@ Most Wayne State apps are older than this stack. Some are raw PHP, some are Lara
   [Booster](https://booster.apps.wayne.edu/)
   Upgrades PHP and Laravel one version at a time, and has a playbook for Vue 2 to 3. It never commits; you read the diff and merge it.
 - I'm deploying to Citadel
-  [Squire](https://squire.apps.wayne.edu/)
-  The build and release scripts Citadel expects, a health check, and a way to run your app locally on the same images.
+  [Squire](https://squire.apps.wayne.edu/) and [Parity](https://git.wayne.edu/enterprise-apps/parity)
+  Squire writes the build and release scripts and the health check Citadel expects. Parity runs your app on Citadel's own image on your computer first.
 - I want CI on every push
   [Preflight](https://preflight.apps.wayne.edu/)
   GitLab CI components for PHP tests on each supported version, PROCTOR, Composer audit, Pint, PHPStan and ESLint.
@@ -168,39 +170,46 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 9. Joint 08
    ### Squire
    The deploy kit
-   Citadel's build, release and health-check scripts from templates, `squire doctor`, local runs on Citadel's image, and one portable image for other hosts.
+   Citadel's build, release and health-check scripts from templates, `squire doctor`, and one portable image for other hosts. Local runs on Citadel's image move to Parity, next joint down.
    Release 0.10.3
    Inspection: In use
    [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
 10. Joint 09
+    ### Parity
+    Citadel, at home
+    Runs any app on Citadel's own PHP image, behind Citadel's proxy, with MySQL 5.6. One program for Windows, macOS and Linux, on Podman or Docker; the desktop app follows.
+    Release 0.1.0-rc.2
+    Inspection: Pilot
+    [Repo of Parity](https://git.wayne.edu/enterprise-apps/parity)
+11. Joint 10
     ### Booster
     Upgrades
     Plans PHP and Laravel upgrades as hops on Rector and gates each hop with your tests on the target PHP. It never commits for you.
     Release 1.14.0
     Inspection: Stable
     [Site of Booster](https://booster.apps.wayne.edu/) [Docs for Booster](https://booster.apps.wayne.edu/docs/)
-11. Joint 10
+12. Joint 11
     ### Rollcall
     The fleet report
     Scans the apps and reports each one's PHP, Laravel, sign-in package and PROCTOR result against CREED's dates, with an end-of-life burn-down. It only reports.
     Release 1.1.0
     Inspection: Stable
     [Site of Rollcall](https://rollcall.apps.wayne.edu/) [Docs for Rollcall](https://rollcall.apps.wayne.edu/docs/)
-12. Joint 11
+13. Joint 12
     ### Drawbridge
     The sign-in gateway
     One OpenID Connect client for Entra ID in front of Citadel apps, passing a signed assertion SESAME checks. Not in front of any apps yet.
     Release 0.6.0
     Inspection: Pilot
     [Site of Drawbridge](https://drawbridge.apps.wayne.edu/) [Docs for Drawbridge](https://drawbridge.apps.wayne.edu/docs/)
-13. Joint 12
+14. Joint 13
     ### ADVISOR
     The MCP server
     Nine read-only tools your coding agent can ask about the stack. Every answer names the file it came from.
     Release 0.2.0
     Inspection: In use
     [Site of ADVISOR](https://advisor.apps.wayne.edu/) [Docs for ADVISOR](https://advisor.apps.wayne.edu/docs/)
-14. Joint 13
+15. Joint 14
     ### WELD
     All of the above
     You are here: Laravel 13 with Inertia 3 and Vue, every joint above already made. Clone it and rename it.
@@ -225,7 +234,7 @@ Up close
 
 ## The cast
 
-The same projects with a bit more detail. The first seven are part of WELD. The next five work around your app: upgrades, the fleet scan, deploys, the sign-in gateway and the MCP server. After those come Sourdough and the one still on the drawing board.
+The same projects with a bit more detail. The first seven are part of WELD. The next six work around your app: upgrades, the fleet scan and the MCP server, then the three that deal with Citadel: deploys, Citadel on your own computer and the sign-in gateway. After those come Sourdough and the one still on the drawing board.
 
 ![WayneUI logo: a rounded frame around a solid shape, with a gold tab on the lower edge](https://weld.apps.wayne.edu/assets/marks/wayneui.svg)
 
@@ -374,19 +383,52 @@ back row   PHP 7.4, waving
 $
 ```
 
+![ADVISOR logo: a speech bubble with a gold compass needle](https://weld.apps.wayne.edu/assets/marks/advisor.png)
+
+### [ADVISOR](https://advisor.apps.wayne.edu/)
+
+0.2.0 Office hours | Always
+
+Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only: it can't write files or run shell commands.
+
+```
+$ advisor mcp
+✓ serving   stdio
+✓ tools     nine, read-only
+answers: from policy.json
+$
+```
+
 ![Squire logo: a satchel with a gold buckle](https://weld.apps.wayne.edu/assets/marks/squire.png)
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
 0.10.3 Armor | Carried
 
-The deploy kit for Citadel: `build.sh`, a release script, a health check and local runs on the same images, plus one portable image for other hosts. This page deploys with it too.
+The deploy kit for Citadel: `build.sh`, a release script and a health check, plus one portable image for other hosts. This page deploys with it too.
 
 ```
 $ squire doctor
 ✓ build.sh     packages only
 ✓ release.sh   idempotent
 ✓ /up          answers
+$
+```
+
+![Parity logo: a spirit level with a gold bubble](https://weld.apps.wayne.edu/assets/marks/parity.png)
+
+### [Parity](https://git.wayne.edu/enterprise-apps/parity)
+
+0.1.0-rc.2 Bubble | Centered
+
+Citadel on your own computer: its PHP image, its proxy and MySQL 5.6, for any app. One program for Windows, macOS and Linux, on Podman or Docker. Squire's old local kit hands it the keys.
+
+```
+$ parity up
+✓ image   Citadel's own
+✓ mysql   5.6.51
+✓ proxy   forwards like Citadel
+twin:   awake
 $
 ```
 
@@ -404,22 +446,6 @@ $ drawbridge config:validate
 ✓ protected   /admin/
 ✓ headers     stripped, every spelling
 bridge: lowered
-$
-```
-
-![ADVISOR logo: a speech bubble with a gold compass needle](https://weld.apps.wayne.edu/assets/marks/advisor.png)
-
-### [ADVISOR](https://advisor.apps.wayne.edu/)
-
-0.2.0 Office hours | Always
-
-Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only: it can't write files or run shell commands.
-
-```
-$ advisor mcp
-✓ serving   stdio
-✓ tools     nine, read-only
-answers: from policy.json
 $
 ```
 

@@ -57,6 +57,7 @@ docker compose -f compose.yaml -f compose.oracle.yaml up
 </code></pre></div></div>
 <p>The overlay swaps only the app's image and passes the <code>ORACLE_*</code> settings through from <code>.env</code>; the ports stay bound to <code>127.0.0.1</code>. It fails closed when <code>WELD_ORACLE_IMAGE</code> is unset.</p>
 <p><code>squire/oracle-parity:8.3</code> is the name Squire documents for its parity image; build it once with Squire's <code>scripts/oracle-image-build.sh --flavour parity --php 8.3</code> (the name is a placeholder until a registry is chosen).</p>
+<p>Or skip the overlay: Citadel's own PHP image carries <code>oci8</code>, so <a href="quick-start.html#run-it-like-citadel">running WELD like Citadel</a> with Parity reaches Oracle the way the deployed app will (Parity's <code>--fallback</code> stand-in leaves <code>oci8</code> out).</p>
 <h2 id="related">Related<a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></h2>
 <ul>
 <li><a href="whats-welded-in.html">What is welded in</a></li>

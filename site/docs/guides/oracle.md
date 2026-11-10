@@ -49,6 +49,8 @@ The overlay swaps only the app's image and passes the `ORACLE_*` settings throug
 
 `squire/oracle-parity:8.3` is the name Squire documents for its parity image; build it once with Squire's `scripts/oracle-image-build.sh --flavour parity --php 8.3` (the name is a placeholder until a registry is chosen).
 
+Or skip the overlay: Citadel's own PHP image carries `oci8`, so [running WELD like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel) with Parity reaches Oracle the way the deployed app will (Parity's `--fallback` stand-in leaves `oci8` out).
+
 ## Related[#](https://weld.apps.wayne.edu/docs/guides/oracle.html#related)
 
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html)

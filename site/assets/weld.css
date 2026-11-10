@@ -622,8 +622,8 @@ body {
 /* ------------------------------------------------------------------ 5. cast */
 
 /* A bento grid on twelve columns: 7 + 5, then three stacked cards, then
-   5 + 7, then the shop floor (three stacked, then 7 + 5), then Sourdough
-   across the whole width. Split cards put the
+   5 + 7, then the shop floor (two rows of three stacked: the helpers, then
+   the Citadel row), then Sourdough across the whole width. Split cards put the
    terminal beside the info; stacked cards put it underneath. */
 
 .cast {
@@ -2560,6 +2560,15 @@ li.journey__stop:has(:is(.part-link, .cast-card__link):hover) img { transform: t
   font-variant-numeric: tabular-nums;
 }
 
+/* A release candidate keeps the number on the line and sets its suffix
+   underneath, smaller, so "0.1.0-rc.2" fits the narrow release column. */
+.joint__pre {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: var(--wsu-font-weight-bold);
+  color: var(--weld-cream-muted);
+}
+
 /* A rubber stamp: outlined capitals, set a few degrees off square. Ink for
    "In use", the WSU green with a double rule for "Stable", a dashed rule
    for "Pilot". */
@@ -2652,6 +2661,11 @@ li.journey__stop:has(:is(.part-link, .cast-card__link):hover) img { transform: t
 
   .joint__links {
     margin-top: 0;
+  }
+
+  /* The meta row has room here, so a release candidate reads on one line. */
+  .joint__pre {
+    display: inline;
   }
 }
 

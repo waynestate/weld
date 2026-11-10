@@ -17,11 +17,11 @@ This page orients you to WELD: what it is, which path to pick first, and where t
 
 WELD is the whole Wayne State app stack joined into one application. Install it, deploy it, and every part is already
 hooked up: sign-in, security headers, checks, coding standards, CI and the WayneUI interface. Think of it as the
-Megazord, except it comes with a deploy script and nobody has to shout to make it combine. Fourteen parts, one bead.
+Megazord, except it comes with a deploy script and nobody has to shout to make it combine. Fifteen parts, one bead.
 
 ## Pick your path
 
-- [Quick start](guides/quick-start.md): bring the whole stack up with one Docker command.
+- [Quick start](guides/quick-start.md): bring the whole stack up with one Docker command, then run it like Citadel with Parity.
 - [Install](install.md): get a copy with composer create-project, or clone it if you want the history too.
 - [What is welded in](guides/whats-welded-in.md): the parts and what each does in the app.
 - [Running WELD off Citadel](running-off-citadel.md): OpenShift, Coolify and plain Docker, with Citadel for comparison.
