@@ -46,6 +46,59 @@ class RegenCheckTest extends TestCase
         $this->assertSame(0, $this->binExitCode($generated, $baseline, $weld));
     }
 
+    public function test_a_crlf_checkout_of_the_lf_bytes_is_identical(): void
+    {
+        $lf = "#!/usr/bin/env pwsh\nWrite-Host weld parity\n";
+        $weld = $this->makeWeld(['scripts/parity.ps1' => str_replace("\n", "\r\n", $lf)]);
+        $generated = $this->makeGenerated([
+            'scripts/parity.ps1' => ['class' => 'managed', 'sha256' => hash('sha256', $lf)],
+        ]);
+        $baseline = $this->writeBaselineFile([]);
+
+        $check = new RegenCheck($generated, $weld);
+        $results = $check->compare();
+        $gate = $check->gate($baseline);
+
+        $this->assertSame([['path' => 'scripts/parity.ps1', 'status' => RegenCheck::STATUS_IDENTICAL, 'class' => 'managed']], $results);
+        $this->assertSame(0, $gate['code']);
+        $this->assertSame([], $gate['newDrift']);
+    }
+
+    public function test_tmp_reverse_direction_and_edges(): void
+    {
+        $crlf = "#!/usr/bin/env pwsh\r\nWrite-Host weld parity\r\n";
+        $lf = str_replace("\r\n", "\n", $crlf);
+        $mixed = "#!/usr/bin/env pwsh\r\nWrite-Host weld parity\n";
+
+        $weld = $this->makeWeld(['scripts/parity.ps1' => $lf]);
+        $generated = $this->makeGenerated([
+            'scripts/parity.ps1' => ['class' => 'managed', 'sha256' => hash('sha256', $crlf)],
+        ]);
+        $results = (new RegenCheck($generated, $weld))->compare();
+        $this->assertSame(RegenCheck::STATUS_IDENTICAL, $results[0]['status']);
+
+        $weld2 = $this->makeWeld(['deploy/scripts/parity.sh' => $lf]);
+        $generated2 = $this->makeGenerated([
+            'scripts/parity.sh' => ['class' => 'managed', 'sha256' => hash('sha256', $crlf)],
+        ]);
+        $results2 = (new RegenCheck($generated2, $weld2))->compare();
+        $this->assertSame(RegenCheck::STATUS_RELOCATED, $results2[0]['status']);
+
+        $weld3 = $this->makeWeld(['scripts/mixed.txt' => $mixed]);
+        $generated3 = $this->makeGenerated([
+            'scripts/mixed.txt' => ['class' => 'managed', 'sha256' => hash('sha256', $mixed)],
+        ]);
+        $results3 = (new RegenCheck($generated3, $weld3))->compare();
+        $this->assertSame(RegenCheck::STATUS_IDENTICAL, $results3[0]['status']);
+
+        $weld4 = $this->makeWeld(['scripts/lone.txt' => "a\rb"]);
+        $generated4 = $this->makeGenerated([
+            'scripts/lone.txt' => ['class' => 'managed', 'sha256' => hash('sha256', 'ab')],
+        ]);
+        $results4 = (new RegenCheck($generated4, $weld4))->compare();
+        $this->assertSame(RegenCheck::STATUS_DIFFERS, $results4[0]['status']);
+    }
+
     public function test_changed_file_fails(): void
     {
         $weld = $this->makeWeld(['config/app.php' => 'weld content']);

@@ -22,8 +22,8 @@ final class RegenCheckError extends \RuntimeException {}
  * path with a vendor or node_modules segment at any depth, and reports each
  * remaining path as IDENTICAL, DIFFERS (the WELD file exists with another
  * SHA-256), MISSING_IN_WELD or RELOCATED (the root file is absent from WELD
- * but deploy/ holds a byte-identical copy, as WELD does for Squire's kit
- * files).
+ * but deploy/ holds a copy that matches apart from line endings, as WELD
+ * does for Squire's kit files).
  *
  * The baseline (.sourdough/regen-baseline.json) records the drift already
  * known and accepted: a sorted list of paths. The gate fails only on NEW
@@ -249,19 +249,38 @@ final class RegenCheck
     {
         $weldPath = $this->weldDir.'/'.$path;
         if (! is_file($weldPath)) {
-            // WELD keeps Squire's kit files under deploy/: a byte-identical
-            // copy there is expected placement, not drift. A changed copy is
-            // real drift and stays MISSING_IN_WELD.
+            // WELD keeps Squire's kit files under deploy/: a copy there that
+            // matches (line endings forgiven) is expected placement, not
+            // drift. A changed copy is real drift and stays MISSING_IN_WELD.
             $deployPath = $this->weldDir.'/deploy/'.$path;
             if (is_file($deployPath)
-                && hash('sha256', (string) file_get_contents($deployPath)) === $sha) {
+                && self::matches((string) file_get_contents($deployPath), $sha)) {
                 return self::STATUS_RELOCATED;
             }
 
             return self::STATUS_MISSING_IN_WELD;
         }
-        $actual = hash('sha256', (string) file_get_contents($weldPath));
 
-        return $actual === $sha ? self::STATUS_IDENTICAL : self::STATUS_DIFFERS;
+        return self::matches((string) file_get_contents($weldPath), $sha)
+            ? self::STATUS_IDENTICAL
+            : self::STATUS_DIFFERS;
+    }
+
+    /**
+     * Line endings are forgiven, as Sourdough's Feed::matches() does, so a
+     * CRLF checkout still matches the bytes Sourdough wrote and the other
+     * way round.
+     */
+    private static function matches(string $content, string $sha256): bool
+    {
+        if (hash('sha256', $content) === $sha256) {
+            return true;
+        }
+        $lf = str_replace("\r\n", "\n", $content);
+        if (hash('sha256', $lf) === $sha256) {
+            return true;
+        }
+
+        return hash('sha256', str_replace("\n", "\r\n", $lf)) === $sha256;
     }
 }

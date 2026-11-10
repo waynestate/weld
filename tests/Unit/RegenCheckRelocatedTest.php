@@ -133,3 +133,42 @@ it('passes the gate with an empty baseline when the only change is relocation', 
         relocatedRemoveDir(dirname($baseline));
     }
 });
+
+it('reports a kit file kept under deploy/ with CRLF line endings as relocated', function () {
+    $parity = "#!/usr/bin/env pwsh\nWrite-Host weld parity\n";
+    $weld = relocatedWeld(['deploy/scripts/parity.ps1' => str_replace("\n", "\r\n", $parity)]);
+    $generated = relocatedGenerated([
+        'scripts/parity.ps1' => ['class' => 'managed', 'sha256' => hash('sha256', $parity)],
+    ]);
+
+    try {
+        $check = new RegenCheck($generated, $weld);
+        $results = $check->compare();
+
+        $this->assertSame([['path' => 'scripts/parity.ps1', 'status' => RegenCheck::STATUS_RELOCATED, 'class' => 'managed']], $results);
+        $this->assertSame([], RegenCheck::driftPaths($results));
+    } finally {
+        relocatedRemoveDir($weld);
+        relocatedRemoveDir($generated);
+    }
+});
+
+it('keeps a CRLF deploy/ copy with a changed line as missing-in-weld drift', function () {
+    $parity = "#!/usr/bin/env pwsh\nWrite-Host weld parity\n";
+    $changed = "#!/usr/bin/env pwsh\nWrite-Host something else\n";
+    $weld = relocatedWeld(['deploy/scripts/parity.ps1' => str_replace("\n", "\r\n", $changed)]);
+    $generated = relocatedGenerated([
+        'scripts/parity.ps1' => ['class' => 'managed', 'sha256' => hash('sha256', $parity)],
+    ]);
+
+    try {
+        $check = new RegenCheck($generated, $weld);
+        $results = $check->compare();
+
+        $this->assertSame([['path' => 'scripts/parity.ps1', 'status' => RegenCheck::STATUS_MISSING_IN_WELD, 'class' => 'managed']], $results);
+        $this->assertSame(['scripts/parity.ps1'], RegenCheck::driftPaths($results));
+    } finally {
+        relocatedRemoveDir($weld);
+        relocatedRemoveDir($generated);
+    }
+});
