@@ -55,56 +55,56 @@
 <tbody>
 <tr>
 <td><code>composer ci</code> (Pest, Pint, PHPStan level 8, agent-ready, docs site, audit)</td>
-<td>2026-11-07</td>
-<td><code>e555f03</code></td>
-<td>Pass: 90 tests (261 assertions), none risky; 67 files formatted; no PHPStan errors; no advisories</td>
-<td>163 s (warm vendor)</td>
+<td>2026-11-10</td>
+<td><code>9bda984</code></td>
+<td>Pass: 189 tests (630 assertions), none risky; Pint clean on 97 files; no PHPStan errors; no advisories</td>
+<td>18 s (warm cache)</td>
 </tr>
 <tr>
 <td><code>composer proctor</code></td>
-<td>2026-11-07</td>
-<td><code>baf8e60</code></td>
-<td>Pass, 1 warning: the PHP 8.3 floor is in security-only support until 2027-12-31</td>
-<td>176 s</td>
+<td>2026-11-10</td>
+<td><code>9bda984</code></td>
+<td>Pass, 7 warnings: the PHP 8.3 floor (security-only support until 2027-12-31), three <code>node-eol</code>, <code>lock-committed</code>, <code>entrypoint-migrate</code> and <code>robots-txt</code></td>
+<td>7 s</td>
 </tr>
 <tr>
 <td><code>ziggy</code> job</td>
-<td>2026-11-07</td>
-<td><code>baf8e60</code></td>
-<td>Pass: the regenerated route list matches the committed one</td>
-<td>174 s</td>
+<td>2026-11-10</td>
+<td><code>9bda984</code></td>
+<td>Pass: the regenerated <code>ziggy.js</code> and <code>ziggy.d.ts</code> match the committed ones byte for byte</td>
+<td>6 s</td>
 </tr>
 <tr>
 <td><code>frontend</code> job (ESLint, Prettier, vue-tsc, Vite)</td>
-<td>2026-11-07</td>
-<td><code>baf8e60</code></td>
-<td>Pass: lint, format and types clean; 168 modules built</td>
-<td>27 s</td>
+<td>2026-11-10</td>
+<td><code>9bda984</code></td>
+<td>Pass: lint, format and types clean; 618 modules built</td>
+<td>11 s</td>
 </tr>
 <tr>
 <td>Accessibility gate (axe-core, WCAG 2.2 AA)</td>
-<td>2026-11-07</td>
-<td><code>e555f03</code></td>
-<td>Pass: 23 pages, 0 violations, light and dark at 360 px and 1280 px</td>
-<td>70 s</td>
+<td>2026-11-10</td>
+<td><code>9bda984</code></td>
+<td>Pass: 24 pages, 96 page checks, 0 violations, light and dark at 320 px and 1280 px</td>
+<td>56 s</td>
 </tr>
 <tr>
 <td>Regen gate (a fresh <code>sourdough new --inertia</code> compared with WELD)</td>
-<td>2026-11-07</td>
-<td><code>e555f03</code></td>
-<td>Pass: no new drift against Sourdough main <code>323a82b</code>; every differing or missing path is in the baseline</td>
-<td>60 s</td>
+<td>2026-11-10</td>
+<td><code>9bda984</code></td>
+<td>Pass: no new drift against Sourdough main <code>f4f3736</code>; every differing or missing path is in the baseline</td>
+<td>33 s</td>
 </tr>
 <tr>
 <td><code>weld:doctor</code></td>
-<td>2026-11-07</td>
-<td><code>baf8e60</code></td>
-<td>Pass: 4 PASS (app key, storage, database, migrations)</td>
-<td>21 s</td>
+<td>2026-11-10</td>
+<td><code>9bda984</code></td>
+<td>Pass: 4 PASS (app key, storage, database, migrations), after <code>bin/weld.sh up</code> brought the stack up from nothing in 179 s</td>
+<td>7 s</td>
 </tr>
 </tbody>
 </table></div>
-<p>Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with <code>composer docs</code> and <code>composer site:agent-ready</code>. The <code>composer ci</code>, accessibility and regen rows above are from this refresh at <code>e555f03</code>: the regen gate now passes against Sourdough's current main (<code>323a82b</code>), with no new drift beyond the recorded baseline, and the accessibility gate runs as <code>scripts/a11y.ps1</code> is written on Docker Desktop, checking all 23 committed pages with 0 violations. The <code>create-project</code> path, the signed-in app-page accessibility checks and the <code>up</code> timings are not in the table: the first installs the newest public tag instead of this commit, and the rest need the running stack and a browser.</p>
+<p>Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with <code>composer docs</code> and <code>composer site:agent-ready</code>. Every row above is from the 2026-11-10 refresh at <code>9bda984</code>, run in the CI's own images on Docker Desktop with nothing retried. Most durations are far shorter than the 2026-11-07 run because the Composer and npm downloads came from warm caches; the 179 s <code>up</code> is the honest cold number for the stack itself. PROCTOR now asks more questions than it did on 2026-11-07, so its warnings went from one to seven; all of them are warnings, and the run passes. The <code>create-project</code> path and the signed-in app-page accessibility checks are not in the table: the first installs the newest public tag instead of this commit, and the second needs the running stack and a browser signed in through SESAME's fake driver.</p>
 <h2 id="what-ran">What <span class="docs-heading-tail"><span>ran</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-ran">#</a></span></h2>
 <p>One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the <a href="../guides/quick-start.html">Quick start</a> says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.</p>
 <ol>
