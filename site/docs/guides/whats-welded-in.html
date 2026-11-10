@@ -62,7 +62,7 @@
 </tr>
 <tr>
 <td>Preflight</td>
-<td>The CI pipeline, from GitLab CI/CD components pinned at 0.5.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection and portability</td>
+<td>The CI pipeline, from GitLab CI/CD components pinned at 0.6.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability</td>
 </tr>
 <tr>
 <td>PROCTOR</td>
@@ -93,7 +93,7 @@
 <p><img src="../readme/journey.svg" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys." /></p>
 <p>One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.</p>
 <h2 id="what-is-on-the-bench-today">What is on the bench <span class="docs-heading-tail"><span>today</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-is-on-the-bench-today">#</a></span></h2>
-<p>Every part is welded in: HELMET and SESAME are in <code>require</code>; CREED, Pinstripe, PROCTOR and ADVISOR are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.5.0; the deploy layer runs Squire's kit 0.10.7. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once <code>@waynestate/pinstripe</code> 0.3.0 is on npm (<a href="../reference/status.html#pinstripe-s-npm-half">the steps</a>).</p>
+<p>Every part is welded in: HELMET and SESAME are in <code>require</code>; CREED, Pinstripe, PROCTOR and ADVISOR are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.6.0; the deploy layer runs Squire's kit 0.10.7. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once <code>@waynestate/pinstripe</code> 0.3.0 is on npm (<a href="../reference/status.html#pinstripe-s-npm-half">the steps</a>).</p>
 <ul>
 <li><code>composer.json</code> is <code>waynestate/weld</code>, requires PHP <code>^8.3</code>, and the lock file resolves for 8.3.0</li>
 <li><code>.env.example</code> sets <code>APP_NAME=WELD</code>, <code>LOG_CHANNEL=stderr</code> and <code>SESSION_DRIVER=database</code></li>

@@ -42,6 +42,7 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased"><span class="docs-heading-tail"><span>Unreleased</span><a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></span></h2>
 <ul>
+<li>Changed: CI pins Preflight 0.6.0; the new mysql56-migrate job runs the migrations against MySQL 5.6.51 (D-078), and the portability job runs the image's own HEALTHCHECK (W12, now Checked).</li>
 <li>Docs: the proof page carries the 2026-11-10 run of all seven checks at <code>9bda984</code> (189 tests, 24 pages with 0 accessibility violations, no regen drift against Sourdough <code>f4f3736</code>).</li>
 <li>Docs: the Proof page keeps <code>composer:2.10.3</code> as the image of its recorded run and says the pipeline now uses <code>composer:2.11.1</code>.</li>
 <li>Changed: the GitHub workflow calls Preflight 0.5.0's reusable workflow (pinned to its release commit), the same release as the GitLab pipeline; it was on 0.1.4 because GitHub's copy of Preflight had no later tag.</li>

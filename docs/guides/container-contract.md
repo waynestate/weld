@@ -37,7 +37,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** Traefik will not route to an unhealthy container, and a missing tool makes a healthy app look dead.
 
-**Stack:** `Documented`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile:47`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php:27`, `deploy/health.php:13`); the portable image's `HEALTHCHECK` runs `squire-entrypoint health`, the same script. Preflight's `portability` job asks `/up` the way a platform's probe does, but Buildah does not run an image's `HEALTHCHECK`, so the command itself goes unchecked in CI. Target `Checked`: a CI step that runs the `HEALTHCHECK` command in the booted image.
+**Stack:** `Checked`. The Dockerfile carries a `HEALTHCHECK` (`deploy/.squire/Dockerfile:47`) whose script asks the local web server for `/up` by default and reads no database (`deploy/health.php:27`, `deploy/health.php:13`); the portable image's `HEALTHCHECK` runs `squire-entrypoint health`, the same script. Preflight's `portability` job (`.gitlab-ci.yml`) builds with `--format docker`, so the image keeps its `HEALTHCHECK`. Its `healthcheck` check runs that command inside the booted replica, as the app's uid, and fails on a non-zero exit. `require_healthcheck: true` fails it if the Dockerfile stops declaring one. `tests/Unit/PortabilityJobTest.php` holds the inputs.
 
 ## W13. Non-root, arbitrary UID in group 0, listen on 8080
 
