@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: the deploy kit is Squire 0.10.7 (was 0.10.6): it ships a `.gitattributes` that pins line endings, so the deploy layer clears PROCTOR's line-ending warnings.
 - Changed: the docs, agent-ready and deploy kits are Squire 0.10.6 (was 0.10.5): the docs builder and agent-ready generator see every file on Docker Desktop mounts.
 - Site: `assets/stack-env.js` knows Parity, so a pre-production page links Parity's pre-production site and a dev page links its local `site/` folder. Until now Parity, of all parts, was the one link that ignored its environment.
 - Docs: Parity is live at https://parity.apps.wayne.edu/. The front page's weld log gives it Site and Docs links like the other live parts, its cast card, the Citadel pick and the "Want it the way Citadel runs it?" line link its site instead of its repo, and "Run it like Citadel" (README and the quick start) gains its install lines (`irm https://parity.apps.wayne.edu/install.ps1 | iex` on Windows, `curl -fsSL https://parity.apps.wayne.edu/install.sh | sh` on macOS and Linux) in place of "until its site is up". Which command when links its site too.
