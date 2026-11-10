@@ -42,6 +42,7 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased"><span class="docs-heading-tail"><span>Unreleased</span><a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></span></h2>
 <ul>
+<li>Changed: the deploy kit is Squire 0.10.7 (was 0.10.6): it ships a <code>.gitattributes</code> that pins line endings, so the deploy layer clears PROCTOR's line-ending warnings.</li>
 <li>Changed: the docs, agent-ready and deploy kits are Squire 0.10.6 (was 0.10.5): the docs builder and agent-ready generator see every file on Docker Desktop mounts.</li>
 <li>Site: <code>assets/stack-env.js</code> knows Parity, so a pre-production page links Parity's pre-production site and a dev page links its local <code>site/</code> folder. Until now Parity, of all parts, was the one link that ignored its environment.</li>
 <li>Docs: Parity is live at <a rel="noopener" href="https://parity.apps.wayne.edu/">https://parity.apps.wayne.edu/</a>. The front page's weld log gives it Site and Docs links like the other live parts, its cast card, the Citadel pick and the &quot;Want it the way Citadel runs it?&quot; line link its site instead of its repo, and &quot;Run it like Citadel&quot; (README and the quick start) gains its install lines (<code>irm https://parity.apps.wayne.edu/install.ps1 | iex</code> on Windows, <code>curl -fsSL https://parity.apps.wayne.edu/install.sh | sh</code> on macOS and Linux) in place of &quot;until its site is up&quot;. Which command when links its site too.</li>
