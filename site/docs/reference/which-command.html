@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Which command when | WELD docs</title>
 <meta name="description" content="The stack&#039;s look-alike commands (weld:doctor, squire doctor, proctor check and the rest) side by side, with what each checks, when to run it and where it runs.">
-<meta name="docs-version" content="0.2.0">
+<meta name="docs-version" content="0.2.1">
 <link rel="stylesheet" href="../../assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="../../assets/docs.css">
 <link rel="stylesheet" href="../../docs/theme/weld.css">
@@ -21,7 +21,7 @@
       <img src="../../brand/weld-avatar-256.png" width="32" height="32" alt="">
       <span class="brand__name">WELD</span>
     </a>
-    <span class="brand__version">0.2.0</span>
+    <span class="brand__version">0.2.1</span>
     <nav class="site-nav" aria-label="Site">
       <a href="../../index.html#start">Get started</a>
       <a href="../../index.html#chooser">Pieces</a>
@@ -65,7 +65,7 @@
 </tr>
 <tr>
 <td><code>vendor/bin/squire doctor</code></td>
-<td><strong>Is my Citadel release setup right?</strong> <code>build.sh</code>, the release scripts, the health check, script hygiene, line endings, secrets kept out of git and the local parity setup, against Squire's rules. Exit 1 on a failed rule. The lock file, audit and MySQL 5.6 checks are handed to PROCTOR.</td>
+<td><strong>Is my Citadel release setup right?</strong> <code>build.sh</code>, the release scripts, the health check, script hygiene, line endings and secrets kept out of git, against Squire's rules; for the deprecated parity kit it says one thing: local runs are <a rel="noopener" href="https://git.wayne.edu/enterprise-apps/parity">Parity</a>'s job now (<code>parity check</code>). Exit 1 on a failed rule. The lock file, audit and MySQL 5.6 checks are handed to PROCTOR.</td>
 <td>After <code>squire init</code> or <code>squire update</code>, and before the first deploy.</td>
 <td>App repo, CI</td>
 </tr>
@@ -159,7 +159,7 @@
   <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
-  <span>Documents WELD <span data-docs-version>0.2.0</span></span>
+  <span>Documents WELD <span data-docs-version>0.2.1</span></span>
   <span><a rel="noopener" href="https://github.com/waynestate/weld">Source</a> <a href="which-command.md">Markdown</a></span>
 </footer>
 </body>

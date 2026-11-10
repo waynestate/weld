@@ -60,7 +60,7 @@ The same subcommands work on every OS:
 | Command | What it does |
 |---|---|
 | `up` | Bring the whole stack up, as above |
-| `down` | Stop and remove the containers |
+| `down` | Stop and remove the containers, and clear Vite's `public/hot` |
 | `test` | Run `composer ci` in the app container |
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs |
@@ -81,6 +81,9 @@ the version of Citadel's shared database server. Parity is one program for Windo
    docker compose run --rm vite npm run build
    ```
 
+   Expected: `down` also clears `public/hot`, the note Vite's dev server leaves so pages load from it. Left behind,
+   it gives you a blank page under Parity.
+
 2. Check this computer, then write the app's Citadel settings:
 
    ```sh
@@ -91,7 +94,17 @@ the version of Citadel's shared database server. Parity is one program for Windo
    Expected: `parity check` prints one line per finding, with the fix under each one that needs it. `parity init`
    writes `parity.json`; `--mysql` is Citadel's "MySQL: yes".
 
-3. Bring it up, migrate as Citadel would, and test it:
+3. Add one line to `parity.json`, under `"mode"`, so the health check asks Laravel's `/up`, as Squire's `health.php`
+   does on Citadel:
+
+   ```json
+   "health_check": "curl -fsS -o /dev/null http://127.0.0.1/up",
+   ```
+
+   Parity's default asks the front page, which needs the sessions table, and that table arrives with the migration
+   in the next step. Without this line the first `parity up` waits five minutes and fails.
+
+4. Bring it up, migrate as Citadel would, and test it:
 
    ```sh
    parity up
@@ -100,14 +113,20 @@ the version of Citadel's shared database server. Parity is one program for Windo
    ```
 
    Expected: `parity up` builds the app behind the proxy and prints its address (http://localhost:8080 unless you pick
-   a port). Your folder is mounted where Citadel mounts it, so an edit shows on the next request. The app gets
-   Laravel's `DB_*` settings for the local MySQL, so `.env` keeps SQLite for the everyday bench. `parity test` asks the
-   running app what Citadel's users would; `parity down` stops it and keeps the data.
+   a port). On a fresh database the front page answers 500 until the migration runs, so the first `parity up` ends on
+   a warning that says so; on Windows its proxy step can time out on that page instead. Carry on with the migration:
+   `parity test` is the word that counts. Your folder is mounted where Citadel mounts it, so an edit shows on the next
+   request. The app gets Laravel's `DB_*` settings for the local MySQL, so `.env` keeps SQLite for the everyday bench.
+   `parity test` asks the running app what Citadel's users would; `parity down` stops it and keeps the data.
+
+A folder on the Windows disk is slow inside the container: in the 2026-11-09 proof run a page took about 10 seconds,
+and `php artisan --version` 9 seconds against a quarter of a second from the container's own disk. Slow, but it holds.
 
 No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks it
-byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity is at
-0.1.0-rc.2 with 0.1.0 close, and its site is not up yet, so install it from the repository's releases. It takes over
-local runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical
+byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity 0.1.0
+is out; until its site is up, take the download for your computer from
+[its release](https://git.wayne.edu/enterprise-apps/parity/-/releases/0.1.0) on git.wayne.edu. It takes over local
+runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical
 under the hood, because it is the same hood.
 
 ## What you built

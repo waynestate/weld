@@ -111,7 +111,7 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 
 ## Releasing
 
-WELD is tagged (0.1.0 through 0.2.0 so far). To release a version:
+WELD is tagged (0.1.0 through 0.2.1 so far). To release a version:
 
 1. Move the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. All the checks above green locally, then both pipelines green for that commit.

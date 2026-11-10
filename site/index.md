@@ -178,7 +178,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Parity
     Citadel, at home
     Runs any app on Citadel's own PHP image, behind Citadel's proxy, with MySQL 5.6. One program for Windows, macOS and Linux, on Podman or Docker; the desktop app follows.
-    Release 0.1.0-rc.2
+    Release 0.1.0
     Inspection: Pilot
     [Repo of Parity](https://git.wayne.edu/enterprise-apps/parity)
 11. Joint 10
@@ -213,7 +213,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### WELD
     All of the above
     You are here: Laravel 13 with Inertia 3 and Vue, every joint above already made. Clone it and rename it.
-    Release 0.2.0
+    Release 0.2.1
     Inspection: In use
     [Docs for WELD](https://weld.apps.wayne.edu/docs/index.html) [Changes in WELD](https://weld.apps.wayne.edu/docs/changelog.html)
 
@@ -419,7 +419,7 @@ $
 
 ### [Parity](https://git.wayne.edu/enterprise-apps/parity)
 
-0.1.0-rc.2 Bubble | Centered
+0.1.0 Bubble | Centered
 
 Citadel on your own computer: its PHP image, its proxy and MySQL 5.6, for any app. One program for Windows, macOS and Linux, on Podman or Docker. Squire's old local kit hands it the keys.
 

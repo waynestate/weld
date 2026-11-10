@@ -50,7 +50,7 @@ npm ci
 ```
 
 `create-project` installs the newest tagged release, and `main` can be ahead of it (the [CHANGELOG](https://github.com/waynestate/weld/blob/HEAD/CHANGELOG.md)
-lists what is unreleased). The newest tag is 0.2.0; 0.1.3 (2026-11-06) was the first where WayneUI draws the app.
+lists what is unreleased). The newest tag is 0.2.1; 0.1.3 (2026-11-06) was the first where WayneUI draws the app.
 Clone when you want `main`.
 
 Or clone it, if you want the history too, and it is yours to rename:
@@ -214,7 +214,7 @@ The same subcommands work on every OS:
 | Command | What it does |
 |---|---|
 | `up` | Bring the whole stack up, as above |
-| `down` | Stop and remove the containers |
+| `down` | Stop and remove the containers, and clear Vite's `public/hot` |
 | `test` | Run `composer ci` in the app container |
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs |
@@ -238,13 +238,27 @@ with its `php.ini` and `vhost.conf`, Citadel's proxy in front adding `X-Forwarde
 MySQL 5.6, the version of Citadel's shared database server. Parity is one program for Windows, macOS and Linux on
 Podman (recommended) or Docker. It needs no PHP on your computer and adds one file to the app, `parity.json`.
 
-Stop the Compose stack first (`down`), so Vite's dev server is not in the way, and build the front end once, because
-Citadel serves built assets. Then, the same on every OS:
+Stop the Compose stack first with `down`, which also clears `public/hot`, the note Vite's dev server leaves so pages
+load from it; left behind, it gives you a blank page under Parity. Build the front end once, because Citadel serves
+built assets. Then check this computer and write the app's Citadel settings, the same on every OS:
 
 ```
 docker compose run --rm vite npm run build
 parity check
 parity init --mysql
+```
+
+Add one line to `parity.json`, under `"mode"`, so the health check asks Laravel's `/up`, as Squire's `health.php`
+does on Citadel. Parity's default asks the front page, which needs the sessions table, and that table arrives with
+the migration below:
+
+```json
+"health_check": "curl -fsS -o /dev/null http://127.0.0.1/up",
+```
+
+Then bring it up, migrate as Citadel would, and test it:
+
+```
 parity up
 parity shell --user citadel php artisan migrate
 parity test
@@ -257,11 +271,18 @@ edit shows on the next request, and the app gets Laravel's `DB_*` settings for t
 SQLite for the everyday bench. The migration runs as the `citadel` user, the way Citadel runs a release.
 `parity test` asks the running app what Citadel's users would, and `parity down` stops it with the data kept.
 
+On a fresh database the front page answers 500 until the migration runs, so the first `parity up` ends on a warning
+that says so; on Windows its proxy step can time out on that page instead. Carry on with the migration: `parity
+test` is the word that counts. A folder on the Windows disk is slow inside the container: in the 2026-11-09 proof run
+a page took about 10 seconds, and `php artisan --version` 9 seconds against a quarter of a second from the
+container's own disk. Slow, but it holds.
+
 No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks
 it byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity
-is at 0.1.0-rc.2 with 0.1.0 close, and its site is not up yet, so install it from the repository's releases. It
-takes over local runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the
-bead looks identical under the hood, because it is the same hood.
+0.1.0 is out; until its site is up, take the download for your computer from
+[its release](https://git.wayne.edu/enterprise-apps/parity/-/releases/0.1.0) on git.wayne.edu. It takes over local
+runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under
+the hood, because it is the same hood.
 
 ### Oracle
 
@@ -324,7 +345,7 @@ Several stack commands sound alike (`weld:doctor`, `squire doctor`, `proctor che
 |---|---|---|---|
 | `composer ci` | **Will my pipeline pass?** The repo's own CI contract, the same command the pipeline runs: validation, the tests, Pint, PHPStan, `composer audit` and whatever checks the repo adds. | Before every push. | App repo, CI |
 | `bin/weld.sh doctor` or `.\bin\weld.ps1 doctor` (both run `php artisan weld:doctor`) | **Does my WELD app hold together?** The app key, writable `storage` and `bootstrap/cache`, the database connection and pending migrations. One PASS, WARN or FAIL line each; exit 1 on a FAIL. Standards are PROCTOR's. | After `up`, when the app will not start, and after every deploy off Citadel. | App repo (in the app container), deploy host (in the app container) |
-| `vendor/bin/squire doctor` | **Is my Citadel release setup right?** `build.sh`, the release scripts, the health check, script hygiene, line endings, secrets kept out of git and the local parity setup, against Squire's rules. Exit 1 on a failed rule. The lock file, audit and MySQL 5.6 checks are handed to PROCTOR. | After `squire init` or `squire update`, and before the first deploy. | App repo, CI |
+| `vendor/bin/squire doctor` | **Is my Citadel release setup right?** `build.sh`, the release scripts, the health check, script hygiene, line endings and secrets kept out of git, against Squire's rules; for the deprecated parity kit it says one thing: local runs are [Parity](https://git.wayne.edu/enterprise-apps/parity)'s job now (`parity check`). Exit 1 on a failed rule. The lock file, audit and MySQL 5.6 checks are handed to PROCTOR. | After `squire init` or `squire update`, and before the first deploy. | App repo, CI |
 | `vendor/bin/squire init --check` | **Have the files Squire wrote drifted from its templates?** Missing, outdated or edited copies. Writes nothing; exit 1 on drift. | After you upgrade Squire (then run `squire update`), and in CI. | App repo, CI |
 | `vendor/bin/squire doctor oracle`, or `php artisan oracle:check` in WELD and Sourdough's Laravel apps | **Can my app reach Oracle?** The `ORACLE_*` settings, the host, the port, the `oci8` driver and the login, in plain language, printing setting names and never values. Silent when the app has no Oracle settings. | After you fill in the `ORACLE_*` settings, or when a connection fails. Squire's `release.sh` runs the same check on every release, as a report. | App repo, deploy host |
 | `vendor/bin/proctor check` (`composer proctor` in WELD and Sourdough's apps) | **Does my app meet CREED's policy?** The PHP floor, Laravel, Node and MySQL end of life, the committed lock, `composer audit`, open-ended constraints, portability, MySQL 5.6 safety, overrides and the rest of its checks. Exit 1 on a FAIL. | Before you merge; the pipeline runs it too. | App repo, CI |
@@ -542,7 +563,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Parity
     Citadel, at home
     Runs any app on Citadel's own PHP image, behind Citadel's proxy, with MySQL 5.6. One program for Windows, macOS and Linux, on Podman or Docker; the desktop app follows.
-    Release 0.1.0-rc.2
+    Release 0.1.0
     Inspection: Pilot
     [Repo of Parity](https://git.wayne.edu/enterprise-apps/parity)
 11. Joint 10
@@ -577,7 +598,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### WELD
     All of the above
     You are here: Laravel 13 with Inertia 3 and Vue, every joint above already made. Clone it and rename it.
-    Release 0.2.0
+    Release 0.2.1
     Inspection: In use
     [Docs for WELD](https://weld.apps.wayne.edu/docs/index.html) [Changes in WELD](https://weld.apps.wayne.edu/docs/changelog.html)
 
@@ -783,7 +804,7 @@ $
 
 #### [Parity](https://git.wayne.edu/enterprise-apps/parity)
 
-0.1.0-rc.2 Bubble | Centered
+0.1.0 Bubble | Centered
 
 Citadel on your own computer: its PHP image, its proxy and MySQL 5.6, for any app. One program for Windows, macOS and Linux, on Podman or Docker. Squire's old local kit hands it the keys.
 
@@ -953,6 +974,12 @@ Source: https://weld.apps.wayne.edu/docs/changelog.html
 ## Changelog[#](https://weld.apps.wayne.edu/docs/changelog.html#changelog)
 
 Notable changes to WELD, newest first.
+
+### 0.2.1 (2026-11-09)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-1-2026-11-09)
+
+- Fixed: `bin/weld.ps1 down` and `bin/weld.sh down` clear `public/hot`. Vite's dev server writes it so pages load their scripts from `http://localhost:5173`, and stopping its container left it behind, so the first real run of "Run it like Citadel" served WELD through Parity as a blank page. `tests/Unit/LocalStackTest.php` fails if either script stops clearing it.
+- Docs: "Run it like Citadel" (README and the quick start) was run word for word on Parity 0.1.0 with Citadel's own `citadel/php-apache:8.5r3`, and now says what it takes: one `health_check` line in `parity.json` that asks Laravel's `/up`, as Squire's `health.php` does on Citadel, because Parity's default asks the front page and the front page needs the sessions table the migration makes (without it the first `parity up` waited five minutes and failed); on a fresh database the first `parity up` ends on the front page's 500 (on Windows its proxy step can time out on it) until the migration runs; and a folder on the Windows disk is slow inside the container (about 10 seconds a page). Parity 0.1.0 is out, so the docs and the front page's weld log and cast card say 0.1.0 (they said 0.1.0-rc.2) and point at its release on git.wayne.edu until its site is up. The commands reference says what `down` now clears.
+- Docs: Which command when stops saying `squire doctor` checks "the local parity setup": the parity kit is deprecated, and local runs on Citadel's image are Parity's job (`parity check`). The other READMEs copy the row next.
 
 ### 0.2.0 (2026-11-09)[#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-0-2026-11-09)
 
@@ -1747,7 +1774,7 @@ The same subcommands work on every OS:
 | Command | What it does |
 | --- | --- |
 | `up` | Bring the whole stack up, as above |
-| `down` | Stop and remove the containers |
+| `down` | Stop and remove the containers, and clear Vite's `public/hot` |
 | `test` | Run `composer ci` in the app container |
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs |
@@ -1760,21 +1787,29 @@ The steps above are the everyday bench: the stock PHP image, SQLite and Vite rel
    ```sh
    docker compose run --rm vite npm run build
    ```
+   Expected: `down` also clears `public/hot`, the note Vite's dev server leaves so pages load from it. Left behind, it gives you a blank page under Parity.
 2. Check this computer, then write the app's Citadel settings:
    ```sh
    parity check
    parity init --mysql
    ```
    Expected: `parity check` prints one line per finding, with the fix under each one that needs it. `parity init` writes `parity.json`; `--mysql` is Citadel's "MySQL: yes".
-3. Bring it up, migrate as Citadel would, and test it:
+3. Add one line to `parity.json`, under `"mode"`, so the health check asks Laravel's `/up`, as Squire's `health.php` does on Citadel:
+   ```json
+   "health_check": "curl -fsS -o /dev/null http://127.0.0.1/up",
+   ```
+   Parity's default asks the front page, which needs the sessions table, and that table arrives with the migration in the next step. Without this line the first `parity up` waits five minutes and fails.
+4. Bring it up, migrate as Citadel would, and test it:
    ```sh
    parity up
    parity shell --user citadel php artisan migrate
    parity test
    ```
-   Expected: `parity up` builds the app behind the proxy and prints its address ([http://localhost:8080](http://localhost:8080) unless you pick a port). Your folder is mounted where Citadel mounts it, so an edit shows on the next request. The app gets Laravel's `DB_*` settings for the local MySQL, so `.env` keeps SQLite for the everyday bench. `parity test` asks the running app what Citadel's users would; `parity down` stops it and keeps the data.
+   Expected: `parity up` builds the app behind the proxy and prints its address ([http://localhost:8080](http://localhost:8080) unless you pick a port). On a fresh database the front page answers 500 until the migration runs, so the first `parity up` ends on a warning that says so; on Windows its proxy step can time out on that page instead. Carry on with the migration: `parity test` is the word that counts. Your folder is mounted where Citadel mounts it, so an edit shows on the next request. The app gets Laravel's `DB_*` settings for the local MySQL, so `.env` keeps SQLite for the everyday bench. `parity test` asks the running app what Citadel's users would; `parity down` stops it and keeps the data.
 
-No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks it byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity is at 0.1.0-rc.2 with 0.1.0 close, and its site is not up yet, so install it from the repository's releases. It takes over local runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood, because it is the same hood.
+A folder on the Windows disk is slow inside the container: in the 2026-11-09 proof run a page took about 10 seconds, and `php artisan --version` 9 seconds against a quarter of a second from the container's own disk. Slow, but it holds.
+
+No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks it byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity 0.1.0 is out; until its site is up, take the download for your computer from [its release](https://git.wayne.edu/enterprise-apps/parity/-/releases/0.1.0) on git.wayne.edu. It takes over local runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood, because it is the same hood.
 
 ### What you built[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#what-you-built)
 
@@ -1998,7 +2033,7 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 
 ### Status[#](https://weld.apps.wayne.edu/docs/#status)
 
-Latest release: 0.2.0 (2026-11-09). The license is MIT.
+Latest release: 0.2.1 (2026-11-09). The license is MIT.
 
 **Not to be confused with:** `weld:doctor` checks local setup only; standards checks are PROCTOR's.
 
@@ -2097,7 +2132,7 @@ One command strikes the spark; the containers do the welding. Docker is the only
 | Command | What it does |
 | --- | --- |
 | `up` | Copy `.env.example` to `.env` if missing, install the PHP and Node dependencies in the containers, write `.mcp.json` from ADVISOR, start the app and Vite, generate the app key if needed, and migrate |
-| `down` | Stop and remove the containers |
+| `down` | Stop and remove the containers, and clear Vite's `public/hot` (left behind, it blanks every page Parity serves) |
 | `test` | Run `composer ci` in the app container |
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs; Ctrl+C stops |
@@ -2162,7 +2197,7 @@ sh
 bin/weld.sh logs
 ```
 
-Stop and remove the containers:
+Stop and remove the containers, and clear Vite's `public/hot`:
 
 PowerShell
 
@@ -2576,7 +2611,7 @@ Several stack commands sound alike (`weld:doctor`, `squire doctor`, `proctor che
 | --- | --- | --- | --- |
 | `composer ci` | **Will my pipeline pass?** The repo's own CI contract, the same command the pipeline runs: validation, the tests, Pint, PHPStan, `composer audit` and whatever checks the repo adds. | Before every push. | App repo, CI |
 | `bin/weld.sh doctor` or `.\bin\weld.ps1 doctor` (both run `php artisan weld:doctor`) | **Does my WELD app hold together?** The app key, writable `storage` and `bootstrap/cache`, the database connection and pending migrations. One PASS, WARN or FAIL line each; exit 1 on a FAIL. Standards are PROCTOR's. | After `up`, when the app will not start, and after every deploy off Citadel. | App repo (in the app container), deploy host (in the app container) |
-| `vendor/bin/squire doctor` | **Is my Citadel release setup right?** `build.sh`, the release scripts, the health check, script hygiene, line endings, secrets kept out of git and the local parity setup, against Squire's rules. Exit 1 on a failed rule. The lock file, audit and MySQL 5.6 checks are handed to PROCTOR. | After `squire init` or `squire update`, and before the first deploy. | App repo, CI |
+| `vendor/bin/squire doctor` | **Is my Citadel release setup right?** `build.sh`, the release scripts, the health check, script hygiene, line endings and secrets kept out of git, against Squire's rules; for the deprecated parity kit it says one thing: local runs are [Parity](https://git.wayne.edu/enterprise-apps/parity)'s job now (`parity check`). Exit 1 on a failed rule. The lock file, audit and MySQL 5.6 checks are handed to PROCTOR. | After `squire init` or `squire update`, and before the first deploy. | App repo, CI |
 | `vendor/bin/squire init --check` | **Have the files Squire wrote drifted from its templates?** Missing, outdated or edited copies. Writes nothing; exit 1 on drift. | After you upgrade Squire (then run `squire update`), and in CI. | App repo, CI |
 | `vendor/bin/squire doctor oracle`, or `php artisan oracle:check` in WELD and Sourdough's Laravel apps | **Can my app reach Oracle?** The `ORACLE_*` settings, the host, the port, the `oci8` driver and the login, in plain language, printing setting names and never values. Silent when the app has no Oracle settings. | After you fill in the `ORACLE_*` settings, or when a connection fails. Squire's `release.sh` runs the same check on every release, as a report. | App repo, deploy host |
 | `vendor/bin/proctor check` (`composer proctor` in WELD and Sourdough's apps) | **Does my app meet CREED's policy?** The PHP floor, Laravel, Node and MySQL end of life, the committed lock, `composer audit`, open-ended constraints, portability, MySQL 5.6 safety, overrides and the rest of its checks. Exit 1 on a FAIL. | Before you merge; the pipeline runs it too. | App repo, CI |
@@ -2866,7 +2901,7 @@ The CHANGELOG lists notable changes to WELD, newest first. Pending work sits und
 
 ### What a release does[#](https://weld.apps.wayne.edu/docs/upgrading.html#what-a-release-does)
 
-WELD is tagged (0.1.0 through 0.2.0 so far). A release:
+WELD is tagged (0.1.0 through 0.2.1 so far). A release:
 
 1. Moves the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. Needs all the checks green locally, then both pipelines green for that commit.
@@ -2890,6 +2925,8 @@ Then run all the checks and commit the lock file.
 - **HELMET's config**: `config/helmet.php` becomes a thin override (only `policy_path`); copy it from WELD and move any setting you changed into `.env` or that file.
 - **Part constraints**: HELMET `^1.3`, SESAME `^0.7` (its CAS protocol defaults to 2.0), PROCTOR `^0.11`, CREED `^0.1.8` and ADVISOR `^0.2`.
 - **Deprecations fail the tests**: `phpunit.xml` sets `failOnDeprecation`, so fix what it reports before you merge.
+
+0.2.1 carries no breaking change. An app built from 0.2.0 that keeps WELD's `bin/weld.ps1` and `bin/weld.sh` copies their `down` from WELD, so it clears `public/hot` too.
 
 ### Related[#](https://weld.apps.wayne.edu/docs/upgrading.html#related)
 

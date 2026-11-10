@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quick start | WELD docs</title>
 <meta name="description" content="Get a new app running in Docker, check the setup with weld:doctor, and plan the rename.">
-<meta name="docs-version" content="0.2.0">
+<meta name="docs-version" content="0.2.1">
 <link rel="stylesheet" href="../../assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="../../assets/docs.css">
 <link rel="stylesheet" href="../../docs/theme/weld.css">
@@ -21,7 +21,7 @@
       <img src="../../brand/weld-avatar-256.png" width="32" height="32" alt="">
       <span class="brand__name">WELD</span>
     </a>
-    <span class="brand__version">0.2.0</span>
+    <span class="brand__version">0.2.1</span>
     <nav class="site-nav" aria-label="Site">
       <a href="../../index.html#start">Get started</a>
       <a href="../../index.html#chooser">Pieces</a>
@@ -90,7 +90,7 @@ and audit.</p>
 </tr>
 <tr>
 <td><code>down</code></td>
-<td>Stop and remove the containers</td>
+<td>Stop and remove the containers, and clear Vite's <code>public/hot</code></td>
 </tr>
 <tr>
 <td><code>test</code></td>
@@ -119,6 +119,8 @@ the version of Citadel's shared database server. Parity is one program for Windo
 Citadel serves built assets:</p>
 <pre tabindex="0"><code class="language-sh">docker compose run --rm vite npm run build
 </code></pre>
+<p>Expected: <code>down</code> also clears <code>public/hot</code>, the note Vite's dev server leaves so pages load from it. Left behind,
+it gives you a blank page under Parity.</p>
 </li>
 <li>
 <p>Check this computer, then write the app's Citadel settings:</p>
@@ -129,21 +131,34 @@ parity init --mysql
 writes <code>parity.json</code>; <code>--mysql</code> is Citadel's &quot;MySQL: yes&quot;.</p>
 </li>
 <li>
+<p>Add one line to <code>parity.json</code>, under <code>&quot;mode&quot;</code>, so the health check asks Laravel's <code>/up</code>, as Squire's <code>health.php</code>
+does on Citadel:</p>
+<pre tabindex="0"><code class="language-json">&quot;health_check&quot;: &quot;curl -fsS -o /dev/null http://127.0.0.1/up&quot;,
+</code></pre>
+<p>Parity's default asks the front page, which needs the sessions table, and that table arrives with the migration
+in the next step. Without this line the first <code>parity up</code> waits five minutes and fails.</p>
+</li>
+<li>
 <p>Bring it up, migrate as Citadel would, and test it:</p>
 <pre tabindex="0"><code class="language-sh">parity up
 parity shell --user citadel php artisan migrate
 parity test
 </code></pre>
 <p>Expected: <code>parity up</code> builds the app behind the proxy and prints its address (<a rel="noopener" href="http://localhost:8080">http://localhost:8080</a> unless you pick
-a port). Your folder is mounted where Citadel mounts it, so an edit shows on the next request. The app gets
-Laravel's <code>DB_*</code> settings for the local MySQL, so <code>.env</code> keeps SQLite for the everyday bench. <code>parity test</code> asks the
-running app what Citadel's users would; <code>parity down</code> stops it and keeps the data.</p>
+a port). On a fresh database the front page answers 500 until the migration runs, so the first <code>parity up</code> ends on
+a warning that says so; on Windows its proxy step can time out on that page instead. Carry on with the migration:
+<code>parity test</code> is the word that counts. Your folder is mounted where Citadel mounts it, so an edit shows on the next
+request. The app gets Laravel's <code>DB_*</code> settings for the local MySQL, so <code>.env</code> keeps SQLite for the everyday bench.
+<code>parity test</code> asks the running app what Citadel's users would; <code>parity down</code> stops it and keeps the data.</p>
 </li>
 </ol>
+<p>A folder on the Windows disk is slow inside the container: in the 2026-11-09 proof run a page took about 10 seconds,
+and <code>php artisan --version</code> 9 seconds against a quarter of a second from the container's own disk. Slow, but it holds.</p>
 <p>No Citadel image on this computer yet? <code>parity image get</code> downloads it with your own git.wayne.edu access and checks it
-byte for byte, and <code>parity up --fallback</code> builds a labeled stand-in from the official PHP image meanwhile. Parity is at
-0.1.0-rc.2 with 0.1.0 close, and its site is not up yet, so install it from the repository's releases. It takes over
-local runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical
+byte for byte, and <code>parity up --fallback</code> builds a labeled stand-in from the official PHP image meanwhile. Parity 0.1.0
+is out; until its site is up, take the download for your computer from
+<a rel="noopener" href="https://git.wayne.edu/enterprise-apps/parity/-/releases/0.1.0">its release</a> on git.wayne.edu. It takes over local
+runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical
 under the hood, because it is the same hood.</p>
 <h2 id="what-you-built">What you built<a class="docs-heading-link" aria-label="Link to this section" href="#what-you-built">#</a></h2>
 <p>You have WELD running locally in Docker: the app and Vite in containers, <code>.env</code> copied from <code>.env.example</code>, the app key
@@ -173,7 +188,7 @@ git remote), give the copy its own key, and re-run the checks.</li>
   <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#steps">Steps</a></li><li class="docs-toc__item"><a href="#the-subcommands">The subcommands</a></li><li class="docs-toc__item"><a href="#run-it-like-citadel">Run it like Citadel</a></li><li class="docs-toc__item"><a href="#what-you-built">What you built</a></li><li class="docs-toc__item"><a href="#next-steps">Next steps</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
-  <span>Documents WELD <span data-docs-version>0.2.0</span></span>
+  <span>Documents WELD <span data-docs-version>0.2.1</span></span>
   <span><a rel="noopener" href="https://github.com/waynestate/weld">Source</a> <a href="quick-start.md">Markdown</a></span>
 </footer>
 </body>

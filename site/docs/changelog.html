@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Changelog | WELD docs</title>
 <meta name="description" content="All notable changes to this project.">
-<meta name="docs-version" content="0.2.0">
+<meta name="docs-version" content="0.2.1">
 <link rel="stylesheet" href="../assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="../assets/docs.css">
 <link rel="stylesheet" href="../docs/theme/weld.css">
@@ -21,7 +21,7 @@
       <img src="../brand/weld-avatar-256.png" width="32" height="32" alt="">
       <span class="brand__name">WELD</span>
     </a>
-    <span class="brand__version">0.2.0</span>
+    <span class="brand__version">0.2.1</span>
     <nav class="site-nav" aria-label="Site">
       <a href="../index.html#start">Get started</a>
       <a href="../index.html#chooser">Pieces</a>
@@ -40,6 +40,12 @@
       <article class="docs-article"><!-- Generated from CHANGELOG.md by bin/docs-site.php. Edit CHANGELOG.md, not this file. -->
 <h1 id="changelog">Changelog<a class="docs-heading-link" aria-label="Link to this section" href="#changelog">#</a></h1>
 <p>Notable changes to WELD, newest first.</p>
+<h2 id="0-2-1-2026-11-09">0.2.1 (2026-11-09)<a class="docs-heading-link" aria-label="Link to this section" href="#0-2-1-2026-11-09">#</a></h2>
+<ul>
+<li>Fixed: <code>bin/weld.ps1 down</code> and <code>bin/weld.sh down</code> clear <code>public/hot</code>. Vite's dev server writes it so pages load their scripts from <code>http://localhost:5173</code>, and stopping its container left it behind, so the first real run of &quot;Run it like Citadel&quot; served WELD through Parity as a blank page. <code>tests/Unit/LocalStackTest.php</code> fails if either script stops clearing it.</li>
+<li>Docs: &quot;Run it like Citadel&quot; (README and the quick start) was run word for word on Parity 0.1.0 with Citadel's own <code>citadel/php-apache:8.5r3</code>, and now says what it takes: one <code>health_check</code> line in <code>parity.json</code> that asks Laravel's <code>/up</code>, as Squire's <code>health.php</code> does on Citadel, because Parity's default asks the front page and the front page needs the sessions table the migration makes (without it the first <code>parity up</code> waited five minutes and failed); on a fresh database the first <code>parity up</code> ends on the front page's 500 (on Windows its proxy step can time out on it) until the migration runs; and a folder on the Windows disk is slow inside the container (about 10 seconds a page). Parity 0.1.0 is out, so the docs and the front page's weld log and cast card say 0.1.0 (they said 0.1.0-rc.2) and point at its release on git.wayne.edu until its site is up. The commands reference says what <code>down</code> now clears.</li>
+<li>Docs: Which command when stops saying <code>squire doctor</code> checks &quot;the local parity setup&quot;: the parity kit is deprecated, and local runs on Citadel's image are Parity's job (<code>parity check</code>). The other READMEs copy the row next.</li>
+</ul>
 <h2 id="0-2-0-2026-11-09">0.2.0 (2026-11-09)<a class="docs-heading-link" aria-label="Link to this section" href="#0-2-0-2026-11-09">#</a></h2>
 <ul>
 <li>
@@ -490,10 +496,10 @@ every OS.</li>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../docs/contributing.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Contributing</span></a></nav>
   </div>
-  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#0-2-0-2026-11-09">0.2.0 (2026-11-09)</a></li><li class="docs-toc__item"><a href="#0-1-5-2026-11-07">0.1.5 (2026-11-07)</a></li><li class="docs-toc__item"><a href="#0-1-4-2026-11-07">0.1.4 (2026-11-07)</a></li><li class="docs-toc__item"><a href="#0-1-3-2026-11-06">0.1.3 (2026-11-06)</a></li><li class="docs-toc__item"><a href="#0-1-2-2026-11-03">0.1.2 (2026-11-03)</a></li><li class="docs-toc__item"><a href="#0-1-1-2026-10-29">0.1.1 (2026-10-29)</a></li><li class="docs-toc__item"><a href="#0-1-0-2026-10-29">0.1.0 (2026-10-29)</a></li></ul></nav>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#0-2-1-2026-11-09">0.2.1 (2026-11-09)</a></li><li class="docs-toc__item"><a href="#0-2-0-2026-11-09">0.2.0 (2026-11-09)</a></li><li class="docs-toc__item"><a href="#0-1-5-2026-11-07">0.1.5 (2026-11-07)</a></li><li class="docs-toc__item"><a href="#0-1-4-2026-11-07">0.1.4 (2026-11-07)</a></li><li class="docs-toc__item"><a href="#0-1-3-2026-11-06">0.1.3 (2026-11-06)</a></li><li class="docs-toc__item"><a href="#0-1-2-2026-11-03">0.1.2 (2026-11-03)</a></li><li class="docs-toc__item"><a href="#0-1-1-2026-10-29">0.1.1 (2026-10-29)</a></li><li class="docs-toc__item"><a href="#0-1-0-2026-10-29">0.1.0 (2026-10-29)</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
-  <span>Documents WELD <span data-docs-version>0.2.0</span></span>
+  <span>Documents WELD <span data-docs-version>0.2.1</span></span>
   <span><a rel="noopener" href="https://github.com/waynestate/weld">Source</a> <a href="changelog.md">Markdown</a></span>
 </footer>
 </body>

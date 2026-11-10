@@ -29,7 +29,7 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 
 ## Status[#](https://weld.apps.wayne.edu/docs/#status)
 
-Latest release: 0.2.0 (2026-11-09). The license is MIT.
+Latest release: 0.2.1 (2026-11-09). The license is MIT.
 
 **Not to be confused with:** `weld:doctor` checks local setup only; standards checks are PROCTOR's.
 
