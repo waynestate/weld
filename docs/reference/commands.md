@@ -14,7 +14,7 @@ One command strikes the spark; the containers do the welding. Docker is the only
 | Command | What it does |
 |---|---|
 | `up` | Copy `.env.example` to `.env` if missing, install the PHP and Node dependencies in the containers, write `.mcp.json` from ADVISOR, start the app and Vite, generate the app key if needed, and migrate |
-| `down` | Stop and remove the containers |
+| `down` | Stop and remove the containers, and clear Vite's `public/hot` (left behind, it blanks every page Parity serves) |
 | `test` | Run `composer ci` in the app container |
 | `doctor` | Run `php artisan weld:doctor` in the app container |
 | `logs` | Follow the container logs; Ctrl+C stops |
@@ -58,7 +58,7 @@ Follow the container logs:
 bin/weld.sh logs
 ```
 
-Stop and remove the containers:
+Stop and remove the containers, and clear Vite's `public/hot`:
 
 ```powershell tab="PowerShell"
 .\bin\weld.ps1 down

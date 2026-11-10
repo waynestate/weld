@@ -27,7 +27,7 @@ function Show-Usage {
     Write-Host "         Node dependencies in the containers, write .mcp.json from"
     Write-Host "         ADVISOR (skip with --no-advisor or -NoAdvisor), start the"
     Write-Host "         app and Vite, generate the app key if needed, and migrate."
-    Write-Host "  down   Stop and remove the containers."
+    Write-Host "  down   Stop and remove the containers, and clear public/hot."
     Write-Host "  test   Run 'composer ci' in the app container."
     Write-Host "  doctor Run 'php artisan weld:doctor' in the app container."
     Write-Host "  logs   Follow the container logs; Ctrl+C stops."
@@ -92,6 +92,15 @@ try {
         }
         'down' {
             Invoke-Docker -Arguments @('compose', 'down')
+            # Vite's dev server writes public/hot and does not always get to
+            # remove it when its container stops. Left behind, it points every
+            # page at a dev server that is gone: blank pages under Parity, or
+            # on any server that serves this folder. The cold weld is the
+            # one that holds.
+            if (Test-Path -LiteralPath 'public/hot') {
+                Write-Host 'weld: Remove-Item public/hot'
+                Remove-Item -LiteralPath 'public/hot'
+            }
         }
         'test' {
             Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'composer', 'ci')

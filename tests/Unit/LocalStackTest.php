@@ -27,6 +27,20 @@ it('creates the SQLite file without truncating it on macOS and Linux', function 
         ->and($script)->not->toMatch('/>\s*database\/database\.sqlite/');
 });
 
+// Found by the 2026-11-09 Parity proof: after `down`, Vite's public/hot
+// stayed behind, so Parity served WELD with every script pointed at
+// http://localhost:5173, a dev server that was no longer running.
+it('clears Vite\'s public/hot on down, on every OS', function () use ($root) {
+    $ps = (string) file_get_contents($root.'/bin/weld.ps1');
+    $sh = (string) file_get_contents($root.'/bin/weld.sh');
+
+    expect(preg_match("/'down' \\{(?<body>.*?)\\n        \\}/s", $ps, $m))->toBe(1)
+        ->and($m['body'])->toContain("Remove-Item -LiteralPath 'public/hot'");
+
+    expect(preg_match('/^    down\)\n(?<body>.*?);;/ms', $sh, $m))->toBe(1)
+        ->and($m['body'])->toContain('rm -f public/hot');
+});
+
 it('points the browser at a Vite address it can reach', function () use ($root) {
     $compose = (string) file_get_contents($root.'/compose.yaml');
 
