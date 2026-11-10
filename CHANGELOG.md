@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Docs: the Proof page keeps `composer:2.10.3` as the image of its recorded run and says the pipeline now uses `composer:2.11.1`.
 - Changed: the GitHub workflow calls Preflight 0.5.0's reusable workflow (pinned to its release commit), the same release as the GitLab pipeline; it was on 0.1.4 because GitHub's copy of Preflight had no later tag.
 - Changed: the lock holds CREED 0.1.10 and HELMET 1.4.0 (were 0.1.9 and 1.3.1), the newest releases.
 - Fixed: `regen-check` forgives line endings, as Sourdough's feed does, so `deploy/scripts/parity.ps1` (CRLF since Squire 0.10.7's `.gitattributes`) counts as relocated again and the `regen-gate` job passes.
