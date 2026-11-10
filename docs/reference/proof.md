@@ -15,15 +15,15 @@ Run on one Windows machine with Docker Desktop; durations are wall clock, includ
 
 | Check | Date | Commit | Result | Duration |
 |---|---|---|---|---|
-| `composer ci` (Pest, Pint, PHPStan level 8, agent-ready, docs site, audit) | 2026-11-07 | `e555f03` | Pass: 90 tests (261 assertions), none risky; 67 files formatted; no PHPStan errors; no advisories | 163 s (warm vendor) |
-| `composer proctor` | 2026-11-07 | `baf8e60` | Pass, 1 warning: the PHP 8.3 floor is in security-only support until 2027-12-31 | 176 s |
-| `ziggy` job | 2026-11-07 | `baf8e60` | Pass: the regenerated route list matches the committed one | 174 s |
-| `frontend` job (ESLint, Prettier, vue-tsc, Vite) | 2026-11-07 | `baf8e60` | Pass: lint, format and types clean; 168 modules built | 27 s |
-| Accessibility gate (axe-core, WCAG 2.2 AA) | 2026-11-07 | `e555f03` | Pass: 23 pages, 0 violations, light and dark at 360 px and 1280 px | 70 s |
-| Regen gate (a fresh `sourdough new --inertia` compared with WELD) | 2026-11-07 | `e555f03` | Pass: no new drift against Sourdough main `323a82b`; every differing or missing path is in the baseline | 60 s |
-| `weld:doctor` | 2026-11-07 | `baf8e60` | Pass: 4 PASS (app key, storage, database, migrations) | 21 s |
+| `composer ci` (Pest, Pint, PHPStan level 8, agent-ready, docs site, audit) | 2026-11-10 | `9bda984` | Pass: 189 tests (630 assertions), none risky; Pint clean on 97 files; no PHPStan errors; no advisories | 18 s (warm cache) |
+| `composer proctor` | 2026-11-10 | `9bda984` | Pass, 7 warnings: the PHP 8.3 floor (security-only support until 2027-12-31), three `node-eol`, `lock-committed`, `entrypoint-migrate` and `robots-txt` | 7 s |
+| `ziggy` job | 2026-11-10 | `9bda984` | Pass: the regenerated `ziggy.js` and `ziggy.d.ts` match the committed ones byte for byte | 6 s |
+| `frontend` job (ESLint, Prettier, vue-tsc, Vite) | 2026-11-10 | `9bda984` | Pass: lint, format and types clean; 618 modules built | 11 s |
+| Accessibility gate (axe-core, WCAG 2.2 AA) | 2026-11-10 | `9bda984` | Pass: 24 pages, 96 page checks, 0 violations, light and dark at 320 px and 1280 px | 56 s |
+| Regen gate (a fresh `sourdough new --inertia` compared with WELD) | 2026-11-10 | `9bda984` | Pass: no new drift against Sourdough main `f4f3736`; every differing or missing path is in the baseline | 33 s |
+| `weld:doctor` | 2026-11-10 | `9bda984` | Pass: 4 PASS (app key, storage, database, migrations), after `bin/weld.sh up` brought the stack up from nothing in 179 s | 7 s |
 
-Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with `composer docs` and `composer site:agent-ready`. The `composer ci`, accessibility and regen rows above are from this refresh at `e555f03`: the regen gate now passes against Sourdough's current main (`323a82b`), with no new drift beyond the recorded baseline, and the accessibility gate runs as `scripts/a11y.ps1` is written on Docker Desktop, checking all 23 committed pages with 0 violations. The `create-project` path, the signed-in app-page accessibility checks and the `up` timings are not in the table: the first installs the newest public tag instead of this commit, and the rest need the running stack and a browser.
+Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with `composer docs` and `composer site:agent-ready`. Every row above is from the 2026-11-10 refresh at `9bda984`, run in the CI's own images on Docker Desktop with nothing retried. Most durations are far shorter than the 2026-11-07 run because the Composer and npm downloads came from warm caches; the 179 s `up` is the honest cold number for the stack itself. PROCTOR now asks more questions than it did on 2026-11-07, so its warnings went from one to seven; all of them are warnings, and the run passes. The `create-project` path and the signed-in app-page accessibility checks are not in the table: the first installs the newest public tag instead of this commit, and the second needs the running stack and a browser signed in through SESAME's fake driver.
 
 ## What ran
 
