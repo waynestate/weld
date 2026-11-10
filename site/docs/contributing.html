@@ -110,7 +110,7 @@ bin/weld.sh down
 <li>When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in Sourdough; if the drift is accepted as intended, record it with <code>--write-baseline</code> and commit <code>.sourdough/regen-baseline.json</code>.</li>
 </ul>
 <h2 id="releasing"><span class="docs-heading-tail"><span>Releasing</span><a class="docs-heading-link" aria-label="Link to this section" href="#releasing">#</a></span></h2>
-<p>WELD has no tags yet. When it gets one:</p>
+<p>WELD is tagged (0.1.0 through 0.2.1 so far). To cut the next release:</p>
 <ol>
 <li>Move the lines under <code>## Unreleased</code> in <code>CHANGELOG.md</code> to a new <code>## X.Y.Z (YYYY-MM-DD)</code> heading.</li>
 <li>All the checks above green locally, then both pipelines green for that commit.</li>

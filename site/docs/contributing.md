@@ -111,7 +111,7 @@ Green means all of those pass; on GitLab the regen gate blocks on new drift, and
 
 ## Releasing [#](https://weld.apps.wayne.edu/docs/contributing.html#releasing)
 
-WELD has no tags yet. When it gets one:
+WELD is tagged (0.1.0 through 0.2.1 so far). To cut the next release:
 
 1. Move the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. All the checks above green locally, then both pipelines green for that commit.
