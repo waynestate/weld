@@ -7212,16 +7212,16 @@
         },
         {
             "name": "waynestate/helmet",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/helmet.git",
-                "reference": "6967f4bfd6cbc1b1af0acc716b1ed9fcd3ba23a8"
+                "reference": "e942c75ca767aa5dfb9eb1ab90013f8c65534b43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/helmet/zipball/6967f4bfd6cbc1b1af0acc716b1ed9fcd3ba23a8",
-                "reference": "6967f4bfd6cbc1b1af0acc716b1ed9fcd3ba23a8",
+                "url": "https://api.github.com/repos/waynestate/helmet/zipball/e942c75ca767aa5dfb9eb1ab90013f8c65534b43",
+                "reference": "e942c75ca767aa5dfb9eb1ab90013f8c65534b43",
                 "shasum": ""
             },
             "require": {
@@ -7284,8 +7284,8 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/helmet/-/issues",
                 "source": "https://github.com/waynestate/helmet"
             },
-            "time": "2026-11-10T14:00:39+00:00",
-            "published-time": "2026-11-10T14:07:58+00:00"
+            "time": "2026-11-10T21:43:46+00:00",
+            "published-time": "2026-11-10T22:03:54+00:00"
         },
         {
             "name": "waynestate/sesame",
@@ -12031,16 +12031,16 @@
         },
         {
             "name": "waynestate/creed",
-            "version": "0.1.10",
+            "version": "0.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/creed.git",
-                "reference": "44fce577a824f162f0bcaafcb6c8a48c3373412c"
+                "reference": "dc7aa961b09000e45e45b01316aaeacaa1c1b7da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/creed/zipball/44fce577a824f162f0bcaafcb6c8a48c3373412c",
-                "reference": "44fce577a824f162f0bcaafcb6c8a48c3373412c",
+                "url": "https://api.github.com/repos/waynestate/creed/zipball/dc7aa961b09000e45e45b01316aaeacaa1c1b7da",
+                "reference": "dc7aa961b09000e45e45b01316aaeacaa1c1b7da",
                 "shasum": ""
             },
             "require": {
@@ -12080,8 +12080,8 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/creed/-/issues",
                 "source": "https://github.com/waynestate/creed"
             },
-            "time": "2026-11-10T14:19:43+00:00",
-            "published-time": "2026-11-10T14:54:10+00:00"
+            "time": "2026-11-10T21:42:08+00:00",
+            "published-time": "2026-11-10T22:01:49+00:00"
         },
         {
             "name": "waynestate/pinstripe",
@@ -12147,16 +12147,16 @@
         },
         {
             "name": "waynestate/proctor",
-            "version": "0.15.0",
+            "version": "0.15.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/proctor.git",
-                "reference": "b395b2adf0db58da09b6e25c6efccb97acb67d46"
+                "reference": "dffd69c72e34035fff9aaf90e5c8398f86e3d2b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/proctor/zipball/b395b2adf0db58da09b6e25c6efccb97acb67d46",
-                "reference": "b395b2adf0db58da09b6e25c6efccb97acb67d46",
+                "url": "https://api.github.com/repos/waynestate/proctor/zipball/dffd69c72e34035fff9aaf90e5c8398f86e3d2b9",
+                "reference": "dffd69c72e34035fff9aaf90e5c8398f86e3d2b9",
                 "shasum": ""
             },
             "require": {
@@ -12207,8 +12207,8 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/proctor/-/issues",
                 "source": "https://github.com/waynestate/proctor"
             },
-            "time": "2026-11-10T20:33:43+00:00",
-            "published-time": "2026-11-10T20:40:52+00:00"
+            "time": "2026-11-10T21:16:52+00:00",
+            "published-time": "2026-11-10T21:18:15+00:00"
         },
         {
             "name": "webmozart/assert",

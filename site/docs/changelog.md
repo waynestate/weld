@@ -12,6 +12,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: the lock holds CREED 0.1.11, HELMET 1.4.1 and PROCTOR 0.15.1 (were 0.1.10, 1.4.0 and 0.15.0), and so does the deploy layer's (it was still on CREED 0.1.8 and HELMET 1.3.0). Patch releases only: PROCTOR 0.15.1 adds an info note when the `mysql56-migrate` job holds, which never fails the gate.
 - Docs: BEST_PRACTICES says the deploy kit is Squire 0.10.7 (it said 0.10.5).
 - Changed: CI pins Preflight 0.6.0; the new mysql56-migrate job runs the migrations against MySQL 5.6.51 (D-078), and the portability job runs the image's own HEALTHCHECK (W12, now Checked).
 - Docs: the proof page carries the 2026-11-10 run of all seven checks at `9bda984` (189 tests, 24 pages with 0 accessibility violations, no regen drift against Sourdough `f4f3736`).
