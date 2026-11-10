@@ -122,7 +122,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### CREED
    The standard
    61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-08.
-   Release 0.1.9
+   Release 0.1.10
    Inspection: In use
    [Site of CREED](https://creed.apps.wayne.edu/) [Docs for CREED](https://creed.apps.wayne.edu/docs/)
 3. Joint 02
@@ -257,7 +257,7 @@ $
 
 ### [CREED](https://creed.apps.wayne.edu/)
 
-0.1.9 Volume | Eleven
+0.1.10 Volume | Eleven
 
 The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 

@@ -518,7 +518,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### CREED
    The standard
    61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-08.
-   Release 0.1.9
+   Release 0.1.10
    Inspection: In use
    [Site of CREED](https://creed.apps.wayne.edu/) [Docs for CREED](https://creed.apps.wayne.edu/docs/)
 3. Joint 02
@@ -653,7 +653,7 @@ $
 
 #### [CREED](https://creed.apps.wayne.edu/)
 
-0.1.9 Volume | Eleven
+0.1.10 Volume | Eleven
 
 The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 
@@ -988,7 +988,8 @@ Notable changes to WELD, newest first.
 
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
-- Docs: the front page's weld log and cast name each part's latest tag, checked again on November 10, 2026: PROCTOR 0.12.0 (was 0.11.2; its weld log line names 0.12's cooldown and tracked-lock warnings), HELMET 1.4.0 (was 1.3.1) and Squire 0.10.7 (was 0.10.5); CREED 0.1.9, Pinstripe 0.3.1, SESAME 0.7.3, Sourdough 0.4.2, Booster 1.17.0, Rollcall 1.1.1, Drawbridge 0.6.1 and ADVISOR 0.3.0 are unchanged. The sheet's "Inspected" stamp reads 2026-11-10 (it said 2026-11-09). WELD's lock matches the tag for CREED, PROCTOR, Pinstripe, SESAME and ADVISOR; HELMET is required `^1.3` and still locked at 1.3.1. Content only; the sheet's design and motion are unchanged.
+- Docs: the front page's weld log and cast name each part's latest tag, checked again on November 10, 2026: CREED 0.1.10 (was 0.1.9), PROCTOR 0.12.0 (was 0.11.2; its weld log line names 0.12's cooldown and tracked-lock warnings), HELMET 1.4.0 (was 1.3.1) and Squire 0.10.7 (was 0.10.5); WayneUI 2.0.8, Pinstripe 0.3.1, SESAME 0.7.3, Sourdough 0.4.2, Booster 1.17.0, Rollcall 1.1.1, Drawbridge 0.6.1 and ADVISOR 0.3.0 are unchanged. The sheet's "Inspected" stamp reads 2026-11-10 (it said 2026-11-09). WELD's lock matches the tag for PROCTOR, Pinstripe, SESAME and ADVISOR; two locks trail by one release: CREED is required `^0.1.8` and locked at 0.1.9, HELMET is required `^1.3` and locked at 1.3.1. Content only; the sheet's design and motion are unchanged.
+- Docs: BEST_PRACTICES and the security guide credit the release script's `APP_KEY` and `APP_DEBUG` refusal to Squire 0.10.7, the kit WELD carries (they said 0.10.5; the release script is the same in both).
 - Docs: the README, What's welded in and Status pages name the deploy kit at Squire 0.10.7 (they said 0.10.5), and Contributing no longer says WELD has no tags.
 - Changed: WELD sets Sourdough's two new Laravel defaults: Composer's release cooldown (`config.policy.cooldown`, 3 days, `waynestate/*` exempt) and HELMET's fixed 4xx pages (`helmet.error_pages` on, `HELMET_ERROR_PAGES=false` turns them off).
 - Changed: requires PROCTOR ^0.12 (locked 0.12.0, was ^0.11), and so does the deploy layer.
@@ -997,7 +998,7 @@ Notable changes to WELD, newest first.
 - Site: `assets/stack-env.js` knows Parity, so a pre-production page links Parity's pre-production site and a dev page links its local `site/` folder. Until now Parity, of all parts, was the one link that ignored its environment.
 - Docs: Parity is live at [https://parity.apps.wayne.edu/](https://parity.apps.wayne.edu/). The front page's weld log gives it Site and Docs links like the other live parts, its cast card, the Citadel pick and the "Want it the way Citadel runs it?" line link its site instead of its repo, and "Run it like Citadel" (README and the quick start) gains its install lines (`irm https://parity.apps.wayne.edu/install.ps1 | iex` on Windows, `curl -fsSL https://parity.apps.wayne.edu/install.sh | sh` on macOS and Linux) in place of "until its site is up". Which command when links its site too.
 - Version mentions refreshed: ADVISOR ^0.3, Squire kit 0.10.5, lock moved to current tags.
-- Docs: the front page's weld log and cast name each part's latest tag, checked on November 10, 2026: CREED 0.1.9, PROCTOR 0.11.2, Pinstripe 0.3.1, HELMET 1.3.1, SESAME 0.7.3, Sourdough 0.4.2, Squire 0.10.5, Booster 1.17.0, Rollcall 1.1.1, Drawbridge 0.6.1 and ADVISOR 0.3.0. Where WELD locks a part (CREED, PROCTOR, Pinstripe, HELMET, SESAME, ADVISOR), the lock is that same version. Content only; the sheet's design and motion are unchanged.
+- Docs: the front page's weld log and cast name each part's latest tag, checked on the morning of November 10, 2026: CREED 0.1.9, PROCTOR 0.11.2, Pinstripe 0.3.1, HELMET 1.3.1, SESAME 0.7.3, Sourdough 0.4.2, Squire 0.10.5, Booster 1.17.0, Rollcall 1.1.1, Drawbridge 0.6.1 and ADVISOR 0.3.0. Where WELD locks a part (CREED, PROCTOR, Pinstripe, HELMET, SESAME, ADVISOR), the lock was that same version at that check; the later check above says where it trails now. Content only; the sheet's design and motion are unchanged.
 
 ### 0.2.1 (2026-11-09) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-2-1-2026-11-09)
 
@@ -1930,7 +1931,7 @@ Warning
 
 **Practice:** `APP_DEBUG=false` in production. The debug page has had an XSS advisory (Low, 2026-09-10).
 
-**Stack:** `Enforced`. `.env.example:4` sets `APP_DEBUG=true` for the local default, and `app/Support/ProductionDebug.php:23-30` refuses to boot when the environment is production and debug is on; `app/Providers/AppServiceProvider.php:29` calls it in `boot()`, and `tests/Feature/ProductionDebugTest.php:17-30` covers both the refusal and the pass. The release stops it earlier still: Squire 0.10.5's release script (`deploy/scripts/release.sh:271-289`) refuses a Laravel release with no `APP_KEY`, or with `APP_DEBUG` on in production, before anything installs, and `tests/Feature/ReleaseEnvGuardTest.php` fails when a kit update drops that guard.
+**Stack:** `Enforced`. `.env.example:4` sets `APP_DEBUG=true` for the local default, and `app/Support/ProductionDebug.php:23-30` refuses to boot when the environment is production and debug is on; `app/Providers/AppServiceProvider.php:29` calls it in `boot()`, and `tests/Feature/ProductionDebugTest.php:17-30` covers both the refusal and the pass. The release stops it earlier still: Squire 0.10.7's release script (`deploy/scripts/release.sh:271-289`) refuses a Laravel release with no `APP_KEY`, or with `APP_DEBUG` on in production, before anything installs, and `tests/Feature/ReleaseEnvGuardTest.php` fails when a kit update drops that guard.
 
 ### W27: CSRF uses the PreventRequestForgery middleware [#](https://weld.apps.wayne.edu/docs/guides/security.html#w27-csrf-uses-the-preventrequestforgery-middleware)
 
