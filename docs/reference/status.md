@@ -37,8 +37,9 @@ For what each part does in WELD, see [What is welded in](../guides/whats-welded-
 
 These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/enterprise-apps/weld/-/blob/main/BEST_PRACTICES.md).
 
-- Preflight's `portability` job builds the portable image and boots its `web` role in CI, on `main` and tags (manual on a merge request, blocking) (W10, W14 and W16 are `Checked`; W8, W13 and W17 gain a CI check). It leaves out the `HEALTHCHECK` command (W12), a session shared across replicas (W15, which needs a database service in the job) and migrations once per release (W24). Pinstripe (W32) is a dependency for the PHP side; the JS side waits on [its npm half](#pinstripe-s-npm-half).
-- The deploy-time scheduler work (W23) is still a plan.
+- Preflight's `portability` job builds the portable image and boots its `web` role in CI, on `main` and tags (manual on a merge request, blocking) (W10, W14 and W16 are `Checked`; W8, W13 and W17 gain a CI check), and its `healthcheck` check runs the image's own `HEALTHCHECK` (W12 is `Checked`). It leaves out a session shared across replicas (W15, which needs a database service in the job). Pinstripe (W32) is a dependency for the PHP side; the JS side waits on [its npm half](#pinstripe-s-npm-half).
+- The `mysql56-migrate` job runs the migrations against MySQL 5.6.51 on every pipeline, and migrations run once per release on both deploy paths: the release script on Citadel, the one-shot `migrate` role off it (W24, `Checked` by `tests/Feature/MigrateOncePerReleaseTest.php`).
+- The scheduler heartbeat on `/ready` is built (W23, `Checked` for the heartbeat); its Prometheus gauge is not.
 - `tests/Feature/HealthHostTest.php` sends a forged `Host` and an IP:port `Host` to `/up` and expects 200, no cookie and no redirect, so W11 is `Checked` in full. The other items that once sat on an "Unverified" list are pinned: the CSRF check (`tests/Feature/CsrfTest.php`), a random UID (W13), Pest 4 on the PHP 8.3 floor, and `/ready` without `spatie/laravel-health`.
 - Decision needed: queue mode on Citadel (W19). The scheduled-worker pattern is a stopgap.
 - Decided: `/ready` is HELMET's `Route::helmetReady()` with app checks as invokable classes: the database and the cache (W11) and the scheduler heartbeat (W23).

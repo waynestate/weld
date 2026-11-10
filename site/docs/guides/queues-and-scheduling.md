@@ -64,7 +64,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Parallel replicas race on schema changes.
 
-**Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh:25`) and the Quick Update post-script (`deploy/scripts/release.sh:7`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint.
+**Stack:** `Checked`. On Citadel the release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh`, which only calls the release script) and the Quick Update post-script (`deploy/scripts/release.sh:7`); Citadel's entrypoint runs no artisan command (`deploy/.squire/fallback/citadel-apache-entrypoint`). Off Citadel the portable image migrates only in its `migrate` role (`deploy/.squire/portable/squire-entrypoint.sh:157-167`), a one-shot service the `web`, `worker` and `scheduler` services wait for (`service_completed_successfully`, `deploy/docker-compose.squire.yml:194-235`). `tests/Feature/MigrateOncePerReleaseTest.php` fails when a kit update moves `migrate` anywhere else. PROCTOR's `entrypoint-migrate` check still warns on the portable entrypoint (it lets a `migrate)` case branch through, not a `run_migrate` function the branch calls), so that one warning is expected; the portability CI job does not run the `migrate` role.
 
 ## How to read the tags [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#how-to-read-the-tags)
 
