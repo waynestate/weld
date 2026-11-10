@@ -133,6 +133,14 @@
         "platform": {
             "php": "8.3.0",
             "ext-oci8": "3.4.1"
+        },
+        "policy": {
+            "cooldown": {
+                "period": "3 days",
+                "ignore": [
+                    "waynestate/*"
+                ]
+            }
         }
     },
     "minimum-stability": "stable",
