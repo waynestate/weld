@@ -64,7 +64,7 @@ This page lists the container contract practices for WELD, from the BEST_PRACTIC
 
 **Why:** A login must survive a hop between replicas.
 
-**Stack:** `Documented`. `.env.example:38` sets `SESSION_DRIVER=database` and `.env.example:69` sets `CACHE_STORE=database`; `config/session.php:21` and `config/cache.php:18` default to the same. Preflight's `portability` job leaves its `session-hop` check out on purpose: database sessions need a database both replicas share, and the job starts none, so it boots with `SESSION_DRIVER=cookie`. Target `Checked`: the `portability` job with a database service, a `migrate` run before the replicas, and `session-hop` signing in on replica A and reading the session on replica B.
+**Stack:** `Checked`. `.env.example:38` sets `SESSION_DRIVER=database` and `.env.example:69` sets `CACHE_STORE=database`; `config/session.php:21` and `config/cache.php:18` default to the same. Preflight's `portability` job (`.gitlab-ci.yml`) starts a MySQL 8.4 both replicas share (`services`, `.gitlab-ci.yml:109`), migrates it once before they boot (`setup_command`), and runs with `SESSION_DRIVER=database` and `CACHE_STORE=database`; its `session-hop` check signs in on replica A through `/_portability/login` and reads the session on replica B through `/_portability/me` (`routes/web.php`, present only when `PORTABILITY_PROBE=yes`, proven absent by default in `tests/Feature/PortabilityProbeRoutesTest.php`). `tests/Unit/PortabilityJobTest.php` holds the inputs.
 
 ## W16. Stop cleanly on SIGTERM [#](https://weld.apps.wayne.edu/docs/guides/container-contract.html#w16-stop-cleanly-on-sigterm)
 

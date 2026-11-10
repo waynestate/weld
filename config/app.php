@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Portability Probe
+    |--------------------------------------------------------------------------
+    |
+    | Only Preflight's portability job sets PORTABILITY_PROBE=yes, so its
+    | session-hop check can sign in on one replica and read the session on
+    | the other. Never set it on a real host.
+    |
+    */
+
+    'portability_probe' => env('PORTABILITY_PROBE') === 'yes',
+
 ];

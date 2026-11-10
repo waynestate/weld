@@ -46,7 +46,7 @@ function weldMysql56Include(): array
 
 it('includes the mysql56-migrate component pinned at the release tag', function () {
     expect(weldMysql56Include()['component'])
-        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/mysql56-migrate@0.6.0');
+        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/mysql56-migrate@0.7.0');
 });
 
 it('takes the component defaults, passing no inputs', function () {
@@ -67,5 +67,5 @@ it('pins every Preflight component in the include list to the same tag', functio
     }
 
     expect($tags)->not->toBeEmpty()
-        ->and(array_unique($tags))->toBe(['0.6.0']);
+        ->and(array_unique($tags))->toBe(['0.7.0']);
 });

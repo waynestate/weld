@@ -47,7 +47,7 @@ function weldPortabilityInputs(): array
 
 it('pins the portability component at the Preflight tag every other component uses', function () {
     expect(weldPortabilityInputs()['component'])
-        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.6.0');
+        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.7.0');
 });
 
 it('builds the portable image from the kit in deploy/, on the base the job builds first', function () {
@@ -111,9 +111,28 @@ it('blocks, can be cancelled by a newer push, and cleans its Buildah storage', f
         ]);
 });
 
-it('runs every check but session-hop', function () {
+it('runs every check, including session-hop', function () {
     expect(weldPortabilityInputs()['inputs']['checks'])
-        ->toBe(['health', 'env-only', 'forwarded-headers', 'logs', 'sigterm', 'healthcheck']);
+        ->toBe(['health', 'env-only', 'forwarded-headers', 'session-hop', 'logs', 'sigterm', 'healthcheck']);
+});
+
+it('runs session-hop over one migrated MySQL shared by both replicas', function () {
+    $inputs = weldPortabilityInputs()['inputs'];
+    $service = $inputs['services'][0];
+
+    expect($inputs['services'])->toHaveCount(1)
+        ->and($service['name'])->toMatch('/^mysql:8\.4\.\d+@sha256:[0-9a-f]{64}$/')
+        ->and($service['alias'])->toBe('db')
+        ->and($inputs['setup_command'])->toContain('php artisan migrate --force')
+        ->and($inputs['session_login_path'])->toBe('/_portability/login')
+        ->and($inputs['session_check_path'])->toBe('/_portability/me');
+
+    $env = $inputs['env'];
+
+    expect($env)->toContain('SESSION_DRIVER=database')
+        ->and($env)->toContain('DB_HOST=db')
+        ->and($env)->toContain('PORTABILITY_PROBE=yes')
+        ->and($env)->not->toContain('SESSION_DRIVER=cookie');
 });
 
 it('runs the image HEALTHCHECK and fails if the Dockerfile drops it', function () {
