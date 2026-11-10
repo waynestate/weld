@@ -109,10 +109,17 @@ and audit.</p>
 <h2 id="run-it-like-citadel">Run it like Citadel<a class="docs-heading-link" aria-label="Link to this section" href="#run-it-like-citadel">#</a></h2>
 <p>The steps above are the everyday bench: the stock PHP image, SQLite and Vite reloading as you type, and Sail or plain
 Docker Compose work too. Parity does not replace them. When &quot;it works here&quot; has to mean &quot;it works on Citadel&quot;, run the same folder on
-Citadel's own machinery with <a rel="noopener" href="https://git.wayne.edu/enterprise-apps/parity">Parity</a>: Citadel's PHP image with its
+Citadel's own machinery with <a rel="noopener" href="https://parity.apps.wayne.edu/">Parity</a>: Citadel's PHP image with its
 <code>php.ini</code> and <code>vhost.conf</code>, Citadel's proxy in front adding <code>X-Forwarded-For</code> and <code>X-Forwarded-Proto</code>, and MySQL 5.6,
 the version of Citadel's shared database server. Parity is one program for Windows, macOS and Linux on Podman
-(recommended) or Docker. It needs no PHP on your computer and adds one file to the app, <code>parity.json</code>.</p>
+(recommended) or Docker. It needs no PHP on your computer and adds one file to the app, <code>parity.json</code>.
+Install it once from <a rel="noopener" href="https://parity.apps.wayne.edu/">its site</a>, with no administrator needed. On Windows, in
+PowerShell:</p>
+<pre tabindex="0"><code class="language-powershell">irm https://parity.apps.wayne.edu/install.ps1 | iex
+</code></pre>
+<p>On macOS and Linux:</p>
+<pre tabindex="0"><code class="language-sh">curl -fsSL https://parity.apps.wayne.edu/install.sh | sh
+</code></pre>
 <ol>
 <li>
 <p>Stop the Compose stack (<code>down</code>), so Vite's dev server is not in the way, and build the front end once, because
@@ -156,10 +163,9 @@ request. The app gets Laravel's <code>DB_*</code> settings for the local MySQL, 
 and <code>php artisan --version</code> 9 seconds against a quarter of a second from the container's own disk. Slow, but it holds.</p>
 <p>No Citadel image on this computer yet? <code>parity image get</code> downloads it with your own git.wayne.edu access and checks it
 byte for byte, and <code>parity up --fallback</code> builds a labeled stand-in from the official PHP image meanwhile. Parity 0.1.0
-is out; until its site is up, take the download for your computer from
-<a rel="noopener" href="https://git.wayne.edu/enterprise-apps/parity/-/releases/0.1.0">its release</a> on git.wayne.edu. It takes over local
-runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical
-under the hood, because it is the same hood.</p>
+is live, and <a rel="noopener" href="https://parity.apps.wayne.edu/docs/">its docs</a> have the rest. It takes over local runs from the parity
+kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood, because it
+is the same hood.</p>
 <h2 id="what-you-built">What you built<a class="docs-heading-link" aria-label="Link to this section" href="#what-you-built">#</a></h2>
 <p>You have WELD running locally in Docker: the app and Vite in containers, <code>.env</code> copied from <code>.env.example</code>, the app key
 generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in,

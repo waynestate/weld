@@ -243,10 +243,22 @@ first page and a Windows `up` that emptied the local database; both are fixed, a
 
 `bin/weld.ps1 up` and `bin/weld.sh up` stay the everyday bench: the stock PHP image, SQLite and Vite reloading as you
 type. Sail and plain Docker Compose work too, and Parity does not replace them. When "it works here" has to mean "it works on Citadel", run the same
-folder on Citadel's own machinery with [Parity](https://git.wayne.edu/enterprise-apps/parity): Citadel's PHP image
+folder on Citadel's own machinery with [Parity](https://parity.apps.wayne.edu/): Citadel's PHP image
 with its `php.ini` and `vhost.conf`, Citadel's proxy in front adding `X-Forwarded-For` and `X-Forwarded-Proto`, and
 MySQL 5.6, the version of Citadel's shared database server. Parity is one program for Windows, macOS and Linux on
 Podman (recommended) or Docker. It needs no PHP on your computer and adds one file to the app, `parity.json`.
+Install it once from [its site](https://parity.apps.wayne.edu/), with no administrator needed. On Windows, in
+PowerShell:
+
+```powershell
+irm https://parity.apps.wayne.edu/install.ps1 | iex
+```
+
+On macOS and Linux:
+
+```sh
+curl -fsSL https://parity.apps.wayne.edu/install.sh | sh
+```
 
 Stop the Compose stack first with `down`, which also clears `public/hot`, the note Vite's dev server leaves so pages
 load from it; left behind, it gives you a blank page under Parity. Build the front end once, because Citadel serves
@@ -289,10 +301,9 @@ container's own disk. Slow, but it holds.
 
 No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks
 it byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity
-0.1.0 is out; until its site is up, take the download for your computer from
-[its release](https://git.wayne.edu/enterprise-apps/parity/-/releases/0.1.0) on git.wayne.edu. It takes over local
-runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under
-the hood, because it is the same hood.
+0.1.0 is live, and [its docs](https://parity.apps.wayne.edu/docs/) have the rest. It takes over local runs from the
+parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood,
+because it is the same hood.
 
 ## Oracle
 
@@ -356,7 +367,7 @@ Several stack commands sound alike (`weld:doctor`, `squire doctor`, `proctor che
 |---|---|---|---|
 | `composer ci` | **Will my pipeline pass?** The repo's own CI contract, the same command the pipeline runs: validation, the tests, Pint, PHPStan, `composer audit` and whatever checks the repo adds. | Before every push. | App repo, CI |
 | `bin/weld.sh doctor` or `.\bin\weld.ps1 doctor` (both run `php artisan weld:doctor`) | **Does my WELD app hold together?** The app key, writable `storage` and `bootstrap/cache`, the database connection and pending migrations. One PASS, WARN or FAIL line each; exit 1 on a FAIL. Standards are PROCTOR's. | After `up`, when the app will not start, and after every deploy off Citadel. | App repo (in the app container), deploy host (in the app container) |
-| `vendor/bin/squire doctor` | **Is my Citadel release setup right?** `build.sh`, the release scripts, the health check, script hygiene, line endings and secrets kept out of git, against Squire's rules; for the deprecated parity kit it says one thing: local runs are [Parity](https://git.wayne.edu/enterprise-apps/parity)'s job now (`parity check`). Exit 1 on a failed rule. The lock file, audit and MySQL 5.6 checks are handed to PROCTOR. | After `squire init` or `squire update`, and before the first deploy. | App repo, CI |
+| `vendor/bin/squire doctor` | **Is my Citadel release setup right?** `build.sh`, the release scripts, the health check, script hygiene, line endings and secrets kept out of git, against Squire's rules; for the deprecated parity kit it says one thing: local runs are [Parity](https://parity.apps.wayne.edu/)'s job now (`parity check`). Exit 1 on a failed rule. The lock file, audit and MySQL 5.6 checks are handed to PROCTOR. | After `squire init` or `squire update`, and before the first deploy. | App repo, CI |
 | `vendor/bin/squire init --check` | **Have the files Squire wrote drifted from its templates?** Missing, outdated or edited copies. Writes nothing; exit 1 on drift. | After you upgrade Squire (then run `squire update`), and in CI. | App repo, CI |
 | `vendor/bin/squire doctor oracle`, or `php artisan oracle:check` in WELD and Sourdough's Laravel apps | **Can my app reach Oracle?** The `ORACLE_*` settings, the host, the port, the `oci8` driver and the login, in plain language, printing setting names and never values. Silent when the app has no Oracle settings. | After you fill in the `ORACLE_*` settings, or when a connection fails. Squire's `release.sh` runs the same check on every release, as a report. | App repo, deploy host |
 | `vendor/bin/proctor check` (`composer proctor` in WELD and Sourdough's apps) | **Does my app meet CREED's policy?** The PHP floor, Laravel, Node and MySQL end of life, the committed lock, `composer audit`, open-ended constraints, portability, MySQL 5.6 safety, overrides and the rest of its checks. Exit 1 on a FAIL. | Before you merge; the pipeline runs it too. | App repo, CI |

@@ -49,7 +49,7 @@ Yes, this is a lot of packages. Most of you can ignore that. Install WELD, run t
    composer ci
    ```
 
-Want it the way Citadel runs it? [Parity](https://git.wayne.edu/enterprise-apps/parity) runs the same folder on Citadel's own PHP image, behind its proxy, with MySQL 5.6: `parity init --mysql`, then `parity up`. Step 2 stays the everyday bench; [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel) has the rest.
+Want it the way Citadel runs it? [Parity](https://parity.apps.wayne.edu/) runs the same folder on Citadel's own PHP image, behind its proxy, with MySQL 5.6: `parity init --mysql`, then `parity up`. Step 2 stays the everyday bench; [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel) has the rest.
 
 [Sourdough](https://sourdough.apps.wayne.edu/) makes the other shapes: `sourdough new my-app` for raw PHP, `sourdough new my-app --laravel` for Laravel with Blade, `sourdough new my-app --laravel --vue` for Vue islands. WELD is the Inertia and Vue shape, ready-made.
 
@@ -69,7 +69,7 @@ Most Wayne State apps are older than this stack. Some are raw PHP, some are Lara
   [Booster](https://booster.apps.wayne.edu/)
   Upgrades PHP and Laravel one version at a time, and has a playbook for Vue 2 to 3. It never commits; you read the diff and merge it.
 - I'm deploying to Citadel
-  [Squire](https://squire.apps.wayne.edu/) and [Parity](https://git.wayne.edu/enterprise-apps/parity)
+  [Squire](https://squire.apps.wayne.edu/) and [Parity](https://parity.apps.wayne.edu/)
   Squire writes the build and release scripts and the health check Citadel expects. Parity runs your app on Citadel's own image on your computer first.
 - I want CI on every push
   [Preflight](https://preflight.apps.wayne.edu/)
@@ -180,7 +180,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     Runs any app on Citadel's own PHP image, behind Citadel's proxy, with MySQL 5.6. One program for Windows, macOS and Linux, on Podman or Docker; the desktop app follows.
     Release 0.1.0
     Inspection: Pilot
-    [Repo of Parity](https://git.wayne.edu/enterprise-apps/parity)
+    [Site of Parity](https://parity.apps.wayne.edu/) [Docs for Parity](https://parity.apps.wayne.edu/docs/)
 11. Joint 10
     ### Booster
     Upgrades
@@ -417,7 +417,7 @@ $
 
 ![Parity logo: a spirit level with a gold bubble](https://weld.apps.wayne.edu/assets/marks/parity.png)
 
-### [Parity](https://git.wayne.edu/enterprise-apps/parity)
+### [Parity](https://parity.apps.wayne.edu/)
 
 0.1.0 Bubble | Centered
 

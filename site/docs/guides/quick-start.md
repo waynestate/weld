@@ -60,7 +60,17 @@ The same subcommands work on every OS:
 
 ## Run it like Citadel[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel)
 
-The steps above are the everyday bench: the stock PHP image, SQLite and Vite reloading as you type, and Sail or plain Docker Compose work too. Parity does not replace them. When "it works here" has to mean "it works on Citadel", run the same folder on Citadel's own machinery with [Parity](https://git.wayne.edu/enterprise-apps/parity): Citadel's PHP image with its `php.ini` and `vhost.conf`, Citadel's proxy in front adding `X-Forwarded-For` and `X-Forwarded-Proto`, and MySQL 5.6, the version of Citadel's shared database server. Parity is one program for Windows, macOS and Linux on Podman (recommended) or Docker. It needs no PHP on your computer and adds one file to the app, `parity.json`.
+The steps above are the everyday bench: the stock PHP image, SQLite and Vite reloading as you type, and Sail or plain Docker Compose work too. Parity does not replace them. When "it works here" has to mean "it works on Citadel", run the same folder on Citadel's own machinery with [Parity](https://parity.apps.wayne.edu/): Citadel's PHP image with its `php.ini` and `vhost.conf`, Citadel's proxy in front adding `X-Forwarded-For` and `X-Forwarded-Proto`, and MySQL 5.6, the version of Citadel's shared database server. Parity is one program for Windows, macOS and Linux on Podman (recommended) or Docker. It needs no PHP on your computer and adds one file to the app, `parity.json`. Install it once from [its site](https://parity.apps.wayne.edu/), with no administrator needed. On Windows, in PowerShell:
+
+```powershell
+irm https://parity.apps.wayne.edu/install.ps1 | iex
+```
+
+On macOS and Linux:
+
+```sh
+curl -fsSL https://parity.apps.wayne.edu/install.sh | sh
+```
 
 1. Stop the Compose stack (`down`), so Vite's dev server is not in the way, and build the front end once, because Citadel serves built assets:
    ```sh
@@ -88,7 +98,7 @@ The steps above are the everyday bench: the stock PHP image, SQLite and Vite rel
 
 A folder on the Windows disk is slow inside the container: in the 2026-11-09 proof run a page took about 10 seconds, and `php artisan --version` 9 seconds against a quarter of a second from the container's own disk. Slow, but it holds.
 
-No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks it byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity 0.1.0 is out; until its site is up, take the download for your computer from [its release](https://git.wayne.edu/enterprise-apps/parity/-/releases/0.1.0) on git.wayne.edu. It takes over local runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood, because it is the same hood.
+No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks it byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity 0.1.0 is live, and [its docs](https://parity.apps.wayne.edu/docs/) have the rest. It takes over local runs from the parity kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood, because it is the same hood.
 
 ## What you built[#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#what-you-built)
 
