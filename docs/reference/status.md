@@ -9,7 +9,7 @@ This page records what is on the bench today: the state of every part welded int
 
 Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR
 are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.5.0; the deploy layer runs
-Squire's kit 0.10.5. Pinstripe's PHP presets are installed; its npm half is [the next step](#pinstripe-s-npm-half).
+Squire's kit 0.10.7. Pinstripe's PHP presets are installed; its npm half is [the next step](#pinstripe-s-npm-half).
 For what each part does in WELD, see [What is welded in](../guides/whats-welded-in.md).
 
 ## What is on the bench today
@@ -28,7 +28,7 @@ For what each part does in WELD, see [What is welded in](../guides/whats-welded-
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |
 | PROCTOR | measures WELD against CREED's `policy.json` as a CI job (`composer proctor`): warnings pass, failures block |
 | ADVISOR | in `require-dev`; `php vendor/bin/advisor install --client=claude --write` points a coding agent at the stack's read-only MCP server |
-| Squire | the deploy kit in `deploy/` at 0.10.5: the Citadel image, an idempotent release script and one portable image for other hosts |
+| Squire | the deploy kit in `deploy/` at 0.10.7: the Citadel image, an idempotent release script and one portable image for other hosts |
 | Pinstripe | `waynestate/pinstripe` `^0.3` in `require-dev`. `phpstan.neon` includes its `phpstan/laravel.neon` and adds only WELD's paths, so the level, the ignore rules and the banned calls (`eval()`, `dd()`, TLS checks turned off, SQL joined from strings) come from the package; WELD's own code passes them with no new ignore and no baseline. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes (Squire's `deploy/` kit and `bin/docs-site.php`), and `tests/Unit/PinstripeWiringTest.php` fails on any other drift. `composer-ci` saves Pint's findings as a Code Quality report (`composer lint:gitlab`). ESLint and Prettier still run on WELD's own config: see [Pinstripe's npm half](#pinstripe-s-npm-half) |
 | Password auth | the starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's |
 | License | MIT |
