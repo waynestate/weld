@@ -293,7 +293,7 @@ job's <code>env</code> input is where to try them first.</p>
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p><code>php artisan optimize</code> works in WELD since SESAME 0.6.1, whose <code>/login</code> and <code>/logout</code> are controller actions
 instead of closures, so <code>route:cache</code> can serialize them (WELD locks SESAME 0.7.4). Under SESAME 0.6.0 the route
 cache ran out of memory and the container stopped; an app still on 0.6.0 starts with <code>SQUIRE_ARTISAN_OPTIMIZE=0</code>
-until it updates. The same holds for the optimize step in <code>scripts/release.sh</code> on Citadel.</p></aside>
+until it updates. The same holds for the optimize step in <code>deploy/scripts/release.sh</code> on Citadel.</p></aside>
 <p>Four tables, one bead: if the joint passes <code>weld:doctor</code> on all of them, the seam holds.</p>
 </article>
     </main>
