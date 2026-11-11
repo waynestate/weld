@@ -5,7 +5,6 @@ use App\Health\DatabaseReady;
 use App\Health\SchedulerHeartbeat;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Support\OracleErrors;
-use App\Support\TrustedProxies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -37,14 +36,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // would bounce still lands on SESAME's door.
         $middleware->redirectGuestsTo('/login');
 
-        // Trust only the proxies named in TRUSTED_PROXIES, so X-Forwarded-Proto
-        // is honored only for requests that really arrived over HTTPS. env() is
-        // read directly because this closure runs before config is loaded;
-        // unset falls back to Citadel's proxy, set-but-empty trusts nothing.
-        $raw = env('TRUSTED_PROXIES'); // @phpstan-ignore larastan.noEnvCallsOutsideOfConfig (closure runs before config is loaded)
-        // A bool-looking value such as true is not a valid proxy list, so fall back to the default.
-        $middleware->trustProxies(at: TrustedProxies::fromEnv(is_string($raw) ? $raw : null));
-
+        // Trusted proxies come from HELMET, not from this file: the HELMET
+        // provider copies helmet.proxies (HELMET_PROXIES, or the HELMET_PRESET
+        // platform preset, or the older TRUSTED_PROXIES alias in
+        // config/helmet.php) into Laravel's trusted-proxy setting, so a
+        // platform address never lives in the app's code.
         $middleware->web(append: [
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
