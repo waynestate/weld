@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>What is welded in | WELD docs</title>
-<meta name="description" content="The parts welded into WELD: WayneUI, CREED, Pinstripe, Preflight, PROCTOR, SESAME, HELMET, ADVISOR, Squire and Ziggy, and what each does in the app.">
+<meta name="description" content="The parts welded into WELD and what each does in the app, plus the five adjacent parts of the stack and when an app reaches for them.">
 <meta name="docs-version" content="0.2.1">
 <link rel="stylesheet" href="../../assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="../../assets/docs.css">
@@ -32,9 +32,9 @@
 </header><div class="docs-layout docs-layout--toc">
   <details class="docs-menu">
     <summary>Menu</summary>
-    <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html" aria-current="page">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/which-command.html">Which command when</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li><li><a href="../../docs/reference/proof.html">Proof</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
+    <nav class="docs-nav" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html" aria-current="page">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/citadel-limits.html">Citadel limits</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/which-command.html">Which command when</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li><li><a href="../../docs/reference/proof.html">Proof</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
   </details>
-  <nav class="docs-nav docs-nav--sidebar" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html" aria-current="page">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/which-command.html">Which command when</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li><li><a href="../../docs/reference/proof.html">Proof</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
+  <nav class="docs-nav docs-nav--sidebar" aria-label="Documentation"><ul class="docs-nav__list"><li class="docs-nav__group"><span class="docs-nav__label">Getting started</span><ul><li><a href="../../docs/index.html">Overview</a></li><li><a href="../../docs/install.html">Install</a></li><li><a href="../../docs/guides/quick-start.html">Quick start</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Guides</span><ul><li><a href="../../docs/guides/whats-welded-in.html" aria-current="page">What is welded in</a></li><li><a href="../../docs/guides/check-your-setup.html">Check your setup</a></li><li><a href="../../docs/guides/oracle.html">Oracle</a></li><li><a href="../../docs/guides/sourdough.html">WELD and Sourdough</a></li><li><a href="../../docs/guides/regen-check.html">Is WELD still Sourdough&#039;s shape?</a></li><li><a href="../../docs/running-off-citadel.html">Running WELD off Citadel</a></li><li><a href="../../docs/guides/citadel-limits.html">Citadel limits</a></li><li><a href="../../docs/guides/app-structure.html">App structure</a></li><li><a href="../../docs/guides/container-contract.html">The container contract</a></li><li><a href="../../docs/guides/queues-and-scheduling.html">Queues and scheduling</a></li><li><a href="../../docs/guides/security.html">Security</a></li><li><a href="../../docs/guides/build-and-supply-chain.html">Build and supply chain</a></li></ul></li><li class="docs-nav__group"><span class="docs-nav__label">Reference</span><ul><li><a href="../../docs/reference/status.html">Status</a></li><li><a href="../../docs/reference/commands.html">Commands</a></li><li><a href="../../docs/reference/which-command.html">Which command when</a></li><li><a href="../../docs/reference/configuration.html">Configuration</a></li><li><a href="../../docs/reference/proof.html">Proof</a></li></ul></li><li><a href="../../docs/troubleshooting.html">Troubleshooting</a></li><li><a href="../../docs/upgrading.html">Upgrading</a></li><li><a href="../../docs/contributing.html">Contributing</a></li><li><a href="../../docs/changelog.html">Changelog</a></li></ul></nav>
   <div class="docs-content">
     <main id="main">
       <article class="docs-article"><h1 id="what-is-welded-in">What is welded <span class="docs-heading-tail"><span>in</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-is-welded-in">#</a></span></h1>
@@ -50,39 +50,39 @@
 <tbody>
 <tr>
 <td>WayneUI</td>
-<td>The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out</td>
+<td>The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out (<a rel="noopener" href="https://wayneui.apps.wayne.edu/llms.txt">agent docs</a>)</td>
 </tr>
 <tr>
 <td>CREED</td>
-<td>The written standards and <code>policy.json</code>: supported PHP, Laravel and Node versions</td>
+<td>The written standards and <code>policy.json</code>: supported PHP, Laravel and Node versions (<a rel="noopener" href="https://creed.apps.wayne.edu/llms.txt">agent docs</a>)</td>
 </tr>
 <tr>
 <td>Pinstripe</td>
-<td>The coding standard, 0.3 in <code>require-dev</code>: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in</td>
+<td>The coding standard, 0.3 in <code>require-dev</code>: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in (<a rel="noopener" href="https://pinstripe.apps.wayne.edu/llms.txt">agent docs</a>)</td>
 </tr>
 <tr>
 <td>Preflight</td>
-<td>The CI pipeline, from GitLab CI/CD components pinned at 0.6.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability</td>
+<td>The CI pipeline, from GitLab CI/CD components pinned at 0.6.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability (<a rel="noopener" href="https://preflight.apps.wayne.edu/llms.txt">agent docs</a>)</td>
 </tr>
 <tr>
 <td>PROCTOR</td>
-<td>The checks, run in CI and as the deploy gate</td>
+<td>The checks, run in CI and as the deploy gate (<a rel="noopener" href="https://proctor.apps.wayne.edu/llms.txt">agent docs</a>)</td>
 </tr>
 <tr>
 <td>SESAME</td>
-<td>Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions</td>
+<td>Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions (<a rel="noopener" href="https://sesame.apps.wayne.edu/llms.txt">agent docs</a>)</td>
 </tr>
 <tr>
 <td>HELMET</td>
-<td>The baseline runtime: security headers and CSP, sessions, trusted proxies, <code>/up</code> and the <code>/ready</code> readiness route</td>
+<td>The baseline runtime: security headers and CSP, sessions, trusted proxies, <code>/up</code> and the <code>/ready</code> readiness route (<a rel="noopener" href="https://helmet.apps.wayne.edu/llms.txt">agent docs</a>)</td>
 </tr>
 <tr>
 <td>ADVISOR</td>
-<td>The stack's read-only MCP server for coding agents, in <code>require-dev</code></td>
+<td>The stack's read-only MCP server for coding agents, in <code>require-dev</code> (<a rel="noopener" href="https://advisor.apps.wayne.edu/llms.txt">agent docs</a>)</td>
 </tr>
 <tr>
 <td>Squire</td>
-<td>The deploy kit in <code>deploy/</code>, at 0.10.7: the Citadel image, an idempotent release script and one portable image for other hosts</td>
+<td>The deploy kit in <code>deploy/</code>, at 0.10.7: the Citadel image, an idempotent release script and one portable image for other hosts (<a rel="noopener" href="https://squire.apps.wayne.edu/llms.txt">agent docs</a>)</td>
 </tr>
 <tr>
 <td>Ziggy</td>
@@ -92,6 +92,15 @@
 </table></div>
 <p><img src="../readme/journey.svg" alt="WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys." /></p>
 <p>One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.</p>
+<h2 id="adjacent-parts">Adjacent <span class="docs-heading-tail"><span>parts</span><a class="docs-heading-link" aria-label="Link to this section" href="#adjacent-parts">#</a></span></h2>
+<p>Five more parts of the stack sit beside WELD. WELD installs none of them: each is its own program or package, and an app reaches for one at a moment of its own.</p>
+<ul>
+<li><strong>Parity</strong> runs Citadel on your own computer: Citadel's PHP image, its proxy and MySQL 5.6, one program for Windows, macOS and Linux. An app reaches for it when &quot;it works here&quot; has to mean &quot;it works on Citadel&quot; before the deploy (<a rel="noopener" href="https://parity.apps.wayne.edu/llms.txt">agent docs</a>).</li>
+<li><strong>Sourdough</strong> is the starter that bakes a Wayne State app with the stack already wired in, in every shape; WELD is its Inertia shape, already built. An app reaches for it at birth, and a legacy app points at <code>sourdough adopt</code> rather than a hand-copied template (<a rel="noopener" href="https://sourdough.apps.wayne.edu/llms.txt">agent docs</a>).</li>
+<li><strong>Booster</strong> upgrades an app's PHP or Laravel version, one hop at a time: Rector rewrites the code, it raises the constraints in <code>composer.json</code>, and the app's tests must pass on the target PHP before the next hop. It edits the working copy and never commits. An app reaches for it when CREED's policy leaves its PHP or Laravel behind (<a rel="noopener" href="https://booster.apps.wayne.edu/llms.txt">agent docs</a>).</li>
+<li><strong>Rollcall</strong> is the fleet scanner: for each app it records the PHP image, the lowest PHP its <code>composer.json</code> allows, the Laravel version, the auth package and the PROCTOR result, looks each version up by date in CREED's <code>policy.json</code>, and keeps one snapshot per scan. It enforces nothing. An app reaches for it to see where the fleet stands and how close each app is to end of life (<a rel="noopener" href="https://rollcall.apps.wayne.edu/llms.txt">agent docs</a>).</li>
+<li><strong>Drawbridge</strong> is the sign-in gateway for apps on Citadel: Apache with mod_auth_openidc, one OpenID Connect client for Microsoft Entra ID. It checks the visitor has a session, drops any identity header the visitor sent, and passes the app a short-lived signed assertion that SESAME's <code>gateway</code> driver verifies. It is not live yet. An app reaches for it when it wants Entra ID sign-in through the platform's front door instead of its own CAS setup (<a rel="noopener" href="https://drawbridge.apps.wayne.edu/llms.txt">agent docs</a>).</li>
+</ul>
 <h2 id="what-is-on-the-bench-today">What is on the bench <span class="docs-heading-tail"><span>today</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-is-on-the-bench-today">#</a></span></h2>
 <p>Every part is welded in: HELMET and SESAME are in <code>require</code>; CREED, Pinstripe, PROCTOR and ADVISOR are in <code>require-dev</code>; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.6.0; the deploy layer runs Squire's kit 0.10.7. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once <code>@waynestate/pinstripe</code> 0.3.0 is on npm (<a href="../reference/status.html#pinstripe-s-npm-half">the steps</a>).</p>
 <ul>
@@ -112,13 +121,14 @@
 <ul>
 <li><a href="check-your-setup.html">Check your setup</a></li>
 <li><a href="oracle.html">Oracle</a></li>
+<li><a href="citadel-limits.html">Citadel limits</a></li>
 <li><a href="../running-off-citadel.html">Running WELD off Citadel</a></li>
 </ul>
 </article>
     </main>
     <nav class="docs-pager" aria-label="Pages"><a class="docs-pager__link" href="../../docs/guides/quick-start.html"><span class="docs-pager__dir">Previous</span><span class="docs-pager__title">Quick start</span></a><a class="docs-pager__link docs-pager__link--next" href="../../docs/guides/check-your-setup.html"><span class="docs-pager__dir">Next</span><span class="docs-pager__title">Check your setup</span></a></nav>
   </div>
-  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#the-parts">The parts</a></li><li class="docs-toc__item"><a href="#what-is-on-the-bench-today">What is on the bench today</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
+  <nav class="docs-toc" aria-label="On this page"><h2 class="docs-toc__title">On this page</h2><ul class="docs-toc__list"><li class="docs-toc__item"><a href="#the-parts">The parts</a></li><li class="docs-toc__item"><a href="#adjacent-parts">Adjacent parts</a></li><li class="docs-toc__item"><a href="#what-is-on-the-bench-today">What is on the bench today</a></li><li class="docs-toc__item"><a href="#related">Related</a></li></ul></nav>
 </div>
 <footer class="docs-footer">
   <span>Documents WELD <span data-docs-version>0.2.1</span></span>

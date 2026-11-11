@@ -46,6 +46,15 @@ These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/en
 - Decision needed: whether WELD keeps Fortify for a non-SSO mode.
 - Decision needed: SSR on by default or off.
 
+## Signed-in pages and the a11y job [#](https://weld.apps.wayne.edu/docs/reference/status.html#signed-in-pages-and-the-a11y-job)
+
+WELD's pipeline audits signed-in pages in two steps, copied from Sourdough's Inertia shape:
+
+1. The `a11y-pages` job boots the app as its first run on a desk does (`.env` from `.env.example`, a generated key, an SQLite database, `php artisan serve`), signs in with SESAME's fake driver, and saves each path in `A11Y_PATHS` (WELD: `/` and `/dashboard`) into `a11y-site/` with `public/`'s static files. One cookie jar carries the sign-in from one path to the next, and the server's origin is cut out of the saved pages (`.gitlab-ci.yml:259-318`).
+2. The `a11y-app` include checks those saved pages: axe-core 4.14.0, light and dark, at 320 and 1280 px, plus WCAG 1.4.10 reflow, at WCAG 2.2 AA (`.gitlab-ci.yml:31-40`).
+
+For a derived app: add each page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages` together (`.gitlab-ci.yml:34`, `:266`). A fully gated app should keep one public page, the landing page, so the site audit has something to read.
+
 ## Pinstripe's npm half [#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
 
 WELD takes Pinstripe's PHP side from Composer today. The JS side, `@waynestate/pinstripe` (ESLint and Prettier presets for Vue), waits for 0.3.0 on npm, because npm still has 0.1.4. The presets inside have not changed since 0.1.4, but the move is a real refit, not a version bump: Pinstripe's presets need ESLint 10 (WELD runs 9), print at 100 columns with 2-space indents where WELD's `.prettierrc` prints at 150 with 4, and add eslint-plugin-vuejs-accessibility, so every Vue file is reformatted once and the accessibility rules may report findings. Once 0.3.0 is on npm:

@@ -47,6 +47,10 @@
           "path": "running-off-citadel"
         },
         {
+          "title": "Citadel limits",
+          "path": "guides/citadel-limits"
+        },
+        {
           "title": "App structure",
           "path": "guides/app-structure"
         },

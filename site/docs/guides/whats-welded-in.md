@@ -1,6 +1,6 @@
 ---
 title: "What is welded in | WELD docs"
-description: "The parts welded into WELD: WayneUI, CREED, Pinstripe, Preflight, PROCTOR, SESAME, HELMET, ADVISOR, Squire and Ziggy, and what each does in the app."
+description: "The parts welded into WELD and what each does in the app, plus the five adjacent parts of the stack and when an app reaches for them."
 url: https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html
 llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
@@ -14,20 +14,30 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 
 | Part | What it does in WELD |
 | --- | --- |
-| WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
-| CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
-| Pinstripe | The coding standard, 0.3 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in |
-| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.6.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability |
-| PROCTOR | The checks, run in CI and as the deploy gate |
-| SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
-| HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
-| ADVISOR | The stack's read-only MCP server for coding agents, in `require-dev` |
-| Squire | The deploy kit in `deploy/`, at 0.10.7: the Citadel image, an idempotent release script and one portable image for other hosts |
+| WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out ([agent docs](https://wayneui.apps.wayne.edu/llms.txt)) |
+| CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions ([agent docs](https://creed.apps.wayne.edu/llms.txt)) |
+| Pinstripe | The coding standard, 0.3 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in ([agent docs](https://pinstripe.apps.wayne.edu/llms.txt)) |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.6.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability ([agent docs](https://preflight.apps.wayne.edu/llms.txt)) |
+| PROCTOR | The checks, run in CI and as the deploy gate ([agent docs](https://proctor.apps.wayne.edu/llms.txt)) |
+| SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions ([agent docs](https://sesame.apps.wayne.edu/llms.txt)) |
+| HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route ([agent docs](https://helmet.apps.wayne.edu/llms.txt)) |
+| ADVISOR | The stack's read-only MCP server for coding agents, in `require-dev` ([agent docs](https://advisor.apps.wayne.edu/llms.txt)) |
+| Squire | The deploy kit in `deploy/`, at 0.10.7: the Citadel image, an idempotent release script and one portable image for other hosts ([agent docs](https://squire.apps.wayne.edu/llms.txt)) |
 | Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ![WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys.](https://weld.apps.wayne.edu/docs/readme/journey.svg)
 
 One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.
+
+## Adjacent parts [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#adjacent-parts)
+
+Five more parts of the stack sit beside WELD. WELD installs none of them: each is its own program or package, and an app reaches for one at a moment of its own.
+
+- **Parity** runs Citadel on your own computer: Citadel's PHP image, its proxy and MySQL 5.6, one program for Windows, macOS and Linux. An app reaches for it when "it works here" has to mean "it works on Citadel" before the deploy ([agent docs](https://parity.apps.wayne.edu/llms.txt)).
+- **Sourdough** is the starter that bakes a Wayne State app with the stack already wired in, in every shape; WELD is its Inertia shape, already built. An app reaches for it at birth, and a legacy app points at `sourdough adopt` rather than a hand-copied template ([agent docs](https://sourdough.apps.wayne.edu/llms.txt)).
+- **Booster** upgrades an app's PHP or Laravel version, one hop at a time: Rector rewrites the code, it raises the constraints in `composer.json`, and the app's tests must pass on the target PHP before the next hop. It edits the working copy and never commits. An app reaches for it when CREED's policy leaves its PHP or Laravel behind ([agent docs](https://booster.apps.wayne.edu/llms.txt)).
+- **Rollcall** is the fleet scanner: for each app it records the PHP image, the lowest PHP its `composer.json` allows, the Laravel version, the auth package and the PROCTOR result, looks each version up by date in CREED's `policy.json`, and keeps one snapshot per scan. It enforces nothing. An app reaches for it to see where the fleet stands and how close each app is to end of life ([agent docs](https://rollcall.apps.wayne.edu/llms.txt)).
+- **Drawbridge** is the sign-in gateway for apps on Citadel: Apache with mod_auth_openidc, one OpenID Connect client for Microsoft Entra ID. It checks the visitor has a session, drops any identity header the visitor sent, and passes the app a short-lived signed assertion that SESAME's `gateway` driver verifies. It is not live yet. An app reaches for it when it wants Entra ID sign-in through the platform's front door instead of its own CAS setup ([agent docs](https://drawbridge.apps.wayne.edu/llms.txt)).
 
 ## What is on the bench today [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
@@ -50,4 +60,5 @@ Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, P
 
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
 - [Oracle](https://weld.apps.wayne.edu/docs/guides/oracle.html)
+- [Citadel limits](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html)
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)

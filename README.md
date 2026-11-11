@@ -17,6 +17,27 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 hooked up: sign-in, security headers, checks, coding standards, CI and the WayneUI interface. Think of it as the
 Megazord, except it comes with a deploy script and nobody has to shout to make it combine.
 
+**Stack members:** every part of the stack publishes agent docs at `llms.txt` on its own site, so an agent can read the member before it reads WELD's pages:
+
+- WayneUI: https://wayneui.apps.wayne.edu/llms.txt
+- CREED: https://creed.apps.wayne.edu/llms.txt
+- Pinstripe: https://pinstripe.apps.wayne.edu/llms.txt
+- Preflight: https://preflight.apps.wayne.edu/llms.txt
+- PROCTOR: https://proctor.apps.wayne.edu/llms.txt
+- SESAME: https://sesame.apps.wayne.edu/llms.txt
+- HELMET: https://helmet.apps.wayne.edu/llms.txt
+- ADVISOR: https://advisor.apps.wayne.edu/llms.txt
+- Squire: https://squire.apps.wayne.edu/llms.txt
+- Parity: https://parity.apps.wayne.edu/llms.txt
+- Sourdough: https://sourdough.apps.wayne.edu/llms.txt
+- Booster: https://booster.apps.wayne.edu/llms.txt
+- Rollcall: https://rollcall.apps.wayne.edu/llms.txt
+- Drawbridge: https://drawbridge.apps.wayne.edu/llms.txt
+
+**Current versions** (checked 2026-11-10): CREED 0.1.11, PROCTOR 0.15.1, Preflight 0.8.0, SESAME 0.7.4, HELMET 1.4.1, Squire 0.10.8, Pinstripe 0.3.2, ADVISOR 0.3.0, WayneUI 2.0.8.
+
+ADVISOR's `policy_lookup` answers what is current at any time; the list above is a snapshot for agents that cannot reach it.
+
 ## Documentation
 
 The docs live at [site/docs/index.html](site/docs/index.html) and ship to https://weld.apps.wayne.edu/docs/. They are

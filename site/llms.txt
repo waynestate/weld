@@ -8,6 +8,27 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 hooked up: sign-in, security headers, checks, coding standards, CI and the WayneUI interface. Think of it as the
 Megazord, except it comes with a deploy script and nobody has to shout to make it combine.
 
+**Stack members:** every part of the stack publishes agent docs at `llms.txt` on its own site, so an agent can read the member before it reads WELD's pages:
+
+- WayneUI: https://wayneui.apps.wayne.edu/llms.txt
+- CREED: https://creed.apps.wayne.edu/llms.txt
+- Pinstripe: https://pinstripe.apps.wayne.edu/llms.txt
+- Preflight: https://preflight.apps.wayne.edu/llms.txt
+- PROCTOR: https://proctor.apps.wayne.edu/llms.txt
+- SESAME: https://sesame.apps.wayne.edu/llms.txt
+- HELMET: https://helmet.apps.wayne.edu/llms.txt
+- ADVISOR: https://advisor.apps.wayne.edu/llms.txt
+- Squire: https://squire.apps.wayne.edu/llms.txt
+- Parity: https://parity.apps.wayne.edu/llms.txt
+- Sourdough: https://sourdough.apps.wayne.edu/llms.txt
+- Booster: https://booster.apps.wayne.edu/llms.txt
+- Rollcall: https://rollcall.apps.wayne.edu/llms.txt
+- Drawbridge: https://drawbridge.apps.wayne.edu/llms.txt
+
+**Current versions** (checked 2026-11-10): CREED 0.1.11, PROCTOR 0.15.1, Preflight 0.8.0, SESAME 0.7.4, HELMET 1.4.1, Squire 0.10.8, Pinstripe 0.3.2, ADVISOR 0.3.0, WayneUI 2.0.8.
+
+ADVISOR's `policy_lookup` answers what is current at any time; the list above is a snapshot for agents that cannot reach it.
+
 Every page below is Markdown. The HTML pages send the same Markdown to a client that asks for `text/markdown`. Written by Squire's agent-ready kit from the README and the pages; do not edit.
 
 ## Pages
@@ -18,6 +39,7 @@ Every page below is Markdown. The HTML pages send the same Markdown to a client 
 - [App structure | WELD docs](https://weld.apps.wayne.edu/docs/guides/app-structure.md): Where the code lives in a WELD app: the Laravel app, the Vue front end, the static site and the deploy layer.
 - [Build and supply chain | WELD docs](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.md): Building and shipping WELD: composer ci as the gate, the audit, and the release path through Squire.
 - [Check your setup | WELD docs](https://weld.apps.wayne.edu/docs/guides/check-your-setup.md): weld:doctor strikes an arc across the local setup and reports every joint: PASS, WARN or FAIL, one line per check.
+- [Citadel limits | WELD docs](https://weld.apps.wayne.edu/docs/guides/citadel-limits.md): The platform facts an app design depends on when it runs on Citadel: MySQL 5.6.51, no separate queue worker, no sidecars, and Squire's php.ini limits.
 - [The container contract | WELD docs](https://weld.apps.wayne.edu/docs/guides/container-contract.md): The container contract a WELD app meets: environment-only config, logs to stderr, writable paths, non-root, /up, and what to run after every deploy.
 - [Oracle | WELD docs](https://weld.apps.wayne.edu/docs/guides/oracle.md): How WELD speaks Oracle through yajra/laravel-oci8: the settings, oracle:check, and the parity image for a real connection.
 - [Queues and scheduling | WELD docs](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.md): Queues and scheduling in WELD: how jobs and scheduled tasks run, and what changes between local and deploy.
@@ -25,7 +47,7 @@ Every page below is Markdown. The HTML pages send the same Markdown to a client 
 - [Is WELD still Sourdough's shape? | WELD docs](https://weld.apps.wayne.edu/docs/guides/regen-check.md): Whether WELD is still Sourdough's Inertia shape: the regen gate compares a fresh generation with WELD and fails only on new drift.
 - [Security | WELD docs](https://weld.apps.wayne.edu/docs/guides/security.md): Security in WELD: sign-in through SESAME, the security headers and CSP from HELMET, and the standards checks from PROCTOR.
 - [WELD and Sourdough | WELD docs](https://weld.apps.wayne.edu/docs/guides/sourdough.md): WELD and Sourdough: the starter tool for every shape of Wayne State app, and why WELD is the finished piece.
-- [What is welded in | WELD docs](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.md): The parts welded into WELD: WayneUI, CREED, Pinstripe, Preflight, PROCTOR, SESAME, HELMET, ADVISOR, Squire and Ziggy, and what each does in the app.
+- [What is welded in | WELD docs](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.md): The parts welded into WELD and what each does in the app, plus the five adjacent parts of the stack and when an app reaches for them.
 - [Overview | WELD docs](https://weld.apps.wayne.edu/docs/index.md): What WELD is: the whole Wayne State app stack joined into one application, and where each part sits in it.
 - [Install | WELD docs](https://weld.apps.wayne.edu/docs/install.md): How to get WELD: composer create-project or clone, then one Docker command brings the app, PHP and Node up.
 - [Commands | WELD docs](https://weld.apps.wayne.edu/docs/reference/commands.md): The commands a WELD app runs: the composer scripts, the artisan commands and the bin/weld subcommands.

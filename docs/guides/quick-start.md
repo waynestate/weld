@@ -154,6 +154,7 @@ you see (the welcome page, the dashboard, settings) is drawn by WayneUI's compon
 - [Check your setup](check-your-setup.md): what the doctor reports, joint by joint.
 - [What is welded in](whats-welded-in.md): the parts and what each does in the app.
 - [Run it like Citadel](#run-it-like-citadel): the same folder on Citadel's image, proxy and MySQL 5.6, through Parity.
+- [Citadel limits](citadel-limits.md): the platform facts an app design depends on, with their sources.
 - [Running WELD off Citadel](../running-off-citadel.md): for when the destination is somewhere other than a laptop.
 
 ## Related

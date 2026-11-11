@@ -18,6 +18,27 @@ WELD is the whole Wayne State app stack joined into one application. Install it,
 hooked up: sign-in, security headers, checks, coding standards, CI and the WayneUI interface. Think of it as the
 Megazord, except it comes with a deploy script and nobody has to shout to make it combine.
 
+**Stack members:** every part of the stack publishes agent docs at `llms.txt` on its own site, so an agent can read the member before it reads WELD's pages:
+
+- WayneUI: https://wayneui.apps.wayne.edu/llms.txt
+- CREED: https://creed.apps.wayne.edu/llms.txt
+- Pinstripe: https://pinstripe.apps.wayne.edu/llms.txt
+- Preflight: https://preflight.apps.wayne.edu/llms.txt
+- PROCTOR: https://proctor.apps.wayne.edu/llms.txt
+- SESAME: https://sesame.apps.wayne.edu/llms.txt
+- HELMET: https://helmet.apps.wayne.edu/llms.txt
+- ADVISOR: https://advisor.apps.wayne.edu/llms.txt
+- Squire: https://squire.apps.wayne.edu/llms.txt
+- Parity: https://parity.apps.wayne.edu/llms.txt
+- Sourdough: https://sourdough.apps.wayne.edu/llms.txt
+- Booster: https://booster.apps.wayne.edu/llms.txt
+- Rollcall: https://rollcall.apps.wayne.edu/llms.txt
+- Drawbridge: https://drawbridge.apps.wayne.edu/llms.txt
+
+**Current versions** (checked 2026-11-10): CREED 0.1.11, PROCTOR 0.15.1, Preflight 0.8.0, SESAME 0.7.4, HELMET 1.4.1, Squire 0.10.8, Pinstripe 0.3.2, ADVISOR 0.3.0, WayneUI 2.0.8.
+
+ADVISOR's `policy_lookup` answers what is current at any time; the list above is a snapshot for agents that cannot reach it.
+
 ### Documentation
 
 The docs live at [site/docs/index.html](https://github.com/waynestate/weld/blob/HEAD/site/docs/index.html) and ship to https://weld.apps.wayne.edu/docs/. They are
@@ -992,6 +1013,7 @@ Notable changes to WELD, newest first.
 - Site: the weld log and the cast name four more latest tags: SESAME 0.7.4, Pinstripe 0.3.2, Drawbridge 0.6.2 and Preflight 0.8.0. They still said 0.7.3, 0.3.1, 0.6.1 and 0.6.0. Preflight's cast line still says WELD's pipeline pins its components at 0.6.0, which is what `.gitlab-ci.yml` holds. Content only; the page's design and motion are unchanged.
 - Changed: The portability probe routes need a per-job `PORTABILITY_PROBE_TOKEN` in the `X-Portability-Token` header, so a stray `PORTABILITY_PROBE=yes` on a real host opens nothing; Preflight 0.8.0's `session_header` sends it.
 - Changed: CI pins Preflight 0.8.0.
+- Docs: the stack map and the platform facts. What is welded in gains an "Adjacent parts" section (Parity, Sourdough, Booster, Rollcall, Drawbridge), and every stack member's entry, welded-in and adjacent, ends with its agent docs link. The README intro (and so llms.txt) lists the stack members' llms.txt URLs and the current versions, with ADVISOR's `policy_lookup` as the live answer. A new guide, Citadel limits, lists the platform facts an app design depends on, each with its source, linked from What is welded in and the Quick start. App structure answers whether an app may add a `deployments/002-*.sh` one-time step (it may). Status explains the pipeline's two-step a11y sign-in pattern for a derived app.
 - Added: `tests/Feature/MigrateOncePerReleaseTest.php` holds W24: on Citadel only the release script runs `migrate`, and the portable image runs it only in its one-shot `migrate` role, which the web, worker and scheduler services wait for. W24 moves from `Documented` to `Checked`. PROCTOR's `entrypoint-migrate` still warns on that role (it does not follow the role into Squire's `run_migrate` function), so BEST_PRACTICES names the warning as expected.
 - Docs: the status page's gaps list mirrors BEST_PRACTICES again: W12 is `Checked` (Preflight 0.6.0's `healthcheck`), the scheduler heartbeat is built (it said W23 was still a plan), and W24 is `Checked`.
 - Site: the weld log and the cast name each part's latest tag again: CREED 0.1.11, PROCTOR 0.15.1 (its line names 0.15's MySQL 5.6 warning), Preflight 0.6.0 (the MySQL 5.6 migrations join its weld log line, its cast line and its terminal, and the image's own health check its weld log line), HELMET 1.4.1, Squire 0.10.8 and Booster 1.18.0. They still said 0.1.10, 0.12.0, 0.5.0, 1.4.0, 0.10.7 and 1.17.0.
@@ -1422,6 +1444,14 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Stack:** `Checked`, for the portable path. Squire's portable image (`deploy/.squire/portable.Dockerfile`) bakes the code in and runs as `web`, `worker` (`queue:work --tries=3 --max-time=3600 --sleep=3`), `scheduler` (`schedule:work`) or `migrate` by `SQUIRE_ROLE` or the first argument (`deploy/.squire/portable/squire-entrypoint.sh`), and the `portable` profile in `deploy/docker-compose.squire.yml` runs the four as services of one image, the scheduler with `QUEUE_WORKER_MODE: none`. `tests/Feature/PortableImageTest.php` fails when a role, the shared image or that switch goes, and Squire's `PortableImageTest` (`testThePortableProfileRunsOneImageAsFourRoles`, `testTheRolePicksTheProcess`) runs the entrypoint itself. Built and run for real on 2026-11-08: `migrate` exited 0, then `web`, `worker` and `scheduler` came up healthy and the worker ran a queued job. The Citadel mirror (`deploy/.squire/Dockerfile`) still runs Apache only, because Citadel has no worker process (W19). In CI, Preflight's `portability` job (`.gitlab-ci.yml`, Preflight 0.6.0) builds this image and boots its `web` role, the image's default; `tests/Unit/PortabilityJobTest.php` holds the include. Open: no `ssr` role (SSR is off); the `portability` job boots only `web`, so `worker`, `scheduler` and `migrate` run only in the compose profile.
 
+### One-time deploy steps (deployments/) [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#one-time-deploy-steps-deployments)
+
+An app may add its own one-time step as `deployments/002-*.sh`, beside the kit's `001-first-release.sh`. Citadel runs each executable file in `deployments/` once per file name for the life of the app, as the `citadel` user, when the container starts, before Apache (`deploy/deployments/001-first-release.sh:4-5`). A finished file is recorded at `/citadel/logs/deployments/<name>.log` and skipped on later starts; a failed run leaves a `.failed.log` instead, so the next start tries again, up to three times, and then the deployment is marked FAILING (`deploy/.squire/fallback/citadel-deploy:12-14`, `:20-24`; `deploy/deployments/001-first-release.sh:5-6`). Everything in the hook must be safe to run twice (S10). A new file name runs on the next container start after it appears, provided it is executable: the runner takes only executable files (`deploy/.squire/fallback/citadel-deploy:9-10`).
+
+Keep repeatable work in `scripts/release.sh`, which the first-release hook calls with the smoke test off (`deploy/deployments/001-first-release.sh:9-10`, `:25`). Mark a new hook executable in git: `git update-index --chmod=+x deployments/002-your-step.sh`.
+
+Squire's update treats a file it does not pin as yours: `.squire.json` pins the kit's files, including `deployments/001-first-release.sh` (`deploy/.squire.json:28`), and Squire never touches a file it did not write, reports it as `app-owned`, never records or overwrites it, and `init --check` does not count it as drift ([Squire's update-and-drift guide](https://squire.apps.wayne.edu/docs/guides/update-and-drift.html)).
+
 ### How to read the tags [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#how-to-read-the-tags)
 
 Each practice ends with exactly one tag.
@@ -1532,6 +1562,47 @@ Not sure whether you want `weld:doctor`, `squire doctor` or `proctor check`? [Wh
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html)
 - [Oracle](https://weld.apps.wayne.edu/docs/guides/oracle.html)
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)
+
+---
+
+Source: https://weld.apps.wayne.edu/docs/guides/citadel-limits.html
+
+## Citadel limits [#](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html#citadel-limits)
+
+This page lists the platform facts an app design depends on when it runs on Citadel, each with its source. Design around them and the deploy is a formality; discover them at deploy time and the weld cracks.
+
+### MySQL 5.6.51 [#](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html#mysql-5-6-51)
+
+Citadel shares one MySQL 5.6.51 server. Two limits bite at design time:
+
+- No JSON or `vector` columns. Store JSON as `text` or `longText` with an Eloquent `array` or `json` cast, and filter in PHP (CREED's databases handbook).
+- Indexed utf8mb4 strings at most 191 characters. `Schema::defaultStringLength(191)` keeps index keys under the 767-byte cap; WELD sets it in `app/Providers/AppServiceProvider.php:32`.
+
+The `mysql56-migrate` job runs `php artisan migrate` against a real 5.6.51 service on every pipeline, because the SQLite tests take a JSON column or a long utf8mb4 index that 5.6 rejects at deploy (`.gitlab-ci.yml:50-56`).
+
+### No separate queue worker [#](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html#no-separate-queue-worker)
+
+Citadel runs no queue worker process. The scheduler drains the queue instead: `QUEUE_WORKER_MODE=scheduler` (the `.env.example` default) schedules a short `queue:work --stop-when-empty --max-time=50 --tries=3` every minute (W19, `docs/guides/queues-and-scheduling.md:20-24`; `docs/running-off-citadel.md:46`). Design jobs to be short; do not assume a long-lived worker.
+
+### No sidecars [#](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html#no-sidecars)
+
+One container per app. WELD deploys on Citadel through Squire as one container per app, and builds run at release time inside the app container (`docs/running-off-citadel.md:8`); traffic comes in through Citadel's front-end proxy, HA-Proxy (`docs/running-off-citadel.md:40`). The database is the one Citadel shares, the queue rides the scheduler, and the proxy sits in front; nothing runs beside the app.
+
+### Squire's php.ini limits [#](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html#squire-s-php-ini-limits)
+
+Squire's `php.ini` (the safe defaults HELMET also enforces at runtime) sets, among others:
+
+- `memory_limit = 128M` (`deploy/.squire/php.ini:20`)
+- `max_execution_time = 30` (`deploy/.squire/php.ini:18`)
+- `output_buffering = 4096` (`deploy/.squire/php.ini:6`)
+
+Size uploads and long-running work around them.
+
+### Related [#](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html#related)
+
+- [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)
+- [The container contract](https://weld.apps.wayne.edu/docs/guides/container-contract.html)
+- [Queues and scheduling](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html)
 
 ---
 
@@ -1874,6 +1945,7 @@ You have WELD running locally in Docker: the app and Vite in containers, `.env` 
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html): what the doctor reports, joint by joint.
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html): the parts and what each does in the app.
 - [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel): the same folder on Citadel's image, proxy and MySQL 5.6, through Parity.
+- [Citadel limits](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html): the platform facts an app design depends on, with their sources.
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html): for when the destination is somewhere other than a laptop.
 
 ### Related [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#related)
@@ -2021,20 +2093,30 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 
 | Part | What it does in WELD |
 | --- | --- |
-| WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
-| CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
-| Pinstripe | The coding standard, 0.3 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in |
-| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.6.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability |
-| PROCTOR | The checks, run in CI and as the deploy gate |
-| SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
-| HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
-| ADVISOR | The stack's read-only MCP server for coding agents, in `require-dev` |
-| Squire | The deploy kit in `deploy/`, at 0.10.7: the Citadel image, an idempotent release script and one portable image for other hosts |
+| WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out ([agent docs](https://wayneui.apps.wayne.edu/llms.txt)) |
+| CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions ([agent docs](https://creed.apps.wayne.edu/llms.txt)) |
+| Pinstripe | The coding standard, 0.3 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in ([agent docs](https://pinstripe.apps.wayne.edu/llms.txt)) |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.6.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability ([agent docs](https://preflight.apps.wayne.edu/llms.txt)) |
+| PROCTOR | The checks, run in CI and as the deploy gate ([agent docs](https://proctor.apps.wayne.edu/llms.txt)) |
+| SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions ([agent docs](https://sesame.apps.wayne.edu/llms.txt)) |
+| HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route ([agent docs](https://helmet.apps.wayne.edu/llms.txt)) |
+| ADVISOR | The stack's read-only MCP server for coding agents, in `require-dev` ([agent docs](https://advisor.apps.wayne.edu/llms.txt)) |
+| Squire | The deploy kit in `deploy/`, at 0.10.7: the Citadel image, an idempotent release script and one portable image for other hosts ([agent docs](https://squire.apps.wayne.edu/llms.txt)) |
 | Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ![WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys.](https://weld.apps.wayne.edu/docs/readme/journey.svg)
 
 One request, six stops, one seam. The bead runs the length of it; with reduced motion on, it stays put.
+
+### Adjacent parts [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#adjacent-parts)
+
+Five more parts of the stack sit beside WELD. WELD installs none of them: each is its own program or package, and an app reaches for one at a moment of its own.
+
+- **Parity** runs Citadel on your own computer: Citadel's PHP image, its proxy and MySQL 5.6, one program for Windows, macOS and Linux. An app reaches for it when "it works here" has to mean "it works on Citadel" before the deploy ([agent docs](https://parity.apps.wayne.edu/llms.txt)).
+- **Sourdough** is the starter that bakes a Wayne State app with the stack already wired in, in every shape; WELD is its Inertia shape, already built. An app reaches for it at birth, and a legacy app points at `sourdough adopt` rather than a hand-copied template ([agent docs](https://sourdough.apps.wayne.edu/llms.txt)).
+- **Booster** upgrades an app's PHP or Laravel version, one hop at a time: Rector rewrites the code, it raises the constraints in `composer.json`, and the app's tests must pass on the target PHP before the next hop. It edits the working copy and never commits. An app reaches for it when CREED's policy leaves its PHP or Laravel behind ([agent docs](https://booster.apps.wayne.edu/llms.txt)).
+- **Rollcall** is the fleet scanner: for each app it records the PHP image, the lowest PHP its `composer.json` allows, the Laravel version, the auth package and the PROCTOR result, looks each version up by date in CREED's `policy.json`, and keeps one snapshot per scan. It enforces nothing. An app reaches for it to see where the fleet stands and how close each app is to end of life ([agent docs](https://rollcall.apps.wayne.edu/llms.txt)).
+- **Drawbridge** is the sign-in gateway for apps on Citadel: Apache with mod_auth_openidc, one OpenID Connect client for Microsoft Entra ID. It checks the visitor has a session, drops any identity header the visitor sent, and passes the app a short-lived signed assertion that SESAME's `gateway` driver verifies. It is not live yet. An app reaches for it when it wants Entra ID sign-in through the platform's front door instead of its own CAS setup ([agent docs](https://drawbridge.apps.wayne.edu/llms.txt)).
 
 ### What is on the bench today [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
@@ -2057,6 +2139,7 @@ Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, P
 
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
 - [Oracle](https://weld.apps.wayne.edu/docs/guides/oracle.html)
+- [Citadel limits](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html)
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)
 
 ---
@@ -2632,6 +2715,15 @@ These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/en
 - Decided: `/ready` is HELMET's `Route::helmetReady()` with app checks as invokable classes: the database and the cache (W11) and the scheduler heartbeat (W23).
 - Decision needed: whether WELD keeps Fortify for a non-SSO mode.
 - Decision needed: SSR on by default or off.
+
+### Signed-in pages and the a11y job [#](https://weld.apps.wayne.edu/docs/reference/status.html#signed-in-pages-and-the-a11y-job)
+
+WELD's pipeline audits signed-in pages in two steps, copied from Sourdough's Inertia shape:
+
+1. The `a11y-pages` job boots the app as its first run on a desk does (`.env` from `.env.example`, a generated key, an SQLite database, `php artisan serve`), signs in with SESAME's fake driver, and saves each path in `A11Y_PATHS` (WELD: `/` and `/dashboard`) into `a11y-site/` with `public/`'s static files. One cookie jar carries the sign-in from one path to the next, and the server's origin is cut out of the saved pages (`.gitlab-ci.yml:259-318`).
+2. The `a11y-app` include checks those saved pages: axe-core 4.14.0, light and dark, at 320 and 1280 px, plus WCAG 1.4.10 reflow, at WCAG 2.2 AA (`.gitlab-ci.yml:31-40`).
+
+For a derived app: add each page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages` together (`.gitlab-ci.yml:34`, `:266`). A fully gated app should keep one public page, the landing page, so the site audit has something to read.
 
 ### Pinstripe's npm half [#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
 

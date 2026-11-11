@@ -110,6 +110,7 @@ You have WELD running locally in Docker: the app and Vite in containers, `.env` 
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html): what the doctor reports, joint by joint.
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html): the parts and what each does in the app.
 - [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel): the same folder on Citadel's image, proxy and MySQL 5.6, through Parity.
+- [Citadel limits](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html): the platform facts an app design depends on, with their sources.
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html): for when the destination is somewhere other than a laptop.
 
 ## Related [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#related)
