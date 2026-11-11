@@ -720,7 +720,7 @@ $
 
 0.8.0 Checklist | Long
 
-GitLab CI/CD components. WELD's pipeline pins them at 0.6.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
+GitLab CI/CD components. WELD's pipeline pins them at 0.8.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
 ```
 $ git push
@@ -990,6 +990,8 @@ Notable changes to WELD, newest first.
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
 - Site: the weld log and the cast name four more latest tags: SESAME 0.7.4, Pinstripe 0.3.2, Drawbridge 0.6.2 and Preflight 0.8.0. They still said 0.7.3, 0.3.1, 0.6.1 and 0.6.0. Preflight's cast line still says WELD's pipeline pins its components at 0.6.0, which is what `.gitlab-ci.yml` holds. Content only; the page's design and motion are unchanged.
+- Changed: The portability probe routes need a per-job `PORTABILITY_PROBE_TOKEN` in the `X-Portability-Token` header, so a stray `PORTABILITY_PROBE=yes` on a real host opens nothing; Preflight 0.8.0's `session_header` sends it.
+- Changed: CI pins Preflight 0.8.0.
 - Added: `tests/Feature/MigrateOncePerReleaseTest.php` holds W24: on Citadel only the release script runs `migrate`, and the portable image runs it only in its one-shot `migrate` role, which the web, worker and scheduler services wait for. W24 moves from `Documented` to `Checked`. PROCTOR's `entrypoint-migrate` still warns on that role (it does not follow the role into Squire's `run_migrate` function), so BEST_PRACTICES names the warning as expected.
 - Docs: the status page's gaps list mirrors BEST_PRACTICES again: W12 is `Checked` (Preflight 0.6.0's `healthcheck`), the scheduler heartbeat is built (it said W23 was still a plan), and W24 is `Checked`.
 - Site: the weld log and the cast name each part's latest tag again: CREED 0.1.11, PROCTOR 0.15.1 (its line names 0.15's MySQL 5.6 warning), Preflight 0.6.0 (the MySQL 5.6 migrations join its weld log line, its cast line and its terminal, and the image's own health check its weld log line), HELMET 1.4.1, Squire 0.10.8 and Booster 1.18.0. They still said 0.1.10, 0.12.0, 0.5.0, 1.4.0, 0.10.7 and 1.17.0.
@@ -1467,7 +1469,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Preflight components are referenced by commit SHA or a fixed tag, not a moving branch.
 
-**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.7.0 release tag (`@0.7.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:56`, `:80`; published tags in the stack never move), and `.github/workflows/ci.yml:16` calls Preflight 0.7.0's reusable workflow at its release commit (`435665959434e5b5adca563c34762bd7061a6b8a`). PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
+**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.8.0 release tag (`@0.8.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:56`, `:80`; published tags in the stack never move), and `.github/workflows/ci.yml:16` calls Preflight 0.8.0's reusable workflow at its release commit (`28d9c5994d06c633850d431dcf6ca56c48a96055`). PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
 
 ### Related [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#related)
 
@@ -1745,8 +1747,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Parallel replicas race on schema changes.
 
-**Stack:** `Checked`. On Citadel the release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh`, which only calls the release script) and the Quick Update post-script (`deploy/scripts/release.sh:7`); Citadel's entrypoint runs no artisan command (`deploy/.squire/fallback/citadel-apache-entrypoint`). Off Citadel the portable image migrates only in its `migrate` role (`deploy/.squire/portable/squire-entrypoint.sh:157-167`), a one-shot service the `web`, `worker` and `scheduler` services wait for (`service_completed_successfully`, `deploy/docker-compose.squire.yml:194-235`). `tests/Feature/MigrateOncePerReleaseTest.php` fails when a kit update moves `migrate` anywhere else. PROCTOR's `entrypoint-migrate` check still warns on the portable entrypoint (it lets a `migrate)` case branch through, not a `run_migrate` function the branch calls), so that one warning is expected; the portability CI job does not run the `migrate` role.
-**Stack:** `Documented`. The release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh:25`) and the Quick Update post-script (`deploy/scripts/release.sh:7`); the entrypoint itself runs no artisan commands (`deploy/.squire/fallback/citadel-apache-entrypoint`). Target `Checked`: PROCTOR flags `migrate` in an entrypoint. In CI, Preflight's `portability` job also migrates once, in its own container, before the two replicas start (`setup_command`, `.gitlab-ci.yml:113`).
+**Stack:** `Checked`. On Citadel the release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh`, which only calls the release script) and the Quick Update post-script (`deploy/scripts/release.sh:7`); Citadel's entrypoint runs no artisan command (`deploy/.squire/fallback/citadel-apache-entrypoint`). Off Citadel the portable image migrates only in its `migrate` role (`deploy/.squire/portable/squire-entrypoint.sh:157-167`), a one-shot service the `web`, `worker` and `scheduler` services wait for (`service_completed_successfully`, `deploy/docker-compose.squire.yml:194-235`). `tests/Feature/MigrateOncePerReleaseTest.php` fails when a kit update moves `migrate` anywhere else. PROCTOR's `entrypoint-migrate` check still warns on the portable entrypoint (it lets a `migrate)` case branch through, not a `run_migrate` function the branch calls), so that one warning is expected; the portability CI job does not run the `migrate` role, but migrates its own test database once, in its own container, before the two replicas start (`setup_command`, `.gitlab-ci.yml:113`).
 
 ### How to read the tags [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#how-to-read-the-tags)
 

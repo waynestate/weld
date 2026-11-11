@@ -324,7 +324,7 @@ $
 
 0.8.0 Checklist | Long
 
-GitLab CI/CD components. WELD's pipeline pins them at 0.6.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
+GitLab CI/CD components. WELD's pipeline pins them at 0.8.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
 ```
 $ git push
