@@ -195,14 +195,15 @@ A deprecation your code raises or causes fails the suite (`failOnDeprecation` in
 before an upgrade does; `tests/TestCase.php` hands deprecations to PHPUnit (`tests/Support/ReportsDeprecationsToPhpUnit.php`, from
 Sourdough), because Laravel's own handler drops them while testing.
 The accessibility gate runs Preflight's own checker (vendored in `tools/a11y/check.mjs`, pinned to the CI tag
-0.6.0 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
+0.8.0 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
 light and dark, at 320 and 1280 px, plus the WCAG 1.4.10 reflow check), so a page that passes locally passes
 CI. It runs in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
 **The app's own gates.** The pipeline carries the three gates every Sourdough app carries, with the jobs copied
 from the Inertia shape. The `a11y-pages` job boots WELD with SESAME's fake driver and saves `/` signed out and
-`/dashboard` signed in into `a11y-site/`. The `a11y-app` job checks them with the same checker, blocking. Add each
-page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages`. Automated checks find only part of the
+`/dashboard` and both settings pages signed in into `a11y-site/`. The `a11y-app` job checks them with the same
+checker, blocking. Add each page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages`;
+`tests/Feature/A11yPagesTest.php` fails when the two lists differ or when no path draws an Inertia page. Automated checks find only part of the
 problems, so try each page with a keyboard and a screen reader too. Preflight's `sbom` job keeps `sbom.cdx.json`
 (Composer) and the `frontend` job keeps `sbom-npm.cdx.json` (npm), each for 30 days. Preflight's `secret-detection`
 job runs Gitleaks over the repository. Preflight's `portability` job builds the portable image
@@ -1011,6 +1012,7 @@ Notable changes to WELD, newest first.
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
 - Changed: the lock takes SESAME 0.7.4 (was 0.7.3), and the Running off Citadel page says so.
+- Changed: the accessibility gate checks both settings pages. `A11Y_PATHS` in the `a11y-pages` job and the `a11y-app` include's `pages` add `/settings/profile` and `/settings/appearance` to `/` and `/dashboard`; until now the pipeline never audited either settings page. The four pages, replayed locally the way the two jobs run them, passed 16 checks with 0 violations (light and dark, 320 and 1280 px, WCAG 2.2 AA). `tests/Feature/A11yPagesTest.php` fails when the two lists differ, and walks the list as the job does (one session, redirects followed) to fail when any Inertia page under `resources/js/pages` is drawn by none of the paths, so a derived app's new page cannot skip the gate. The README and the status page say so (the status page's job line citations are current again), and the README says the vendored checker is pinned to 0.8.0 (it said 0.6.0).
 - Added: `tests/Unit/DocsCitationsTest.php` reads every backticked repo path in the README, MAINTAINING, BEST_PRACTICES and the docs pages (over 400 of them, the evidence behind the `Checked` and `Enforced` tags) and fails when the file is gone or a cited line is past the file's end. A short list excuses the paths a fresh checkout lacks on purpose (`public/hot`, `app/Jobs`, a derived app's `.sourdough/manifest.json` and four more), each with its reason, and fails when an excuse is no longer needed. It found three citations of `scripts/release.sh`, where Sourdough keeps it; WELD's is `deploy/scripts/release.sh`, and BEST_PRACTICES W29 (with the security guide), App structure (whose `git update-index` line gains `deploy/` too) and Running off Citadel now say so.
 - Changed: the deploy kit is Squire 0.10.8 (was 0.10.7), refreshed with `squire update --path=deploy`: all 26 kit files already matched the 0.10.8 templates, so only `deploy/.squire.json` records the new version, and `squire init --check` passes. The README, MAINTAINING, BEST_PRACTICES (with the security guide), What is welded in and the status page say 0.10.8.
 - Added: `tests/Unit/DocsPinsTest.php` fails when a sentence in the README, MAINTAINING, BEST_PRACTICES or a docs page says CI pins a Preflight release other than the one `.gitlab-ci.yml` pins (and the GitHub workflow calls), or names a Squire kit other than the one `deploy/.squire.json` records. The changelog is history and is left alone. Five such sentences still said Preflight 0.6.0 after CI moved to 0.8.0; the README, MAINTAINING, BEST_PRACTICES W8 (and its guide), What is welded in and the status page now say 0.8.0, and the status page's gaps list says `session-hop` checks W15, as BEST_PRACTICES does.
@@ -2914,10 +2916,10 @@ These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/en
 
 WELD's pipeline audits signed-in pages in two steps, copied from Sourdough's Inertia shape:
 
-1. The `a11y-pages` job boots the app as its first run on a desk does (`.env` from `.env.example`, a generated key, an SQLite database, `php artisan serve`), signs in with SESAME's fake driver, and saves each path in `A11Y_PATHS` (WELD: `/` and `/dashboard`) into `a11y-site/` with `public/`'s static files. One cookie jar carries the sign-in from one path to the next, and the server's origin is cut out of the saved pages (`.gitlab-ci.yml:259-318`).
+1. The `a11y-pages` job boots the app as its first run on a desk does (`.env` from `.env.example`, a generated key, an SQLite database, `php artisan serve`), signs in with SESAME's fake driver, and saves each path in `A11Y_PATHS` (WELD: `/`, `/dashboard`, `/settings/profile` and `/settings/appearance`) into `a11y-site/` with `public/`'s static files. One cookie jar carries the sign-in from one path to the next, and the server's origin is cut out of the saved pages (`.gitlab-ci.yml:296-344`).
 2. The `a11y-app` include checks those saved pages: axe-core 4.14.0, light and dark, at 320 and 1280 px, plus WCAG 1.4.10 reflow, at WCAG 2.2 AA (`.gitlab-ci.yml:31-40`).
 
-For a derived app: add each page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages` together (`.gitlab-ci.yml:34`, `:266`). A fully gated app should keep one public page, the landing page, so the site audit has something to read.
+For a derived app: add each page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages` together (`.gitlab-ci.yml:39`, `:301`). `tests/Feature/A11yPagesTest.php` holds you to it: it fails when the two lists differ, and it walks the list the way the job does (one session, redirects followed) and fails when an Inertia page under `resources/js/pages` is drawn by none of the paths. Until 2026-11-11 neither settings page was on the list. A fully gated app should keep one public page, the landing page, so the site audit has something to read.
 
 ### Pinstripe's npm half [#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
 

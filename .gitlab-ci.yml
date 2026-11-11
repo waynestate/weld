@@ -36,7 +36,7 @@ include:
     inputs:
       job_name: a11y-app
       site_dir: a11y-site
-      pages: ["/", "/dashboard"]
+      pages: ["/", "/dashboard", "/settings/profile", "/settings/appearance"]
       wcag_tags: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]
   # The bill of materials: a CycloneDX SBOM of the Composer packages
   # composer.lock installs, dev packages left out, kept as sbom.cdx.json for
@@ -286,7 +286,9 @@ regen-gate:
 # php artisan serve), where SESAME signs in with its fake driver, and saves
 # each path in A11Y_PATHS, with public/'s static files, into a11y-site/.
 # / is the home page signed out; /dashboard goes through /login and comes
-# back signed in (in production the CAS server draws its own sign-in page).
+# back signed in (in production the CAS server draws its own sign-in page),
+# and the two settings pages ride the same session. tests/Feature/A11yPagesTest.php
+# fails when an Inertia page is drawn by no path here.
 # Add each page you build to A11Y_PATHS and to the a11y-app include's pages.
 # The gate finds only part of the problems: try each page with a keyboard
 # and a screen reader too. The frontend job's build comes along in
@@ -296,7 +298,7 @@ a11y-pages:
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.11.1@sha256:8de2184c6de224f4689e8f80ed5f5edaf0030b6b8b7839a22a2bcb6722ac87d0
   needs: [frontend]
   variables:
-    A11Y_PATHS: "/ /dashboard"
+    A11Y_PATHS: "/ /dashboard /settings/profile /settings/appearance"
   script:
     - composer install --no-interaction --no-progress --prefer-dist
     - cp .env.example .env
