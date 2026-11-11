@@ -11,6 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: the lock takes SESAME 0.7.4 (was 0.7.3), and the Running off Citadel page says so.
 - Site: the weld log and the cast name four more latest tags: SESAME 0.7.4, Pinstripe 0.3.2, Drawbridge 0.6.2 and Preflight 0.8.0. They still said 0.7.3, 0.3.1, 0.6.1 and 0.6.0. Preflight's cast line still says WELD's pipeline pins its components at 0.6.0, which is what `.gitlab-ci.yml` holds. Content only; the page's design and motion are unchanged.
 - Changed: The portability probe routes need a per-job `PORTABILITY_PROBE_TOKEN` in the `X-Portability-Token` header, so a stray `PORTABILITY_PROBE=yes` on a real host opens nothing; Preflight 0.8.0's `session_header` sends it.
 - Changed: CI pins Preflight 0.8.0.
