@@ -1,18 +1,19 @@
-# weld.ps1: run WELD locally on Windows with one command.
+# weld.ps1: thin pointer for one release (D-087). The local runtime is Parity
+# (D-082), and bin\weld is deleted in the next release.
 #
-# Works on Windows PowerShell 5.1 and PowerShell 7; no bash, no WSL. The app
-# and Vite run in Docker; PHP and Node live in the containers, so the host
-# only needs Docker. Linux and macOS have their own native path: bin/weld.sh.
+# Works on Windows PowerShell 5.1 and PowerShell 7; no bash, no WSL.
+# `up`, `down` and `logs` print the Parity commands that replace them and
+# exit 2, so a script cannot mistake the pointer for a running app. `test`
+# and `doctor` still run here, because Parity cannot run them yet.
 #
-# Usage: bin\weld.ps1 <up|down|test|doctor|logs> [--no-advisor|-NoAdvisor]
+# Usage: bin\weld.ps1 <test|doctor>
 
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
     [string] $Command,
-    [switch] $NoAdvisor,
-    # PowerShell binds -NoAdvisor to the switch above, but the documented
-    # --no-advisor form arrives here as a remaining argument, so catch it.
+    # Anything past the command is unknown (the old opt-out flag is gone), so
+    # the script refuses it below.
     [Parameter(ValueFromRemainingArguments)]
     [string[]] $Rest
 )
@@ -22,15 +23,14 @@ $ErrorActionPreference = 'Stop'
 function Show-Usage {
     Write-Host "Usage: bin\weld.ps1 <command>"
     Write-Host ""
-    Write-Host "Commands:"
-    Write-Host "  up     Copy .env.example to .env if missing, install the PHP and"
-    Write-Host "         Node dependencies in the containers, write .mcp.json from"
-    Write-Host "         ADVISOR (skip with --no-advisor or -NoAdvisor), start the"
-    Write-Host "         app and Vite, generate the app key if needed, and migrate."
-    Write-Host "  down   Stop and remove the containers, and clear public/hot."
-    Write-Host "  test   Run 'composer ci' in the app container."
-    Write-Host "  doctor Run 'php artisan weld:doctor' in the app container."
-    Write-Host "  logs   Follow the container logs; Ctrl+C stops."
+    Write-Host "Commands still run here:"
+    Write-Host "  test    Run 'composer ci' in the app container."
+    Write-Host "  doctor  Run 'php artisan weld:doctor' in the app container."
+    Write-Host ""
+    Write-Host "Moved to Parity (D-082):"
+    Write-Host "  up      parity up"
+    Write-Host "  down    parity down"
+    Write-Host "  logs    parity logs -f"
 }
 
 function Invoke-Docker {
@@ -46,18 +46,13 @@ function Invoke-Docker {
     }
 }
 
-# --no-advisor reaches us in $Rest (-NoAdvisor binds to the switch), so fold
-# it in here; anything else left over is a typo, and the script refuses it.
+# A second argument is unknown, and the script refuses it the way it refuses
+# an unknown command.
 foreach ($arg in $Rest) {
-    if ($arg -eq '--no-advisor') {
-        $NoAdvisor = $true
-    }
-    else {
-        Show-Usage
-        Write-Host ''
-        Write-Host "weld: unknown argument: $arg"
-        exit 2
-    }
+    Show-Usage
+    Write-Host ''
+    Write-Host "weld: unknown argument: $arg"
+    exit 2
 }
 
 # Run from the repository root, no matter where the caller stands, and leave
@@ -66,50 +61,28 @@ Push-Location -LiteralPath (Split-Path -Parent $PSScriptRoot)
 try {
     switch ($Command) {
         'up' {
-            if (-not (Test-Path -LiteralPath '.env')) {
-                Write-Host 'weld: Copy-Item .env.example .env'
-                Copy-Item -LiteralPath '.env.example' -Destination '.env'
-            }
-            Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'composer', 'install')
-            if (-not $NoAdvisor) {
-                Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'php', 'vendor/bin/advisor', 'install', '--client=claude', '--write')
-            }
-            Invoke-Docker -Arguments @('compose', 'run', '--rm', 'vite', 'npm', 'ci')
-            Invoke-Docker -Arguments @('compose', 'up', '-d')
-            $appKey = Select-String -Path '.env' -Pattern '^APP_KEY=.'
-            if (-not $appKey) {
-                Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'php', 'artisan', 'key:generate')
-            }
-            # Create the SQLite file only when it is missing. New-Item -Force on
-            # an existing file empties it, so every second `up` used to wipe the
-            # local database; touch on macOS and Linux never did.
-            if (-not (Test-Path -LiteralPath 'database/database.sqlite')) {
-                Write-Host 'weld: New-Item database/database.sqlite'
-                New-Item -ItemType File -Path 'database/database.sqlite' | Out-Null
-            }
-            Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'php', 'artisan', 'migrate')
-            Write-Host 'weld: done. Open http://localhost:8000'
+            Write-Host 'weld: "up" moved to Parity (D-082). Run:'
+            Write-Host '  parity init --from-squire (first time only; plain parity init if there is no Squire kit)'
+            Write-Host '  parity up'
+            Write-Host '  parity test (smoke test)'
+            exit 2
         }
         'down' {
-            Invoke-Docker -Arguments @('compose', 'down')
-            # Vite's dev server writes public/hot and does not always get to
-            # remove it when its container stops. Left behind, it points every
-            # page at a dev server that is gone: blank pages under Parity, or
-            # on any server that serves this folder. The cold weld is the
-            # one that holds.
-            if (Test-Path -LiteralPath 'public/hot') {
-                Write-Host 'weld: Remove-Item public/hot'
-                Remove-Item -LiteralPath 'public/hot'
-            }
+            Write-Host 'weld: "down" moved to Parity (D-082). Run:'
+            Write-Host '  parity down'
+            Write-Host '  (parity down --volumes empties the database)'
+            exit 2
+        }
+        'logs' {
+            Write-Host 'weld: "logs" moved to Parity (D-082). Run:'
+            Write-Host '  parity logs -f'
+            exit 2
         }
         'test' {
             Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'composer', 'ci')
         }
         'doctor' {
             Invoke-Docker -Arguments @('compose', 'run', '--rm', 'app', 'php', 'artisan', 'weld:doctor')
-        }
-        'logs' {
-            Invoke-Docker -Arguments @('compose', 'logs', '-f')
         }
         default {
             Show-Usage

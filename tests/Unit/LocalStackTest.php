@@ -1,45 +1,81 @@
 <?php
 
-// The local stack that `bin/weld.ps1 up` and `bin/weld.sh up` bring up. Both
-// bugs below were found by the 2026-11-06 proof run (docs/reference/proof.md),
-// where a fresh clone on Windows loaded every page blank and a second `up`
-// emptied the local database. A weld that holds once is a tack weld.
+// The local stack that `bin/weld.sh test` and `bin/weld.sh doctor` still run,
+// plus the Parity pointers (D-087): `up`, `down` and `logs` print the parity
+// commands that replace them and exit 2. The last test guards the compose Vite
+// bug found by the 2026-11-06 proof run (docs/reference/proof.md), where a
+// fresh clone loaded every page blank. A weld that holds once is a tack weld.
 
 $root = dirname(__DIR__, 2);
 
-it('creates the SQLite file only when it is missing on Windows', function () use ($root) {
-    $script = (string) file_get_contents($root.'/bin/weld.ps1');
+it('points up, down and logs at Parity in both scripts', function () use ($root) {
+    foreach (['bin/weld.sh', 'bin/weld.ps1'] as $path) {
+        $script = (string) file_get_contents($root.'/'.$path);
 
-    // New-Item -Force on an existing file truncates it to zero bytes.
-    foreach (preg_split('/\R/', $script) ?: [] as $line) {
-        if (str_contains($line, 'database.sqlite') && str_contains($line, 'New-Item')) {
-            expect($line)->not->toContain('-Force');
+        expect($script)->toContain('parity up')
+            ->and($script)->toContain('parity down')
+            ->and($script)->toContain('parity logs -f')
+            ->and($script)->toContain('D-087');
+    }
+});
+
+it('carries none of the old up and down implementation', function () use ($root) {
+    foreach (['bin/weld.sh', 'bin/weld.ps1'] as $path) {
+        $script = (string) file_get_contents($root.'/'.$path);
+
+        foreach (['database.sqlite', 'key:generate', 'public/hot', 'advisor', 'npm ci', 'compose up', 'compose down'] as $gone) {
+            expect($script)->not->toContain($gone, $path.' still carries '.$gone);
         }
     }
-
-    expect($script)->toContain("if (-not (Test-Path -LiteralPath 'database/database.sqlite'))");
 });
 
-it('creates the SQLite file without truncating it on macOS and Linux', function () use ($root) {
-    $script = (string) file_get_contents($root.'/bin/weld.sh');
-
-    expect($script)->toContain('touch database/database.sqlite')
-        ->and($script)->not->toMatch('/>\s*database\/database\.sqlite/');
-});
-
-// Found by the 2026-11-09 Parity proof: after `down`, Vite's public/hot
-// stayed behind, so Parity served WELD with every script pointed at
-// http://localhost:5173, a dev server that was no longer running.
-it('clears Vite\'s public/hot on down, on every OS', function () use ($root) {
-    $ps = (string) file_get_contents($root.'/bin/weld.ps1');
+it('still runs test and doctor in the app container', function () use ($root) {
     $sh = (string) file_get_contents($root.'/bin/weld.sh');
+    $ps = (string) file_get_contents($root.'/bin/weld.ps1');
 
-    expect(preg_match("/'down' \\{(?<body>.*?)\\n        \\}/s", $ps, $m))->toBe(1)
-        ->and($m['body'])->toContain("Remove-Item -LiteralPath 'public/hot'");
-
-    expect(preg_match('/^    down\)\n(?<body>.*?);;/ms', $sh, $m))->toBe(1)
-        ->and($m['body'])->toContain('rm -f public/hot');
+    expect($sh)->toContain('docker compose run --rm app composer ci')
+        ->and($sh)->toContain('docker compose run --rm app php artisan weld:doctor')
+        ->and($ps)->toContain("'composer', 'ci'")
+        ->and($ps)->toContain("'weld:doctor'");
 });
+
+it('prints the Parity commands for up, down and logs, and exits 2', function () use ($root) {
+    if (PHP_OS_FAMILY === 'Windows') {
+        markTestSkipped('needs sh, which this Windows checkout does not have');
+    }
+
+    foreach ([['up', 'parity up'], ['down', 'parity down'], ['logs', 'parity logs -f']] as [$command, $parity]) {
+        [$code, $out] = runWeldScript($root, $command);
+
+        expect($code)->toBe(2, 'bin/weld.sh '.$command.' exited with '.$code.': '.$out)
+            ->and($out)->toContain($parity);
+    }
+});
+
+it('exits 2 on an unknown command', function () use ($root) {
+    if (PHP_OS_FAMILY === 'Windows') {
+        markTestSkipped('needs sh, which this Windows checkout does not have');
+    }
+
+    [$code, $out] = runWeldScript($root, 'bogus');
+
+    expect($code)->toBe(2, 'bin/weld.sh bogus exited with '.$code.': '.$out);
+});
+
+/** Run `sh bin/weld.sh <command>` from the repository root; return [exit code, output]. */
+function runWeldScript(string $root, string $command): array
+{
+    $process = proc_open(['sh', 'bin/weld.sh', $command], [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, $root);
+    if (! is_resource($process)) {
+        throw new RuntimeException('could not start sh');
+    }
+
+    $out = (string) stream_get_contents($pipes[1]).(string) stream_get_contents($pipes[2]);
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+
+    return [proc_close($process), $out];
+}
 
 it('points the browser at a Vite address it can reach', function () use ($root) {
     $compose = (string) file_get_contents($root.'/compose.yaml');
