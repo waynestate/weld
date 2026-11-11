@@ -57,8 +57,8 @@ const welded = [
 
         <Card title="Already welded in" :title-level="2" class="weld-dashboard__welded">
             <ul class="weld-welded">
-                <li v-for="item in welded" :key="item.part">
-                    <Icon :name="item.icon" />
+                <li v-for="(item, index) in welded" :key="item.part" :style="{ '--row': index }">
+                    <span class="weld-welded__tack" aria-hidden="true"><Icon :name="item.icon" /></span>
                     <span>
                         <Badge variant="brand">{{ item.part }}</Badge> {{ item.did }}
                     </span>
