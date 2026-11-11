@@ -43,6 +43,10 @@
           "path": "guides/regen-check"
         },
         {
+          "title": "Making WELD yours",
+          "path": "guides/making-weld-yours"
+        },
+        {
           "title": "Running WELD off Citadel",
           "path": "running-off-citadel"
         },
@@ -61,6 +65,10 @@
         {
           "title": "Queues and scheduling",
           "path": "guides/queues-and-scheduling"
+        },
+        {
+          "title": "Building an AI or LLM app",
+          "path": "guides/ai-apps"
         },
         {
           "title": "Security",

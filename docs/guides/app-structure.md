@@ -90,6 +90,26 @@ Each practice ends with exactly one tag.
 | `Documented` | Written down in the README or a config file, with no check behind it. |
 | `Not yet` | A gap. |
 
+## SESAME and fetch
+
+The `auth.sesame` middleware lets a request through when SESAME has a user in the session. Otherwise it answers by kind of client (`vendor/waynestate/sesame/src/Laravel/Authenticate.php:25-36`):
+
+- a request for which Laravel's `expectsJson()` is true gets **401** with the body `Unauthorized.` (`:31-33`);
+- everything else gets **redirected to the login route**, `GET /login` (`:35`, registered at `vendor/waynestate/sesame/src/Laravel/SesameServiceProvider.php:297`).
+
+Laravel's `expectsJson()` is true when the first type in `Accept` is JSON (`.../json` or `...+json`), or when the request carries `X-Requested-With: XMLHttpRequest`, is not pjax, and accepts any content type (`vendor/laravel/framework/src/Illuminate/Http/Concerns/InteractsWithContentTypes.php:24-27,34-39,136-143`). Two consequences for scripted requests:
+
+- A bare `fetch('/api/answer')` sends `Accept: */*` and no XHR header, so it is not a JSON request and gets the redirect, not a 401. Send the JSON Accept header and handle the 401:
+
+  ```js
+  const res = await fetch('/api/answer', { headers: { Accept: 'application/json' } });
+  if (res.status === 401) {
+    // signed out: send the browser to /login
+  }
+  ```
+
+- A streaming `text/event-stream` request is never JSON: its first type is not JSON, and `X-Requested-With: XMLHttpRequest` only counts when the request accepts any content type. An unauthenticated stream therefore gets the redirect, and `EventSource` cannot follow one. Check the session before opening the stream, or treat a redirect as signed out.
+
 ## Related
 
 - [The container contract](./container-contract.md)

@@ -61,4 +61,5 @@ Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, P
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html)
 - [Oracle](https://weld.apps.wayne.edu/docs/guides/oracle.html)
 - [Citadel limits](https://weld.apps.wayne.edu/docs/guides/citadel-limits.html)
+- [Building an AI or LLM app](https://weld.apps.wayne.edu/docs/guides/ai-apps.html)
 - [Running WELD off Citadel](https://weld.apps.wayne.edu/docs/running-off-citadel.html)

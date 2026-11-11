@@ -106,7 +106,7 @@ You have WELD running locally in Docker: the app and Vite in containers, `.env` 
 
 ## Next steps [#](https://weld.apps.wayne.edu/docs/guides/quick-start.html#next-steps)
 
-- Make it yours: rename the four things that still say WELD (the composer name, the app name, the site title and the git remote), give the copy its own key, and re-run the checks.
+- [Make it yours](https://weld.apps.wayne.edu/docs/guides/making-weld-yours.html): rename the parts that still say WELD (the composer name, the app name, the site title and the git remote), give the copy its own key and re-run the checks, then strip WELD's product files and adopt Sourdough so `feed` keeps working.
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html): what the doctor reports, joint by joint.
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html): the parts and what each does in the app.
 - [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel): the same folder on Citadel's image, proxy and MySQL 5.6, through Parity.

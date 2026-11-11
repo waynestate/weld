@@ -149,8 +149,9 @@ you see (the welcome page, the dashboard, settings) is drawn by WayneUI's compon
 
 ## Next steps
 
-- Make it yours: rename the four things that still say WELD (the composer name, the app name, the site title and the
-  git remote), give the copy its own key, and re-run the checks.
+- [Make it yours](making-weld-yours.md): rename the parts that still say WELD (the composer name, the app name, the
+  site title and the git remote), give the copy its own key and re-run the checks, then strip WELD's product files
+  and adopt Sourdough so `feed` keeps working.
 - [Check your setup](check-your-setup.md): what the doctor reports, joint by joint.
 - [What is welded in](whats-welded-in.md): the parts and what each does in the app.
 - [Run it like Citadel](#run-it-like-citadel): the same folder on Citadel's image, proxy and MySQL 5.6, through Parity.

@@ -58,4 +58,5 @@ Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, P
 - [Check your setup](check-your-setup.md)
 - [Oracle](oracle.md)
 - [Citadel limits](citadel-limits.md)
+- [Building an AI or LLM app](ai-apps.md)
 - [Running WELD off Citadel](../running-off-citadel.md)

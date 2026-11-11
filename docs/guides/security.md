@@ -34,6 +34,31 @@ This page states WELD's security practices, one per heading, each with the rule 
 
 **Stack:** `Checked`. HELMET `^1.3` is a dependency (`composer.json:23`) and its security headers and CSP run in the global chain: HELMET's own config defaults the scope to `global` (`vendor/waynestate/helmet/config/helmet.php:331`; WELD's `config/helmet.php` overrides only `policy_path` and the package merges the rest), `resources/views/app.blade.php:8` reads the per-request nonce and `:32` hands it to `Vite::useCspNonce()`, and `tests/Feature/HelmetHeadersTest.php:14-34` plus `tests/Feature/CspScriptTagsTest.php:23-60` fail the suite on header, nonce or `strict-dynamic` regression. The policy is enforced, not report-only (`vendor/waynestate/helmet/config/helmet.php:352`). Open: a real browser test under the enforced CSP.
 
+## The effective CSP
+
+WELD overrides no CSP key: `config/helmet.php` sets only `policy_path` and `error_pages`, and nothing in `.env.example` or `deploy/` sets `HELMET_CSP`, so every response carries HELMET's default policy (`vendor/waynestate/helmet/config/helmet.php:344`, built from `SecurityHeaders::defaultCspPolicy()` at `vendor/waynestate/helmet/src/Headers/SecurityHeaders.php:52-76`). The `citadel` preset changes none of this: a preset is a named list of trusted proxies only (`vendor/waynestate/helmet/src/Platform/Presets.php:11,53-56`), and WELD ships it commented out for local runs (`.env.example:55`).
+
+| Directive | Sources |
+|---|---|
+| `default-src` | `'self'` |
+| `script-src` | `'self'`, `https://wayneui.apps.wayne.edu`, the per-request nonce, `strict-dynamic` |
+| `style-src` | `'self'`, `https://wayneui.apps.wayne.edu`, the nonce |
+| `style-src-attr` | `'unsafe-inline'` |
+| `style-src-elem` | `'self'`, `https://wayneui.apps.wayne.edu`, the nonce |
+| `img-src` | `'self'`, `data:`, `https://wayneui.apps.wayne.edu` |
+| `connect-src` | `'self'`, `https://wayneui.apps.wayne.edu` |
+| `font-src` | `'self'`, `data:`, `https://wayneui.apps.wayne.edu` |
+| `frame-ancestors` | `'self'` |
+
+The nonce binds to `script-src`, `style-src` and `style-src-elem` (`SecurityHeaders.php:138-147`); `strict-dynamic` lets a nonced script load further scripts without opening `script-src` to inline (`:149-151`). `base-uri 'self'`, `object-src 'none'` and `form-action 'self'` complete the policy (`:71-73`).
+
+Four consequences for page authors:
+
+- **`style=""` attributes are allowed.** `style-src-attr` carries `'unsafe-inline'`, deliberately: WayneUI's recipes set inline style attributes for block spacing that would be silently dropped without it (`SecurityHeaders.php:57-62`).
+- **`<style>` elements are allowed only with the nonce.** `style-src-elem` does not carry `'unsafe-inline'` (`:42-44,64`), but Vite's tags carry the nonce because the Blade template calls `Vite::useCspNonce()` (`resources/views/app.blade.php:32`).
+- **`connect-src` allows the app's own origin and the WayneUI CDN only** (`:70`). Browser fetches cannot reach any other host, which is why an AI app calls its model server-side ([Building an AI or LLM app](ai-apps.md)).
+- **Inline `<svg>` markup is fine.** None of the directives above govern document markup; SVG in the HTML is neither a script nor a style.
+
 ## W29: Agent tooling stays out of production
 
 > [!WARNING]
