@@ -128,12 +128,17 @@ return [
     | Portability Probe
     |--------------------------------------------------------------------------
     |
-    | Only Preflight's portability job sets PORTABILITY_PROBE=yes, so its
+    | Only Preflight's portability job sets PORTABILITY_PROBE=yes and makes a
+    | PORTABILITY_PROBE_TOKEN of at least 32 characters for the run, so its
     | session-hop check can sign in on one replica and read the session on
-    | the other. Never set it on a real host.
+    | the other. The routes exist only when both are set, and every request
+    | must carry that token in X-Portability-Token. Never set either on a
+    | real host.
     |
     */
 
-    'portability_probe' => env('PORTABILITY_PROBE') === 'yes',
+    'portability_probe' => env('PORTABILITY_PROBE') === 'yes' && strlen((string) env('PORTABILITY_PROBE_TOKEN', '')) >= 32,
+
+    'portability_probe_token' => (string) env('PORTABILITY_PROBE_TOKEN', ''),
 
 ];

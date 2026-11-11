@@ -5,6 +5,8 @@ Notable changes to WELD, newest first.
 ## Unreleased
 
 - Site: the weld log and the cast name four more latest tags: SESAME 0.7.4, Pinstripe 0.3.2, Drawbridge 0.6.2 and Preflight 0.8.0. They still said 0.7.3, 0.3.1, 0.6.1 and 0.6.0. Preflight's cast line still says WELD's pipeline pins its components at 0.6.0, which is what `.gitlab-ci.yml` holds. Content only; the page's design and motion are unchanged.
+- Changed: The portability probe routes need a per-job `PORTABILITY_PROBE_TOKEN` in the `X-Portability-Token` header, so a stray `PORTABILITY_PROBE=yes` on a real host opens nothing; Preflight 0.8.0's `session_header` sends it.
+- Changed: CI pins Preflight 0.8.0.
 - Added: `tests/Feature/MigrateOncePerReleaseTest.php` holds W24: on Citadel only the release script runs `migrate`, and the portable image runs it only in its one-shot `migrate` role, which the web, worker and scheduler services wait for. W24 moves from `Documented` to `Checked`. PROCTOR's `entrypoint-migrate` still warns on that role (it does not follow the role into Squire's `run_migrate` function), so BEST_PRACTICES names the warning as expected.
 - Docs: the status page's gaps list mirrors BEST_PRACTICES again: W12 is `Checked` (Preflight 0.6.0's `healthcheck`), the scheduler heartbeat is built (it said W23 was still a plan), and W24 is `Checked`.
 - Site: the weld log and the cast name each part's latest tag again: CREED 0.1.11, PROCTOR 0.15.1 (its line names 0.15's MySQL 5.6 warning), Preflight 0.6.0 (the MySQL 5.6 migrations join its weld log line, its cast line and its terminal, and the image's own health check its weld log line), HELMET 1.4.1, Squire 0.10.8 and Booster 1.18.0. They still said 0.1.10, 0.12.0, 0.5.0, 1.4.0, 0.10.7 and 1.17.0.

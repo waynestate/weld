@@ -47,7 +47,7 @@ function weldPortabilityInputs(): array
 
 it('pins the portability component at the Preflight tag every other component uses', function () {
     expect(weldPortabilityInputs()['component'])
-        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.7.0');
+        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.8.0');
 });
 
 it('builds the portable image from the kit in deploy/, on the base the job builds first', function () {
@@ -154,4 +154,18 @@ it('boots in production on a key made for the job, trusting no proxy', function 
 
     expect(implode("\n", weldPortabilityCi()['portability']['before_script']))
         ->toContain('export PORTABILITY_APP_KEY');
+});
+
+it('carries a per-job probe token the routes demand, never a literal value', function () {
+    $inputs = weldPortabilityInputs()['inputs'];
+
+    expect($inputs['env'])->toContain('PORTABILITY_PROBE_TOKEN=${PORTABILITY_PROBE_TOKEN}')
+        ->and($inputs['session_header'])->toBe('X-Portability-Token: $PORTABILITY_PROBE_TOKEN');
+
+    // The token is made from /dev/urandom in the job's own setup, the same
+    // way the app key is, so no secret sits in this file or a CI variable.
+    expect(implode("\n", weldPortabilityCi()['portability']['before_script']))
+        ->toContain("head -c 24 /dev/urandom | od -An -tx1 | tr -d ' \\n'")
+        ->and(implode("\n", weldPortabilityCi()['portability']['before_script']))
+        ->toContain('export PORTABILITY_PROBE_TOKEN');
 });
