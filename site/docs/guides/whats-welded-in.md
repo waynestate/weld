@@ -22,7 +22,7 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions ([agent docs](https://sesame.apps.wayne.edu/llms.txt)) |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route ([agent docs](https://helmet.apps.wayne.edu/llms.txt)) |
 | ADVISOR | The stack's read-only MCP server for coding agents, in `require-dev` ([agent docs](https://advisor.apps.wayne.edu/llms.txt)) |
-| Squire | The deploy kit in `deploy/`, at 0.10.7: the Citadel image, an idempotent release script and one portable image for other hosts ([agent docs](https://squire.apps.wayne.edu/llms.txt)) |
+| Squire | The deploy kit in `deploy/`, at 0.10.8: the Citadel image, an idempotent release script and one portable image for other hosts ([agent docs](https://squire.apps.wayne.edu/llms.txt)) |
 | Ziggy | Route names as URLs: the route list ships inside the Vite bundle, so `route()` works in Vue templates and scripts without an inline script |
 
 ![WELD's journey, one request and six stops joined by a gold seam: HELMET sets security headers, SESAME signs the user in, WayneUI renders the page, PROCTOR checks the code, Preflight runs CI, Squire deploys.](https://weld.apps.wayne.edu/docs/readme/journey.svg)
@@ -41,7 +41,7 @@ Five more parts of the stack sit beside WELD. WELD installs none of them: each i
 
 ## What is on the bench today [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
-Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.8.0; the deploy layer runs Squire's kit 0.10.7. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is on npm ([the steps](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)).
+Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.8.0; the deploy layer runs Squire's kit 0.10.8. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is on npm ([the steps](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)).
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
 - `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
