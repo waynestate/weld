@@ -4,8 +4,6 @@
     ".gitattributes",
     ".gitignore",
     ".gitlab-ci.yml",
-    "AGENTS.md",
-    "CLAUDE.md",
     "app/Console/Commands/OracleCheck.php",
     "app/Http/Middleware/HandleInertiaRequests.php",
     "app/Sesame/UserResolver.php",
@@ -17,6 +15,7 @@
     "config/cache.php",
     "config/database.php",
     "config/filesystems.php",
+    "config/helmet.php",
     "config/logging.php",
     "config/mail.php",
     "config/oracle.php",
@@ -45,6 +44,7 @@
     "resources/views/app.blade.php",
     "routes/web.php",
     "tests/Feature/SkeletonTest.php",
+    "tests/TestCase.php",
     "tests/Unit/ExampleTest.php",
     "tests/Unit/PinstripeWiringTest.php"
 ]
