@@ -26,6 +26,19 @@ abstract class TestCase extends BaseTestCase
         $app->bind(LoadEnvironmentVariables::class, SkipEnvFile::class);
         $app->make(Kernel::class)->bootstrap();
 
+        // The skeleton suite must pass on every laptop and in CI, so the
+        // values it leans on are pinned here instead of left to the
+        // developer's .env: an APP_URL or SESAME_DRIVER=cas must not change
+        // the verdict. A test that wants another value sets it itself.
+        // WELD leaves helmet.proxies unpinned on purpose: TrustedProxiesTest
+        // reboots with its own .env and asserts the HSTS header, and HELMET
+        // reads helmet.proxies per request, so a null pin would erase the
+        // value the alias under test just loaded.
+        $app['config']->set([
+            'app.url' => 'http://localhost',
+            'sesame.driver' => 'fake',
+        ]);
+
         return $app;
     }
 
