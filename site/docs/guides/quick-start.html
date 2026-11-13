@@ -77,8 +77,7 @@ parity init --mysql
 </code></pre>
 <p>Expected: <code>parity check</code> prints one line per finding, with the fix under each one that needs it. <code>parity init</code>
 writes <code>parity.json</code>; <code>--mysql</code> is Citadel's &quot;MySQL: yes&quot;. <code>bin/weld.sh up</code> and <code>.\bin\weld.ps1 up</code> print
-<code>parity init --from-squire (first time only; plain parity init if there is no Squire kit)</code>. In WELD, Squire's kit
-sits in <code>deploy/</code> rather than at the root, so use plain <code>parity init</code>, as above.</p>
+<code>parity init --mysql (first time only)</code>.</p>
 </li>
 <li>
 <p>Add one line to <code>parity.json</code>, under <code>&quot;mode&quot;</code>, so the health check asks Laravel's <code>/up</code>, as Squire's <code>health.php</code>

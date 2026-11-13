@@ -273,9 +273,7 @@ parity check
 parity init --mysql
 ```
 
-`bin/weld.sh up` and `.\bin\weld.ps1 up` print `parity init --from-squire (first time only; plain parity init if
-there is no Squire kit)`. In WELD, Squire's kit sits in `deploy/` rather than at the root, so use plain `parity init`,
-as above.
+`bin/weld.sh up` and `.\bin\weld.ps1 up` print `parity init --mysql (first time only)`.
 
 Add one line to `parity.json`, under `"mode"`, so the health check asks Laravel's `/up`, as Squire's `health.php`
 does on Citadel. Parity's default asks the front page, which needs the sessions table, and that table arrives with
@@ -1037,7 +1035,8 @@ Notable changes to WELD, newest first.
 
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
-- Docs: running WELD locally starts with Parity, now that `bin/weld up` only prints the Parity commands. The README, the Quick start, Install, Commands, Contributing, MAINTAINING and the front page (step 2 and the Get started prompt) prepare the folder in the stock Composer and Node containers, then run `parity check`, `parity init --mysql`, `parity up`, the migration as the `citadel` user and `parity test`. They say why plain `parity init` applies (Squire's kit is in `deploy/`, not at the root), and they no longer tell anyone to run `bin/weld.sh up`, `down` or `logs`. Install lists the prerequisite Parity checks for: Docker Engine with the Compose v2 plugin, checked by `docker compose version`; on a Linux host with Docker 27 or older and no plugin, install `docker-compose-plugin`. `bin/weld` behaves as before.
+- `bin/weld up` now prints `parity init --mysql`, which works in WELD (it printed `--from-squire`, which Parity refuses while the kit is in `deploy/`).
+- Docs: running WELD locally starts with Parity, now that `bin/weld up` only prints the Parity commands. The README, the Quick start, Install, Commands, Contributing, MAINTAINING and the front page (step 2 and the Get started prompt) prepare the folder in the stock Composer and Node containers, then run `parity check`, `parity init --mysql`, `parity up`, the migration as the `citadel` user and `parity test`. They no longer tell anyone to run `bin/weld.sh up`, `down` or `logs`. Install lists the prerequisite Parity checks for: Docker Engine with the Compose v2 plugin, checked by `docker compose version`; on a Linux host with Docker 27 or older and no plugin, install `docker-compose-plugin`. `bin/weld` behaves as before.
 - Changed: the regen gate is green again against Sourdough main `70e9f85`. WELD takes Sourdough's `config/home.php`, `config/ziggy.php`, `tests/Feature/EnvIsolationTest.php` and `tests/Feature/ZiggyConfigTest.php` as-is (Sourdough commits `a605a49`, `edb7684` and `2e80be5`), and takes `tests/TestCase.php` minus its `helmet.proxies` pin, which it now baselines: `TrustedProxiesTest` reboots the app with its own `.env` and asserts the HSTS header, and HELMET reads `helmet.proxies` per request, so the pin would erase the value the alias under test just loaded. `config/helmet.php` joins the baseline because WELD owns the `TRUSTED_PROXIES` alias there. The refreshed baseline drops `AGENTS.md` and `CLAUDE.md`, which Sourdough no longer generates.
 - Changed: `bin/weld.sh` and `bin/weld.ps1` are thin pointers to Parity for one release (D-087): `up`, `down` and `logs` print the Parity commands that replace them and exit 2, `test` and `doctor` still run, and the scripts are deleted next release.
 - Changed: the lock takes SESAME 0.7.4 (was 0.7.3), and the Running off Citadel page says so.
@@ -2055,7 +2054,7 @@ You need Docker with the Compose v2 plugin: `docker compose version` must answer
    parity check
    parity init --mysql
    ```
-   Expected: `parity check` prints one line per finding, with the fix under each one that needs it. `parity init` writes `parity.json`; `--mysql` is Citadel's "MySQL: yes". `bin/weld.sh up` and `.\bin\weld.ps1 up` print `parity init --from-squire (first time only; plain parity init if there is no Squire kit)`. In WELD, Squire's kit sits in `deploy/` rather than at the root, so use plain `parity init`, as above.
+   Expected: `parity check` prints one line per finding, with the fix under each one that needs it. `parity init` writes `parity.json`; `--mysql` is Citadel's "MySQL: yes". `bin/weld.sh up` and `.\bin\weld.ps1 up` print `parity init --mysql (first time only)`.
 4. Add one line to `parity.json`, under `"mode"`, so the health check asks Laravel's `/up`, as Squire's `health.php` does on Citadel:
    ```json
    "health_check": "curl -fsS -o /dev/null http://127.0.0.1/up",
@@ -2462,7 +2461,7 @@ This page is the reference for every command a WELD app runs: the `bin/weld` sub
 | --- | --- |
 | `test` | Run `composer ci` in the app container |
 | `doctor` | Run `php artisan weld:doctor` in the app container |
-| `up` | Print `parity init --from-squire` (first time only; plain `parity init` if there is no Squire kit), `parity up` and `parity test`, then exit 2. In WELD, Squire's kit sits in `deploy/`, so use plain `parity init --mysql` |
+| `up` | Print `parity init --mysql` (first time only), `parity up` and `parity test`, then exit 2 |
 | `down` | Print `parity down` (`parity down --volumes` empties the database), then exit 2 |
 | `logs` | Print `parity logs -f`, then exit 2 |
 

@@ -18,7 +18,7 @@ This page is the reference for every command a WELD app runs: the `bin/weld` sub
 | --- | --- |
 | `test` | Run `composer ci` in the app container |
 | `doctor` | Run `php artisan weld:doctor` in the app container |
-| `up` | Print `parity init --from-squire` (first time only; plain `parity init` if there is no Squire kit), `parity up` and `parity test`, then exit 2. In WELD, Squire's kit sits in `deploy/`, so use plain `parity init --mysql` |
+| `up` | Print `parity init --mysql` (first time only), `parity up` and `parity test`, then exit 2 |
 | `down` | Print `parity down` (`parity down --volumes` empties the database), then exit 2 |
 | `logs` | Print `parity logs -f`, then exit 2 |
 
