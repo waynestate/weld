@@ -35,7 +35,7 @@ fi
 case "${1:-}" in
     up)
         echo 'weld: "up" moved to Parity (D-082). Run:'
-        echo '  parity init --from-squire (first time only; plain parity init if there is no Squire kit)'
+        echo '  parity init --mysql (first time only)'
         echo '  parity up'
         echo '  parity test (smoke test)'
         exit 2

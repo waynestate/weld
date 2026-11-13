@@ -56,8 +56,7 @@ You need Docker with the Compose v2 plugin: `docker compose version` must answer
 
    Expected: `parity check` prints one line per finding, with the fix under each one that needs it. `parity init`
    writes `parity.json`; `--mysql` is Citadel's "MySQL: yes". `bin/weld.sh up` and `.\bin\weld.ps1 up` print
-   `parity init --from-squire (first time only; plain parity init if there is no Squire kit)`. In WELD, Squire's kit
-   sits in `deploy/` rather than at the root, so use plain `parity init`, as above.
+   `parity init --mysql (first time only)`.
 
 4. Add one line to `parity.json`, under `"mode"`, so the health check asks Laravel's `/up`, as Squire's `health.php`
    does on Citadel:

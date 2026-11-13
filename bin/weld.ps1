@@ -62,7 +62,7 @@ try {
     switch ($Command) {
         'up' {
             Write-Host 'weld: "up" moved to Parity (D-082). Run:'
-            Write-Host '  parity init --from-squire (first time only; plain parity init if there is no Squire kit)'
+            Write-Host '  parity init --mysql (first time only)'
             Write-Host '  parity up'
             Write-Host '  parity test (smoke test)'
             exit 2

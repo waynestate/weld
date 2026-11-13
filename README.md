@@ -283,9 +283,7 @@ parity check
 parity init --mysql
 ```
 
-`bin/weld.sh up` and `.\bin\weld.ps1 up` print `parity init --from-squire (first time only; plain parity init if
-there is no Squire kit)`. In WELD, Squire's kit sits in `deploy/` rather than at the root, so use plain `parity init`,
-as above.
+`bin/weld.sh up` and `.\bin\weld.ps1 up` print `parity init --mysql (first time only)`.
 
 Add one line to `parity.json`, under `"mode"`, so the health check asks Laravel's `/up`, as Squire's `health.php`
 does on Citadel. Parity's default asks the front page, which needs the sessions table, and that table arrives with
