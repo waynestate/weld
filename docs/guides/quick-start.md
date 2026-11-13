@@ -1,102 +1,53 @@
 ---
 title: Quick start
-description: Get a new app running in Docker, check the setup with weld:doctor, and plan the rename.
+description: Run a fresh copy of WELD locally with Parity, on Citadel's own PHP image, then check it with weld:doctor and composer ci.
 ---
 
 # Quick start
 
 This page takes a fresh copy of WELD from a folder to a running, checked app on your machine.
 
-One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the
-containers, so the host needs neither.
+Start with Parity: it runs every stack app locally (the stack's D-082). Parity is Citadel on your computer: Citadel's
+PHP image with its `php.ini` and `vhost.conf`, Citadel's proxy in front adding `X-Forwarded-For` and
+`X-Forwarded-Proto`, and MySQL 5.6, the version of Citadel's shared database server. It is one program for Windows,
+macOS and Linux, needs no PHP on your computer, and adds one file to the app, `parity.json`. One command strikes the
+spark; the containers do the welding.
 
-## Steps
-
-1. Bring the stack up:
-
-   ```powershell tab="PowerShell"
-   .\bin\weld.ps1 up
-   ```
-
-   ```sh tab="macOS / Linux"
-   bin/weld.sh up
-   ```
-
-   Expected: `up` copies `.env.example` to `.env` if it is missing, installs the PHP and Node dependencies in the
-   containers, starts the app and Vite, generates the app key if it is not set, and runs the migrations.
-
-2. Open http://localhost:8000. Expected: the app, served by the local stack.
-
-3. Run the doctor:
-
-   ```powershell tab="PowerShell"
-   .\bin\weld.ps1 doctor
-   ```
-
-   ```sh tab="macOS / Linux"
-   bin/weld.sh doctor
-   ```
-
-   Expected: one line per check, PASS or WARN or FAIL; exit code 1 when anything FAILs. A good bead is a quiet one:
-   all PASS and nothing to say.
-
-4. Run the checks:
-
-   ```powershell tab="PowerShell"
-   .\bin\weld.ps1 test
-   ```
-
-   ```sh tab="macOS / Linux"
-   bin/weld.sh test
-   ```
-
-   Expected: `composer ci` runs in the app container: validate, tests, Pint, PHPStan level 8, the agent-ready check
-   and audit.
-
-## The subcommands
-
-The same subcommands work on every OS:
-
-| Command | What it does |
-|---|---|
-| `up` | Bring the whole stack up, as above |
-| `down` | Stop and remove the containers, and clear Vite's `public/hot` |
-| `test` | Run `composer ci` in the app container |
-| `doctor` | Run `php artisan weld:doctor` in the app container |
-| `logs` | Follow the container logs |
+You need Docker with the Compose v2 plugin: `docker compose version` must answer, because Parity calls exactly that
+(see [Install](../install.md#requirements)). PHP and Node run in containers, so the host needs neither.
 
 ## Run it like Citadel
 
-The steps above are the everyday bench: the stock PHP image, SQLite and Vite reloading as you type, and Sail or plain
-Docker Compose work too. Parity does not replace them. When "it works here" has to mean "it works on Citadel", run the same folder on
-Citadel's own machinery with [Parity](https://parity.apps.wayne.edu/): Citadel's PHP image with its
-`php.ini` and `vhost.conf`, Citadel's proxy in front adding `X-Forwarded-For` and `X-Forwarded-Proto`, and MySQL 5.6,
-the version of Citadel's shared database server. Parity is one program for Windows, macOS and Linux on Podman
-(recommended) or Docker. It needs no PHP on your computer and adds one file to the app, `parity.json`.
-Install it once from [its site](https://parity.apps.wayne.edu/), with no administrator needed. On Windows, in
-PowerShell:
+1. Install Parity once from [its site](https://parity.apps.wayne.edu/), with no administrator needed:
 
-```powershell
-irm https://parity.apps.wayne.edu/install.ps1 | iex
-```
-
-On macOS and Linux:
-
-```sh
-curl -fsSL https://parity.apps.wayne.edu/install.sh | sh
-```
-
-1. Stop the Compose stack (`down`), so Vite's dev server is not in the way, and build the front end once, because
-   Citadel serves built assets:
-
-   ```sh
-   docker compose run --rm vite npm run build
+   ```powershell tab="PowerShell"
+   irm https://parity.apps.wayne.edu/install.ps1 | iex
    ```
 
-   Expected: `down` also clears `public/hot`, the note Vite's dev server leaves so pages load from it. Left behind,
-   it gives you a blank page under Parity.
+   ```sh tab="macOS / Linux"
+   curl -fsSL https://parity.apps.wayne.edu/install.sh | sh
+   ```
 
-2. Check this computer, then write the app's Citadel settings:
+2. Prepare the folder once: a `.env`, the PHP and Node dependencies, the app key, and the front end built, because
+   Citadel serves built assets. These run in the stock Composer and Node containers from `compose.yaml`:
+
+   ```powershell tab="PowerShell"
+   Copy-Item .env.example .env
+   docker compose run --rm app composer install
+   docker compose run --rm app php artisan key:generate
+   docker compose run --rm vite sh -c 'npm ci && npm run build'
+   ```
+
+   ```sh tab="macOS / Linux"
+   cp .env.example .env
+   docker compose run --rm app composer install
+   docker compose run --rm app php artisan key:generate
+   docker compose run --rm vite sh -c 'npm ci && npm run build'
+   ```
+
+   Skip the copy when the folder already has a `.env`.
+
+3. Check this computer, then write the app's Citadel settings:
 
    ```sh
    parity check
@@ -104,9 +55,11 @@ curl -fsSL https://parity.apps.wayne.edu/install.sh | sh
    ```
 
    Expected: `parity check` prints one line per finding, with the fix under each one that needs it. `parity init`
-   writes `parity.json`; `--mysql` is Citadel's "MySQL: yes".
+   writes `parity.json`; `--mysql` is Citadel's "MySQL: yes". `bin/weld.sh up` and `.\bin\weld.ps1 up` print
+   `parity init --from-squire (first time only; plain parity init if there is no Squire kit)`. In WELD, Squire's kit
+   sits in `deploy/` rather than at the root, so use plain `parity init`, as above.
 
-3. Add one line to `parity.json`, under `"mode"`, so the health check asks Laravel's `/up`, as Squire's `health.php`
+4. Add one line to `parity.json`, under `"mode"`, so the health check asks Laravel's `/up`, as Squire's `health.php`
    does on Citadel:
 
    ```json
@@ -116,7 +69,7 @@ curl -fsSL https://parity.apps.wayne.edu/install.sh | sh
    Parity's default asks the front page, which needs the sessions table, and that table arrives with the migration
    in the next step. Without this line the first `parity up` waits five minutes and fails.
 
-4. Bring it up, migrate as Citadel would, and test it:
+5. Bring it up, migrate as Citadel would, and test it:
 
    ```sh
    parity up
@@ -128,24 +81,60 @@ curl -fsSL https://parity.apps.wayne.edu/install.sh | sh
    a port). On a fresh database the front page answers 500 until the migration runs, so the first `parity up` ends on
    a warning that says so; on Windows its proxy step can time out on that page instead. Carry on with the migration:
    `parity test` is the word that counts. Your folder is mounted where Citadel mounts it, so an edit shows on the next
-   request. The app gets Laravel's `DB_*` settings for the local MySQL, so `.env` keeps SQLite for the everyday bench.
-   `parity test` asks the running app what Citadel's users would; `parity down` stops it and keeps the data.
+   request. The app gets Laravel's `DB_*` settings for the local MySQL from Parity, so `.env` keeps its own database
+   settings. `parity test` asks the running app what Citadel's users would.
+
+6. Run the doctor and the checks. These two still run through `bin/weld`, in the app container:
+
+   ```powershell tab="PowerShell"
+   .\bin\weld.ps1 doctor
+   .\bin\weld.ps1 test
+   ```
+
+   ```sh tab="macOS / Linux"
+   bin/weld.sh doctor
+   bin/weld.sh test
+   ```
+
+   Expected: the doctor prints one line per check, PASS or WARN or FAIL, with exit code 1 when anything FAILs. A good
+   bead is a quiet one: all PASS and nothing to say. `test` runs `composer ci`: validate, tests, Pint, PHPStan level 8,
+   the agent-ready check and audit.
+
+After a change, run `parity up` again. `parity logs -f` follows the logs, `parity down` stops the app and keeps the
+data, and `parity down --volumes` empties the database.
 
 A folder on the Windows disk is slow inside the container: in the 2026-11-09 proof run a page took about 10 seconds,
 and `php artisan --version` 9 seconds against a quarter of a second from the container's own disk. Slow, but it holds.
 
 No Citadel image on this computer yet? `parity image get` downloads it with your own git.wayne.edu access and checks it
-byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile. Parity 0.1.0
-is live, and [its docs](https://parity.apps.wayne.edu/docs/) have the rest. It takes over local runs from the parity
-kit in Squire. Same app, same folder, now in Citadel's own image: the bead looks identical under the hood, because it
-is the same hood.
+byte for byte, and `parity up --fallback` builds a labeled stand-in from the official PHP image meanwhile.
+[Parity's docs](https://parity.apps.wayne.edu/docs/) have the rest. Same app, same folder, now in Citadel's own image:
+the bead looks identical under the hood, because it is the same hood.
+
+## The bin/weld subcommands
+
+`bin/weld.ps1` and `bin/weld.sh` are thin pointers for one release (the stack's D-087), and the next release deletes
+them:
+
+| Command | What it does |
+|---|---|
+| `test` | Run `composer ci` in the app container |
+| `doctor` | Run `php artisan weld:doctor` in the app container |
+| `up`, `down`, `logs` | Print the Parity commands that replace them (`parity up`, `parity down`, `parity logs -f`) and exit 2 |
+
+Want Vite reloading as you type instead? Sail and plain Docker Compose still work: `compose.yaml` has the app on
+http://localhost:8000 and Vite. After step 2, create `database/database.sqlite`, run
+`docker compose run --rm app php artisan migrate`, then `docker compose up -d`. Stop it with `docker compose down`
+and delete `public/hot`, the note Vite's dev server leaves so pages load from it, before you go back to Parity: left
+behind, it gives you a blank page there.
 
 ## What you built
 
-You have WELD running locally in Docker: the app and Vite in containers, `.env` copied from `.env.example`, the app key
-generated and the migrations run. That is the whole Wayne State app stack joined into one application, with sign-in,
-security headers, checks, coding standards, CI and the WayneUI interface already hooked up. Open the app and every page
-you see (the welcome page, the dashboard, settings) is drawn by WayneUI's components, light or dark to match your device.
+You have WELD running locally on Citadel's own image: the app behind Citadel's proxy, MySQL 5.6 migrated as a Citadel
+release would, `.env` copied from `.env.example` and the app key generated. That is the whole Wayne State app stack
+joined into one application, with sign-in, security headers, checks, coding standards, CI and the WayneUI interface
+already hooked up. Open the app and every page you see (the welcome page, the dashboard, settings) is drawn by
+WayneUI's components, light or dark to match your device.
 
 ## Next steps
 
@@ -154,7 +143,7 @@ you see (the welcome page, the dashboard, settings) is drawn by WayneUI's compon
   and adopt Sourdough so `feed` keeps working.
 - [Check your setup](check-your-setup.md): what the doctor reports, joint by joint.
 - [What is welded in](whats-welded-in.md): the parts and what each does in the app.
-- [Run it like Citadel](#run-it-like-citadel): the same folder on Citadel's image, proxy and MySQL 5.6, through Parity.
+- [Run it like Citadel](#run-it-like-citadel): the steps above, for when you come back to them.
 - [Citadel limits](citadel-limits.md): the platform facts an app design depends on, with their sources.
 - [Running WELD off Citadel](../running-off-citadel.md): for when the destination is somewhere other than a laptop.
 

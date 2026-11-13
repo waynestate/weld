@@ -1,6 +1,6 @@
 ---
 title: "Install | WELD docs"
-description: "How to get WELD: composer create-project or clone, then one Docker command brings the app, PHP and Node up."
+description: "How to get WELD: composer create-project or clone, then run it locally with Parity on Docker with the Compose v2 plugin."
 url: https://weld.apps.wayne.edu/docs/install.html
 llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
@@ -15,11 +15,12 @@ This page gets you a working copy of WELD: what it needs, the two ways to get it
 - PHP `^8.3`
 - Laravel `^13.29`
 - Node 22 or newer, for `npm ci` (`.nvmrc` says 22; `engines` in `package.json` says `>=22`)
-- Docker, for the local stack
+- Docker, for the local stack: Docker Engine with the Compose v2 plugin (Docker Desktop includes it). Check it with `docker compose version`; Parity runs that exact command. On a Linux host with Docker 27 or older and no plugin, that command fails: install the `docker-compose-plugin` package.
+- [Parity](https://parity.apps.wayne.edu/), which runs the app locally on Citadel's own PHP image
 
 Note
 
-To run WELD locally, Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither.
+To run WELD locally, Docker and Parity are the only prerequisites: PHP and Node run in containers, so the host needs neither.
 
 ## Get it [#](https://weld.apps.wayne.edu/docs/install.html#get-it)
 
@@ -54,6 +55,8 @@ Note
 
 The `advisor install` line writes `.mcp.json`, the MCP config that points Claude Code at ADVISOR's server; the file is git-ignored, because a committed `.mcp.json` would run a program on whoever opens the project. Set `ADVISOR_ENABLED=1` in `.env` to switch the advisor on.
 
+No PHP or Node on your computer? Step 2 of the [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel) runs the same install in the stock Composer and Node containers, and the ADVISOR line runs there too: `docker compose run --rm app php vendor/bin/advisor install --client=claude --write`.
+
 ## Verify [#](https://weld.apps.wayne.edu/docs/install.html#verify)
 
 Run the checks the way CI does. `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the agent-ready check and audit, the same command on GitLab and GitHub. The `test` subcommand runs it in the app container: `.\bin\weld.ps1 test` on Windows (PowerShell), `bin/weld.sh test` on macOS / Linux.
@@ -62,7 +65,7 @@ The doctor strikes an arc across the local setup: `.\bin\weld.ps1 doctor` on Win
 
 ## Next steps [#](https://weld.apps.wayne.edu/docs/install.html#next-steps)
 
-- [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html): bring the stack up with one command and open the app.
+- [Quick start](https://weld.apps.wayne.edu/docs/guides/quick-start.html): run the app with Parity on Citadel's own image and open it.
 - [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html): the parts already hooked up in your copy.
 - [Check your setup](https://weld.apps.wayne.edu/docs/guides/check-your-setup.html): what the doctor reports, joint by joint.
 

@@ -43,11 +43,9 @@
 <p>Development happens on git.wayne.edu, the canonical repository: <a rel="noopener" href="https://git.wayne.edu/enterprise-apps/weld">enterprise-apps/weld</a>. Changes, issues and merge requests go there; tags are made there, by the maintainer, with an approver. The GitHub repository (<a rel="noopener" href="https://github.com/waynestate/weld">waynestate/weld</a>) is a read-only push mirror: <code>main</code> and tags are copied automatically, nobody pushes to it, and Packagist reads from it.</p>
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>The weld is made on git.wayne.edu; the mirrors only get the polished bead.</p></aside>
 <h2 id="build-and-test">Build and <span class="docs-heading-tail"><span>test</span><a class="docs-heading-link" aria-label="Link to this section" href="#build-and-test">#</a></span></h2>
-<p>The Docker path installs, migrates and serves in one command:</p>
-<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh up
-</code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 up
-</code></pre></div></div>
+<p>Run the app with Parity, on Citadel's own image: <a href="guides/quick-start.html#run-it-like-citadel">Run it like Citadel</a> prepares
+the folder in Docker, then <code>parity init --mysql</code> and <code>parity up</code>. <code>bin/weld.sh up</code> and <code>.\bin\weld.ps1 up</code> only print
+the Parity commands now (the stack's D-087).</p>
 <p>All checks run <code>composer ci</code> in the container:</p>
 <div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh test
 </code></pre></div>
@@ -58,13 +56,7 @@
 </code></pre></div>
 <div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 doctor
 </code></pre></div></div>
-<p>Logs and stop:</p>
-<div class="docs-tabs" data-tabs="sh|powershell"><div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh logs
-bin/weld.sh down
-</code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 logs
-.\bin\weld.ps1 down
-</code></pre></div></div>
+<p>Logs and stop, the same on every OS: <code>parity logs -f</code> and <code>parity down</code>.</p>
 <p>Without Docker: run <code>composer install</code>, <code>npm ci</code>, copy <code>.env.example</code> to <code>.env</code>, <code>php artisan key:generate</code>, then <code>composer ci</code>.</p>
 <h3 id="other-checks">Other <span class="docs-heading-tail"><span>checks</span><a class="docs-heading-link" aria-label="Link to this section" href="#other-checks">#</a></span></h3>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>

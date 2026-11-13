@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Commands | WELD docs</title>
-<meta name="description" content="The commands a WELD app runs: the composer scripts, the artisan commands and the bin/weld subcommands.">
+<meta name="description" content="The commands a WELD app runs: the composer scripts, the artisan commands, and the bin/weld pointers to Parity.">
 <meta name="docs-version" content="0.2.1">
 <link rel="stylesheet" href="../../assets/wayne-ui/wayne-ui.css">
 <link rel="stylesheet" href="../../assets/docs.css">
@@ -40,7 +40,10 @@
       <article class="docs-article"><h1 id="commands"><span class="docs-heading-tail"><span>Commands</span><a class="docs-heading-link" aria-label="Link to this section" href="#commands">#</a></span></h1>
 <p>This page is the reference for every command a WELD app runs: the <code>bin/weld</code> subcommands, the composer scripts, and the artisan and bin PHP commands, with what each one does.</p>
 <h2 id="the-bin-weld-subcommands">The bin/weld <span class="docs-heading-tail"><span>subcommands</span><a class="docs-heading-link" aria-label="Link to this section" href="#the-bin-weld-subcommands">#</a></span></h2>
-<p>One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither. The same subcommands work on every OS.</p>
+<p><code>bin/weld.ps1</code> and <code>bin/weld.sh</code> are thin pointers for one release (the stack's D-087), and the next release deletes
+them. The app runs locally with Parity (the stack's D-082): see <a href="../guides/quick-start.html#run-it-like-citadel">Run it like Citadel</a>.
+<code>test</code> and <code>doctor</code> still run here, in the app container; <code>up</code>, <code>down</code> and <code>logs</code> print the Parity commands that
+replace them and exit 2, so a script cannot mistake the pointer for a running app.</p>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>
 <tr>
@@ -50,14 +53,6 @@
 </thead>
 <tbody>
 <tr>
-<td><code>up</code></td>
-<td>Copy <code>.env.example</code> to <code>.env</code> if missing, install the PHP and Node dependencies in the containers, write <code>.mcp.json</code> from ADVISOR, start the app and Vite, generate the app key if needed, and migrate</td>
-</tr>
-<tr>
-<td><code>down</code></td>
-<td>Stop and remove the containers, and clear Vite's <code>public/hot</code> (left behind, it blanks every page Parity serves)</td>
-</tr>
-<tr>
 <td><code>test</code></td>
 <td>Run <code>composer ci</code> in the app container</td>
 </tr>
@@ -66,17 +61,19 @@
 <td>Run <code>php artisan weld:doctor</code> in the app container</td>
 </tr>
 <tr>
+<td><code>up</code></td>
+<td>Print <code>parity init --from-squire</code> (first time only; plain <code>parity init</code> if there is no Squire kit), <code>parity up</code> and <code>parity test</code>, then exit 2. In WELD, Squire's kit sits in <code>deploy/</code>, so use plain <code>parity init --mysql</code></td>
+</tr>
+<tr>
+<td><code>down</code></td>
+<td>Print <code>parity down</code> (<code>parity down --volumes</code> empties the database), then exit 2</td>
+</tr>
+<tr>
 <td><code>logs</code></td>
-<td>Follow the container logs; Ctrl+C stops</td>
+<td>Print <code>parity logs -f</code>, then exit 2</td>
 </tr>
 </tbody>
 </table></div>
-<aside class="docs-callout docs-callout--tip" role="note"><p class="docs-callout__label">Tip</p><p><code>up</code> finishes with a pointer to open <a rel="noopener" href="http://localhost:8000">http://localhost:8000</a>. Skip the ADVISOR step with <code>--no-advisor</code> (<code>-NoAdvisor</code> on Windows).</p></aside>
-<p>Bring the whole stack up:</p>
-<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 up
-</code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh up
-</code></pre></div></div>
 <p>Run the full check suite in the app container:</p>
 <div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 test
 </code></pre></div>
@@ -87,16 +84,12 @@
 </code></pre></div>
 <div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh doctor
 </code></pre></div></div>
-<p>Follow the container logs:</p>
-<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 logs
-</code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh logs
-</code></pre></div></div>
-<p>Stop and remove the containers, and clear Vite's <code>public/hot</code>:</p>
-<div class="docs-tabs" data-tabs="powershell|sh"><div class="docs-tabs__panel" data-tab-label="PowerShell"><p class="docs-tabs__label">PowerShell</p><pre tabindex="0"><code class="language-powershell">.\bin\weld.ps1 down
-</code></pre></div>
-<div class="docs-tabs__panel" data-tab-label="sh"><p class="docs-tabs__label">sh</p><pre tabindex="0"><code class="language-sh">bin/weld.sh down
-</code></pre></div></div>
+<p>The Parity commands, the same on every OS:</p>
+<pre tabindex="0"><code class="language-sh">parity up
+parity test
+parity logs -f
+parity down
+</code></pre>
 <h2 id="composer-scripts">Composer <span class="docs-heading-tail"><span>scripts</span><a class="docs-heading-link" aria-label="Link to this section" href="#composer-scripts">#</a></span></h2>
 <div class="docs-table" role="region" aria-label="Table" tabindex="0"><table>
 <thead>

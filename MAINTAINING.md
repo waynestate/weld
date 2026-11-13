@@ -27,10 +27,10 @@ copied automatically, nobody pushes to it, and Packagist reads from it.
 
 | Task | Windows (PowerShell 5.1 or 7) | Linux and macOS |
 |---|---|---|
-| Start the app (Docker: installs, migrates, serves) | `.\bin\weld.ps1 up` | `bin/weld.sh up` |
+| Start the app (Parity; prepare the folder first, see the quick start) | `parity init --mysql`, then `parity up` | `parity init --mysql`, then `parity up` |
 | All checks (runs `composer ci` in the container) | `.\bin\weld.ps1 test` | `bin/weld.sh test` |
 | Check your setup | `.\bin\weld.ps1 doctor` | `bin/weld.sh doctor` |
-| Logs, stop | `.\bin\weld.ps1 logs`, `.\bin\weld.ps1 down` | `bin/weld.sh logs`, `bin/weld.sh down` |
+| Logs, stop | `parity logs -f`, `parity down` | `parity logs -f`, `parity down` |
 
 Without Docker: `composer install`, `npm ci`, copy `.env.example` to `.env`, `php artisan key:generate`, then
 `composer ci`. Other checks:

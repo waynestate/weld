@@ -20,19 +20,7 @@ The weld is made on git.wayne.edu; the mirrors only get the polished bead.
 
 ## Build and test [#](https://weld.apps.wayne.edu/docs/contributing.html#build-and-test)
 
-The Docker path installs, migrates and serves in one command:
-
-sh
-
-```sh
-bin/weld.sh up
-```
-
-PowerShell
-
-```powershell
-.\bin\weld.ps1 up
-```
+Run the app with Parity, on Citadel's own image: [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel) prepares the folder in Docker, then `parity init --mysql` and `parity up`. `bin/weld.sh up` and `.\bin\weld.ps1 up` only print the Parity commands now (the stack's D-087).
 
 All checks run `composer ci` in the container:
 
@@ -62,21 +50,7 @@ PowerShell
 .\bin\weld.ps1 doctor
 ```
 
-Logs and stop:
-
-sh
-
-```sh
-bin/weld.sh logs
-bin/weld.sh down
-```
-
-PowerShell
-
-```powershell
-.\bin\weld.ps1 logs
-.\bin\weld.ps1 down
-```
+Logs and stop, the same on every OS: `parity logs -f` and `parity down`.
 
 Without Docker: run `composer install`, `npm ci`, copy `.env.example` to `.env`, `php artisan key:generate`, then `composer ci`.
 

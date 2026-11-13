@@ -1,6 +1,6 @@
 ---
 title: "Commands | WELD docs"
-description: "The commands a WELD app runs: the composer scripts, the artisan commands and the bin/weld subcommands."
+description: "The commands a WELD app runs: the composer scripts, the artisan commands, and the bin/weld pointers to Parity."
 url: https://weld.apps.wayne.edu/docs/reference/commands.html
 llms: https://weld.apps.wayne.edu/llms.txt
 generator: Squire agent-ready
@@ -12,33 +12,15 @@ This page is the reference for every command a WELD app runs: the `bin/weld` sub
 
 ## The bin/weld subcommands [#](https://weld.apps.wayne.edu/docs/reference/commands.html#the-bin-weld-subcommands)
 
-One command strikes the spark; the containers do the welding. Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither. The same subcommands work on every OS.
+`bin/weld.ps1` and `bin/weld.sh` are thin pointers for one release (the stack's D-087), and the next release deletes them. The app runs locally with Parity (the stack's D-082): see [Run it like Citadel](https://weld.apps.wayne.edu/docs/guides/quick-start.html#run-it-like-citadel). `test` and `doctor` still run here, in the app container; `up`, `down` and `logs` print the Parity commands that replace them and exit 2, so a script cannot mistake the pointer for a running app.
 
 | Command | What it does |
 | --- | --- |
-| `up` | Copy `.env.example` to `.env` if missing, install the PHP and Node dependencies in the containers, write `.mcp.json` from ADVISOR, start the app and Vite, generate the app key if needed, and migrate |
-| `down` | Stop and remove the containers, and clear Vite's `public/hot` (left behind, it blanks every page Parity serves) |
 | `test` | Run `composer ci` in the app container |
 | `doctor` | Run `php artisan weld:doctor` in the app container |
-| `logs` | Follow the container logs; Ctrl+C stops |
-
-Tip
-
-`up` finishes with a pointer to open [http://localhost:8000](http://localhost:8000). Skip the ADVISOR step with `--no-advisor` (`-NoAdvisor` on Windows).
-
-Bring the whole stack up:
-
-PowerShell
-
-```powershell
-.\bin\weld.ps1 up
-```
-
-sh
-
-```sh
-bin/weld.sh up
-```
+| `up` | Print `parity init --from-squire` (first time only; plain `parity init` if there is no Squire kit), `parity up` and `parity test`, then exit 2. In WELD, Squire's kit sits in `deploy/`, so use plain `parity init --mysql` |
+| `down` | Print `parity down` (`parity down --volumes` empties the database), then exit 2 |
+| `logs` | Print `parity logs -f`, then exit 2 |
 
 Run the full check suite in the app container:
 
@@ -68,32 +50,13 @@ sh
 bin/weld.sh doctor
 ```
 
-Follow the container logs:
-
-PowerShell
-
-```powershell
-.\bin\weld.ps1 logs
-```
-
-sh
+The Parity commands, the same on every OS:
 
 ```sh
-bin/weld.sh logs
-```
-
-Stop and remove the containers, and clear Vite's `public/hot`:
-
-PowerShell
-
-```powershell
-.\bin\weld.ps1 down
-```
-
-sh
-
-```sh
-bin/weld.sh down
+parity up
+parity test
+parity logs -f
+parity down
 ```
 
 ## Composer scripts [#](https://weld.apps.wayne.edu/docs/reference/commands.html#composer-scripts)

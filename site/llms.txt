@@ -45,14 +45,14 @@ Every page below is Markdown. The HTML pages send the same Markdown to a client 
 - [Making WELD yours | WELD docs](https://weld.apps.wayne.edu/docs/guides/making-weld-yours.md): Starting an app from WELD: renaming the parts that still say WELD, stripping WELD's product files so composer ci keeps passing, and adopting Sourdough so feed keeps working.
 - [Oracle | WELD docs](https://weld.apps.wayne.edu/docs/guides/oracle.md): How WELD speaks Oracle through yajra/laravel-oci8: the settings, oracle:check, and the parity image for a real connection.
 - [Queues and scheduling | WELD docs](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.md): Queues and scheduling in WELD: how jobs and scheduled tasks run, and what changes between local and deploy.
-- [Quick start | WELD docs](https://weld.apps.wayne.edu/docs/guides/quick-start.md): Get a new app running in Docker, check the setup with weld:doctor, and plan the rename.
+- [Quick start | WELD docs](https://weld.apps.wayne.edu/docs/guides/quick-start.md): Run a fresh copy of WELD locally with Parity, on Citadel's own PHP image, then check it with weld:doctor and composer ci.
 - [Is WELD still Sourdough's shape? | WELD docs](https://weld.apps.wayne.edu/docs/guides/regen-check.md): Whether WELD is still Sourdough's Inertia shape: the regen gate compares a fresh generation with WELD and fails only on new drift.
 - [Security | WELD docs](https://weld.apps.wayne.edu/docs/guides/security.md): Security in WELD: sign-in through SESAME, the security headers and CSP from HELMET, and the standards checks from PROCTOR.
 - [WELD and Sourdough | WELD docs](https://weld.apps.wayne.edu/docs/guides/sourdough.md): WELD and Sourdough: the starter tool for every shape of Wayne State app, and why WELD is the finished piece.
 - [What is welded in | WELD docs](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.md): The parts welded into WELD and what each does in the app, plus the five adjacent parts of the stack and when an app reaches for them.
 - [Overview | WELD docs](https://weld.apps.wayne.edu/docs/index.md): What WELD is: the whole Wayne State app stack joined into one application, and where each part sits in it.
-- [Install | WELD docs](https://weld.apps.wayne.edu/docs/install.md): How to get WELD: composer create-project or clone, then one Docker command brings the app, PHP and Node up.
-- [Commands | WELD docs](https://weld.apps.wayne.edu/docs/reference/commands.md): The commands a WELD app runs: the composer scripts, the artisan commands and the bin/weld subcommands.
+- [Install | WELD docs](https://weld.apps.wayne.edu/docs/install.md): How to get WELD: composer create-project or clone, then run it locally with Parity on Docker with the Compose v2 plugin.
+- [Commands | WELD docs](https://weld.apps.wayne.edu/docs/reference/commands.md): The commands a WELD app runs: the composer scripts, the artisan commands, and the bin/weld pointers to Parity.
 - [Configuration | WELD docs](https://weld.apps.wayne.edu/docs/reference/configuration.md): The configuration a WELD app reads: the environment variables, their defaults and where they live.
 - [Proof | WELD docs](https://weld.apps.wayne.edu/docs/reference/proof.md): WELD made into a new app from a clean folder on 2026-11-06, both documented ways, with every gate it ships run locally and timed, plus one small Wayne State app ported onto it: what held, what broke, what was fixed, and what it does not prove.
 - [Status | WELD docs](https://weld.apps.wayne.edu/docs/reference/status.md): What is on the bench today: the state of every part welded into WELD.
@@ -63,7 +63,7 @@ Every page below is Markdown. The HTML pages send the same Markdown to a client 
 
 ## Prompts
 
-- [Get started with WELD](https://weld.apps.wayne.edu/#prompt-get-started): Gets a new app running in Docker, checks it, and plans the rename. It won't rename anything until you say so. The prompt itself is in https://weld.apps.wayne.edu/index.md.
+- [Get started with WELD](https://weld.apps.wayne.edu/#prompt-get-started): Gets a new app running with Parity on Citadel's own image, checks it, and plans the rename. It won't rename anything until you say so. The prompt itself is in https://weld.apps.wayne.edu/index.md.
 - [Add a signed-in page to a WELD app](https://weld.apps.wayne.edu/#prompt-add-page): Adds a route behind SESAME, a Vue page in the app layout and a feature test, then runs the checks. The prompt itself is in https://weld.apps.wayne.edu/index.md.
 
 ## Source

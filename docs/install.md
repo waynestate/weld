@@ -1,6 +1,6 @@
 ---
 title: Install
-description: How to get WELD: composer create-project or clone, then one Docker command brings the app, PHP and Node up.
+description: How to get WELD: composer create-project or clone, then run it locally with Parity on Docker with the Compose v2 plugin.
 ---
 
 # Install
@@ -12,10 +12,14 @@ This page gets you a working copy of WELD: what it needs, the two ways to get it
 - PHP `^8.3`
 - Laravel `^13.29`
 - Node 22 or newer, for `npm ci` (`.nvmrc` says 22; `engines` in `package.json` says `>=22`)
-- Docker, for the local stack
+- Docker, for the local stack: Docker Engine with the Compose v2 plugin (Docker Desktop includes it). Check it with
+  `docker compose version`; Parity runs that exact command. On a Linux host with Docker 27 or older and no plugin,
+  that command fails: install the `docker-compose-plugin` package.
+- [Parity](https://parity.apps.wayne.edu/), which runs the app locally on Citadel's own PHP image
 
 > [!NOTE]
-> To run WELD locally, Docker is the only prerequisite: PHP and Node run in the containers, so the host needs neither.
+> To run WELD locally, Docker and Parity are the only prerequisites: PHP and Node run in containers, so the host needs
+> neither.
 
 ## Get it
 
@@ -53,6 +57,10 @@ php artisan key:generate
 > is git-ignored, because a committed `.mcp.json` would run a program on whoever opens the project. Set
 > `ADVISOR_ENABLED=1` in `.env` to switch the advisor on.
 
+No PHP or Node on your computer? Step 2 of the [Quick start](guides/quick-start.md#run-it-like-citadel) runs the same
+install in the stock Composer and Node containers, and the ADVISOR line runs there too:
+`docker compose run --rm app php vendor/bin/advisor install --client=claude --write`.
+
 ## Verify
 
 Run the checks the way CI does. `composer ci` is the CI contract: it runs validate, tests, Pint, PHPStan level 8, the
@@ -65,7 +73,7 @@ works as a gate. A good bead is a quiet one: all PASS and nothing to say.
 
 ## Next steps
 
-- [Quick start](guides/quick-start.md): bring the stack up with one command and open the app.
+- [Quick start](guides/quick-start.md): run the app with Parity on Citadel's own image and open it.
 - [What is welded in](guides/whats-welded-in.md): the parts already hooked up in your copy.
 - [Check your setup](guides/check-your-setup.md): what the doctor reports, joint by joint.
 

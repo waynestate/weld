@@ -112,32 +112,35 @@
   </section>
 
   <!-- =========================================================== start here -->
-  <!-- The answer to "wait, there's more?": one install, three commands, before
+  <!-- The answer to "wait, there's more?": one install, Parity, the checks, before
        anyone meets the cast. Commands as documented in README.md (Get it, Run it
        locally) and MAINTAINING.md (composer ci). -->
   <section class="section section--start" id="start" aria-labelledby="start-title">
     <div class="wsu-container">
       <div class="section__head">
         <p class="eyebrow">Start here</p>
-        <h2 id="start-title">Install it, then run one command</h2>
-        <p class="start__lead">Yes, this is a lot of packages. Most of you can ignore that. Install WELD, run the one command in step 2, and you have a working app with all of it set up. We split the stack into separate projects because Wayne State developers work on very different apps, and you shouldn't have to buy the whole shop to borrow one torch.</p>
+        <h2 id="start-title">Install it, then run it like Citadel</h2>
+        <p class="start__lead">Yes, this is a lot of packages. Most of you can ignore that. Install WELD, run it with Parity in step 2, and you have a working app with all of it set up. We split the stack into separate projects because Wayne State developers work on very different apps, and you shouldn't have to buy the whole shop to borrow one torch.</p>
       </div>
 
       <ol class="steps">
         <li class="step">
           <span class="step__num" aria-hidden="true">1</span>
           <h3 class="step__title">Install</h3>
-          <p class="step__line">Composer makes a fresh copy, writes <code>.env</code>, sets the app key and runs the first migration.</p>
-          <pre class="step__code"><code>composer create-project waynestate/weld my-app</code></pre>
+          <p class="step__line">Composer makes a fresh copy, writes <code>.env</code>, sets the app key and runs the first migration. Then build the front end once, because Citadel serves built assets.</p>
+          <pre class="step__code"><code>composer create-project waynestate/weld my-app
+cd my-app
+npm ci &amp;&amp; npm run build</code></pre>
         </li>
         <li class="step step--key">
           <span class="step__num" aria-hidden="true">2</span>
-          <h3 class="step__title">Start it in Docker</h3>
-          <p class="step__line">This is the one command. You only need Docker, because PHP and Node run in the containers. Then open <code>localhost:8000</code>.</p>
-          <pre class="step__code"><code><span class="t-dim"># macOS, Linux</span>
-bin/weld.sh up
-<span class="t-dim"># Windows (PowerShell)</span>
-.\bin\weld.ps1 up</code></pre>
+          <h3 class="step__title">Run it with Parity</h3>
+          <p class="step__line"><a href="https://parity.apps.wayne.edu/">Parity</a> runs it on Citadel's own PHP image, proxy and MySQL 5.6. It needs Docker with the Compose v2 plugin (<code>docker compose version</code>). The first time, add the <a href="docs/guides/quick-start.html#run-it-like-citadel">Quick start's</a> health check line to <code>parity.json</code>. Then open <code>localhost:8080</code>.</p>
+          <pre class="step__code"><code>parity check
+parity init --mysql
+parity up
+parity shell --user citadel php artisan migrate
+parity test</code></pre>
         </li>
         <li class="step">
           <span class="step__num" aria-hidden="true">3</span>
@@ -147,7 +150,7 @@ bin/weld.sh up
         </li>
       </ol>
 
-      <p class="start__also">Want it the way Citadel runs it? <a href="https://parity.apps.wayne.edu/">Parity</a> runs the same folder on Citadel's own PHP image, behind its proxy, with MySQL 5.6: <code>parity init --mysql</code>, then <code>parity up</code>. Step 2 stays the everyday bench; <a href="docs/guides/quick-start.html#run-it-like-citadel">Run it like Citadel</a> has the rest.</p>
+      <p class="start__also">No PHP or Node on your computer? <a href="docs/guides/quick-start.html#run-it-like-citadel">The Quick start</a> clones WELD and prepares the folder in Docker instead. <code>bin/weld.sh up</code> and <code>.\bin\weld.ps1 up</code> print the Parity commands instead of starting anything; <code>test</code> and <code>doctor</code> still run.</p>
       <p class="start__also"><a href="https://sourdough.apps.wayne.edu/">Sourdough</a> makes the other shapes: <code>sourdough new my-app</code> for raw PHP, <code>sourdough new my-app --laravel</code> for Laravel with Blade, <code>sourdough new my-app --laravel --vue</code> for Vue islands. WELD is the Inertia and Vue shape, ready-made.</p>
     </div>
   </section>
@@ -946,7 +949,7 @@ sourdough new my-app --raw</code>
             <div>
               <p class="ar-prompt__kicker">Ticket W-1 · A new app</p>
               <h3 class="ar-prompt__title" id="prompt-get-started-title">Get started with WELD</h3>
-              <p class="ar-prompt__desc">Gets a new app running in Docker, checks it, and plans the rename. It won't rename anything until you say so.</p>
+              <p class="ar-prompt__desc">Gets a new app running with Parity on Citadel's own image, checks it, and plans the rename. It won't rename anything until you say so.</p>
             </div>
           </header>
           <pre class="ar-prompt__text"><code>You are a coding agent helping a Wayne State University developer start a new app from WELD: the Wayne State application stack welded into one Laravel app with Inertia and Vue. Sign-in (SESAME), security headers (HELMET), the standards check (PROCTOR) and CI are already joined. The job is to get it running and make it this developer's own.
@@ -957,10 +960,11 @@ Read first:
 
 Task:
 1. Clone WELD into a new folder with `git clone https://github.com/waynestate/weld.git my-app`, using the app name I give you in place of my-app.
-2. Bring it up with Docker, the only prerequisite: `.\bin\weld.ps1 up` on Windows (PowerShell), `bin/weld.sh up` on macOS and Linux. It copies .env.example to .env, installs the PHP and Node dependencies in the containers, sets the app key and runs the migrations.
-3. Check the setup with the doctor subcommand (`.\bin\weld.ps1 doctor` or `bin/weld.sh doctor`) and report every line that is not PASS.
-4. Run the gate with the test subcommand, which runs `composer ci` in the app container, and the standards check with `composer proctor` (in the app container if the host has no PHP).
-5. Propose what to rename to make it mine: APP_NAME in .env.example and the package name in composer.json. Do not change them yet.
+2. Check that `docker compose version` answers: Parity needs Docker with the Compose v2 plugin. On Linux with Docker 27 or older and no plugin, tell me to install the docker-compose-plugin package, and stop.
+3. Run it with Parity, following Run it like Citadel in the README: prepare the folder once (copy .env.example to .env, then `docker compose run --rm app composer install`, `docker compose run --rm app php artisan key:generate` and `docker compose run --rm vite sh -c 'npm ci &amp;&amp; npm run build'`), then `parity check`, `parity init --mysql`, the health_check line in parity.json, `parity up`, `parity shell --user citadel php artisan migrate` and `parity test`. `bin/weld.sh up` and `.\bin\weld.ps1 up` only print Parity commands now; do not run them.
+4. Check the setup with the doctor subcommand (`.\bin\weld.ps1 doctor` or `bin/weld.sh doctor`) and report every line that is not PASS.
+5. Run the gate with the test subcommand, which runs `composer ci` in the app container, and the standards check with `composer proctor` (in the app container if the host has no PHP).
+6. Propose what to rename to make it mine: APP_NAME in .env.example and the package name in composer.json. Do not change them yet.
 
 Constraints:
 - WELD is Laravel with Inertia and Vue. If I want raw PHP or Laravel with Blade, stop and point me at Sourdough, the starter for every shape: https://sourdough.apps.wayne.edu/llms.txt
