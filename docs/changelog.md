@@ -11,6 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: the deploy kit is Squire 0.11.1 (was 0.10.8): the release script, parity scripts, HAProxy pin and fallback base follow the new templates.
 - Changed: `deploy/` requires PROCTOR `^0.16` (was `^0.15`, which does not allow 0.16), whose `ci-pipelines` check no longer asks for a GitHub workflow (D-069).
 - Site: PROCTOR's cast label and the README's current versions line say 0.16.1 (they said 0.16.0). Content only.
 - Changed: WELD requires SESAME `^0.8`, Pinstripe `^0.4` and PROCTOR `^0.16` (was `^0.7`, `^0.3` and `^0.15`, which do not allow the current releases); the docs say the Preflight components are pinned at 0.9.0, not 0.6.0.
