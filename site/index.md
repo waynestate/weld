@@ -174,7 +174,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Squire
    The deploy kit
    Citadel's build, release and health-check scripts from templates, `squire doctor`, and one portable image for other hosts. Local runs on Citadel's image move to Parity, next joint down.
-   Release 0.11.0
+   Release 0.11.1
    Inspection: In use
    [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
 10. Joint 09
@@ -209,7 +209,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### ADVISOR
     The MCP server
     Nine read-only tools your coding agent can ask about the stack. Every answer names the file it came from.
-    Release 0.3.0
+    Release 0.3.1
     Inspection: In use
     [Site of ADVISOR](https://advisor.apps.wayne.edu/) [Docs for ADVISOR](https://advisor.apps.wayne.edu/docs/)
 15. Joint 14
@@ -391,7 +391,7 @@ $
 
 ### [ADVISOR](https://advisor.apps.wayne.edu/)
 
-0.3.0 Office hours | Always
+0.3.1 Office hours | Always
 
 Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only: it can't write files or run shell commands.
 
@@ -407,7 +407,7 @@ $
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
-0.11.0 Armor | Carried
+0.11.1 Armor | Carried
 
 The deploy kit for Citadel: `build.sh`, a release script and a health check, plus one portable image for other hosts. This page deploys with it too.
 
