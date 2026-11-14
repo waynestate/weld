@@ -1,21 +1,21 @@
 # WELD's pipeline, built from the Preflight components on this GitLab.
-# Pinned to Preflight 0.8.0. Never use ~latest.
+# Pinned to Preflight 0.9.0. Never use ~latest.
 # WELD requires PHP ^8.3, so the test matrix starts at 8.3.
 # composer ci is the contract: every check runs from the "ci" script in composer.json.
 # Docker Hub images go through the GitLab Dependency Proxy to avoid the anonymous pull limit.
 include:
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.8.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.9.0
     inputs:
       php_versions: ["8.3", "8.4", "8.5"]
       image: "php:${PHP_VERSION}-cli-trixie"
       # The tests are Pest files, and PHPUnit refuses to load them ("Please run
       # ./vendor/bin/pest instead"). Pest runs the PHPUnit class tests too.
       test_command: vendor/bin/pest
-  # Preflight 0.8.0 runs it on composer:2.11.1 by digest, so no image input.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@0.8.0
+  # Preflight 0.9.0 runs it on composer:2.11.1 by digest, so no image input.
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@0.9.0
   # The front page deploy layer (ADR-0017): PROCTOR checks deploy/ against CREED's policy.
   # Warnings pass and failures block, as in the proctor-root job.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@0.8.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@0.9.0
     inputs:
       working_dir: deploy
       proctor_command: vendor/bin/proctor check --format=codequality
@@ -23,7 +23,7 @@ include:
   # Accessibility: Preflight's a11y component serves site/ and checks every page with axe-core 4.14.0, light and
   # dark, at 320 and 1280 px, plus WCAG 1.4.10 reflow, at WCAG 2.2 AA. Its Playwright image comes from
   # mcr.microsoft.com, which the Dependency Proxy does not front, so it takes no image_prefix.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.8.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.9.0
     inputs:
       site_dir: site
       pages: ["**/*.html"]
@@ -32,7 +32,7 @@ include:
   # it: the a11y-pages job saves them into a11y-site/, signed in by SESAME's
   # fake driver. Named a11y-app so it sits beside the site's a11y job. The
   # pages list is the a11y-pages job's A11Y_PATHS: change the two together.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.8.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.9.0
     inputs:
       job_name: a11y-app
       site_dir: a11y-site
@@ -42,18 +42,18 @@ include:
   # composer.lock installs, dev packages left out, kept as sbom.cdx.json for
   # 30 days. When the next advisory lands, finding out whether WELD has the
   # package is one search instead of one guess.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/sbom@0.8.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/sbom@0.9.0
   # Gitleaks reads the checkout and fails on anything shaped like a
   # credential, with the finding redacted in the log and in gitleaks.json.
   # A secret belongs in Settings > CI/CD > Variables, never in a file.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/secret-detection@0.8.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/secret-detection@0.9.0
   # Migrations meet the MySQL 5.6.51 that Citadel shares (CREED databases.md,
   # a MUST). The tests run on SQLite, which takes a JSON column or a long
   # utf8mb4 index that 5.6 rejects at deploy. This job runs php artisan
   # migrate against a real 5.6.51 service instead. The official 5.6 images
   # are amd64 only, so the job carries the amd64 runner tag. Test the weld
   # on the metal you will hang the gate from.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/mysql56-migrate@0.8.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/mysql56-migrate@0.9.0
   # PORTABILITY (ADR-0010): WELD must run off Citadel too, on OpenShift,
   # Coolify or plain Docker. The portability job builds the portable image
   # (deploy/.squire/portable.Dockerfile) with Buildah, no Docker daemon and no
@@ -77,7 +77,7 @@ include:
   # redirected from it, and a believed X-Forwarded-Host would show in the
   # Location. The runner is arm64: the Buildah image and both bases are
   # multi-arch, so no input names an architecture.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.8.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.9.0
     inputs:
       context: .
       dockerfile: deploy/.squire/portable.Dockerfile
@@ -108,13 +108,13 @@ include:
       # that Citadel runs is proven by the mysql56-migrate job, so this one only
       # has to hold sessions.
       services: [{ name: "mysql:8.4.11@sha256:0f51e63e537a1f176423fa03ef559aabe6fa4372a53160a44bc7e75da7d15364", alias: db, variables: { MYSQL_ROOT_PASSWORD: "portability", MYSQL_DATABASE: "app" } }]
-      # Preflight 0.8.0 runs this once, in its own container of the image,
+      # Preflight 0.9.0 runs this once, in its own container of the image,
       # before either replica starts: the way a release migrates once before
       # the web pods start (W24). The loop waits out MySQL's first boot.
       setup_command: "cd /citadel/src && for i in 1 2 3 4 5 6 7 8 9 10; do php artisan migrate --force && exit 0; sleep 3; done; exit 1"
       session_login_path: /_portability/login
       session_check_path: /_portability/me
-      # Preflight 0.8.0 sends this header on every session-hop request,
+      # Preflight 0.9.0 sends this header on every session-hop request,
       # reading the variable at run time and never printing it.
       session_header: "X-Portability-Token: $PORTABILITY_PROBE_TOKEN"
       # No start_command: the probe runs the image's own entrypoint, as the
