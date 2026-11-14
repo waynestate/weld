@@ -5,7 +5,7 @@ import { Button, Card, Input } from '@waynestate/wayne-ui-vue';
 import DeleteUser from '@/components/DeleteUser.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
-import { type BreadcrumbItem, type SharedData, type User } from '@/types';
+import { type BreadcrumbItem, type SharedData } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -13,7 +13,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const page = usePage<SharedData>();
-const user = page.props.auth.user as User;
+const user = page.props.auth.user;
 
 const form = useForm({
     name: user.name,
@@ -37,7 +37,15 @@ const submit = () => {
                     <p class="weld-muted">Update your name and email address.</p>
 
                     <!-- WayneUI fields: the label, hint, error and aria-describedby come wired together. -->
-                    <Input id="name" v-model="form.name" name="name" label="Name" required autocomplete="name" :error="form.errors.name" />
+                    <Input
+                        id="name"
+                        v-model="form.name"
+                        name="name"
+                        label="Name"
+                        required
+                        autocomplete="name"
+                        :error="form.errors.name"
+                    />
                     <Input
                         id="email"
                         v-model="form.email"
@@ -50,7 +58,13 @@ const submit = () => {
                     />
 
                     <div class="weld-form__actions">
-                        <Button variant="primary" type="submit" :loading="form.processing" :disabled="form.processing">Save</Button>
+                        <Button
+                            variant="primary"
+                            type="submit"
+                            :loading="form.processing"
+                            :disabled="form.processing"
+                            >Save</Button
+                        >
                         <p class="weld-muted" role="status">
                             <Transition name="weld-fade">
                                 <span v-if="form.recentlySuccessful">Saved.</span>

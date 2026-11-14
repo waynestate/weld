@@ -30,7 +30,12 @@ defineProps<Props>();
             </li>
             <li>
                 <!-- Sign out is a POST, so it is a button that looks like its neighbor. -->
-                <Link :href="route('sesame.logout')" method="post" as="button" class="wsu-sidebar__link user-menu-content__button">
+                <Link
+                    :href="route('sesame.logout')"
+                    method="post"
+                    as="button"
+                    class="wsu-sidebar__link user-menu-content__button"
+                >
                     <Icon name="log-out" />
                     Sign out
                 </Link>

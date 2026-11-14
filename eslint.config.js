@@ -1,7 +1,4 @@
-import prettier from 'eslint-config-prettier';
-import vue from 'eslint-plugin-vue';
-
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript';
+import pinstripe from '@waynestate/pinstripe/eslint/typescript';
 
 // WayneUI is the only component source (BEST_PRACTICES W2). The Laravel kit's
 // shadcn-vue copies lived in components/ui; this rule keeps them from moving
@@ -22,20 +19,52 @@ const wayneUiOnly = {
     ],
 };
 
-export default defineConfigWithVueTs(
-    vue.configs['flat/essential'],
-    vueTsConfigs.recommended,
+// Pinstripe cuts the suit (ESLint's, Vue's, typescript-eslint's typed and the
+// accessibility rules, every warning raised to an error, Prettier last); WELD
+// only sews on its own cufflinks below.
+export default [
+    ...pinstripe,
     {
-        // site/assets/docs.js is the shared docs builder's kit file, synced byte for byte
-        // from Squire; its three unused catch bindings get fixed there, not here.
-        ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'site/assets/docs.js'],
+        // Copies kept byte for byte from their owners get fixed there, not here:
+        // site/assets/docs.js and site/assets/agent-ready.js are Squire's kit files
+        // (bin/agent-ready.php --check holds the second), tools/a11y/check.mjs is
+        // Preflight's a11y checker. resources/js/ziggy.* is written by
+        // `composer ziggy`, and the ziggy CI job compares it with a fresh
+        // generation, so it is linted as little as Prettier formats it.
+        ignores: [
+            'vendor',
+            'node_modules',
+            'public',
+            'bootstrap/ssr',
+            'site/assets/docs.js',
+            'site/assets/agent-ready.js',
+            'tools/a11y/check.mjs',
+            'resources/js/ziggy.js',
+            'resources/js/ziggy.d.ts',
+        ],
+    },
+    {
+        // The Vite config is the one TypeScript file outside tsconfig.json's
+        // resources/js, so typed linting reads it as a project of its own. One
+        // project service serves every typed file, so this sits on all of them.
+        files: ['**/*.ts', '**/*.vue'],
+        languageOptions: {
+            parserOptions: {
+                projectService: { allowDefaultProject: ['vite.config.ts'] },
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
+    },
+    {
+        // The README art kit runs in Node, not in the browser the preset assumes.
+        files: ['scripts/**/*.mjs'],
+        languageOptions: {
+            globals: { process: 'readonly', Buffer: 'readonly' },
+        },
     },
     {
         rules: {
-            'vue/multi-word-component-names': 'off',
-            '@typescript-eslint/no-explicit-any': 'off',
             'no-restricted-imports': ['error', wayneUiOnly],
         },
     },
-    prettier,
-);
+];

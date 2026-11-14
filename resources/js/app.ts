@@ -44,9 +44,15 @@ Object.assign(globalThis, {
     route: (...args: Parameters<typeof ziggyRoute>) => ziggyRoute(args[0], args[1], args[2], ziggy),
 });
 
-createInertiaApp({
+// The boot promise has no one to report to: a page that fails to resolve
+// already throws in the console, so `void` says the floating is on purpose.
+void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
+    resolve: (name) =>
+        resolvePageComponent(
+            `./pages/${name}.vue`,
+            import.meta.glob<DefineComponent>('./pages/**/*.vue'),
+        ),
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
@@ -71,7 +77,9 @@ createInertiaApp({
 // it on an unmount, so the HELMET ribbon outside the app stayed inert for
 // good. Close the drawer the proper way as the visit starts.
 router.on('start', () => {
-    document.querySelectorAll<HTMLElement>('[data-wsu-drawer-toggle][aria-expanded="true"]').forEach((toggle) => toggle.click());
+    document
+        .querySelectorAll<HTMLElement>('[data-wsu-drawer-toggle][aria-expanded="true"]')
+        .forEach((toggle) => toggle.click());
 });
 
 // An Inertia visit swaps the page without a load, so focus would stay on the
@@ -82,7 +90,7 @@ router.on('finish', (event) => {
     const visit = event.detail.visit;
     if (visit.method !== 'get' || visit.prefetch) return;
 
-    nextTick(() => {
+    void nextTick(() => {
         document.getElementById('main')?.focus({ preventScroll: true });
     });
 });

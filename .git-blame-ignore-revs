@@ -1,0 +1,7 @@
+# Commits git blame looks past: whole-file reformats with no change in behavior.
+# GitLab reads this file on its own; locally, once per clone:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+# The seams moved, the weld did not.
+
+# style: npm run format with Pinstripe's Prettier preset (100 columns)
+6afd1464e9caaa2de8740e7f53b6dab747be2dee

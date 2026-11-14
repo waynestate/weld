@@ -3,7 +3,9 @@ import AppFooter from '@/components/AppFooter.vue';
 import AppHeader from '@/components/AppHeader.vue';
 import { mainNavItems, toCrumbs, toWayneUi } from '@/navigation';
 import type { BreadcrumbItemType } from '@/types';
-import { Link, usePage } from '@inertiajs/vue3';
+// Imported as InertiaLink, not Link: the accessibility rules read a bare <Link>
+// as HTML's <link> element, which may not carry aria-current. It renders an <a>.
+import { Link as InertiaLink, usePage } from '@inertiajs/vue3';
 import { AppShell, Breadcrumbs, Icon, Sidebar, SkipLink } from '@waynestate/wayne-ui-vue';
 import { computed } from 'vue';
 
@@ -38,16 +40,20 @@ const primary = computed(() => toWayneUi(mainNavItems, page.url));
             <Sidebar id="app-header-nav" label="Menu">
                 <template #primary-nav>
                     <li v-for="item in primary" :key="item.href">
-                        <Link class="wsu-sidebar__link" :href="item.href" :aria-current="item.current ? 'page' : undefined">
+                        <InertiaLink
+                            class="wsu-sidebar__link"
+                            :href="item.href"
+                            :aria-current="item.current ? 'page' : undefined"
+                        >
                             <Icon v-if="item.icon" :name="item.icon" />
                             {{ item.label }}
-                        </Link>
+                        </InertiaLink>
                     </li>
                 </template>
             </Sidebar>
         </template>
 
-        <Breadcrumbs v-if="crumbs.length > 1" :items="crumbs" :link-as="Link" />
+        <Breadcrumbs v-if="crumbs.length > 1" :items="crumbs" :link-as="InertiaLink" />
         <slot />
 
         <template #footer>

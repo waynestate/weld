@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import UserMenuContent from '@/components/UserMenuContent.vue';
-import type { SharedData, User } from '@/types';
+import type { SharedData } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
 import { Avatar, Icon } from '@waynestate/wayne-ui-vue';
 import { computed, onBeforeUnmount, onMounted, ref, useId } from 'vue';
 
 const page = usePage<SharedData>();
-const user = computed(() => page.props.auth.user as User);
+const user = computed(() => page.props.auth.user);
 
 const menuId = `user-menu-${useId()}`;
 const open = ref(false);
@@ -23,13 +23,16 @@ const onDocumentClick = (event: MouseEvent) => {
     if (root.value && !root.value.contains(event.target as Node)) close();
 };
 
-// Escape closes from anywhere inside, and hands focus back to the button so a
-// keyboard user lands where they started.
+// Escape closes the open panel from anywhere on the page, like a click outside
+// does. From inside it, focus goes back to the button so a keyboard user lands
+// where they started. It listens on the document rather than on the wrapper
+// <div>, which is only a box: the button is the one control here.
 const onKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape' && open.value) {
-        event.preventDefault();
-        close(true);
-    }
+    if (event.key !== 'Escape' || !open.value) return;
+
+    const inside = root.value?.contains(document.activeElement) ?? false;
+    if (inside) event.preventDefault();
+    close(inside);
 };
 
 // Tabbing out of the panel closes it, so it never hangs open behind the page.
@@ -42,11 +45,13 @@ let stopNavigate: (() => void) | undefined;
 
 onMounted(() => {
     document.addEventListener('click', onDocumentClick);
+    document.addEventListener('keydown', onKeydown);
     stopNavigate = router.on('start', () => close());
 });
 
 onBeforeUnmount(() => {
     document.removeEventListener('click', onDocumentClick);
+    document.removeEventListener('keydown', onKeydown);
     stopNavigate?.();
 });
 </script>
@@ -57,7 +62,7 @@ onBeforeUnmount(() => {
         static label), so this is a small local disclosure built on its tokens and
         its bar button. A disclosure, not role="menu": no arrow-key contract to break.
     -->
-    <div ref="root" class="user-menu" @keydown="onKeydown" @focusout="onFocusOut">
+    <div ref="root" class="user-menu" @focusout="onFocusOut">
         <button
             ref="trigger"
             type="button"

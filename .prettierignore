@@ -2,3 +2,9 @@
 # compares them with a fresh generation byte for byte, so Prettier keeps out.
 resources/js/ziggy.js
 resources/js/ziggy.d.ts
+
+# Pinstripe's preset formats Blade too, and it would respace the layout's
+# directives (`@if($cspNonce)` becomes `@if ($cspNonce)`) in the theme script
+# tag that tests/Feature/WayneUiOnlyTest.php pins byte for byte. The one Blade
+# file stays hand-set until that test and the layout move together.
+resources/views/app.blade.php

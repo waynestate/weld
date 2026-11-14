@@ -46,7 +46,10 @@ function migrateLegacyChoice() {
         if (legacy === null) return;
 
         localStorage.removeItem(LEGACY_KEY);
-        if ((legacy === 'light' || legacy === 'dark') && localStorage.getItem(STORAGE_KEY) === null) {
+        if (
+            (legacy === 'light' || legacy === 'dark') &&
+            localStorage.getItem(STORAGE_KEY) === null
+        ) {
             localStorage.setItem(STORAGE_KEY, legacy === 'dark' ? DARK : LIGHT);
         }
     } catch {
