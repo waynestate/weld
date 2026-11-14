@@ -7,8 +7,8 @@ so most of the upkeep is keeping the parts it joins current.
 ## What WELD is and what it depends on
 
 - `waynestate/weld`, a Composer `project` (an app you clone), not a library. It is on Packagist, installed with `composer create-project waynestate/weld`.
-- **The stack parts it joins:** `waynestate/helmet` `^1.3` and `waynestate/sesame` `^0.7` at runtime;
-  `waynestate/creed` `^0.1.8`, `waynestate/pinstripe` `^0.3` and `waynestate/proctor` `^0.15` for checks, and
+- **The stack parts it joins:** `waynestate/helmet` `^1.3` and `waynestate/sesame` `^0.8` at runtime;
+  `waynestate/creed` `^0.1.8`, `waynestate/pinstripe` `^0.4` and `waynestate/proctor` `^0.16` for checks, and
   `waynestate/advisor` `^0.3` for coding agents (all four `require-dev`). WayneUI provides the interface (npm, 2.0.8),
   Preflight's components run CI (0.9.0), and Squire's kit in `deploy/` deploys it (0.10.8). Pinstripe's npm presets
   are not in yet (docs/reference/status.md, "Pinstripe's npm half").
