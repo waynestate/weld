@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { type SharedData, type User } from '@/types';
+import { type SharedData } from '@/types';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { Alert, Button, Card, Dialog, Input } from '@waynestate/wayne-ui-vue';
 import { nextTick, ref } from 'vue';
 
 const page = usePage<SharedData>();
-const user = page.props.auth.user as User;
+const user = page.props.auth.user;
 
 const open = ref(false);
 

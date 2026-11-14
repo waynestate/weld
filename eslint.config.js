@@ -45,8 +45,9 @@ export default [
     },
     {
         // The Vite config is the one TypeScript file outside tsconfig.json's
-        // resources/js, so typed linting reads it as a project of its own.
-        files: ['vite.config.ts'],
+        // resources/js, so typed linting reads it as a project of its own. One
+        // project service serves every typed file, so this sits on all of them.
+        files: ['**/*.ts', '**/*.vue'],
         languageOptions: {
             parserOptions: {
                 projectService: { allowDefaultProject: ['vite.config.ts'] },
