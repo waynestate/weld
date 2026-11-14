@@ -570,7 +570,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### PROCTOR
    The grader
    Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.15 warns when an app has migrations its pipeline never runs against MySQL 5.6.
-   Release 0.15.1
+   Release 0.16.0
    Inspection: In use
    [Site of PROCTOR](https://proctor.apps.wayne.edu/) [Docs for PROCTOR](https://proctor.apps.wayne.edu/docs/)
 4. Joint 03
@@ -747,7 +747,7 @@ $
 
 #### [PROCTOR](https://proctor.apps.wayne.edu/)
 
-0.15.1 Strictness | Kind
+0.16.0 Strictness | Kind
 
 In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
