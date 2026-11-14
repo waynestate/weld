@@ -47,7 +47,7 @@ function weldPortabilityInputs(): array
 
 it('pins the portability component at the Preflight tag every other component uses', function () {
     expect(weldPortabilityInputs()['component'])
-        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.8.0');
+        ->toBe('$CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.9.0');
 });
 
 it('builds the portable image from the kit in deploy/, on the base the job builds first', function () {
