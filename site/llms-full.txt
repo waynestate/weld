@@ -154,7 +154,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 ### Status
 
 Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in
-`require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.8.0; the deploy layer runs Squire's kit 0.10.8.
+`require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.9.0; the deploy layer runs Squire's kit 0.10.8.
 Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is
 on npm (the [status page](https://github.com/waynestate/weld/blob/HEAD/docs/reference/status.md#pinstripe-s-npm-half) has the steps). The bead is closed on the PHP side.
 What is on the bench today:
@@ -195,7 +195,7 @@ A deprecation your code raises or causes fails the suite (`failOnDeprecation` in
 before an upgrade does; `tests/TestCase.php` hands deprecations to PHPUnit (`tests/Support/ReportsDeprecationsToPhpUnit.php`, from
 Sourdough), because Laravel's own handler drops them while testing.
 The accessibility gate runs Preflight's own checker (vendored in `tools/a11y/check.mjs`, pinned to the CI tag
-0.8.0 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
+0.9.0 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
 light and dark, at 320 and 1280 px, plus the WCAG 1.4.10 reflow check), so a page that passes locally passes
 CI. It runs in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
@@ -765,7 +765,7 @@ $
 
 0.9.0 Checklist | Long
 
-GitLab CI/CD components. WELD's pipeline pins them at 0.8.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
+GitLab CI/CD components. WELD's pipeline pins them at 0.9.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
 ```
 $ git push
@@ -1035,6 +1035,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: CI pins Preflight 0.9.0 (components and the a11y checker copy).
 - Site: SESAME's cast label and the README's current versions line say 0.8.0 (they said 0.7.5). SESAME 0.8.0 removes the wayne-cas shim; WELD never used it, so only the label moves.
 - Site: SESAME's cast label says 0.7.5 (it said 0.7.4), and the README's current versions line is checked 2026-11-14: PROCTOR 0.16.0, Preflight 0.9.0, SESAME 0.7.5, Squire 0.11.1, Pinstripe 0.4.0 and ADVISOR 0.3.1 caught up. Content only.
 - `bin/weld up` now prints `parity init --mysql`, which works in WELD (it printed `--from-squire`, which Parity refuses while the kit is in `deploy/`).
@@ -1538,7 +1539,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** One build means one tested artifact, and the process types stay identical in code.
 
-**Stack:** `Checked`, for the portable path. Squire's portable image (`deploy/.squire/portable.Dockerfile`) bakes the code in and runs as `web`, `worker` (`queue:work --tries=3 --max-time=3600 --sleep=3`), `scheduler` (`schedule:work`) or `migrate` by `SQUIRE_ROLE` or the first argument (`deploy/.squire/portable/squire-entrypoint.sh`), and the `portable` profile in `deploy/docker-compose.squire.yml` runs the four as services of one image, the scheduler with `QUEUE_WORKER_MODE: none`. `tests/Feature/PortableImageTest.php` fails when a role, the shared image or that switch goes, and Squire's `PortableImageTest` (`testThePortableProfileRunsOneImageAsFourRoles`, `testTheRolePicksTheProcess`) runs the entrypoint itself. Built and run for real on 2026-11-08: `migrate` exited 0, then `web`, `worker` and `scheduler` came up healthy and the worker ran a queued job. The Citadel mirror (`deploy/.squire/Dockerfile`) still runs Apache only, because Citadel has no worker process (W19). In CI, Preflight's `portability` job (`.gitlab-ci.yml`, Preflight 0.8.0) builds this image and boots its `web` role, the image's default; `tests/Unit/PortabilityJobTest.php` holds the include. Open: no `ssr` role (SSR is off); the `portability` job boots only `web`, so `worker`, `scheduler` and `migrate` run only in the compose profile.
+**Stack:** `Checked`, for the portable path. Squire's portable image (`deploy/.squire/portable.Dockerfile`) bakes the code in and runs as `web`, `worker` (`queue:work --tries=3 --max-time=3600 --sleep=3`), `scheduler` (`schedule:work`) or `migrate` by `SQUIRE_ROLE` or the first argument (`deploy/.squire/portable/squire-entrypoint.sh`), and the `portable` profile in `deploy/docker-compose.squire.yml` runs the four as services of one image, the scheduler with `QUEUE_WORKER_MODE: none`. `tests/Feature/PortableImageTest.php` fails when a role, the shared image or that switch goes, and Squire's `PortableImageTest` (`testThePortableProfileRunsOneImageAsFourRoles`, `testTheRolePicksTheProcess`) runs the entrypoint itself. Built and run for real on 2026-11-08: `migrate` exited 0, then `web`, `worker` and `scheduler` came up healthy and the worker ran a queued job. The Citadel mirror (`deploy/.squire/Dockerfile`) still runs Apache only, because Citadel has no worker process (W19). In CI, Preflight's `portability` job (`.gitlab-ci.yml`, Preflight 0.9.0) builds this image and boots its `web` role, the image's default; `tests/Unit/PortabilityJobTest.php` holds the include. Open: no `ssr` role (SSR is off); the `portability` job boots only `web`, so `worker`, `scheduler` and `migrate` run only in the compose profile.
 
 ### One-time deploy steps (deployments/) [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#one-time-deploy-steps-deployments)
 
@@ -1613,7 +1614,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Preflight components are referenced by commit SHA or a fixed tag, not a moving branch.
 
-**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.8.0 release tag (`@0.8.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:56`, `:80`; published tags in the stack never move), and `.github/workflows/ci.yml:16` calls Preflight 0.8.0's reusable workflow at its release commit (`28d9c5994d06c633850d431dcf6ca56c48a96055`). PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
+**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.9.0 release tag (`@0.9.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:56`, `:80`; published tags in the stack never move), and `.github/workflows/ci.yml:16` calls Preflight 0.9.0's reusable workflow at its release commit (`fb73b538f3980292119b5b306ff64383d760a214`). PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
 
 ### Related [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#related)
 
@@ -2310,7 +2311,7 @@ Five more parts of the stack sit beside WELD. WELD installs none of them: each i
 
 ### What is on the bench today [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
-Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.8.0; the deploy layer runs Squire's kit 0.10.8. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is on npm ([the steps](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)).
+Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.9.0; the deploy layer runs Squire's kit 0.10.8. Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is on npm ([the steps](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)).
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
 - `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
@@ -2837,7 +2838,7 @@ Source: https://weld.apps.wayne.edu/docs/reference/status.html
 
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
-Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.8.0; the deploy layer runs Squire's kit 0.10.8. Pinstripe's PHP presets are installed; its npm half is [the next step](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half). For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
+Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.9.0; the deploy layer runs Squire's kit 0.10.8. Pinstripe's PHP presets are installed; its npm half is [the next step](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half). For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
 ### What is on the bench today [#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
@@ -2849,7 +2850,7 @@ Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED,
 | Index length | `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap |
 | `.gitattributes` | sets `* text=auto eol=lf` |
 | CI contract | `composer ci` runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub |
-| CI jobs | on GitLab, Preflight 0.8.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM, secret detection, the MySQL 5.6 migrate job (`php artisan migrate` against a real 5.6.51) and the portability job, which builds the portable image and boots it the way OpenShift would; the `frontend` job runs ESLint and Prettier |
+| CI jobs | on GitLab, Preflight 0.9.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM, secret detection, the MySQL 5.6 migrate job (`php artisan migrate` against a real 5.6.51) and the portability job, which builds the portable image and boots it the way OpenShift would; the `frontend` job runs ESLint and Prettier |
 | WayneUI | an npm dependency at 2.0.8; it draws every page of the app and the site |
 | HELMET | runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays Laravel's built-in liveness route and `/ready` is HELMET's readiness route, checking the database, the cache and the scheduler heartbeat |
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |

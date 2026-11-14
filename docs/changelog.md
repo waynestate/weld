@@ -11,6 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: CI pins Preflight 0.9.0 (components and the a11y checker copy).
 - Site: SESAME's cast label and the README's current versions line say 0.8.0 (they said 0.7.5). SESAME 0.8.0 removes the wayne-cas shim; WELD never used it, so only the label moves.
 - Site: SESAME's cast label says 0.7.5 (it said 0.7.4), and the README's current versions line is checked 2026-11-14: PROCTOR 0.16.0, Preflight 0.9.0, SESAME 0.7.5, Squire 0.11.1, Pinstripe 0.4.0 and ADVISOR 0.3.1 caught up. Content only.
 - `bin/weld up` now prints `parity init --mysql`, which works in WELD (it printed `--from-squire`, which Parity refuses while the kit is in `deploy/`).
