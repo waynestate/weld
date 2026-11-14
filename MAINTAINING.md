@@ -11,7 +11,7 @@ so most of the upkeep is keeping the parts it joins current.
   `waynestate/creed` `^0.1.8`, `waynestate/pinstripe` `^0.4` and `waynestate/proctor` `^0.16` for checks, and
   `waynestate/advisor` `^0.3` for coding agents (all four `require-dev`). WayneUI provides the interface (npm, 2.0.8),
   Preflight's components run CI (0.9.0), and Squire's kit in `deploy/` deploys it (0.11.1). Pinstripe's npm presets
-  are not in yet (docs/reference/status.md, "Pinstripe's npm half").
+  (`@waynestate/pinstripe` `^0.4`) run ESLint and Prettier (docs/reference/status.md, "Pinstripe's npm half").
 - Laravel 13, Inertia 3 with Vue 3, Ziggy for routes (a committed, generated `resources/js/ziggy.*`), Vite.
 - WELD is the Laravel + Inertia/Vue shape that Sourdough's templates describe, already shaped. If every app should get
   a change, it belongs in Sourdough; if only this shape should, it lives here.

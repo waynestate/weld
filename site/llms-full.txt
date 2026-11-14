@@ -141,7 +141,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 |---|---|
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
-| Pinstripe | The coding standard, 0.4 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in |
+| Pinstripe | The coding standard, 0.4 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run its npm presets (`@waynestate/pinstripe` `^0.4`), accessibility rules included |
 | Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.9.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
@@ -576,7 +576,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 4. Joint 03
    ### Pinstripe
    The code style
-   Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist; npm still has 0.1.4.
+   Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist and npm; WELD wears both halves.
    Release 0.4.0
    Inspection: In use
    [Site of Pinstripe](https://pinstripe.apps.wayne.edu/) [Docs for Pinstripe](https://pinstripe.apps.wayne.edu/docs/)
@@ -782,7 +782,7 @@ $
 
 0.4.0 Creases | Sharp
 
-The code style presets, now banning SQL joined from strings. WELD requires 0.3 and runs Pint and PHPStan at level 8 straight from its Laravel preset, banned calls and all; ESLint and Prettier run in CI on WELD's own config until the npm half moves in.
+The code style presets, now banning SQL joined from strings. WELD requires 0.4 and runs Pint and PHPStan at level 8 straight from its Laravel preset, banned calls and all, and ESLint and Prettier straight from its npm presets, accessibility rules and all.
 
 ```
 $ composer lint && composer analyse
@@ -1036,6 +1036,8 @@ Notable changes to WELD, newest first.
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
 - Changed: the deploy kit is Squire 0.11.1 (was 0.10.8): the release script, parity scripts, HAProxy pin and fallback base follow the new templates.
+- Changed: ESLint and Prettier come from Pinstripe's npm presets (`@waynestate/pinstripe` `^0.4`, ESLint 10): `eslint.config.js` spreads `eslint/typescript` before WELD's WayneUI-only import ban, `package.json` points Prettier at the preset, and `.prettierrc` (with `prettier-plugin-organize-imports`) is gone; `resources/` is reformatted at 100 columns in one commit that `.git-blame-ignore-revs` lists, and the Blade layout stays out of Prettier for now (`.prettierignore` says why).
+- Changed: the preset's accessibility rules found three things, fixed in the templates: the account menu's Escape key listens on the document instead of on its wrapper `<div>`, and the two nav lists import Inertia's Link as `InertiaLink` so the rules stop reading it as HTML's `<link>`, which may not carry `aria-current` (it renders an `<a>`); seven typed-lint findings are fixed too, and WELD's two ESLint rule offs are gone.
 - Changed: `deploy/` requires PROCTOR `^0.16` (was `^0.15`, which does not allow 0.16), whose `ci-pipelines` check no longer asks for a GitHub workflow (D-069).
 - Site: PROCTOR's cast label and the README's current versions line say 0.16.1 (they said 0.16.0). Content only.
 - Changed: WELD requires SESAME `^0.8`, Pinstripe `^0.4` and PROCTOR `^0.16` (was `^0.7`, `^0.3` and `^0.15`, which do not allow the current releases); the docs say the Preflight components are pinned at 0.9.0, not 0.6.0.
@@ -1511,7 +1513,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** Inertia 3 removed all of these; code copied from older tutorials fails or half-works.
 
-**Stack:** `Checked`. WELD is on Inertia 3: `composer.json:19` requires `inertiajs/inertia-laravel: ^3.0` and `package.json:26` requires `@inertiajs/vue3: ^3.0`. `tests/Feature/CspScriptTagsTest.php:53-60` pins the Inertia 3 JSON page island, so a regression to the Inertia 2 layout fails the suite. Open: an ESLint restriction on `axios` and a grep guard for `Inertia::lazy`.
+**Stack:** `Checked`. WELD is on Inertia 3: `composer.json:19` requires `inertiajs/inertia-laravel: ^3.0` and `package.json:21` requires `@inertiajs/vue3: ^3.0`. `tests/Feature/CspScriptTagsTest.php:53-60` pins the Inertia 3 JSON page island, so a regression to the Inertia 2 layout fails the suite. Open: an ESLint restriction on `axios` and a grep guard for `Inertia::lazy`.
 
 ### W5. Commit `.ai/rules`; ignore what Boost regenerates [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#w5-commit-ai-rules-ignore-what-boost-regenerates)
 
@@ -1612,7 +1614,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Use Pinstripe's Pint preset, PHPStan level 8 through Larastan, ESLint (flat config) and Prettier. No local overrides without a recorded reason.
 
-**Stack:** `Checked`, for the PHP side. `waynestate/pinstripe` `^0.4` is a dev dependency (`composer.json:43`), and `phpstan.neon:10` includes its `phpstan/laravel.neon`, so level 8, the ignore rules and the banned calls (SQL joined from strings among them) come from the package; WELD's code passes with no new ignore and no baseline. `composer.json:60` runs `pint --test`, `composer.json:63` runs `phpstan analyse`, and both are in the `ci` script (`composer.json:68-77`), which CI runs. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's `deploy/` kit and `bin/docs-site.php`, since Pint cannot extend a config file; `tests/Unit/PinstripeWiringTest.php` fails on any other drift in either file. The JS side runs in CI too, on WELD's own config until `@waynestate/pinstripe` 0.3.0 is on npm: the `frontend` job (`.gitlab-ci.yml`, `.github/workflows/ci.yml`) runs `npm run lint` (`eslint.config.js`, flat config) and `npm run format:check` (`.prettierrc`).
+**Stack:** `Checked`, for both sides. `waynestate/pinstripe` `^0.4` is a dev dependency (`composer.json:43`), and `phpstan.neon:10` includes its `phpstan/laravel.neon`, so level 8, the ignore rules and the banned calls (SQL joined from strings among them) come from the package; WELD's code passes with no new ignore and no baseline. `composer.json:60` runs `pint --test`, `composer.json:63` runs `phpstan analyse`, and both are in the `ci` script (`composer.json:68-77`), which CI runs. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's `deploy/` kit and `bin/docs-site.php`, since Pint cannot extend a config file; `tests/Unit/PinstripeWiringTest.php` fails on any other drift in either file. The JS side comes from Pinstripe too, from npm: `@waynestate/pinstripe` `^0.4` is a dev dependency (`package.json:16`), `eslint.config.js:26` spreads its `eslint/typescript` preset (Vue, accessibility and typed TypeScript rules, every Vue and accessibility warning an error) before WELD's own WayneUI-only import ban (`eslint.config.js:67`, W2), and `package.json:38` points Prettier at its `prettier` preset, so there is no `.prettierrc`. WELD turns no ESLint rule off. Its one recorded override keeps the Blade layout out of Prettier (`.prettierignore:10`), because the preset's Blade plugin would respace a directive that `tests/Feature/WayneUiOnlyTest.php` pins. The `frontend` job runs `npm run lint` and `npm run format:check` on GitLab (`.gitlab-ci.yml:203-204`) and GitHub (`.github/workflows/ci.yml:48-49`).
 
 ### W33: Pin shared CI components to a commit [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#w33-pin-shared-ci-components-to-a-commit)
 
@@ -2290,7 +2292,7 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 | --- | --- |
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out ([agent docs](https://wayneui.apps.wayne.edu/llms.txt)) |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions ([agent docs](https://creed.apps.wayne.edu/llms.txt)) |
-| Pinstripe | The coding standard, 0.4 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in ([agent docs](https://pinstripe.apps.wayne.edu/llms.txt)) |
+| Pinstripe | The coding standard, 0.4 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run its npm presets (`@waynestate/pinstripe` `^0.4`), accessibility rules included ([agent docs](https://pinstripe.apps.wayne.edu/llms.txt)) |
 | Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.9.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability ([agent docs](https://preflight.apps.wayne.edu/llms.txt)) |
 | PROCTOR | The checks, run in CI and as the deploy gate ([agent docs](https://proctor.apps.wayne.edu/llms.txt)) |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions ([agent docs](https://sesame.apps.wayne.edu/llms.txt)) |
@@ -2843,6 +2845,7 @@ Source: https://weld.apps.wayne.edu/docs/reference/status.html
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
 Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.9.0; the deploy layer runs Squire's kit 0.11.1. Pinstripe's PHP presets are installed; its npm half is [the next step](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half). For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
+Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.9.0; the deploy layer runs Squire's kit 0.10.8. Pinstripe's PHP presets and [its npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half) are both installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
 ### What is on the bench today [#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
@@ -2862,6 +2865,8 @@ Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED,
 | ADVISOR | in `require-dev`; `php vendor/bin/advisor install --client=claude --write` points a coding agent at the stack's read-only MCP server |
 | Squire | the deploy kit in `deploy/` at 0.11.1: the Citadel image, an idempotent release script and one portable image for other hosts |
 | Pinstripe | `waynestate/pinstripe` `^0.4` in `require-dev`. `phpstan.neon` includes its `phpstan/laravel.neon` and adds only WELD's paths, so the level, the ignore rules and the banned calls (`eval()`, `dd()`, TLS checks turned off, SQL joined from strings) come from the package; WELD's own code passes them with no new ignore and no baseline. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes (Squire's `deploy/` kit and `bin/docs-site.php`), and `tests/Unit/PinstripeWiringTest.php` fails on any other drift. `composer-ci` saves Pint's findings as a Code Quality report (`composer lint:gitlab`). ESLint and Prettier still run on WELD's own config: see [Pinstripe's npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half) |
+| Squire | the deploy kit in `deploy/` at 0.10.8: the Citadel image, an idempotent release script and one portable image for other hosts |
+| Pinstripe | `waynestate/pinstripe` `^0.4` in `require-dev`. `phpstan.neon` includes its `phpstan/laravel.neon` and adds only WELD's paths, so the level, the ignore rules and the banned calls (`eval()`, `dd()`, TLS checks turned off, SQL joined from strings) come from the package; WELD's own code passes them with no new ignore and no baseline. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes (Squire's `deploy/` kit and `bin/docs-site.php`), and `tests/Unit/PinstripeWiringTest.php` fails on any other drift. `composer-ci` saves Pint's findings as a Code Quality report (`composer lint:gitlab`). ESLint and Prettier run on `@waynestate/pinstripe` `^0.4` from npm: see [Pinstripe's npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half) |
 | Password auth | the starter kit's password auth (register, login, password reset, two-factor) is removed on purpose; the door is SESAME's |
 | License | MIT |
 
@@ -2869,7 +2874,7 @@ Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED,
 
 These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/enterprise-apps/weld/-/blob/main/BEST_PRACTICES.md).
 
-- Preflight's `portability` job builds the portable image and boots its `web` role in CI, on `main` and tags (manual on a merge request, blocking) (W10, W14 and W16 are `Checked`; W8, W13 and W17 gain a CI check), and its `healthcheck` check runs the image's own `HEALTHCHECK` (W12 is `Checked`), and its `session-hop` check signs in on one replica and reads the session on the other over a MySQL the job starts and migrates once (W15 is `Checked`). Pinstripe (W32) is a dependency for the PHP side; the JS side waits on [its npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half).
+- Preflight's `portability` job builds the portable image and boots its `web` role in CI, on `main` and tags (manual on a merge request, blocking) (W10, W14 and W16 are `Checked`; W8, W13 and W17 gain a CI check), and its `healthcheck` check runs the image's own `HEALTHCHECK` (W12 is `Checked`), and its `session-hop` check signs in on one replica and reads the session on the other over a MySQL the job starts and migrates once (W15 is `Checked`). Pinstripe (W32) is a dependency for both sides, PHP from Composer and [JS from npm](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half).
 - The `mysql56-migrate` job runs the migrations against MySQL 5.6.51 on every pipeline, and migrations run once per release on both deploy paths: the release script on Citadel, the one-shot `migrate` role off it (W24, `Checked` by `tests/Feature/MigrateOncePerReleaseTest.php`).
 - The scheduler heartbeat on `/ready` is built (W23, `Checked` for the heartbeat); its Prometheus gauge is not.
 - `tests/Feature/HealthHostTest.php` sends a forged `Host` and an IP:port `Host` to `/up` and expects 200, no cookie and no redirect, so W11 is `Checked` in full. The other items that once sat on an "Unverified" list are pinned: the CSRF check (`tests/Feature/CsrfTest.php`), a random UID (W13), Pest 4 on the PHP 8.3 floor, and `/ready` without `spatie/laravel-health`.
@@ -2889,15 +2894,15 @@ For a derived app: add each page you build to `A11Y_PATHS` and to the `a11y-app`
 
 ### Pinstripe's npm half [#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
 
-WELD takes Pinstripe's PHP side from Composer today. The JS side, `@waynestate/pinstripe` (ESLint and Prettier presets for Vue), waits for 0.3.0 on npm, because npm still has 0.1.4. The presets inside have not changed since 0.1.4, but the move is a real refit, not a version bump: Pinstripe's presets need ESLint 10 (WELD runs 9), print at 100 columns with 2-space indents where WELD's `.prettierrc` prints at 150 with 4, and add eslint-plugin-vuejs-accessibility, so every Vue file is reformatted once and the accessibility rules may report findings. Once 0.3.0 is on npm:
+Both halves of Pinstripe are installed now. The PHP side comes from Composer, and the JS side from npm: `@waynestate/pinstripe` `^0.4` is a dev dependency in `package.json`, with ESLint 10 and Prettier beside it.
 
-1. Install it with ESLint 10: `npm install --save-dev @waynestate/pinstripe@^0.3 eslint@^10 prettier`, and drop the packages the preset now brings (`@eslint/js`, `@vue/eslint-config-typescript`, `eslint-config-prettier`, `eslint-plugin-vue`, `typescript-eslint`).
-2. In `eslint.config.js`, spread `@waynestate/pinstripe/eslint/typescript` first and keep WELD's own blocks after it: the WayneUI-only import ban (W2, checked by `tests/Feature/WayneUiOnlyTest.php`) and the ignore for Squire's `site/assets/docs.js`. If the accessibility rules report more than one change should fix, take the `typescript-warn` twin for that cut, then switch back.
-3. Point Prettier at the preset (`"prettier": "@waynestate/pinstripe/prettier"` in `package.json`) and delete `.prettierrc`. If `prettier-plugin-organize-imports` stays, that is a local override: record why.
-4. Run `npm run format` as a commit of its own, with nothing else in it, and list its hash in `.git-blame-ignore-revs` so `git blame` skips the reformat.
-5. `npm run lint`, `npm run format:check`, `npm run typecheck` and `npm run build` pass, the a11y gates stay green, and W32 says the JS side comes from the package too.
+- **ESLint.** `eslint.config.js` spreads `@waynestate/pinstripe/eslint/typescript` first: ESLint's recommended rules, eslint-plugin-vue's `flat/recommended-error`, eslint-plugin-vuejs-accessibility, typescript-eslint's typed `recommendedTypeChecked` and eslint-config-prettier, with every Vue and accessibility warning raised to an error. The preset brings those packages, so `package.json` no longer lists `@eslint/js`, `@vue/eslint-config-typescript`, `eslint-config-prettier`, `eslint-plugin-vue` or `typescript-eslint`. WELD's own blocks follow it: the WayneUI-only import ban (W2, held by `tests/Feature/WayneUiOnlyTest.php`); the ignores for copies another repo owns (Squire's `site/assets/docs.js` and `site/assets/agent-ready.js`, Preflight's `tools/a11y/check.mjs`) and for the generated `resources/js/ziggy.*`; a default project for `vite.config.ts`, the one TypeScript file outside `tsconfig.json`; and Node's `process` and `Buffer` for the README art kit. WELD turns no rule off: its old two offs (one-word component names, `no-explicit-any`) are gone, and the settings layout names itself `SettingsLayout`.
+- **Prettier.** `package.json` says `"prettier": "@waynestate/pinstripe/prettier"`, and `.prettierrc` is gone. Lines wrap at 100 columns (WELD printed at 150); `.editorconfig` keeps the 4-space indent, since the preset sets none. `prettier-plugin-organize-imports` went with `.prettierrc`: the preset does not sort imports, and WELD keeps no local override. The reformat is one commit with nothing else in it, listed in `.git-blame-ignore-revs`.
+- **The one local override.** The preset formats Blade too, and `.prettierignore` keeps `resources/views/app.blade.php` out for now: Prettier's Blade plugin respaces `@if($cspNonce)` to `@if ($cspNonce)` in the theme script tag, which `tests/Feature/WayneUiOnlyTest.php` pins byte for byte. The layout and that test move together, in a change of their own.
+- **What the accessibility rules found.** Three findings, all fixed in the templates, none with a disable comment. `UserMenu.vue`'s wrapper `<div>` listened for keydown; Escape is now a document listener, like the click outside that already closed the panel. Both nav lists put `aria-current` on `<Link>`, which the rules read as HTML's `<link>`; the layouts import Inertia's Link as `InertiaLink`, which renders the same `<a>`. Typed linting found seven more (two promises now marked `void`, three casts that changed nothing, a duplicate `| undefined`, the one-word layout name). The strict preset is the one in use, not its `-warn` twin.
+- **Sourdough.** Its Inertia shape still ships `.prettierrc`, so the regen gate's baseline (`.sourdough/regen-baseline.json`) accepts that file and four others as drift until Sourdough takes the same presets.
 
-One tailor, two fittings: the trousers are done, the jacket waits for the cloth to arrive.
+`npm run lint`, `npm run format:check`, `npm run typecheck` and `npm run build` pass, in the `frontend` job and on a desk. One tailor, two fittings, both done: the jacket matches the trousers, down to the last pinstripe.
 
 ### Related [#](https://weld.apps.wayne.edu/docs/reference/status.html#related)
 

@@ -138,7 +138,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
 4. Joint 03
    ### Pinstripe
    The code style
-   Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist; npm still has 0.1.4.
+   Presets for Pint, PHPStan with Larastan, Rector, ESLint and Prettier; 0.3.0 bans SQL joined from strings. On Packagist and npm; WELD wears both halves.
    Release 0.4.0
    Inspection: In use
    [Site of Pinstripe](https://pinstripe.apps.wayne.edu/) [Docs for Pinstripe](https://pinstripe.apps.wayne.edu/docs/)
@@ -344,7 +344,7 @@ $
 
 0.4.0 Creases | Sharp
 
-The code style presets, now banning SQL joined from strings. WELD requires 0.3 and runs Pint and PHPStan at level 8 straight from its Laravel preset, banned calls and all; ESLint and Prettier run in CI on WELD's own config until the npm half moves in.
+The code style presets, now banning SQL joined from strings. WELD requires 0.4 and runs Pint and PHPStan at level 8 straight from its Laravel preset, banned calls and all, and ESLint and Prettier straight from its npm presets, accessibility rules and all.
 
 ```
 $ composer lint && composer analyse

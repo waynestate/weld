@@ -12,6 +12,8 @@ Notable changes to WELD, newest first.
 ## Unreleased
 
 - Changed: the deploy kit is Squire 0.11.1 (was 0.10.8): the release script, parity scripts, HAProxy pin and fallback base follow the new templates.
+- Changed: ESLint and Prettier come from Pinstripe's npm presets (`@waynestate/pinstripe` `^0.4`, ESLint 10): `eslint.config.js` spreads `eslint/typescript` before WELD's WayneUI-only import ban, `package.json` points Prettier at the preset, and `.prettierrc` (with `prettier-plugin-organize-imports`) is gone; `resources/` is reformatted at 100 columns in one commit that `.git-blame-ignore-revs` lists, and the Blade layout stays out of Prettier for now (`.prettierignore` says why).
+- Changed: the preset's accessibility rules found three things, fixed in the templates: the account menu's Escape key listens on the document instead of on its wrapper `<div>`, and the two nav lists import Inertia's Link as `InertiaLink` so the rules stop reading it as HTML's `<link>`, which may not carry `aria-current` (it renders an `<a>`); seven typed-lint findings are fixed too, and WELD's two ESLint rule offs are gone.
 - Changed: `deploy/` requires PROCTOR `^0.16` (was `^0.15`, which does not allow 0.16), whose `ci-pipelines` check no longer asks for a GitHub workflow (D-069).
 - Site: PROCTOR's cast label and the README's current versions line say 0.16.1 (they said 0.16.0). Content only.
 - Changed: WELD requires SESAME `^0.8`, Pinstripe `^0.4` and PROCTOR `^0.16` (was `^0.7`, `^0.3` and `^0.15`, which do not allow the current releases); the docs say the Preflight components are pinned at 0.9.0, not 0.6.0.
