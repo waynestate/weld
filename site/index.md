@@ -160,7 +160,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.7.5
+   Release 0.8.0
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
@@ -293,7 +293,7 @@ $
 
 ### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.7.5 Says | Open
+0.8.0 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 

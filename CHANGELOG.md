@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Site: SESAME's cast label and the README's current versions line say 0.8.0 (they said 0.7.5). SESAME 0.8.0 removes the wayne-cas shim; WELD never used it, so only the label moves.
 - Site: SESAME's cast label says 0.7.5 (it said 0.7.4), and the README's current versions line is checked 2026-11-14: PROCTOR 0.16.0, Preflight 0.9.0, SESAME 0.7.5, Squire 0.11.1, Pinstripe 0.4.0 and ADVISOR 0.3.1 caught up. Content only.
 - `bin/weld up` now prints `parity init --mysql`, which works in WELD (it printed `--from-squire`, which Parity refuses while the kit is in `deploy/`).
 - Docs: running WELD locally starts with Parity, now that `bin/weld up` only prints the Parity commands. The README, the Quick start, Install, Commands, Contributing, MAINTAINING and the front page (step 2 and the Get started prompt) prepare the folder in the stock Composer and Node containers, then run `parity check`, `parity init --mysql`, `parity up`, the migration as the `citadel` user and `parity test`. They no longer tell anyone to run `bin/weld.sh up`, `down` or `logs`. Install lists the prerequisite Parity checks for: Docker Engine with the Compose v2 plugin, checked by `docker compose version`; on a Linux host with Docker 27 or older and no plugin, install `docker-compose-plugin`. `bin/weld` behaves as before.
