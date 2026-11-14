@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0945d8ae84aefe1f96a8824015ea2959",
+    "content-hash": "3915dde2d9649e76bd43d56accbbb07f",
     "packages": [
         {
             "name": "brick/math",
@@ -7289,16 +7289,16 @@
         },
         {
             "name": "waynestate/sesame",
-            "version": "0.7.4",
+            "version": "0.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/sesame.git",
-                "reference": "c169cf8b78f92f8cd4e7bf600dd3dae0d158dcdb"
+                "reference": "7310056226f0ee2e934204dd64e6ddc7ab728baf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/sesame/zipball/c169cf8b78f92f8cd4e7bf600dd3dae0d158dcdb",
-                "reference": "c169cf8b78f92f8cd4e7bf600dd3dae0d158dcdb",
+                "url": "https://api.github.com/repos/waynestate/sesame/zipball/7310056226f0ee2e934204dd64e6ddc7ab728baf",
+                "reference": "7310056226f0ee2e934204dd64e6ddc7ab728baf",
                 "shasum": ""
             },
             "require": {
@@ -7330,6 +7330,8 @@
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-strict-rules": "^2.0",
                 "phpunit/phpunit": "^11.5",
+                "promphp/prometheus_client_php": "^2.15",
+                "waynestate/helmet": "^1.4",
                 "waynestate/pinstripe": "^0.3"
             },
             "suggest": {
@@ -7337,6 +7339,7 @@
                 "laravel/framework": "For the Laravel adapter",
                 "league/oauth2-client": "Required by the oidc driver (browser sign-in to Entra): the authorization code flow with PKCE and the token request",
                 "onelogin/php-saml": "Required by the saml driver (a SAML 2.0 service provider for a Shibboleth-style IdP): ^4.3.2",
+                "promphp/prometheus_client_php": "Required by the sign-in counter (sesame_logins_total); HELMET already requires it",
                 "symfony/http-client": "A PSR-18 client for the cas, oauth2 and oidc drivers",
                 "waynestate/playbook": "WSU's shared values (CAS, Entra, gateway); private, git.wayne.edu"
             },
@@ -7374,8 +7377,8 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/sesame/-/issues",
                 "source": "https://github.com/waynestate/sesame"
             },
-            "time": "2026-11-10T21:44:07+00:00",
-            "published-time": "2026-11-10T22:51:46+00:00"
+            "time": "2026-11-14T08:56:59+00:00",
+            "published-time": "2026-11-14T08:58:11+00:00"
         },
         {
             "name": "yajra/laravel-oci8",
@@ -12085,16 +12088,16 @@
         },
         {
             "name": "waynestate/pinstripe",
-            "version": "0.3.1",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/pinstripe.git",
-                "reference": "7f2d774b11c12c050ca8d2b22ee03cf081fdcd22"
+                "reference": "8572c46f2dc0f627664c05ea3412ad7fedf2196c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/pinstripe/zipball/7f2d774b11c12c050ca8d2b22ee03cf081fdcd22",
-                "reference": "7f2d774b11c12c050ca8d2b22ee03cf081fdcd22",
+                "url": "https://api.github.com/repos/waynestate/pinstripe/zipball/8572c46f2dc0f627664c05ea3412ad7fedf2196c",
+                "reference": "8572c46f2dc0f627664c05ea3412ad7fedf2196c",
                 "shasum": ""
             },
             "require": {
@@ -12116,7 +12119,7 @@
             },
             "suggest": {
                 "larastan/larastan": "^3.13 (Laravel apps: include phpstan/laravel.neon)",
-                "rector/rector": "^2.8 (apps: use rector/base.php from your rector.php)"
+                "rector/rector": "^2.8 (apps: use rector/base.php from your rector.php, rector/strict-types.php to declare strict types file by file, and rector/levels.php to climb one rule level at a time)"
             },
             "bin": [
                 "bin/pinstripe-baseline"
@@ -12142,21 +12145,21 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/pinstripe/-/issues",
                 "source": "https://github.com/waynestate/pinstripe"
             },
-            "time": "2026-11-10T02:31:59+00:00",
-            "published-time": "2026-11-10T02:52:13+00:00"
+            "time": "2026-11-11T12:38:31+00:00",
+            "published-time": "2026-11-11T23:28:29+00:00"
         },
         {
             "name": "waynestate/proctor",
-            "version": "0.15.1",
+            "version": "0.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/proctor.git",
-                "reference": "dffd69c72e34035fff9aaf90e5c8398f86e3d2b9"
+                "reference": "f35f5a03ec13ad37a7f4cf752e196ccae8847d3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/proctor/zipball/dffd69c72e34035fff9aaf90e5c8398f86e3d2b9",
-                "reference": "dffd69c72e34035fff9aaf90e5c8398f86e3d2b9",
+                "url": "https://api.github.com/repos/waynestate/proctor/zipball/f35f5a03ec13ad37a7f4cf752e196ccae8847d3b",
+                "reference": "f35f5a03ec13ad37a7f4cf752e196ccae8847d3b",
                 "shasum": ""
             },
             "require": {
@@ -12207,8 +12210,8 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/proctor/-/issues",
                 "source": "https://github.com/waynestate/proctor"
             },
-            "time": "2026-11-10T21:16:52+00:00",
-            "published-time": "2026-11-10T21:18:15+00:00"
+            "time": "2026-11-13T23:36:08+00:00",
+            "published-time": "2026-11-13T23:59:32+00:00"
         },
         {
             "name": "webmozart/assert",
