@@ -140,8 +140,8 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 |---|---|
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
-| Pinstripe | The coding standard, 0.3 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in |
-| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.6.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability |
+| Pinstripe | The coding standard, 0.4 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run on WELD's own config until its npm half moves in |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.9.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
@@ -177,7 +177,7 @@ What is on the bench today:
   practices sync check, the docs check and audit, the same command on GitLab and GitHub
 - `phpstan.neon` includes `vendor/waynestate/pinstripe/phpstan/laravel.neon` and adds only WELD's paths, so the
   level, the ignore rules and the banned calls (`eval()`, `dd()`, TLS checks turned off, SQL joined from strings)
-  come from Pinstripe 0.3. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's
+  come from Pinstripe 0.4. `pint.json` is Pinstripe's `pint/laravel.json` plus two recorded excludes, Squire's
   `deploy/` kit and its vendored `bin/docs-site.php` (Pint cannot extend another config file), and
   `tests/Unit/PinstripeWiringTest.php` fails if either file drifts from that. In CI, `composer-ci` also saves Pint's
   findings as a Code Quality report for the merge request (`composer lint:gitlab`)
