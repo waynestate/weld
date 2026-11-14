@@ -36,14 +36,28 @@ const stops = [
                 <p class="weld-welcome__tagline">Many parts, one piece.</p>
                 <span class="weld-welcome__seam" aria-hidden="true" />
                 <p class="weld-welcome__lede">
-                    Sign-in, security headers, checks, coding standards, CI and the WayneUI interface arrive already joined. What is left to build is
-                    the part that is yours.
+                    Sign-in, security headers, checks, coding standards, CI and the WayneUI
+                    interface arrive already joined. What is left to build is the part that is
+                    yours.
                 </p>
                 <div class="weld-welcome__actions">
-                    <Link v-if="signedIn" class="wsu-btn wsu-btn--primary wsu-btn--lg" :href="route('dashboard')">Open the dashboard</Link>
+                    <Link
+                        v-if="signedIn"
+                        class="wsu-btn wsu-btn--primary wsu-btn--lg"
+                        :href="route('dashboard')"
+                        >Open the dashboard</Link
+                    >
                     <!-- A plain link: CAS and the gateway answer /login with a redirect to another host. -->
-                    <a v-else class="wsu-btn wsu-btn--primary wsu-btn--lg" :href="route('sesame.login')">Sign in</a>
-                    <a class="wsu-btn wsu-btn--outline wsu-btn--lg" href="https://weld.apps.wayne.edu/docs/">
+                    <a
+                        v-else
+                        class="wsu-btn wsu-btn--primary wsu-btn--lg"
+                        :href="route('sesame.login')"
+                        >Sign in</a
+                    >
+                    <a
+                        class="wsu-btn wsu-btn--outline wsu-btn--lg"
+                        href="https://weld.apps.wayne.edu/docs/"
+                    >
                         Read the docs
                         <Icon name="book-open" />
                     </a>
@@ -51,9 +65,16 @@ const stops = [
             </section>
 
             <section class="weld-welcome__journey" aria-labelledby="journey-title">
-                <h2 id="journey-title" class="weld-welcome__journey-title">One request, six stops</h2>
+                <h2 id="journey-title" class="weld-welcome__journey-title">
+                    One request, six stops
+                </h2>
                 <ol class="weld-journey">
-                    <li v-for="(stop, index) in stops" :key="stop.part" class="weld-journey__stop" :style="{ '--stop': index }">
+                    <li
+                        v-for="(stop, index) in stops"
+                        :key="stop.part"
+                        class="weld-journey__stop"
+                        :style="{ '--stop': index }"
+                    >
                         <span class="weld-journey__marker" aria-hidden="true" />
                         <span class="weld-journey__part">{{ stop.part }}</span>
                         <span class="weld-journey__does">{{ stop.does }}</span>

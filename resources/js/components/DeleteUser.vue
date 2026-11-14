@@ -47,17 +47,26 @@ const deleteUser = () => {
     <Card title="Delete account">
         <div class="weld-form">
             <Alert variant="warning" title="This cannot be undone">
-                <p>Deleting your account removes it and everything attached to it, then signs you out.</p>
+                <p>
+                    Deleting your account removes it and everything attached to it, then signs you
+                    out.
+                </p>
             </Alert>
             <div>
                 <Button variant="danger" @click="openDialog">Delete account</Button>
             </div>
         </div>
 
-        <Dialog v-model:open="open" title="Delete your account?" close-label="Cancel and close" @close="reset">
+        <Dialog
+            v-model:open="open"
+            title="Delete your account?"
+            close-label="Cancel and close"
+            @close="reset"
+        >
             <form id="delete-user-form" class="weld-form" @submit.prevent="deleteUser">
                 <p>
-                    Your account and all of its data will be permanently deleted. To confirm, type the email address on the account:
+                    Your account and all of its data will be permanently deleted. To confirm, type
+                    the email address on the account:
                     <strong>{{ user.email }}</strong>
                 </p>
                 <Input
@@ -73,7 +82,13 @@ const deleteUser = () => {
 
             <template #footer>
                 <Button variant="ghost" @click="closeDialog">Cancel</Button>
-                <Button variant="danger" type="submit" form="delete-user-form" :loading="form.processing" :disabled="form.processing">
+                <Button
+                    variant="danger"
+                    type="submit"
+                    form="delete-user-form"
+                    :loading="form.processing"
+                    :disabled="form.processing"
+                >
                     Delete account
                 </Button>
             </template>

@@ -46,7 +46,11 @@ Object.assign(globalThis, {
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
+    resolve: (name) =>
+        resolvePageComponent(
+            `./pages/${name}.vue`,
+            import.meta.glob<DefineComponent>('./pages/**/*.vue'),
+        ),
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
@@ -71,7 +75,9 @@ createInertiaApp({
 // it on an unmount, so the HELMET ribbon outside the app stayed inert for
 // good. Close the drawer the proper way as the visit starts.
 router.on('start', () => {
-    document.querySelectorAll<HTMLElement>('[data-wsu-drawer-toggle][aria-expanded="true"]').forEach((toggle) => toggle.click());
+    document
+        .querySelectorAll<HTMLElement>('[data-wsu-drawer-toggle][aria-expanded="true"]')
+        .forEach((toggle) => toggle.click());
 });
 
 // An Inertia visit swaps the page without a load, so focus would stay on the

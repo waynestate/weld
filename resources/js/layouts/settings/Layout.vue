@@ -16,7 +16,11 @@ const currentPath = computed(() => pathOf(page.url));
             <!-- WayneUI's sidebar link: the same filled pill marks the current page here as in the sidebar. -->
             <ul class="wsu-sidebar__list">
                 <li v-for="item in settingsNavItems" :key="item.href">
-                    <Link :href="item.href" class="wsu-sidebar__link" :aria-current="currentPath === item.href ? 'page' : undefined">
+                    <Link
+                        :href="item.href"
+                        class="wsu-sidebar__link"
+                        :aria-current="currentPath === item.href ? 'page' : undefined"
+                    >
                         <Icon v-if="item.icon" :name="item.icon" />
                         {{ item.title }}
                     </Link>

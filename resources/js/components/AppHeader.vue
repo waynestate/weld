@@ -29,7 +29,11 @@ const signedIn = computed(() => Boolean(page.props.auth?.user));
     <!-- WayneUI's own app bar: the shield, the theme toggle and the drawer button come with it. -->
     <AppBar variant="compact" :mark="shieldUrl" :nav="barNav" :link-as="Link" :drawer="drawer">
         <template #brand>
-            <Link class="wsu-app-bar__brand" :href="signedIn ? route('dashboard') : route('home')">{{ appName }}</Link>
+            <Link
+                class="wsu-app-bar__brand"
+                :href="signedIn ? route('dashboard') : route('home')"
+                >{{ appName }}</Link
+            >
         </template>
         <template #user>
             <UserMenu v-if="signedIn" />

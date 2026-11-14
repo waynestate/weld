@@ -38,7 +38,11 @@ const primary = computed(() => toWayneUi(mainNavItems, page.url));
             <Sidebar id="app-header-nav" label="Menu">
                 <template #primary-nav>
                     <li v-for="item in primary" :key="item.href">
-                        <Link class="wsu-sidebar__link" :href="item.href" :aria-current="item.current ? 'page' : undefined">
+                        <Link
+                            class="wsu-sidebar__link"
+                            :href="item.href"
+                            :aria-current="item.current ? 'page' : undefined"
+                        >
                             <Icon v-if="item.icon" :name="item.icon" />
                             {{ item.label }}
                         </Link>

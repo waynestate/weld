@@ -24,14 +24,18 @@ const welded = [
     <AppLayout :breadcrumbs="breadcrumbs">
         <PageHeader
             title="Dashboard"
-            :subtitle="firstName ? `Welcome back, ${firstName}. This page is yours to replace.` : 'This page is yours to replace.'"
+            :subtitle="
+                firstName
+                    ? `Welcome back, ${firstName}. This page is yours to replace.`
+                    : 'This page is yours to replace.'
+            "
         />
 
         <section class="weld-dashboard" aria-label="Getting started">
             <Card title="Build your first page" :title-level="2">
                 <p>
-                    Pages live in <code>resources/js/pages</code> and wear WayneUI's Vue components, imported from
-                    <code>@waynestate/wayne-ui-vue</code>. Start from this one.
+                    Pages live in <code>resources/js/pages</code> and wear WayneUI's Vue components,
+                    imported from <code>@waynestate/wayne-ui-vue</code>. Start from this one.
                 </p>
                 <template #footer>
                     <a class="weld-card-link" href="https://wayneui.apps.wayne.edu/components/">
@@ -41,16 +45,23 @@ const welded = [
             </Card>
 
             <Card title="Check before you ship" :title-level="2">
-                <p><code>composer ci</code> runs the tests, Pint and PHPStan; <code>npm run lint</code> keeps the front end on WayneUI.</p>
+                <p>
+                    <code>composer ci</code> runs the tests, Pint and PHPStan;
+                    <code>npm run lint</code> keeps the front end on WayneUI.
+                </p>
                 <template #footer>
-                    <a class="weld-card-link" href="https://weld.apps.wayne.edu/docs/"> Read the docs <Icon name="book-open" /> </a>
+                    <a class="weld-card-link" href="https://weld.apps.wayne.edu/docs/">
+                        Read the docs <Icon name="book-open" />
+                    </a>
                 </template>
             </Card>
 
             <Card title="Make it yours" :title-level="2">
                 <p>Your name, your email and the light or dark theme all live under settings.</p>
                 <template #footer>
-                    <Link class="weld-card-link" :href="route('profile.edit')"> Open settings <Icon name="settings" /> </Link>
+                    <Link class="weld-card-link" :href="route('profile.edit')">
+                        Open settings <Icon name="settings" />
+                    </Link>
                 </template>
             </Card>
         </section>
@@ -58,7 +69,9 @@ const welded = [
         <Card title="Already welded in" :title-level="2" class="weld-dashboard__welded">
             <ul class="weld-welded">
                 <li v-for="(item, index) in welded" :key="item.part" :style="{ '--row': index }">
-                    <span class="weld-welded__tack" aria-hidden="true"><Icon :name="item.icon" /></span>
+                    <span class="weld-welded__tack" aria-hidden="true"
+                        ><Icon :name="item.icon"
+                    /></span>
                     <span>
                         <Badge variant="brand">{{ item.part }}</Badge> {{ item.did }}
                     </span>
