@@ -165,8 +165,8 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 
 Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in
 `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.9.0; the deploy layer runs Squire's kit 0.11.1.
-Pinstripe's PHP presets are installed; its ESLint and Prettier presets move in once `@waynestate/pinstripe` 0.3.0 is
-on npm (the [status page](docs/reference/status.md#pinstripe-s-npm-half) has the steps). The bead is closed on the PHP side.
+Pinstripe's PHP and JavaScript presets are both installed: ESLint and Prettier run on `@waynestate/pinstripe` `^0.4`
+from npm (the [status page](docs/reference/status.md#pinstripe-s-npm-half) has the details).
 What is on the bench today:
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
