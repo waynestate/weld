@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Site: the cast names Booster 1.19.0, its latest tag (it said 1.18.0).
 - Fixed: the README and the "what's welded in" guide say Pinstripe's ESLint and Prettier presets are installed from npm (`^0.4`); they still said they would move in once 0.3.0 shipped. Content only.
 - Changed: ESLint and Prettier come from Pinstripe's npm presets (`@waynestate/pinstripe` `^0.4`, ESLint 10): `eslint.config.js` spreads `eslint/typescript` before WELD's WayneUI-only import ban, `package.json` points Prettier at the preset, and `.prettierrc` (with `prettier-plugin-organize-imports`) is gone; `resources/` is reformatted at 100 columns in one commit that `.git-blame-ignore-revs` lists, and the Blade layout stays out of Prettier for now (`.prettierignore` says why).
 - Changed: the preset's accessibility rules found three things, fixed in the templates: the account menu's Escape key listens on the document instead of on its wrapper `<div>`, and the two nav lists import Inertia's Link as `InertiaLink` so the rules stop reading it as HTML's `<link>`, which may not carry `aria-current` (it renders an `<a>`); seven typed-lint findings are fixed too, and WELD's two ESLint rule offs are gone.
