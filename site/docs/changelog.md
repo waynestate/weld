@@ -12,6 +12,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Site: TELLER 0.1.0 and Rolodex 0.1.0 leave the drawing board. The bench under the cast is now "Off the line, internal for now" and holds both, each with a `0.1.0, internal` chip and its role (TELLER: read-only Banner and Oracle data through named queries and an allow-list; Rolodex: people lookup with typed person data and privacy rules, from raw PHP, Laravel, a JSON endpoint or Vue). They live on the internal repo home only, with no public site, docs or mark yet, so the cards carry no links and keep the empty mould. Content only; the bench's design and motion are unchanged.
 - Site: the cast names Booster 1.19.0, its latest tag (it said 1.18.0).
 - Fixed: the README and the "what's welded in" guide say Pinstripe's ESLint and Prettier presets are installed from npm (`^0.4`); they still said they would move in once 0.3.0 shipped. Content only.
 - Changed: ESLint and Prettier come from Pinstripe's npm presets (`@waynestate/pinstripe` `^0.4`, ESLint 10): `eslint.config.js` spreads `eslint/typescript` before WELD's WayneUI-only import ban, `package.json` points Prettier at the preset, and `.prettierrc` (with `prettier-plugin-organize-imports`) is gone; `resources/` is reformatted at 100 columns in one commit that `.git-blame-ignore-revs` lists, and the Blade layout stays out of Prettier for now (`.prettierignore` says why).

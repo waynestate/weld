@@ -237,7 +237,7 @@ Up close
 
 ## The cast
 
-The same projects with a bit more detail. The first seven are part of WELD. The next six work around your app: upgrades, the fleet scan and the MCP server, then the three that deal with Citadel: deploys, Citadel on your own computer and the sign-in gateway. After those come Sourdough and the one still on the drawing board.
+The same projects with a bit more detail. The first seven are part of WELD. The next six work around your app: upgrades, the fleet scan and the MCP server, then the three that deal with Citadel: deploys, Citadel on your own computer and the sign-in gateway. After those come Sourdough and two parts that are built but stay inside Wayne State for now.
 
 ![WayneUI logo: a rounded frame around a solid shape, with a gold tab on the lower edge](https://weld.apps.wayne.edu/assets/marks/wayneui.svg)
 
@@ -469,10 +469,12 @@ Next steps:
 $
 ```
 
-### Still on the drawing board
+### Off the line, internal for now
 
-- Rolodex later
-  Person data with types, so nobody has to flip through cards by hand. Paused for now, with no release yet.
+- TELLER 0.1.0, internal
+  Read-only Banner and Oracle data for your app, through named queries and an allow-list. A teller who will read you your balance all day and never once opens the vault.
+- Rolodex 0.1.0, internal
+  People lookup with typed person data, so nobody has to flip through cards by hand. Privacy rules keep confidential people hidden, from raw PHP, Laravel, a JSON endpoint or Vue.
 
 ## Pick your path
 
