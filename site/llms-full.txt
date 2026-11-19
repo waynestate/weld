@@ -563,14 +563,14 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### CREED
    The standard
    61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-10, now with the Composer release cooldown.
-   Release 0.1.11
+   Release 0.1.12
    Inspection: In use
    [Site of CREED](https://creed.apps.wayne.edu/) [Docs for CREED](https://creed.apps.wayne.edu/docs/)
 3. Joint 02
    ### PROCTOR
    The grader
    Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.15 warns when an app has migrations its pipeline never runs against MySQL 5.6.
-   Release 0.16.1
+   Release 0.17.0
    Inspection: In use
    [Site of PROCTOR](https://proctor.apps.wayne.edu/) [Docs for PROCTOR](https://proctor.apps.wayne.edu/docs/)
 4. Joint 03
@@ -698,7 +698,7 @@ $
 
 #### [CREED](https://creed.apps.wayne.edu/)
 
-0.1.11 Volume | Eleven
+0.1.12 Volume | Eleven
 
 The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 
@@ -747,7 +747,7 @@ $
 
 #### [PROCTOR](https://proctor.apps.wayne.edu/)
 
-0.16.1 Strictness | Kind
+0.17.0 Strictness | Kind
 
 In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
