@@ -11,6 +11,9 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+## 0.3.0 (2026-11-19)
+
+- Site: CREED's cast label says 0.1.12 and PROCTOR's says 0.17.0 (they said 0.1.11 and 0.16.1). Content only.
 - Site: TELLER 0.1.0 and Rolodex 0.1.0 leave the drawing board. The bench under the cast is now "Off the line, internal for now" and holds both, each with a `0.1.0, internal` chip and its role (TELLER: read-only Banner and Oracle data through named queries and an allow-list; Rolodex: people lookup with typed person data and privacy rules, from raw PHP, Laravel, a JSON endpoint or Vue). They live on the internal repo home only, with no public site, docs or mark yet, so the cards carry no links and keep the empty mould. Content only; the bench's design and motion are unchanged.
 - Site: the cast names Booster 1.19.0, its latest tag (it said 1.18.0).
 - Fixed: the README and the "what's welded in" guide say Pinstripe's ESLint and Prettier presets are installed from npm (`^0.4`); they still said they would move in once 0.3.0 shipped. Content only.
