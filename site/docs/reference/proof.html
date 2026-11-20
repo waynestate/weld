@@ -55,17 +55,17 @@
 <tbody>
 <tr>
 <td><code>composer ci</code> (Pest, Pint, PHPStan level 8, agent-ready, docs site, audit)</td>
-<td>2026-11-10</td>
-<td><code>9bda984</code></td>
-<td>Pass: 189 tests (630 assertions), none risky; Pint clean on 97 files; no PHPStan errors; no advisories</td>
-<td>18 s (warm cache)</td>
+<td>2026-11-19</td>
+<td><code>7a224de</code> plus the 0.3.0 regen</td>
+<td>Pass: 223 tests (1046 assertions); Pint clean; no PHPStan errors; no advisories</td>
+<td>not timed</td>
 </tr>
 <tr>
 <td><code>composer proctor</code></td>
-<td>2026-11-10</td>
-<td><code>9bda984</code></td>
-<td>Pass, 7 warnings: the PHP 8.3 floor (security-only support until 2027-12-31), three <code>node-eol</code>, <code>lock-committed</code>, <code>entrypoint-migrate</code> and <code>robots-txt</code></td>
-<td>7 s</td>
+<td>2026-11-19</td>
+<td><code>7a224de</code> plus the 0.3.0 regen</td>
+<td>Pass, 5 warnings: the PHP 8.3 floor (security-only support until 2027-12-31), three <code>node-eol</code> and <code>robots-txt</code></td>
+<td>not timed</td>
 </tr>
 <tr>
 <td><code>ziggy</code> job</td>
@@ -104,11 +104,11 @@
 </tr>
 </tbody>
 </table></div>
-<p>Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with <code>composer docs</code> and <code>composer site:agent-ready</code>. Every row above is from the 2026-11-10 refresh at <code>9bda984</code>, run in the CI's own images on Docker Desktop with nothing retried. Most durations are far shorter than the 2026-11-07 run because the Composer and npm downloads came from warm caches; the 179 s <code>up</code> is the honest cold number for the stack itself. PROCTOR now asks more questions than it did on 2026-11-07, so its warnings went from one to seven; all of them are warnings, and the run passes. The <code>create-project</code> path and the signed-in app-page accessibility checks are not in the table: the first installs the newest public tag instead of this commit, and the second needs the running stack and a browser signed in through SESAME's fake driver.</p>
+<p>Refresh it by re-running those seven checks at the current HEAD, writing down the new date and commit, and rebuilding the site with <code>composer docs</code> and <code>composer site:agent-ready</code>. The first two rows were re-run on 2026-11-19 in the CI's own gate image (composer 2.11.1); the other five rows are from the 2026-11-10 refresh at <code>9bda984</code>, run in the CI's own images on Docker Desktop with nothing retried. Most durations are far shorter than the 2026-11-07 run because the Composer and npm downloads came from warm caches; the 179 s <code>up</code> is the honest cold number for the stack itself. PROCTOR asks more questions than it did on 2026-11-07, so its warnings went from one to seven on 2026-11-10 and are five on 2026-11-19; all of them are warnings, and the run passes. The <code>create-project</code> path and the signed-in app-page accessibility checks are not in the table: the first installs the newest public tag instead of this commit, and the second needs the running stack and a browser signed in through SESAME's fake driver.</p>
 <h2 id="what-ran">What <span class="docs-heading-tail"><span>ran</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-ran">#</a></span></h2>
 <p>One Windows 11 machine with Docker Desktop, Node 24 and no PHP or Composer on the host, which is the setup the <a href="../guides/quick-start.html">Quick start</a> says is enough. Each path started from an empty folder. Every step was timed and logged, and nothing was retried to make a number look better.</p>
 <ol>
-<li><strong>The <code>create-project</code> path</strong> from <a href="../install.html">Install</a>: <code>composer create-project waynestate/weld</code> (run in the <code>composer:2.10.3</code> image on that run, since the host has no Composer; the pipeline now uses <code>composer:2.11.1</code>), <code>npm ci</code>, then <code>bin\weld.ps1 up</code> and <code>test</code>.</li>
+<li><strong>The <code>create-project</code> path</strong> from <a href="../install.html">Install</a>: <code>composer create-project waynestate/weld</code> (run in a Composer container on that run, since the host has no Composer; the pipeline uses <code>composer:2.11.1</code>), <code>npm ci</code>, then <code>bin\weld.ps1 up</code> and <code>test</code>.</li>
 <li><strong>The clone path</strong> from the <a href="../guides/quick-start.html">Quick start</a>: <code>git clone</code> from the GitHub mirror at <code>main</code> (<code>6da94b9</code>), <code>bin\weld.ps1 up</code>, then the pages in a browser and every gate WELD ships, run locally the way its CI runs them:
 <ul>
 <li><code>bin\weld.ps1 doctor</code> and <code>bin\weld.ps1 test</code> (<code>composer ci</code>: validate, Pest, Pint, PHPStan level 8, the agent-ready and docs checks, audit);</li>
