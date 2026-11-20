@@ -125,7 +125,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### CREED
    The standard
    61 numbered practices and `policy.json`, the support dates PROCTOR, Rollcall and ADVISOR read. Policy refreshed 2026-11-10, now with the Composer release cooldown.
-   Release 0.1.12
+   Release 0.1.13
    Inspection: In use
    [Site of CREED](https://creed.apps.wayne.edu/) [Docs for CREED](https://creed.apps.wayne.edu/docs/)
 3. Joint 02
@@ -146,7 +146,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Preflight
    The CI runner
    GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, the migrations on MySQL 5.6, a portability boot of the image with its own health check, Pint, PHPStan and ESLint.
-   Release 0.9.0
+   Release 0.10.0
    Inspection: In use
    [Site of Preflight](https://preflight.apps.wayne.edu/) [Docs for Preflight](https://preflight.apps.wayne.edu/docs/)
 6. Joint 05
@@ -260,7 +260,7 @@ $
 
 ### [CREED](https://creed.apps.wayne.edu/)
 
-0.1.12 Volume | Eleven
+0.1.13 Volume | Eleven
 
 The written standards, plus `policy.json` with the support dates for PHP, Laravel, Node, MySQL, Vue and Inertia. PROCTOR, Rollcall and ADVISOR all read it.
 
@@ -325,7 +325,7 @@ $
 
 ### [Preflight](https://preflight.apps.wayne.edu/)
 
-0.9.0 Checklist | Long
+0.10.0 Checklist | Long
 
 GitLab CI/CD components. WELD's pipeline pins them at 0.9.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
