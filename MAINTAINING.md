@@ -108,6 +108,14 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 - When Sourdough changes what it generates, the regen gate flags the new drift in CI. Fix it here or upstream in
   Sourdough; if the drift is accepted as intended, record it with `--write-baseline` and commit
   `.sourdough/regen-baseline.json`.
+- When any part of the stack releases a new tag, refresh the version labels that name it: the weld log row and
+  cast card in `site/index.html` and the README's "Current versions" list. Run `composer cast` (or
+  `php bin/cast-versions.php`); it reads each part's latest semver tag from its git.wayne.edu repository (one
+  `git ls-remote` per part, spaced 60 s apart because git.wayne.edu throttles bursts) and rewrites only those
+  labels. It never touches the "pins them at" sentence on the Preflight card or WELD's own `data-docs-version`
+  row, and a part whose remote cannot be reached keeps its current label with a warning. Check staleness without
+  writing with `composer cast:check` (exit 1 listing each stale label). `cast:check` is deliberately not part of
+  `composer ci`: it fails on every new tag until someone runs the rewrite, so it is a release step, not a gate.
 
 ## Releasing
 
@@ -117,7 +125,10 @@ WELD is tagged (0.1.0 through 0.2.1 so far). To release a version:
 2. All the checks above green locally, then both pipelines green for that commit.
 3. Run a secrets scan of the history and check that nothing internal (server names, people, IDs) is in the tree.
 4. Tag `X.Y.Z` (no `v`) on git.wayne.edu, with an approver. The push mirror carries the tag to GitHub.
-5. A release needs a maintainer's approval. Never move or delete a published tag.
+5. Once the tag exists, refresh the generated pages so they name the new release: run `composer cast`, then
+   `composer docs && composer site:agent-ready`, and commit the rewritten `site/index.html`, README, docs and
+   agent-ready files. (`composer cast:check` passes again only after this rewrite.)
+6. A release needs a maintainer's approval. Never move or delete a published tag.
 
 ## Running it elsewhere
 
