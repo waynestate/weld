@@ -181,7 +181,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Parity
     Citadel, at home
     Runs any app on Citadel's own PHP image, behind Citadel's proxy, with MySQL 5.6. One program for Windows, macOS and Linux, on Podman or Docker; the desktop app follows.
-    Release 0.1.0
+    Release 0.2.0
     Inspection: Pilot
     [Site of Parity](https://parity.apps.wayne.edu/) [Docs for Parity](https://parity.apps.wayne.edu/docs/)
 11. Joint 10
@@ -209,7 +209,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### ADVISOR
     The MCP server
     Nine read-only tools your coding agent can ask about the stack. Every answer names the file it came from.
-    Release 0.3.1
+    Release 0.4.0
     Inspection: In use
     [Site of ADVISOR](https://advisor.apps.wayne.edu/) [Docs for ADVISOR](https://advisor.apps.wayne.edu/docs/)
 15. Joint 14
@@ -391,7 +391,7 @@ $
 
 ### [ADVISOR](https://advisor.apps.wayne.edu/)
 
-0.3.1 Office hours | Always
+0.4.0 Office hours | Always
 
 Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only: it can't write files or run shell commands.
 
@@ -423,7 +423,7 @@ $
 
 ### [Parity](https://parity.apps.wayne.edu/)
 
-0.1.0 Bubble | Centered
+0.2.0 Bubble | Centered
 
 Citadel on your own computer: its PHP image, its proxy and MySQL 5.6, for any app. One program for Windows, macOS and Linux, on Podman or Docker. Squire's old local kit hands it the keys.
 

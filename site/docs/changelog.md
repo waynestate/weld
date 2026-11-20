@@ -12,6 +12,8 @@ Notable changes to WELD, newest first.
 
 ## Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Site: the cast labels name ADVISOR 0.4.0 and Parity 0.2.0, their latest tags (they said 0.3.1 and 0.1.0), and the README's current-versions line is checked 2026-11-19. Content only.
+
 ## 0.3.0 (2026-11-19) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-3-0-2026-11-19)
 
 - Site: CREED's cast label says 0.1.12 and PROCTOR's says 0.17.0 (they said 0.1.11 and 0.16.1). Content only.
