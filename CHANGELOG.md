@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Fixed: the `a11y-pages` job asks for the local sign-in it needs (APP_ENV=local, SESAME_DRIVER=fake, SESAME_FAKE_ALLOWED=true, set after `cp .env.example .env`) since .env.example now ships safe for a server; it answered 500 on every page. Docs: the install and quick-start pages say to set the same three values to sign in locally.
 - Removed: Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example; D-095). Parity runs the app locally: `parity up` in `deploy/`.
 - Changed: .env.example is safe for a server as it stands (APP_ENV=production, APP_DEBUG=false, no fake sign-in); the README lists the local values to set in your own .env.
 - Site: the cast labels name ADVISOR 0.4.0 and Parity 0.2.0, their latest tags (they said 0.3.1 and 0.1.0), and the README's current-versions line is checked 2026-11-19. Content only.
