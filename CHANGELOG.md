@@ -7,6 +7,7 @@ Notable changes to WELD, newest first.
 ## 0.4.0 (2026-11-22)
 
 - Changed: the `web` guard runs on SESAME's `sesame` driver (was Laravel's plain `session` driver), so inside `auth.sesame` routes `$request->user()`, `auth()->user()`, `@can` and `Gate::allows()` see the signed-in SESAME user instead of none; `tests/Feature/SesameGuardTest.php` proves the owner passes a policy check, a non-owner gets 403, a guest is sent to sign in and logout ends it. Minor release.
+- Changed: Preflight 0.12.0 (commit b1fa380) in the pipeline's nine components and the GitHub workflow (was 0.9.0): php-test also runs an advisory PHP 8.6 job, the components gain a tag_pipeline input, and the a11y image digest moves.
 - Fixed: eslint, Prettier, Pint and .gitignore keep `.cache` out (Sourdough 012be50): Squire's release kit keeps its package download cache in `.cache/squire`, and eslint failed on the files in it.
 - Changed: `.ai/guidelines/wayne-state.md` is Sourdough's again (0694a86): the sign-in line names `SESAME_FAKE_ALLOWED=true` with `APP_ENV=local` for the fake driver, so regen-gate sees no drift.
 - Changed: SESAME ^0.11 (was ^0.8). The fake driver now needs APP_ENV local or testing and SESAME_FAKE_ALLOWED=true, which config/sesame.php reads as fake.allowed (off by default); .env.example still ships both commented out.
