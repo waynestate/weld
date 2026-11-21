@@ -42,6 +42,7 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased"><span class="docs-heading-tail"><span>Unreleased</span><a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></span></h2>
 <ul>
+<li>Changed: SESAME ^0.11 (was ^0.8). The fake driver now needs APP_ENV local or testing and SESAME_FAKE_ALLOWED=true, which config/sesame.php reads as fake.allowed (off by default); .env.example still ships both commented out.</li>
 <li>Changed: PROCTOR is <code>^0.17</code> in WELD and its <code>deploy/</code> layer (was <code>^0.16</code>, which does not allow 0.17; it adds three warn-only Oracle checks) and the dev dependency ADVISOR is <code>^0.4</code> (was <code>^0.3</code>; adds <code>advisor install --runner</code>). No template or screen changes.</li>
 <li>Fixed: the <code>a11y-pages</code> job asks for the local sign-in it needs (APP_ENV=local, SESAME_DRIVER=fake, SESAME_FAKE_ALLOWED=true, set after <code>cp .env.example .env</code>) since .env.example now ships safe for a server; it answered 500 on every page. Docs: the install and quick-start pages say to set the same three values to sign in locally.</li>
 <li>Removed: Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example; D-095). Parity runs the app locally: <code>parity up</code> in <code>deploy/</code>.</li>
