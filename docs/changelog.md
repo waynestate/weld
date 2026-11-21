@@ -11,6 +11,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: .env.example is safe for a server as it stands (APP_ENV=production, APP_DEBUG=false, no fake sign-in); the README lists the local values to set in your own .env.
 - Site: the cast labels name ADVISOR 0.4.0 and Parity 0.2.0, their latest tags (they said 0.3.1 and 0.1.0), and the README's current-versions line is checked 2026-11-19. Content only.
 - Site: the cast labels name CREED 0.1.13 and Preflight 0.10.0, their latest tags (they said 0.1.12 and 0.9.0); WELD's CI still pins Preflight 0.9.0. Content only.
 - Site: the cast labels name CREED 0.1.14, Preflight 0.11.0 and SESAME 0.9.0, their latest tags (they said 0.1.13, 0.10.0 and 0.8.0); WELD's CI still pins Preflight 0.9.0. Content only.

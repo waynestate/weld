@@ -56,8 +56,8 @@
 </tr>
 <tr>
 <td><code>APP_ENV</code></td>
-<td><code>local</code></td>
-<td></td>
+<td><code>production</code></td>
+<td>Safe for a server as it stands; for local work set <code>local</code> in your own <code>.env</code> (README, Run it locally).</td>
 </tr>
 <tr>
 <td><code>APP_KEY</code></td>
@@ -66,8 +66,8 @@
 </tr>
 <tr>
 <td><code>APP_DEBUG</code></td>
-<td><code>true</code></td>
-<td>The local default; keep <code>APP_DEBUG=false</code> in production (W26).</td>
+<td><code>false</code></td>
+<td>The safe server default; set <code>true</code> in your own <code>.env</code> for local work (W26).</td>
 </tr>
 <tr>
 <td><code>APP_URL</code></td>
@@ -231,13 +231,18 @@
 </tr>
 <tr>
 <td><code>SESAME_DRIVER</code></td>
-<td><code>fake</code></td>
-<td>SESAME owns sign-in. <code>fake</code> signs in locally without an identity provider and refuses to boot outside development environments; production sets <code>SESAME_DRIVER=cas</code> plus <code>SESAME_CAS_BASE_URL</code>.</td>
+<td><code>(unset)</code></td>
+<td>SESAME owns sign-in. Unset, <code>config/sesame.php</code> falls back to <code>cas</code>. The <code>fake</code> driver signs in without an identity provider, for local work only: it needs <code>APP_ENV=local</code> and <code>SESAME_FAKE_ALLOWED=true</code>, and refuses to boot otherwise. Production sets <code>SESAME_DRIVER=cas</code> plus <code>SESAME_CAS_BASE_URL</code>.</td>
+</tr>
+<tr>
+<td><code>SESAME_FAKE_ALLOWED</code></td>
+<td><code>(empty)</code></td>
+<td>Local only: the <code>fake</code> driver needs this set to <code>true</code> with <code>APP_ENV=local</code>; it refuses to boot otherwise.</td>
 </tr>
 <tr>
 <td><code>SESAME_FAKE_USERNAME</code></td>
-<td><code>jdoe</code></td>
-<td></td>
+<td><code>jdoe (commented out)</code></td>
+<td>The identity the <code>fake</code> driver returns, for local work.</td>
 </tr>
 <tr>
 <td><code>SESAME_CAS_BASE_URL</code></td>
