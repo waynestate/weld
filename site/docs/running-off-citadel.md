@@ -63,7 +63,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Logs | `php://stderr`; Coolify shows the container logs. |
 | Writable paths | `storage/`, `bootstrap/cache/`, on a persistent volume so they survive redeploys. |
 | User | Whatever the image declares: `10001:0` for the portable image (W13). |
-| Processes | Deploy the portable image's Dockerfile, or the `portable` profile of `deploy/docker-compose.squire.yml` as a Compose app (W8). |
+| Processes | Deploy the portable image's Dockerfile, or run the app through Parity: `parity init --from-squire` once (writes `deploy/parity.json`, already committed), then `parity up`, `parity test`, `parity down` (W8). |
 | Health | A Dockerfile `HEALTHCHECK` takes precedence over the dashboard check (W12). The portable image's runs `squire-entrypoint health`: `health.php` asks the web role's `/up`, and the other roles are healthy while they run. A dashboard check instead needs `curl` or `wget` in the image. Traefik stops routing to an unhealthy container. |
 | After deploy | Exec into the app container and run `php artisan weld:doctor`. |
 
@@ -75,7 +75,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Logs | `php://stderr`, and Apache's logs to stdout and stderr; follow them with `docker compose logs -f web worker scheduler`. |
 | Writable paths | Mount `storage/` and `bootstrap/cache/` as volumes so data survives the container. |
 | User | Non-root `USER` in the image (W13); try OpenShift's way with `SQUIRE_PORTABLE_USER=1000123:0`. |
-| Processes | The `portable` profile's `migrate`, `web`, `worker` and `scheduler` services, one image (W8). |
+| Processes | The `migrate`, `web`, `worker` and `scheduler` services, one image, through Parity (W8). |
 | Health | `HEALTHCHECK` in the image (W12). |
 | After deploy | `docker compose exec app php artisan weld:doctor`. |
 
@@ -92,10 +92,12 @@ docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=worker weld
 docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=scheduler -e QUEUE_WORKER_MODE=none weld
 ```
 
-Or the four roles at once, with MySQL beside them, from `deploy/` (copy `.env.squire.example` to `.env.squire` and set `SQUIRE_PORTABLE_CONTEXT=..`, `SQUIRE_KIT_DIR=deploy` and `SQUIRE_PORTABLE_ENV_FILE=../.env` there):
+Or the four roles at once, with MySQL beside them, from `deploy/`, through Parity ([https://git.wayne.edu/enterprise-apps/parity](https://git.wayne.edu/enterprise-apps/parity)): `parity init --from-squire` once (writes `deploy/parity.json`, already committed), then:
 
 ```sh
-docker compose -f docker-compose.squire.yml --env-file .env.squire --profile portable up -d --build web worker scheduler
+parity up
+parity test
+parity down
 ```
 
 The build runs the install-and-build half of the release (Composer without dev packages, the Vite build); each container runs `php artisan optimize` when it starts, so config is cached for its own environment, never at build (W10), and `migrate` runs once before the others (W24). Every role stops gracefully on `SIGTERM` (W16). Squire's [portable image guide](https://squire.apps.wayne.edu/docs/guides/portable-image.html) has the whole contract.

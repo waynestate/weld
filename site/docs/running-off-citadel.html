@@ -212,7 +212,7 @@ Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same a
 </tr>
 <tr>
 <td>Processes</td>
-<td>Deploy the portable image's Dockerfile, or the <code>portable</code> profile of <code>deploy/docker-compose.squire.yml</code> as a Compose app (W8).</td>
+<td>Deploy the portable image's Dockerfile, or run the app through Parity: <code>parity init --from-squire</code> once (writes <code>deploy/parity.json</code>, already committed), then <code>parity up</code>, <code>parity test</code>, <code>parity down</code> (W8).</td>
 </tr>
 <tr>
 <td>Health</td>
@@ -251,7 +251,7 @@ Laravel's own proxy list has its own variable: set TRUSTED_PROXIES to the same a
 </tr>
 <tr>
 <td>Processes</td>
-<td>The <code>portable</code> profile's <code>migrate</code>, <code>web</code>, <code>worker</code> and <code>scheduler</code> services, one image (W8).</td>
+<td>The <code>migrate</code>, <code>web</code>, <code>worker</code> and <code>scheduler</code> services, one image, through Parity (W8).</td>
 </tr>
 <tr>
 <td>Health</td>
@@ -273,10 +273,12 @@ docker run -d --user 1000123:0 --cap-drop ALL --security-opt no-new-privileges:t
 docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=worker weld
 docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=scheduler -e QUEUE_WORKER_MODE=none weld
 </code></pre>
-<p>Or the four roles at once, with MySQL beside them, from <code>deploy/</code> (copy <code>.env.squire.example</code> to <code>.env.squire</code> and set
-<code>SQUIRE_PORTABLE_CONTEXT=..</code>, <code>SQUIRE_KIT_DIR=deploy</code> and <code>SQUIRE_PORTABLE_ENV_FILE=../.env</code> there):</p>
+<p>Or the four roles at once, with MySQL beside them, from <code>deploy/</code>, through Parity (<a rel="noopener" href="https://git.wayne.edu/enterprise-apps/parity">https://git.wayne.edu/enterprise-apps/parity</a>):
+<code>parity init --from-squire</code> once (writes <code>deploy/parity.json</code>, already committed), then:</p>
 <!-- docs-test: skip needs Docker -->
-<pre tabindex="0"><code class="language-sh">docker compose -f docker-compose.squire.yml --env-file .env.squire --profile portable up -d --build web worker scheduler
+<pre tabindex="0"><code class="language-sh">parity up
+parity test
+parity down
 </code></pre>
 <p>The build runs the install-and-build half of the release (Composer without dev packages, the Vite build); each
 container runs <code>php artisan optimize</code> when it starts, so config is cached for its own environment, never at build

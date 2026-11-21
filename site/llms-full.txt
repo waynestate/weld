@@ -1037,6 +1037,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Removed: Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example; D-095). Parity runs the app locally: `parity up` in `deploy/`.
 - Site: the cast labels name ADVISOR 0.4.0 and Parity 0.2.0, their latest tags (they said 0.3.1 and 0.1.0), and the README's current-versions line is checked 2026-11-19. Content only.
 - Site: the cast labels name CREED 0.1.13 and Preflight 0.10.0, their latest tags (they said 0.1.12 and 0.9.0); WELD's CI still pins Preflight 0.9.0. Content only.
 - Site: the cast labels name CREED 0.1.14, Preflight 0.11.0 and SESAME 0.9.0, their latest tags (they said 0.1.13, 0.10.0 and 0.8.0); WELD's CI still pins Preflight 0.9.0. Content only.
@@ -1557,7 +1558,7 @@ This page lists the app structure practices for WELD, from the BEST_PRACTICES gu
 
 **Why:** One build means one tested artifact, and the process types stay identical in code.
 
-**Stack:** `Checked`, for the portable path. Squire's portable image (`deploy/.squire/portable.Dockerfile`) bakes the code in and runs as `web`, `worker` (`queue:work --tries=3 --max-time=3600 --sleep=3`), `scheduler` (`schedule:work`) or `migrate` by `SQUIRE_ROLE` or the first argument (`deploy/.squire/portable/squire-entrypoint.sh`), and the `portable` profile in `deploy/docker-compose.squire.yml` runs the four as services of one image, the scheduler with `QUEUE_WORKER_MODE: none`. `tests/Feature/PortableImageTest.php` fails when a role, the shared image or that switch goes, and Squire's `PortableImageTest` (`testThePortableProfileRunsOneImageAsFourRoles`, `testTheRolePicksTheProcess`) runs the entrypoint itself. Built and run for real on 2026-11-08: `migrate` exited 0, then `web`, `worker` and `scheduler` came up healthy and the worker ran a queued job. The Citadel mirror (`deploy/.squire/Dockerfile`) still runs Apache only, because Citadel has no worker process (W19). In CI, Preflight's `portability` job (`.gitlab-ci.yml`, Preflight 0.9.0) builds this image and boots its `web` role, the image's default; `tests/Unit/PortabilityJobTest.php` holds the include. Open: no `ssr` role (SSR is off); the `portability` job boots only `web`, so `worker`, `scheduler` and `migrate` run only in the compose profile.
+**Stack:** `Checked`, for the portable path. Squire's portable image (`deploy/.squire/portable.Dockerfile`) bakes the code in and runs as `web`, `worker` (`queue:work --tries=3 --max-time=3600 --sleep=3`), `scheduler` (`schedule:work`) or `migrate` by `SQUIRE_ROLE` or the first argument (`deploy/.squire/portable/squire-entrypoint.sh`). Locally, Parity runs the app: `parity init --from-squire` once (writes `deploy/parity.json`, already committed), then `parity up`, `parity test`, `parity down`. `tests/Feature/PortableImageTest.php` fails when a role, the shared image or that switch goes, and Squire's `PortableImageTest` (`testThePortableProfileRunsOneImageAsFourRoles`, `testTheRolePicksTheProcess`) runs the entrypoint itself. Built and run for real on 2026-11-08: `migrate` exited 0, then `web`, `worker` and `scheduler` came up healthy and the worker ran a queued job. The Citadel mirror (`deploy/.squire/Dockerfile`) still runs Apache only, because Citadel has no worker process (W19). In CI, Preflight's `portability` job (`.gitlab-ci.yml`, Preflight 0.9.0) builds this image and boots its `web` role, the image's default; `tests/Unit/PortabilityJobTest.php` holds the include. Open: no `ssr` role (SSR is off); the `portability` job boots only `web`, so `worker`, `scheduler` and `migrate` run only locally, through Parity.
 
 ### One-time deploy steps (deployments/) [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#one-time-deploy-steps-deployments)
 
@@ -1565,7 +1566,7 @@ An app may add its own one-time step as `deployments/002-*.sh`, beside the kit's
 
 Keep repeatable work in `deploy/scripts/release.sh`, which the first-release hook calls with the smoke test off (`deploy/deployments/001-first-release.sh:9-10`, `:25`). Mark a new hook executable in git: `git update-index --chmod=+x deploy/deployments/002-your-step.sh`.
 
-Squire's update treats a file it does not pin as yours: `.squire.json` pins the kit's files, including `deployments/001-first-release.sh` (`deploy/.squire.json:28`), and Squire never touches a file it did not write, reports it as `app-owned`, never records or overwrites it, and `init --check` does not count it as drift ([Squire's update-and-drift guide](https://squire.apps.wayne.edu/docs/guides/update-and-drift.html)).
+Squire's update treats a file it does not pin as yours: `.squire.json` pins the kit's files, including `deployments/001-first-release.sh` (`deploy/.squire.json:26`), and Squire never touches a file it did not write, reports it as `app-owned`, never records or overwrites it, and `init --check` does not count it as drift ([Squire's update-and-drift guide](https://squire.apps.wayne.edu/docs/guides/update-and-drift.html)).
 
 ### How to read the tags [#](https://weld.apps.wayne.edu/docs/guides/app-structure.html#how-to-read-the-tags)
 
@@ -2012,7 +2013,7 @@ This page lists the queue and scheduling practices for WELD without Citadel work
 
 **Why:** Parallel replicas race on schema changes.
 
-**Stack:** `Checked`. On Citadel the release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh`, which only calls the release script) and the Quick Update post-script (`deploy/scripts/release.sh:7`); Citadel's entrypoint runs no artisan command (`deploy/.squire/fallback/citadel-apache-entrypoint`). Off Citadel the portable image migrates only in its `migrate` role (`deploy/.squire/portable/squire-entrypoint.sh:157-167`), a one-shot service the `web`, `worker` and `scheduler` services wait for (`service_completed_successfully`, `deploy/docker-compose.squire.yml:194-235`). `tests/Feature/MigrateOncePerReleaseTest.php` fails when a kit update moves `migrate` anywhere else. PROCTOR's `entrypoint-migrate` check still warns on the portable entrypoint (it lets a `migrate)` case branch through, not a `run_migrate` function the branch calls), so that one warning is expected; the portability CI job does not run the `migrate` role, but migrates its own test database once, in its own container, before the two replicas start (`setup_command`, `.gitlab-ci.yml:113`).
+**Stack:** `Checked`. On Citadel the release step runs `php artisan migrate --force` (`deploy/scripts/release.sh:550`) once per release, from the first-release hook (`deploy/deployments/001-first-release.sh`, which only calls the release script) and the Quick Update post-script (`deploy/scripts/release.sh:7`); Citadel's entrypoint runs no artisan command (`deploy/.squire/fallback/citadel-apache-entrypoint`). Off Citadel the portable image migrates only in its `migrate` role (`deploy/.squire/portable/squire-entrypoint.sh:157-167`), a one-shot service the `web`, `worker` and `scheduler` services wait for (`service_completed_successfully`). `tests/Feature/MigrateOncePerReleaseTest.php` fails when a kit update moves `migrate` anywhere else. PROCTOR's `entrypoint-migrate` check still warns on the portable entrypoint (it lets a `migrate)` case branch through, not a `run_migrate` function the branch calls), so that one warning is expected; the portability CI job does not run the `migrate` role, but migrates its own test database once, in its own container, before the two replicas start (`setup_command`, `.gitlab-ci.yml:113`).
 
 ### How to read the tags [#](https://weld.apps.wayne.edu/docs/guides/queues-and-scheduling.html#how-to-read-the-tags)
 
@@ -3016,7 +3017,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Logs | `php://stderr`; Coolify shows the container logs. |
 | Writable paths | `storage/`, `bootstrap/cache/`, on a persistent volume so they survive redeploys. |
 | User | Whatever the image declares: `10001:0` for the portable image (W13). |
-| Processes | Deploy the portable image's Dockerfile, or the `portable` profile of `deploy/docker-compose.squire.yml` as a Compose app (W8). |
+| Processes | Deploy the portable image's Dockerfile, or run the app through Parity: `parity init --from-squire` once (writes `deploy/parity.json`, already committed), then `parity up`, `parity test`, `parity down` (W8). |
 | Health | A Dockerfile `HEALTHCHECK` takes precedence over the dashboard check (W12). The portable image's runs `squire-entrypoint health`: `health.php` asks the web role's `/up`, and the other roles are healthy while they run. A dashboard check instead needs `curl` or `wget` in the image. Traefik stops routing to an unhealthy container. |
 | After deploy | Exec into the app container and run `php artisan weld:doctor`. |
 
@@ -3028,7 +3029,7 @@ Two notes before the tables. Claims marked **(check)** depend on something not b
 | Logs | `php://stderr`, and Apache's logs to stdout and stderr; follow them with `docker compose logs -f web worker scheduler`. |
 | Writable paths | Mount `storage/` and `bootstrap/cache/` as volumes so data survives the container. |
 | User | Non-root `USER` in the image (W13); try OpenShift's way with `SQUIRE_PORTABLE_USER=1000123:0`. |
-| Processes | The `portable` profile's `migrate`, `web`, `worker` and `scheduler` services, one image (W8). |
+| Processes | The `migrate`, `web`, `worker` and `scheduler` services, one image, through Parity (W8). |
 | Health | `HEALTHCHECK` in the image (W12). |
 | After deploy | `docker compose exec app php artisan weld:doctor`. |
 
@@ -3045,10 +3046,12 @@ docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=worker weld
 docker run -d --user 1000123:0 --env-file .env -e SQUIRE_ROLE=scheduler -e QUEUE_WORKER_MODE=none weld
 ```
 
-Or the four roles at once, with MySQL beside them, from `deploy/` (copy `.env.squire.example` to `.env.squire` and set `SQUIRE_PORTABLE_CONTEXT=..`, `SQUIRE_KIT_DIR=deploy` and `SQUIRE_PORTABLE_ENV_FILE=../.env` there):
+Or the four roles at once, with MySQL beside them, from `deploy/`, through Parity ([https://git.wayne.edu/enterprise-apps/parity](https://git.wayne.edu/enterprise-apps/parity)): `parity init --from-squire` once (writes `deploy/parity.json`, already committed), then:
 
 ```sh
-docker compose -f docker-compose.squire.yml --env-file .env.squire --profile portable up -d --build web worker scheduler
+parity up
+parity test
+parity down
 ```
 
 The build runs the install-and-build half of the release (Composer without dev packages, the Vite build); each container runs `php artisan optimize` when it starts, so config is cached for its own environment, never at build (W10), and `migrate` runs once before the others (W24). Every role stops gracefully on `SIGTERM` (W16). Squire's [portable image guide](https://squire.apps.wayne.edu/docs/guides/portable-image.html) has the whole contract.
