@@ -12,9 +12,9 @@ This page lists every environment variable a WELD app reads, its default from `.
 | Name | Default | Notes |
 | --- | --- | --- |
 | `APP_NAME` | `WELD` | Renamed when you clone and rename; `VITE_APP_NAME` follows it through `${APP_NAME}`. |
-| `APP_ENV` | `local` | |
+| `APP_ENV` | `production` | Safe for a server as it stands; for local work set `local` in your own `.env` (README, Run it locally). |
 | `APP_KEY` | `(empty)` | Generate it with `php artisan key:generate`; `weld:doctor` checks the app key. |
-| `APP_DEBUG` | `true` | The local default; keep `APP_DEBUG=false` in production (W26). |
+| `APP_DEBUG` | `false` | The safe server default; set `true` in your own `.env` for local work (W26). |
 | `APP_URL` | `http://localhost` | Set it to the real host (W17); Laravel trusts subdomains of `APP_URL` unless `subdomains: false`. |
 | `APP_LOCALE` | `en` | |
 | `APP_FALLBACK_LOCALE` | `en` | |
@@ -47,8 +47,9 @@ This page lists every environment variable a WELD app reads, its default from `.
 | `TRUSTED_PROXIES` | `172.18.0.1` | Which proxies Laravel trusts for `X-Forwarded-Proto` and the client address. Unset keeps `172.18.0.1` (Citadel's proxy); set but empty trusts none; `*` trusts every proxy; or a comma-separated list of IPs and CIDR ranges. Off Citadel, set your own proxy here and put the same list in `HELMET_PROXIES`. |
 | `HELMET_PROXIES` | `172.18.0.1` | The address HA-Proxy connects from; the same list as `trustProxies` in `bootstrap/app.php`. Empty trusts nothing. A platform preset fills the list instead; when both are set, `HELMET_PROXIES` wins, and an unknown preset name throws at boot. |
 | `HELMET_PRESET` | `citadel (commented out)` | Picks a platform preset; HELMET ships two, `citadel` and `docker`. An unknown preset name throws at boot. When both it and `HELMET_PROXIES` are set, `HELMET_PROXIES` wins. |
-| `SESAME_DRIVER` | `fake` | SESAME owns sign-in. `fake` signs in locally without an identity provider and refuses to boot outside development environments; production sets `SESAME_DRIVER=cas` plus `SESAME_CAS_BASE_URL`. |
-| `SESAME_FAKE_USERNAME` | `jdoe` | |
+| `SESAME_DRIVER` | `(unset)` | SESAME owns sign-in. Unset, `config/sesame.php` falls back to `cas`. The `fake` driver signs in without an identity provider, for local work only: it needs `APP_ENV=local` and `SESAME_FAKE_ALLOWED=true`, and refuses to boot otherwise. Production sets `SESAME_DRIVER=cas` plus `SESAME_CAS_BASE_URL`. |
+| `SESAME_FAKE_ALLOWED` | `(empty)` | Local only: the `fake` driver needs this set to `true` with `APP_ENV=local`; it refuses to boot otherwise. |
+| `SESAME_FAKE_USERNAME` | `jdoe (commented out)` | The identity the `fake` driver returns, for local work. |
 | `SESAME_CAS_BASE_URL` | `(empty, commented out)` | Set with `SESAME_DRIVER=cas` in production. |
 | `SESAME_CAS_SERVICE_URL` | `(empty, commented out)` | |
 | `BROADCAST_CONNECTION` | `log` | |

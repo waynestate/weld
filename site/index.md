@@ -146,28 +146,28 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Preflight
    The CI runner
    GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, the migrations on MySQL 5.6, a portability boot of the image with its own health check, Pint, PHPStan and ESLint.
-   Release 0.11.0
+   Release 0.12.0
    Inspection: In use
    [Site of Preflight](https://preflight.apps.wayne.edu/) [Docs for Preflight](https://preflight.apps.wayne.edu/docs/)
 6. Joint 05
    ### HELMET
    The runtime baseline
    Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
-   Release 1.4.1
+   Release 1.5.0
    Inspection: Stable
    [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
 7. Joint 06
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.9.0
+   Release 0.11.0
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
    ### Sourdough
    The starter
    Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. It adopts an app it did not make, so feed can keep it current, and 0.4.0 puts Pinstripe 0.3 in every shape.
-   Release 0.4.2
+   Release 0.5.1
    Inspection: In use
    [Site of Sourdough](https://sourdough.apps.wayne.edu/) [Docs for Sourdough](https://sourdough.apps.wayne.edu/docs/)
 9. Joint 08
@@ -188,7 +188,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Booster
     Upgrades
     Plans PHP and Laravel upgrades as hops on Rector and gates each hop with your tests on the target PHP. It never commits for you.
-    Release 1.19.0
+    Release 1.21.0
     Inspection: Stable
     [Site of Booster](https://booster.apps.wayne.edu/) [Docs for Booster](https://booster.apps.wayne.edu/docs/)
 12. Joint 11
@@ -202,7 +202,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Drawbridge
     The sign-in gateway
     One OpenID Connect client for Entra ID in front of Citadel apps, passing a signed assertion SESAME checks. Not in front of any apps yet.
-    Release 0.6.2
+    Release 0.7.0
     Inspection: Pilot
     [Site of Drawbridge](https://drawbridge.apps.wayne.edu/) [Docs for Drawbridge](https://drawbridge.apps.wayne.edu/docs/)
 14. Joint 13
@@ -277,7 +277,7 @@ $
 
 ### [HELMET](https://helmet.apps.wayne.edu/)
 
-1.4.1 Fit | Snug
+1.5.0 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
@@ -293,7 +293,7 @@ $
 
 ### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.9.0 Says | Open
+0.11.0 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -325,7 +325,7 @@ $
 
 ### [Preflight](https://preflight.apps.wayne.edu/)
 
-0.11.0 Checklist | Long
+0.12.0 Checklist | Long
 
 GitLab CI/CD components. WELD's pipeline pins them at 0.9.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
@@ -359,7 +359,7 @@ $
 
 ### [Booster](https://booster.apps.wayne.edu/)
 
-1.19.0 Sting | Mild
+1.21.0 Sting | Mild
 
 Plans an upgrade as hops, like Laravel 10 to 11, and runs them one at a time with Rector. Your tests have to pass on the new PHP before the next hop starts.
 
@@ -440,7 +440,7 @@ $
 
 ### [Drawbridge](https://drawbridge.apps.wayne.edu/)
 
-0.6.2 Moat | Full
+0.7.0 Moat | Full
 
 One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app. Built and tested; not in front of any apps yet.
 
@@ -457,7 +457,7 @@ $
 
 ### [Sourdough](https://sourdough.apps.wayne.edu/)
 
-0.4.2 Rise | Daily
+0.5.1 Rise | Daily
 
 `sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself, or run `sourdough adopt` on an app it did not make so `sourdough feed` keeps it current. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 

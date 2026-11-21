@@ -36,6 +36,7 @@ Megazord, except it comes with a deploy script and nobody has to shout to make i
 - Drawbridge: https://drawbridge.apps.wayne.edu/llms.txt
 
 **Current versions** (checked 2026-11-19): CREED 0.1.14, PROCTOR 0.17.0, Preflight 0.11.0, SESAME 0.9.0, HELMET 1.4.1, Squire 0.12.0, Pinstripe 0.4.0, ADVISOR 0.4.0, Parity 0.2.0, WayneUI 2.0.8. These are the latest releases, not what this repo pins: CI and `deploy/.squire.json` hold those.
+**Current versions** (checked 2026-11-19): CREED 0.1.14, PROCTOR 0.17.0, Preflight 0.12.0, SESAME 0.11.0, HELMET 1.5.0, Squire 0.12.0, Pinstripe 0.4.0, ADVISOR 0.4.0, Parity 0.2.0, WayneUI 2.0.8. These are the latest releases, not what this repo pins: CI and `deploy/.squire.json` hold those.
 
 ADVISOR's `policy_lookup` answers what is current at any time; the list above is a snapshot for agents that cannot reach it.
 
@@ -86,6 +87,12 @@ npm ci
 Copy-Item .env.example .env
 # Linux/macOS:
 cp .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 php artisan key:generate
 ```
 
@@ -119,6 +126,12 @@ Then give the copy its own key and remote. Skip the copy if `up` already made `.
 
 ```powershell
 Copy-Item .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 php artisan key:generate
 git remote set-url origin https://git.example.com/you/my-app.git
 ```
@@ -127,6 +140,12 @@ macOS and Linux (sh):
 
 ```sh
 cp .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 php artisan key:generate
 git remote set-url origin https://git.example.com/you/my-app.git
 ```
@@ -160,7 +179,7 @@ from npm (the [status page](https://github.com/waynestate/weld/blob/HEAD/docs/re
 What is on the bench today:
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
-- `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
+- `.env.example` is safe for a server as it stands: it sets `APP_NAME=WELD`, `APP_ENV=production`, `APP_DEBUG=false`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`, and leaves sign-in to SESAME's `cas` driver (no fake driver); [Run it locally](#run-it-locally) lists the local values to set in your own `.env`
 - `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap
 - `.gitattributes` sets `* text=auto eol=lf`
 - `composer ci` is the CI contract: it runs validate, the tests with Pest, Pint, PHPStan level 8, the agent-ready check, the
@@ -252,6 +271,12 @@ PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 docker compose run --rm app composer install
 docker compose run --rm app php artisan key:generate
 docker compose run --rm vite sh -c 'npm ci && npm run build'
@@ -261,6 +286,12 @@ macOS and Linux:
 
 ```sh
 cp .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 docker compose run --rm app composer install
 docker compose run --rm app php artisan key:generate
 docker compose run --rm vite sh -c 'npm ci && npm run build'
@@ -295,7 +326,9 @@ parity test
 app's Citadel settings (`--mysql` is Citadel's "MySQL: yes"). `parity up` builds and starts the app behind the proxy and
 prints its address, http://localhost:8080 unless you pick a port. Your folder is mounted where Citadel mounts it, so an
 edit shows on the next request, and the app gets Laravel's `DB_*` settings for the local MySQL from Parity, so `.env`
-keeps its own database settings. The migration runs as the `citadel` user, the way Citadel runs a release.
+keeps its own database settings. Parity sets the local values above itself for
+`sign_in: fake`, so they hold whether or not you wrote them into `.env`. The
+migration runs as the `citadel` user, the way Citadel runs a release.
 `parity test` asks the running app what Citadel's users would. After a change, run `parity up` again; `parity logs -f`
 follows the logs, `parity down` stops the app with the data kept, and `parity down --volumes` empties the database.
 
@@ -584,28 +617,28 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Preflight
    The CI runner
    GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, the migrations on MySQL 5.6, a portability boot of the image with its own health check, Pint, PHPStan and ESLint.
-   Release 0.11.0
+   Release 0.12.0
    Inspection: In use
    [Site of Preflight](https://preflight.apps.wayne.edu/) [Docs for Preflight](https://preflight.apps.wayne.edu/docs/)
 6. Joint 05
    ### HELMET
    The runtime baseline
    Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
-   Release 1.4.1
+   Release 1.5.0
    Inspection: Stable
    [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
 7. Joint 06
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.9.0
+   Release 0.11.0
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
    ### Sourdough
    The starter
    Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. It adopts an app it did not make, so feed can keep it current, and 0.4.0 puts Pinstripe 0.3 in every shape.
-   Release 0.4.2
+   Release 0.5.1
    Inspection: In use
    [Site of Sourdough](https://sourdough.apps.wayne.edu/) [Docs for Sourdough](https://sourdough.apps.wayne.edu/docs/)
 9. Joint 08
@@ -626,7 +659,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Booster
     Upgrades
     Plans PHP and Laravel upgrades as hops on Rector and gates each hop with your tests on the target PHP. It never commits for you.
-    Release 1.19.0
+    Release 1.21.0
     Inspection: Stable
     [Site of Booster](https://booster.apps.wayne.edu/) [Docs for Booster](https://booster.apps.wayne.edu/docs/)
 12. Joint 11
@@ -640,7 +673,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Drawbridge
     The sign-in gateway
     One OpenID Connect client for Entra ID in front of Citadel apps, passing a signed assertion SESAME checks. Not in front of any apps yet.
-    Release 0.6.2
+    Release 0.7.0
     Inspection: Pilot
     [Site of Drawbridge](https://drawbridge.apps.wayne.edu/) [Docs for Drawbridge](https://drawbridge.apps.wayne.edu/docs/)
 14. Joint 13
@@ -715,7 +748,7 @@ $
 
 #### [HELMET](https://helmet.apps.wayne.edu/)
 
-1.4.1 Fit | Snug
+1.5.0 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
@@ -731,7 +764,7 @@ $
 
 #### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.9.0 Says | Open
+0.11.0 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -763,7 +796,7 @@ $
 
 #### [Preflight](https://preflight.apps.wayne.edu/)
 
-0.11.0 Checklist | Long
+0.12.0 Checklist | Long
 
 GitLab CI/CD components. WELD's pipeline pins them at 0.9.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
@@ -797,7 +830,7 @@ $
 
 #### [Booster](https://booster.apps.wayne.edu/)
 
-1.19.0 Sting | Mild
+1.21.0 Sting | Mild
 
 Plans an upgrade as hops, like Laravel 10 to 11, and runs them one at a time with Rector. Your tests have to pass on the new PHP before the next hop starts.
 
@@ -878,7 +911,7 @@ $
 
 #### [Drawbridge](https://drawbridge.apps.wayne.edu/)
 
-0.6.2 Moat | Full
+0.7.0 Moat | Full
 
 One OpenID Connect client, through Entra ID, for every app on Citadel. We'd rather get the nonce and state checks right once than in every app. Built and tested; not in front of any apps yet.
 
@@ -895,7 +928,7 @@ $
 
 #### [Sourdough](https://sourdough.apps.wayne.edu/)
 
-0.4.2 Rise | Daily
+0.5.1 Rise | Daily
 
 `sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself, or run `sourdough adopt` on an app it did not make so `sourdough feed` keeps it current. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 
@@ -1038,6 +1071,7 @@ Notable changes to WELD, newest first.
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
 - Removed: Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example; D-095). Parity runs the app locally: `parity up` in `deploy/`.
+- Changed: .env.example is safe for a server as it stands (APP_ENV=production, APP_DEBUG=false, no fake sign-in); the README lists the local values to set in your own .env.
 - Site: the cast labels name ADVISOR 0.4.0 and Parity 0.2.0, their latest tags (they said 0.3.1 and 0.1.0), and the README's current-versions line is checked 2026-11-19. Content only.
 - Site: the cast labels name CREED 0.1.13 and Preflight 0.10.0, their latest tags (they said 0.1.12 and 0.9.0); WELD's CI still pins Preflight 0.9.0. Content only.
 - Site: the cast labels name CREED 0.1.14, Preflight 0.11.0 and SESAME 0.9.0, their latest tags (they said 0.1.13, 0.10.0 and 0.8.0); WELD's CI still pins Preflight 0.9.0. Content only.
@@ -2612,9 +2646,9 @@ This page lists every environment variable a WELD app reads, its default from `.
 | Name | Default | Notes |
 | --- | --- | --- |
 | `APP_NAME` | `WELD` | Renamed when you clone and rename; `VITE_APP_NAME` follows it through `${APP_NAME}`. |
-| `APP_ENV` | `local` |  |
+| `APP_ENV` | `production` | Safe for a server as it stands; for local work set `local` in your own `.env` (README, Run it locally). |
 | `APP_KEY` | `(empty)` | Generate it with `php artisan key:generate`; `weld:doctor` checks the app key. |
-| `APP_DEBUG` | `true` | The local default; keep `APP_DEBUG=false` in production (W26). |
+| `APP_DEBUG` | `false` | The safe server default; set `true` in your own `.env` for local work (W26). |
 | `APP_URL` | `http://localhost` | Set it to the real host (W17); Laravel trusts subdomains of `APP_URL` unless `subdomains: false`. |
 | `APP_LOCALE` | `en` |  |
 | `APP_FALLBACK_LOCALE` | `en` |  |
@@ -2647,8 +2681,9 @@ This page lists every environment variable a WELD app reads, its default from `.
 | `TRUSTED_PROXIES` | `172.18.0.1` | Which proxies Laravel trusts for `X-Forwarded-Proto` and the client address. Unset keeps `172.18.0.1` (Citadel's proxy); set but empty trusts none; `*` trusts every proxy; or a comma-separated list of IPs and CIDR ranges. Off Citadel, set your own proxy here and put the same list in `HELMET_PROXIES`. |
 | `HELMET_PROXIES` | `172.18.0.1` | The address HA-Proxy connects from; the same list as `trustProxies` in `bootstrap/app.php`. Empty trusts nothing. A platform preset fills the list instead; when both are set, `HELMET_PROXIES` wins, and an unknown preset name throws at boot. |
 | `HELMET_PRESET` | `citadel (commented out)` | Picks a platform preset; HELMET ships two, `citadel` and `docker`. An unknown preset name throws at boot. When both it and `HELMET_PROXIES` are set, `HELMET_PROXIES` wins. |
-| `SESAME_DRIVER` | `fake` | SESAME owns sign-in. `fake` signs in locally without an identity provider and refuses to boot outside development environments; production sets `SESAME_DRIVER=cas` plus `SESAME_CAS_BASE_URL`. |
-| `SESAME_FAKE_USERNAME` | `jdoe` |  |
+| `SESAME_DRIVER` | `(unset)` | SESAME owns sign-in. Unset, `config/sesame.php` falls back to `cas`. The `fake` driver signs in without an identity provider, for local work only: it needs `APP_ENV=local` and `SESAME_FAKE_ALLOWED=true`, and refuses to boot otherwise. Production sets `SESAME_DRIVER=cas` plus `SESAME_CAS_BASE_URL`. |
+| `SESAME_FAKE_ALLOWED` | `(empty)` | Local only: the `fake` driver needs this set to `true` with `APP_ENV=local`; it refuses to boot otherwise. |
+| `SESAME_FAKE_USERNAME` | `jdoe (commented out)` | The identity the `fake` driver returns, for local work. |
 | `SESAME_CAS_BASE_URL` | `(empty, commented out)` | Set with `SESAME_DRIVER=cas` in production. |
 | `SESAME_CAS_SERVICE_URL` | `(empty, commented out)` |  |
 | `BROADCAST_CONNECTION` | `log` |  |
