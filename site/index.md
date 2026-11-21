@@ -160,21 +160,21 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### SESAME
    Sign-in
    CAS, OpenID Connect, an OAuth2 token or the Drawbridge gateway, and your app keeps its own session. Raw PHP, Blade and Inertia.
-   Release 0.10.1
+   Release 0.11.0
    Inspection: In use
    [Site of SESAME](https://sesame.apps.wayne.edu/) [Docs for SESAME](https://sesame.apps.wayne.edu/docs/)
 8. Joint 07
    ### Sourdough
    The starter
    Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. It adopts an app it did not make, so feed can keep it current, and 0.4.0 puts Pinstripe 0.3 in every shape.
-   Release 0.4.2
+   Release 0.5.1
    Inspection: In use
    [Site of Sourdough](https://sourdough.apps.wayne.edu/) [Docs for Sourdough](https://sourdough.apps.wayne.edu/docs/)
 9. Joint 08
    ### Squire
    The deploy kit
    Citadel's build, release and health-check scripts from templates, `squire doctor`, and one portable image for other hosts. Local runs on Citadel's image move to Parity, next joint down.
-   Release 0.11.2
+   Release 0.12.0
    Inspection: In use
    [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
 10. Joint 09
@@ -293,7 +293,7 @@ $
 
 ### [SESAME](https://sesame.apps.wayne.edu/)
 
-0.10.1 Says | Open
+0.11.0 Says | Open
 
 Sign-in through CAS, Entra ID or Drawbridge. Locally, a fake driver signs you in.
 
@@ -407,7 +407,7 @@ $
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
-0.11.2 Armor | Carried
+0.12.0 Armor | Carried
 
 The deploy kit for Citadel: `build.sh`, a release script and a health check, plus one portable image for other hosts. This page deploys with it too.
 
@@ -457,7 +457,7 @@ $
 
 ### [Sourdough](https://sourdough.apps.wayne.edu/)
 
-0.4.2 Rise | Daily
+0.5.1 Rise | Daily
 
 `sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself, or run `sourdough adopt` on an app it did not make so `sourdough feed` keeps it current. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 
