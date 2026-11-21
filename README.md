@@ -85,6 +85,12 @@ npm ci
 Copy-Item .env.example .env
 # Linux/macOS:
 cp .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 php artisan key:generate
 ```
 
@@ -118,6 +124,12 @@ Then give the copy its own key and remote. Skip the copy if `up` already made `.
 
 ```powershell
 Copy-Item .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 php artisan key:generate
 git remote set-url origin https://git.example.com/you/my-app.git
 ```
@@ -126,6 +138,12 @@ macOS and Linux (sh):
 
 ```sh
 cp .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 php artisan key:generate
 git remote set-url origin https://git.example.com/you/my-app.git
 ```
@@ -170,7 +188,7 @@ from npm (the [status page](docs/reference/status.md#pinstripe-s-npm-half) has t
 What is on the bench today:
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
-- `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
+- `.env.example` is safe for a server as it stands: it sets `APP_NAME=WELD`, `APP_ENV=production`, `APP_DEBUG=false`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`, and leaves sign-in to SESAME's `cas` driver (no fake driver); [Run it locally](#run-it-locally) lists the local values to set in your own `.env`
 - `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap
 - `.gitattributes` sets `* text=auto eol=lf`
 - `composer ci` is the CI contract: it runs validate, the tests with Pest, Pint, PHPStan level 8, the agent-ready check, the
@@ -262,6 +280,12 @@ PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 docker compose run --rm app composer install
 docker compose run --rm app php artisan key:generate
 docker compose run --rm vite sh -c 'npm ci && npm run build'
@@ -271,6 +295,12 @@ macOS and Linux:
 
 ```sh
 cp .env.example .env
+# Set the local values in the .env you just copied (it ships safe for a server):
+# APP_ENV=local
+# APP_DEBUG=true
+# SESAME_DRIVER=fake
+# SESAME_FAKE_ALLOWED=true
+# SESAME_FAKE_USERNAME=jdoe
 docker compose run --rm app composer install
 docker compose run --rm app php artisan key:generate
 docker compose run --rm vite sh -c 'npm ci && npm run build'
@@ -305,7 +335,9 @@ parity test
 app's Citadel settings (`--mysql` is Citadel's "MySQL: yes"). `parity up` builds and starts the app behind the proxy and
 prints its address, http://localhost:8080 unless you pick a port. Your folder is mounted where Citadel mounts it, so an
 edit shows on the next request, and the app gets Laravel's `DB_*` settings for the local MySQL from Parity, so `.env`
-keeps its own database settings. The migration runs as the `citadel` user, the way Citadel runs a release.
+keeps its own database settings. Parity sets the local values above itself for
+`sign_in: fake`, so they hold whether or not you wrote them into `.env`. The
+migration runs as the `citadel` user, the way Citadel runs a release.
 `parity test` asks the running app what Citadel's users would. After a change, run `parity up` again; `parity logs -f`
 follows the logs, `parity down` stops the app with the data kept, and `parity down --volumes` empties the database.
 
