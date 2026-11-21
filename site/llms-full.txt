@@ -658,7 +658,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### Booster
     Upgrades
     Plans PHP and Laravel upgrades as hops on Rector and gates each hop with your tests on the target PHP. It never commits for you.
-    Release 1.21.0
+    Release 1.22.0
     Inspection: Stable
     [Site of Booster](https://booster.apps.wayne.edu/) [Docs for Booster](https://booster.apps.wayne.edu/docs/)
 12. Joint 11
@@ -829,7 +829,7 @@ $
 
 #### [Booster](https://booster.apps.wayne.edu/)
 
-1.21.0 Sting | Mild
+1.22.0 Sting | Mild
 
 Plans an upgrade as hops, like Laravel 10 to 11, and runs them one at a time with Rector. Your tests have to pass on the new PHP before the next hop starts.
 
