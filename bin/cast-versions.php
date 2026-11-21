@@ -148,11 +148,13 @@ if ($tagsFile !== null) {
         $remoteTags = castVersionsLsRemote($url);
         if ($remoteTags === null) {
             fwrite(STDERR, "cast-versions: warning: could not reach $url; keeping the current label for $name.\n");
+
             continue;
         }
         $latest = castVersionsLatest($remoteTags);
         if ($latest === null) {
             fwrite(STDERR, "cast-versions: warning: no semver tag on $url; keeping the current label for $name.\n");
+
             continue;
         }
         $tags[$name] = $latest;
@@ -262,6 +264,7 @@ function castVersionsLsRemote(string $url): ?array
     if ($timedOut) {
         proc_terminate($process, 9);
         proc_close($process);
+
         return null;
     }
 

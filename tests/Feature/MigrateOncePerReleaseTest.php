@@ -60,4 +60,3 @@ it('runs migrate in the portable image only for the migrate role', function () {
     preg_match_all('/^.*\brun_migrate\b.*$/m', $entrypoint, $lines);
     expect(array_map('trim', $lines[0]))->toBe(['run_migrate() {', 'migrate) run_migrate "$@" ;;']);
 });
-
