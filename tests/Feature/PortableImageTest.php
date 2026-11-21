@@ -28,15 +28,7 @@ function weldKitFile(string $relative): string
 }
 
 it('runs one image as web, worker, scheduler and migrate (W8)', function () {
-    $compose = weldKitFile('docker-compose.squire.yml');
     $entrypoint = weldKitFile('.squire/portable/squire-entrypoint.sh');
-
-    expect($compose)
-        ->toContain('image: squire-local/portable:${SQUIRE_PROJECT:-squire-app}')
-        ->toContain('profiles: [portable]');
-    foreach (['migrate', 'web', 'worker', 'scheduler'] as $role) {
-        expect($compose)->toContain("SQUIRE_ROLE: {$role}");
-    }
 
     expect($entrypoint)
         ->toContain('exec php artisan queue:work --tries=3 --max-time=3600 --sleep=3 "$@"')
@@ -46,7 +38,6 @@ it('runs one image as web, worker, scheduler and migrate (W8)', function () {
 
 it('leaves the queue to the worker service, not the scheduler', function () {
     // W19's short scheduled worker is for Citadel; beside a real worker it would run the queue twice over.
-    expect(weldKitFile('docker-compose.squire.yml'))->toContain('QUEUE_WORKER_MODE: none');
     expect((string) file_get_contents(dirname(__DIR__, 2).'/config/worker.php'))->toContain('QUEUE_WORKER_MODE');
 });
 

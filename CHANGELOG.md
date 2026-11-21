@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Removed: Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example; D-095). Parity runs the app locally: `parity up` in `deploy/`.
 - Site: the cast labels name ADVISOR 0.4.0 and Parity 0.2.0, their latest tags (they said 0.3.1 and 0.1.0), and the README's current-versions line is checked 2026-11-19. Content only.
 - Site: the cast labels name CREED 0.1.13 and Preflight 0.10.0, their latest tags (they said 0.1.12 and 0.9.0); WELD's CI still pins Preflight 0.9.0. Content only.
 - Site: the cast labels name CREED 0.1.14, Preflight 0.11.0 and SESAME 0.9.0, their latest tags (they said 0.1.13, 0.10.0 and 0.8.0); WELD's CI still pins Preflight 0.9.0. Content only.

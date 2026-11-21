@@ -61,18 +61,3 @@ it('runs migrate in the portable image only for the migrate role', function () {
     expect(array_map('trim', $lines[0]))->toBe(['run_migrate() {', 'migrate) run_migrate "$@" ;;']);
 });
 
-it('starts web, worker and scheduler only after the one-shot migrate service succeeds', function () {
-    $compose = weldDeployFile('docker-compose.squire.yml');
-
-    expect(preg_match('/^  migrate:\n(.*?)(?=^  [a-z]+:\n)/ms', $compose, $migrate))->toBe(1);
-    expect($migrate[1])
-        ->toContain('SQUIRE_ROLE: migrate')
-        ->toContain('restart: "no"');
-
-    foreach (['web', 'worker', 'scheduler'] as $role) {
-        expect(preg_match('/^  '.$role.':\n(.*?)(?=^  [a-z]+:\n|^[a-z]+:\n|\z)/ms', $compose, $service))->toBe(1, "no {$role} service");
-        expect($service[1])
-            ->toContain("SQUIRE_ROLE: {$role}")
-            ->toMatch('/depends_on:\n\s+migrate:\n\s+condition: service_completed_successfully/');
-    }
-});
