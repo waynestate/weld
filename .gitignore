@@ -37,3 +37,6 @@ yarn-error.log
 
 # Pint's Code Quality report (composer lint:gitlab), an artifact in CI only.
 /pint-codequality.json
+
+# Squire's package download cache: it survives an Update, so git never sees it.
+/.cache/

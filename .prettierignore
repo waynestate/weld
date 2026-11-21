@@ -8,3 +8,6 @@ resources/js/ziggy.d.ts
 # tag that tests/Feature/WayneUiOnlyTest.php pins byte for byte. The one Blade
 # file stays hand-set until that test and the layout move together.
 resources/views/app.blade.php
+
+# Squire's package download cache (scripts/release.sh keeps it in the app folder).
+.cache

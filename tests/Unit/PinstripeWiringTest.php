@@ -41,6 +41,8 @@ function pinstripeJson(string $path): array
  * @var array<string, string>
  */
 const WELD_PINT_EXTRA_EXCLUDES = [
+    // Squire's package cache (release.sh): never lint it.
+    '.cache' => 'Squire package cache',
     // Squire's deploy kit, vendored in deploy/: restyling it turns every kit update into a conflict.
     'deploy' => 'Squire deploy kit',
     // Squire's shared docs builder, vendored as one file and updated by copying it again.

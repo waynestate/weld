@@ -36,6 +36,7 @@ export default [
             'node_modules',
             'public',
             'bootstrap/ssr',
+            '.cache',
             'site/assets/docs.js',
             'site/assets/agent-ready.js',
             'tools/a11y/check.mjs',
