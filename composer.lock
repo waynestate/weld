@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca91886df92f4e06f05cc81f7060f50b",
+    "content-hash": "4fc6a9ed11ed107b2e172216c4bb85bd",
     "packages": [
         {
             "name": "brick/math",
@@ -513,16 +513,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v7.2.1",
+            "version": "v7.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/php-jwt.git",
-                "reference": "0501f5729b9e2448516674aff07c7d1727869b8e"
+                "reference": "99efeb17d6def8c0295777f2d45b07ff4fdb4e40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/0501f5729b9e2448516674aff07c7d1727869b8e",
-                "reference": "0501f5729b9e2448516674aff07c7d1727869b8e",
+                "url": "https://api.github.com/repos/googleapis/php-jwt/zipball/99efeb17d6def8c0295777f2d45b07ff4fdb4e40",
+                "reference": "99efeb17d6def8c0295777f2d45b07ff4fdb4e40",
                 "shasum": ""
             },
             "require": {
@@ -581,10 +581,10 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/php-jwt/issues",
-                "source": "https://github.com/googleapis/php-jwt/tree/v7.2.1"
+                "source": "https://github.com/googleapis/php-jwt/tree/v7.2.2"
             },
-            "time": "2026-09-28T17:51:46+00:00",
-            "published-time": "2026-09-28T18:08:24+00:00"
+            "time": "2026-11-17T00:25:19+00:00",
+            "published-time": "2026-11-17T19:16:00+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -7289,16 +7289,16 @@
         },
         {
             "name": "waynestate/sesame",
-            "version": "0.8.0",
+            "version": "0.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waynestate/sesame.git",
-                "reference": "7310056226f0ee2e934204dd64e6ddc7ab728baf"
+                "reference": "57d72e44dd8f56c3598fb2218ac4159104638a10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waynestate/sesame/zipball/7310056226f0ee2e934204dd64e6ddc7ab728baf",
-                "reference": "7310056226f0ee2e934204dd64e6ddc7ab728baf",
+                "url": "https://api.github.com/repos/waynestate/sesame/zipball/57d72e44dd8f56c3598fb2218ac4159104638a10",
+                "reference": "57d72e44dd8f56c3598fb2218ac4159104638a10",
                 "shasum": ""
             },
             "require": {
@@ -7321,6 +7321,7 @@
                 "robrichards/xmlseclibs": "<3.1.5"
             },
             "require-dev": {
+                "cakephp/authentication": "^3.0",
                 "guzzlehttp/guzzle": "^7.9 || ^8.0",
                 "laravel/pint": "^1.32",
                 "league/commonmark": "^2.10",
@@ -7332,9 +7333,10 @@
                 "phpunit/phpunit": "^11.5",
                 "promphp/prometheus_client_php": "^2.15",
                 "waynestate/helmet": "^1.4",
-                "waynestate/pinstripe": "^0.3"
+                "waynestate/pinstripe": "^0.4"
             },
             "suggest": {
+                "cakephp/authentication": "For the CakePHP 5 adapter (^3.0)",
                 "guzzlehttp/guzzle": "A PSR-18 client for the cas, oauth2 and oidc drivers",
                 "laravel/framework": "For the Laravel adapter",
                 "league/oauth2-client": "Required by the oidc driver (browser sign-in to Entra): the authorization code flow with PKCE and the token request",
@@ -7377,8 +7379,8 @@
                 "issues": "https://git.wayne.edu/enterprise-apps/sesame/-/issues",
                 "source": "https://github.com/waynestate/sesame"
             },
-            "time": "2026-11-14T08:56:59+00:00",
-            "published-time": "2026-11-14T08:58:11+00:00"
+            "time": "2026-11-21T09:06:53+00:00",
+            "published-time": "2026-11-21T09:08:17+00:00"
         },
         {
             "name": "yajra/laravel-oci8",
