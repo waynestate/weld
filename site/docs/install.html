@@ -73,6 +73,7 @@ Copy-Item .env.example .env
 cp .env.example .env
 php artisan key:generate
 </code></pre>
+<p>The copy ships safe for a server (production, no fake sign-in). To sign in on your own computer, set <code>APP_ENV=local</code>, <code>SESAME_DRIVER=fake</code> and <code>SESAME_FAKE_ALLOWED=true</code> in the <code>.env</code> you just made; &quot;Run it locally&quot; in the README lists them.</p>
 <aside class="docs-callout docs-callout--note" role="note"><p class="docs-callout__label">Note</p><p>The <code>advisor install</code> line writes <code>.mcp.json</code>, the MCP config that points Claude Code at ADVISOR's server; the file
 is git-ignored, because a committed <code>.mcp.json</code> would run a program on whoever opens the project. Set
 <code>ADVISOR_ENABLED=1</code> in <code>.env</code> to switch the advisor on.</p></aside>

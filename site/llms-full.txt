@@ -1069,6 +1069,7 @@ Notable changes to WELD, newest first.
 
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Fixed: the `a11y-pages` job asks for the local sign-in it needs (APP_ENV=local, SESAME_DRIVER=fake, SESAME_FAKE_ALLOWED=true, set after `cp .env.example .env`) since .env.example now ships safe for a server; it answered 500 on every page. Docs: the install and quick-start pages say to set the same three values to sign in locally.
 - Removed: Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example; D-095). Parity runs the app locally: `parity up` in `deploy/`.
 - Changed: .env.example is safe for a server as it stands (APP_ENV=production, APP_DEBUG=false, no fake sign-in); the README lists the local values to set in your own .env.
 - Site: the cast labels name ADVISOR 0.4.0 and Parity 0.2.0, their latest tags (they said 0.3.1 and 0.1.0), and the README's current-versions line is checked 2026-11-19. Content only.
@@ -2104,6 +2105,7 @@ You need Docker with the Compose v2 plugin: `docker compose version` must answer
    docker compose run --rm vite sh -c 'npm ci && npm run build'
    ```
    Skip the copy when the folder already has a `.env`.
+   The copy ships safe for a server: signing in locally needs `APP_ENV=local`, `SESAME_DRIVER=fake` and `SESAME_FAKE_ALLOWED=true` in your `.env`; "Run it locally" in the README lists them.
 3. Check this computer, then write the app's Citadel settings:
    ```sh
    parity check
@@ -2474,6 +2476,8 @@ Copy-Item .env.example .env
 cp .env.example .env
 php artisan key:generate
 ```
+
+The copy ships safe for a server (production, no fake sign-in). To sign in on your own computer, set `APP_ENV=local`, `SESAME_DRIVER=fake` and `SESAME_FAKE_ALLOWED=true` in the `.env` you just made; "Run it locally" in the README lists them.
 
 Note
 

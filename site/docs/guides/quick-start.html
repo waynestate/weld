@@ -69,6 +69,7 @@ docker compose run --rm app php artisan key:generate
 docker compose run --rm vite sh -c 'npm ci &amp;&amp; npm run build'
 </code></pre></div></div>
 <p>Skip the copy when the folder already has a <code>.env</code>.</p>
+<p>The copy ships safe for a server: signing in locally needs <code>APP_ENV=local</code>, <code>SESAME_DRIVER=fake</code> and <code>SESAME_FAKE_ALLOWED=true</code> in your <code>.env</code>; &quot;Run it locally&quot; in the README lists them.</p>
 </li>
 <li>
 <p>Check this computer, then write the app's Citadel settings:</p>

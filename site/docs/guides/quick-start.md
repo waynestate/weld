@@ -41,6 +41,7 @@ You need Docker with the Compose v2 plugin: `docker compose version` must answer
    docker compose run --rm vite sh -c 'npm ci && npm run build'
    ```
    Skip the copy when the folder already has a `.env`.
+   The copy ships safe for a server: signing in locally needs `APP_ENV=local`, `SESAME_DRIVER=fake` and `SESAME_FAKE_ALLOWED=true` in your `.env`; "Run it locally" in the README lists them.
 3. Check this computer, then write the app's Citadel settings:
    ```sh
    parity check
