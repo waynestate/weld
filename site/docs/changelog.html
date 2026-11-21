@@ -42,6 +42,7 @@
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased"><span class="docs-heading-tail"><span>Unreleased</span><a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></span></h2>
 <ul>
+<li>Fixed: eslint, Prettier, Pint and .gitignore keep <code>.cache</code> out (Sourdough 012be50): Squire's release kit keeps its package download cache in <code>.cache/squire</code>, and eslint failed on the files in it.</li>
 <li>Changed: <code>.ai/guidelines/wayne-state.md</code> is Sourdough's again (0694a86): the sign-in line names <code>SESAME_FAKE_ALLOWED=true</code> with <code>APP_ENV=local</code> for the fake driver, so regen-gate sees no drift.</li>
 <li>Changed: SESAME ^0.11 (was ^0.8). The fake driver now needs APP_ENV local or testing and SESAME_FAKE_ALLOWED=true, which config/sesame.php reads as fake.allowed (off by default); .env.example still ships both commented out.</li>
 <li>Changed: PROCTOR is <code>^0.17</code> in WELD and its <code>deploy/</code> layer (was <code>^0.16</code>, which does not allow 0.17; it adds three warn-only Oracle checks) and the dev dependency ADVISOR is <code>^0.4</code> (was <code>^0.3</code>; adds <code>advisor install --runner</code>). No template or screen changes.</li>
