@@ -504,3 +504,5 @@ locally, point it at your own generation:
 
 <div align="center"><sub>Fifteen parts, one bead. The README art is cut from the front page by
 <a href="scripts/readme-art/README.md"><code>scripts/readme-art</code></a>; no sparks were drawn in its making.</sub></div>
+
+Found a security problem? See [SECURITY.md](SECURITY.md); please do not open a public issue.

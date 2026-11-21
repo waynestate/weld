@@ -14,6 +14,7 @@ Notable changes to WELD, newest first.
 - Changed: PROCTOR is `^0.17` in WELD and its `deploy/` layer (was `^0.16`, which does not allow 0.17; it adds three warn-only Oracle checks) and the dev dependency ADVISOR is `^0.4` (was `^0.3`; adds `advisor install --runner`). No template or screen changes.
 - Fixed: the `a11y-pages` job asks for the local sign-in it needs (APP_ENV=local, SESAME_DRIVER=fake, SESAME_FAKE_ALLOWED=true, set after `cp .env.example .env`) since .env.example now ships safe for a server; it answered 500 on every page. Docs: the install and quick-start pages say to set the same three values to sign in locally.
 - Removed: Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example; D-095). Parity runs the app locally: `parity up` in `deploy/`.
+- Docs: SECURITY.md says how to report a vulnerability privately.
 - Changed: .env.example is safe for a server as it stands (APP_ENV=production, APP_DEBUG=false, no fake sign-in); the README lists the local values to set in your own .env.
 - Site: the cast labels name ADVISOR 0.4.0 and Parity 0.2.0, their latest tags (they said 0.3.1 and 0.1.0), and the README's current-versions line is checked 2026-11-19. Content only.
 - Site: the cast labels name CREED 0.1.13 and Preflight 0.10.0, their latest tags (they said 0.1.12 and 0.9.0); WELD's CI still pins Preflight 0.9.0. Content only.
