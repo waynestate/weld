@@ -12,6 +12,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: PROCTOR is `^0.17` in WELD and its `deploy/` layer (was `^0.16`, which does not allow 0.17; it adds three warn-only Oracle checks) and the dev dependency ADVISOR is `^0.4` (was `^0.3`; adds `advisor install --runner`). No template or screen changes.
 - Fixed: the `a11y-pages` job asks for the local sign-in it needs (APP_ENV=local, SESAME_DRIVER=fake, SESAME_FAKE_ALLOWED=true, set after `cp .env.example .env`) since .env.example now ships safe for a server; it answered 500 on every page. Docs: the install and quick-start pages say to set the same three values to sign in locally.
 - Removed: Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example; D-095). Parity runs the app locally: `parity up` in `deploy/`.
 - Changed: .env.example is safe for a server as it stands (APP_ENV=production, APP_DEBUG=false, no fake sign-in); the README lists the local values to set in your own .env.

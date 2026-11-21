@@ -38,10 +38,10 @@
         "pestphp/pest-plugin-laravel": "^4.0",
         "phpstan/extension-installer": "^1.4",
         "phpunit/phpunit": "^12.0",
-        "waynestate/advisor": "^0.3",
+        "waynestate/advisor": "^0.4",
         "waynestate/creed": "^0.1.8",
         "waynestate/pinstripe": "^0.4",
-        "waynestate/proctor": "^0.16"
+        "waynestate/proctor": "^0.17"
     },
     "autoload": {
         "psr-4": {
