@@ -686,7 +686,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### WELD
     All of the above
     You are here: Laravel 13 with Inertia 3 and Vue, every joint above already made. Clone it and rename it.
-    Release 0.3.0
+    Release 0.4.0
     Inspection: In use
     [Docs for WELD](https://weld.apps.wayne.edu/docs/index.html) [Changes in WELD](https://weld.apps.wayne.edu/docs/changelog.html)
 
@@ -1068,6 +1068,8 @@ Source: https://weld.apps.wayne.edu/docs/changelog.html
 Notable changes to WELD, newest first.
 
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
+
+### 0.4.0 (2026-11-22) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-4-0-2026-11-22)
 
 - Changed: the `web` guard runs on SESAME's `sesame` driver (was Laravel's plain `session` driver), so inside `auth.sesame` routes `$request->user()`, `auth()->user()`, `@can` and `Gate::allows()` see the signed-in SESAME user instead of none; `tests/Feature/SesameGuardTest.php` proves the owner passes a policy check, a non-owner gets 403, a guest is sent to sign in and logout ends it. Minor release.
 - Fixed: eslint, Prettier, Pint and .gitignore keep `.cache` out (Sourdough 012be50): Squire's release kit keeps its package download cache in `.cache/squire`, and eslint failed on the files in it.
