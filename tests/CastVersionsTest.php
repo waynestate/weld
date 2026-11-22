@@ -195,7 +195,7 @@ it('never touches the pins-them-at sentence or the README pinning note', functio
         $html = (string) file_get_contents($dir.'/index.html');
         $readme = (string) file_get_contents($dir.'/README.md');
 
-        expect($html)->toContain("WELD's pipeline pins them at 0.9.0 for the tests on PHP 8.3, 8.4 and 8.5");
+        expect($html)->toContain("WELD's pipeline pins them at 0.12.0 for the tests on PHP 8.3, 8.4 and 8.5");
         expect($readme)->toContain('These are the latest releases, not what this repo pins: CI and `deploy/.squire.json` hold those.');
     } finally {
         castVerRemoveDir($dir);

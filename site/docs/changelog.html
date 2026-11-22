@@ -41,6 +41,10 @@
 <h1 id="changelog"><span class="docs-heading-tail"><span>Changelog</span><a class="docs-heading-link" aria-label="Link to this section" href="#changelog">#</a></span></h1>
 <p>Notable changes to WELD, newest first.</p>
 <h2 id="unreleased"><span class="docs-heading-tail"><span>Unreleased</span><a class="docs-heading-link" aria-label="Link to this section" href="#unreleased">#</a></span></h2>
+<ul>
+<li>Changed: Preflight 0.12.0 (commit b1fa380) in the pipeline's nine components and the GitHub workflow (was 0.9.0): php-test also runs an advisory PHP 8.6 job, the components gain a tag_pipeline input, and the a11y image digest moves.</li>
+<li>Docs: SECURITY.md says how to report a vulnerability privately.</li>
+</ul>
 <h2 id="0-4-0-2026-11-22">0.4.0 <span class="docs-heading-tail"><span>(2026-11-22)</span><a class="docs-heading-link" aria-label="Link to this section" href="#0-4-0-2026-11-22">#</a></span></h2>
 <ul>
 <li>Changed: the <code>web</code> guard runs on SESAME's <code>sesame</code> driver (was Laravel's plain <code>session</code> driver), so inside <code>auth.sesame</code> routes <code>$request-&gt;user()</code>, <code>auth()-&gt;user()</code>, <code>@can</code> and <code>Gate::allows()</code> see the signed-in SESAME user instead of none; <code>tests/Feature/SesameGuardTest.php</code> proves the owner passes a policy check, a non-owner gets 403, a guest is sent to sign in and logout ends it. Minor release.</li>

@@ -11,6 +11,9 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: Preflight 0.12.0 (commit b1fa380) in the pipeline's nine components and the GitHub workflow (was 0.9.0): php-test also runs an advisory PHP 8.6 job, the components gain a tag_pipeline input, and the a11y image digest moves.
+- Docs: SECURITY.md says how to report a vulnerability privately.
+
 ## 0.4.0 (2026-11-22)
 
 - Changed: the `web` guard runs on SESAME's `sesame` driver (was Laravel's plain `session` driver), so inside `auth.sesame` routes `$request->user()`, `auth()->user()`, `@can` and `Gate::allows()` see the signed-in SESAME user instead of none; `tests/Feature/SesameGuardTest.php` proves the owner passes a policy check, a non-owner gets 403, a guest is sent to sign in and logout ends it. Minor release.
