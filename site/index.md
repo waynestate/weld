@@ -153,7 +153,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### HELMET
    The runtime baseline
    Security headers and a nonce CSP, a hardened session, the proxy check, `/up` and JSON logs, for raw PHP, Laravel and PSR-15 apps alike.
-   Release 1.5.0
+   Release 1.5.1
    Inspection: Stable
    [Site of HELMET](https://helmet.apps.wayne.edu/) [Docs for HELMET](https://helmet.apps.wayne.edu/docs/)
 7. Joint 06
@@ -174,7 +174,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Squire
    The deploy kit
    Citadel's build, release and health-check scripts from templates, `squire doctor`, and one portable image for other hosts. Local runs on Citadel's image move to Parity, next joint down.
-   Release 0.12.0
+   Release 0.12.1
    Inspection: In use
    [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
 10. Joint 09
@@ -209,7 +209,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     ### ADVISOR
     The MCP server
     Nine read-only tools your coding agent can ask about the stack. Every answer names the file it came from.
-    Release 0.4.0
+    Release 0.4.1
     Inspection: In use
     [Site of ADVISOR](https://advisor.apps.wayne.edu/) [Docs for ADVISOR](https://advisor.apps.wayne.edu/docs/)
 15. Joint 14
@@ -277,7 +277,7 @@ $
 
 ### [HELMET](https://helmet.apps.wayne.edu/)
 
-1.5.0 Fit | Snug
+1.5.1 Fit | Snug
 
 In WELD it runs in the global middleware, so every response carries the security headers and CSP.
 
@@ -391,7 +391,7 @@ $
 
 ### [ADVISOR](https://advisor.apps.wayne.edu/)
 
-0.4.0 Office hours | Always
+0.4.1 Office hours | Always
 
 Ask it which PHP you can build on and it answers from `policy.json`, with the date. It's read-only: it can't write files or run shell commands.
 
@@ -407,7 +407,7 @@ $
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
-0.12.0 Armor | Carried
+0.12.1 Armor | Carried
 
 The deploy kit for Citadel: `build.sh`, a release script and a health check, plus one portable image for other hosts. This page deploys with it too.
 
