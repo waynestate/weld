@@ -33,13 +33,16 @@ return [
     | users are actually retrieved out of your database or other storage
     | system used by the application. Typically, Eloquent is utilized.
     |
-    | Supported: "session"
+    | Supported: "sesame"
     |
     */
 
     'guards' => [
+        // The web guard runs on SESAME's sesame driver, so Laravel's own
+        // user(), auth()->user(), @can and Gate see the person SESAME
+        // signed in, not an empty session.
         'web' => [
-            'driver' => 'session',
+            'driver' => 'sesame',
             'provider' => 'users',
         ],
     ],
