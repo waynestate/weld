@@ -639,7 +639,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Sourdough
    The starter
    Bakes all five app shapes with sign-in, headers, checks, CI and the deploy kit already in, and saves each bake's plan in the app. It adopts an app it did not make, so feed can keep it current, and 0.4.0 puts Pinstripe 0.3 in every shape.
-   Release 0.5.1
+   Release 0.6.1
    Inspection: In use
    [Site of Sourdough](https://sourdough.apps.wayne.edu/) [Docs for Sourdough](https://sourdough.apps.wayne.edu/docs/)
 9. Joint 08
@@ -929,7 +929,7 @@ $
 
 #### [Sourdough](https://sourdough.apps.wayne.edu/)
 
-0.5.1 Rise | Daily
+0.6.1 Rise | Daily
 
 `sourdough new` makes a new app with SESAME, HELMET, Pinstripe, PROCTOR and Preflight already in place. Use it when you'd rather shape the app yourself, or run `sourdough adopt` on an app it did not make so `sourdough feed` keeps it current. It bakes all five app shapes, this one included; WELD is the Inertia and Vue loaf, already sliced.
 
