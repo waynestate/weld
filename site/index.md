@@ -132,7 +132,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### PROCTOR
    The grader
    Checks an app against CREED from the command line and gives the deploy gate its go or no-go. 0.15 warns when an app has migrations its pipeline never runs against MySQL 5.6.
-   Release 0.17.0
+   Release 0.18.0
    Inspection: In use
    [Site of PROCTOR](https://proctor.apps.wayne.edu/) [Docs for PROCTOR](https://proctor.apps.wayne.edu/docs/)
 4. Joint 03
@@ -174,7 +174,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Squire
    The deploy kit
    Citadel's build, release and health-check scripts from templates, `squire doctor`, and one portable image for other hosts. Local runs on Citadel's image move to Parity, next joint down.
-   Release 0.12.1
+   Release 0.12.2
    Inspection: In use
    [Site of Squire](https://squire.apps.wayne.edu/) [Docs for Squire](https://squire.apps.wayne.edu/docs/)
 10. Joint 09
@@ -309,7 +309,7 @@ $
 
 ### [PROCTOR](https://proctor.apps.wayne.edu/)
 
-0.17.0 Strictness | Kind
+0.18.0 Strictness | Kind
 
 In WELD it's `composer proctor`. In CI, warnings pass and failures block.
 
@@ -407,7 +407,7 @@ $
 
 ### [Squire](https://squire.apps.wayne.edu/)
 
-0.12.1 Armor | Carried
+0.12.2 Armor | Carried
 
 The deploy kit for Citadel: `build.sh`, a release script and a health check, plus one portable image for other hosts. This page deploys with it too.
 
