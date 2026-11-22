@@ -160,7 +160,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions |
 | Pinstripe | The coding standard, 0.4 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run its npm presets (`@waynestate/pinstripe` `^0.4`), accessibility rules included |
-| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.9.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.12.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability |
 | PROCTOR | The checks, run in CI and as the deploy gate |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route |
@@ -172,7 +172,7 @@ Want a smaller starting point than a full Laravel app? Sourdough is the starter 
 ### Status
 
 Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in
-`require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.9.0; the deploy layer runs Squire's kit 0.12.0.
+`require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.12.0; the deploy layer runs Squire's kit 0.12.0.
 Pinstripe's PHP and JavaScript presets are both installed: ESLint and Prettier run on `@waynestate/pinstripe` `^0.4`
 from npm (the [status page](https://github.com/waynestate/weld/blob/HEAD/docs/reference/status.md#pinstripe-s-npm-half) has the details).
 What is on the bench today:
@@ -213,7 +213,7 @@ A deprecation your code raises or causes fails the suite (`failOnDeprecation` in
 before an upgrade does; `tests/TestCase.php` hands deprecations to PHPUnit (`tests/Support/ReportsDeprecationsToPhpUnit.php`, from
 Sourdough), because Laravel's own handler drops them while testing.
 The accessibility gate runs Preflight's own checker (vendored in `tools/a11y/check.mjs`, pinned to the CI tag
-0.9.0 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
+0.12.0 by `tests/Unit/A11yCheckerPinTest.php`) over every page under `site/` with axe-core 4.14.0 (WCAG 2.2 AA,
 light and dark, at 320 and 1280 px, plus the WCAG 1.4.10 reflow check), so a page that passes locally passes
 CI. It runs in Docker: `scripts/a11y.sh` from Git Bash, Linux or macOS, `scripts/a11y.ps1` on Windows.
 
@@ -471,6 +471,8 @@ locally, point it at your own generation:
 - Record the current drift as accepted: add `--write-baseline`
 
 ### The cast
+
+Found a security problem? See [SECURITY.md](https://github.com/waynestate/weld/blob/HEAD/SECURITY.md); please do not open a public issue.
 
 ---
 
@@ -1068,6 +1070,9 @@ Source: https://weld.apps.wayne.edu/docs/changelog.html
 Notable changes to WELD, newest first.
 
 ### Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
+
+- Changed: Preflight 0.12.0 (commit b1fa380) in the pipeline's nine components and the GitHub workflow (was 0.9.0): php-test also runs an advisory PHP 8.6 job, the components gain a tag_pipeline input, and the a11y image digest moves.
+- Docs: SECURITY.md says how to report a vulnerability privately.
 
 ### 0.4.0 (2026-11-22) [#](https://weld.apps.wayne.edu/docs/changelog.html#0-4-0-2026-11-22)
 
@@ -1676,7 +1681,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Preflight components are referenced by commit SHA or a fixed tag, not a moving branch.
 
-**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.9.0 release tag (`@0.9.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:56`, `:80`; published tags in the stack never move), and `.github/workflows/ci.yml:16` calls Preflight 0.9.0's reusable workflow at its release commit (`fb73b538f3980292119b5b306ff64383d760a214`). PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
+**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.12.0 release tag (`@0.12.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:56`, `:80`; published tags in the stack never move), and `.github/workflows/ci.yml:16` calls Preflight 0.12.0's reusable workflow at its release commit (`b1fa3809495794e98475e9d2c20877a331cd6975`). PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
 
 ### Related [#](https://weld.apps.wayne.edu/docs/guides/build-and-supply-chain.html#related)
 
@@ -2350,7 +2355,7 @@ This page lists the parts welded into WELD, what each one does in the app, and w
 | WayneUI | The interface: Wayne State's design system, 2.0.8 from npm, pinned exactly. Its app bar, sidebar drawer, cards, forms and dialog draw every page, in light and dark, and ESLint keeps any other component kit out ([agent docs](https://wayneui.apps.wayne.edu/llms.txt)) |
 | CREED | The written standards and `policy.json`: supported PHP, Laravel and Node versions ([agent docs](https://creed.apps.wayne.edu/llms.txt)) |
 | Pinstripe | The coding standard, 0.4 in `require-dev`: PHPStan includes its Laravel preset (level 8 with Larastan, and the banned calls, SQL joined from strings among them) and Pint runs its Laravel preset. ESLint and Prettier run its npm presets (`@waynestate/pinstripe` `^0.4`), accessibility rules included ([agent docs](https://pinstripe.apps.wayne.edu/llms.txt)) |
-| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.9.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability ([agent docs](https://preflight.apps.wayne.edu/llms.txt)) |
+| Preflight | The CI pipeline, from GitLab CI/CD components pinned at 0.12.0: tests on PHP 8.3, 8.4 and 8.5, audit, PROCTOR, accessibility, SBOM, secret detection, the MySQL 5.6 migrate job and portability ([agent docs](https://preflight.apps.wayne.edu/llms.txt)) |
 | PROCTOR | The checks, run in CI and as the deploy gate ([agent docs](https://proctor.apps.wayne.edu/llms.txt)) |
 | SESAME | Sign-in: CAS, Entra ID (OpenID Connect) and the auth gateway driver, and app-native sessions ([agent docs](https://sesame.apps.wayne.edu/llms.txt)) |
 | HELMET | The baseline runtime: security headers and CSP, sessions, trusted proxies, `/up` and the `/ready` readiness route ([agent docs](https://helmet.apps.wayne.edu/llms.txt)) |
@@ -2374,7 +2379,7 @@ Five more parts of the stack sit beside WELD. WELD installs none of them: each i
 
 ### What is on the bench today [#](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html#what-is-on-the-bench-today)
 
-Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.9.0; the deploy layer runs Squire's kit 0.12.0. Pinstripe's PHP and JavaScript presets are both installed: ESLint and Prettier run on `@waynestate/pinstripe` `^0.4` from npm ([the details](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)).
+Every part is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight 0.12.0; the deploy layer runs Squire's kit 0.12.0. Pinstripe's PHP and JavaScript presets are both installed: ESLint and Prettier run on `@waynestate/pinstripe` `^0.4` from npm ([the details](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)).
 
 - `composer.json` is `waynestate/weld`, requires PHP `^8.3`, and the lock file resolves for 8.3.0
 - `.env.example` sets `APP_NAME=WELD`, `LOG_CHANNEL=stderr` and `SESSION_DRIVER=database`
@@ -2904,7 +2909,7 @@ Source: https://weld.apps.wayne.edu/docs/reference/status.html
 
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
-Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.9.0; the deploy layer runs Squire's kit 0.12.0. Pinstripe's PHP presets and [its npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half) are both installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
+Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.12.0; the deploy layer runs Squire's kit 0.12.0. Pinstripe's PHP presets and [its npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half) are both installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
 ### What is on the bench today [#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
@@ -2916,7 +2921,7 @@ Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED,
 | Index length | `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap |
 | `.gitattributes` | sets `* text=auto eol=lf` |
 | CI contract | `composer ci` runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub |
-| CI jobs | on GitLab, Preflight 0.9.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM, secret detection, the MySQL 5.6 migrate job (`php artisan migrate` against a real 5.6.51) and the portability job, which builds the portable image and boots it the way OpenShift would; the `frontend` job runs ESLint and Prettier |
+| CI jobs | on GitLab, Preflight 0.12.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM, secret detection, the MySQL 5.6 migrate job (`php artisan migrate` against a real 5.6.51) and the portability job, which builds the portable image and boots it the way OpenShift would; the `frontend` job runs ESLint and Prettier |
 | WayneUI | an npm dependency at 2.0.8; it draws every page of the app and the site |
 | HELMET | runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays Laravel's built-in liveness route and `/ready` is HELMET's readiness route, checking the database, the cache and the scheduler heartbeat |
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |
