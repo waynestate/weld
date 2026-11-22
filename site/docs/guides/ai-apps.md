@@ -71,6 +71,8 @@ if (! RateLimiter::attempt('model:'.$user->username, 30)) {
 }
 ```
 
+Because the web guard runs on SESAME's driver, `$request->user()` returns this same user, so policies and `@can` work on it as usual. When you need to check a specific user by hand, `Gate::forUser(app(Sesame::class)->user())` still works too.
+
 Thirty calls a minute per user is a placeholder, not a policy: pick the number your budget allows.
 
 ## Log like everything else [#](https://weld.apps.wayne.edu/docs/guides/ai-apps.html#log-like-everything-else)

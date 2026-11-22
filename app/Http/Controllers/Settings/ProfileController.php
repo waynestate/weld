@@ -76,7 +76,8 @@ class ProfileController extends Controller
     }
 
     /**
-     * The signed-in user, from SESAME's session rather than a Laravel guard.
+     * The signed-in user. The web guard runs on SESAME's driver, so this is
+     * the same user the guard resolves for the request.
      */
     private function user(Request $request): User
     {

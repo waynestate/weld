@@ -46,8 +46,8 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
-                // Sign-in is SESAME's, so the shared user comes from its
-                // session, not from a Laravel guard.
+                // The web guard runs on SESAME's driver, so this shared user
+                // is the same one the guard hands to $request->user().
                 'user' => app(Sesame::class)->user(),
             ],
         ]);

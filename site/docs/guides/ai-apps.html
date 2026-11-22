@@ -87,6 +87,7 @@ if (! RateLimiter::attempt('model:'.$user-&gt;username, 30)) {
     abort(429);
 }
 </code></pre>
+<p>Because the web guard runs on SESAME's driver, <code>$request-&gt;user()</code> returns this same user, so policies and <code>@can</code> work on it as usual. When you need to check a specific user by hand, <code>Gate::forUser(app(Sesame::class)-&gt;user())</code> still works too.</p>
 <p>Thirty calls a minute per user is a placeholder, not a policy: pick the number your budget allows.</p>
 <h2 id="log-like-everything-else">Log like everything <span class="docs-heading-tail"><span>else</span><a class="docs-heading-link" aria-label="Link to this section" href="#log-like-everything-else">#</a></span></h2>
 <p>CREED has no AI-specific logging rules, and the general ones apply:</p>
