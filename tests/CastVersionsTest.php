@@ -129,7 +129,7 @@ it('rewrites the weld log, the cast cards and the README list from the tags', fu
         }
 
         // WELD's own row is the docs builder's (data-docs-version), not this tool's.
-        expect($html)->toContain('<span data-docs-version>0.3.0</span>');
+        expect($html)->toContain('<span data-docs-version>0.4.0</span>');
     } finally {
         castVerRemoveDir($dir);
     }
