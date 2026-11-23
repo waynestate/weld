@@ -7,8 +7,9 @@ declare(strict_types=1);
  * release by hand, so they drift on every tag (11-19: CREED, SESAME,
  * Preflight). These tests run the tool against copies of site/index.html and
  * README.md with the fixture tags file: the rewrite, an idempotent second
- * run, the --check exit codes and the pins-them-at sentence it must never
- * touch. The committed page is left alone; the lead runs the real regen.
+ * run, the --check exit codes, the --today stamp on the "checked" date and
+ * the pins-them-at sentence it must never touch. The committed page is left
+ * alone; the lead runs the real regen.
  */
 
 function castVerRoot(): string
@@ -57,10 +58,10 @@ function castVerTags(): array
     return $tags;
 }
 
-function castVerRun(string $dir, array $extra = []): array
+function castVerRun(string $dir, array $extra = [], ?string $tagsFile = null): array
 {
     $args = array_merge(
-        ['--tags', castVerRoot().'/tests/fixtures/cast-tags.json', '--site', $dir.'/index.html', '--readme', $dir.'/README.md'],
+        ['--tags', $tagsFile ?? castVerRoot().'/tests/fixtures/cast-tags.json', '--site', $dir.'/index.html', '--readme', $dir.'/README.md'],
         $extra,
     );
     $command = PHP_BINARY.' '.escapeshellarg(castVerRoot().'/bin/cast-versions.php').' '.implode(' ', array_map('escapeshellarg', $args)).' 2>&1';
@@ -159,7 +160,8 @@ it('exits 1 from --check while the labels are stale, listing each stale label', 
     try {
         [$code, $output] = castVerRun($dir, ['--check']);
         expect($code)->toBe(1, $output);
-        foreach (['CREED', 'PROCTOR', 'Preflight', 'SESAME'] as $name) {
+        // Each name must stay stale: the fixture disagrees with the committed page for it.
+        foreach (['CREED', 'PROCTOR', 'Pinstripe', 'SESAME'] as $name) {
             expect($output)->toContain($name.': shown ');
             expect($output)->toContain($tags[$name]);
         }
@@ -197,6 +199,57 @@ it('never touches the pins-them-at sentence or the README pinning note', functio
 
         expect($html)->toContain("WELD's pipeline pins them at 0.12.0 for the tests on PHP 8.3, 8.4 and 8.5");
         expect($readme)->toContain('These are the latest releases, not what this repo pins: CI and `deploy/.squire.json` hold those.');
+    } finally {
+        castVerRemoveDir($dir);
+    }
+});
+
+it('stamps the checked date from --today when it rewrites a label', function (): void {
+    $dir = castVerStage();
+    $tags = castVerTags();
+
+    try {
+        [$code, $output] = castVerRun($dir, ['--today', '2026-12-01']);
+        expect($code)->toBe(0, $output);
+
+        $readme = (string) file_get_contents($dir.'/README.md');
+        expect($readme)->toContain('**Current versions** (checked 2026-12-01): ');
+        expect(preg_match('#\*\*Current versions\*\* \(checked [0-9]{4}-[0-9]{2}-[0-9]{2}\): (.+?)\. These are the latest releases#', $readme, $list))
+            ->toBe(1, 'the README "Current versions" list is gone');
+        foreach (explode(', ', $list[1]) as $pair) {
+            [$name, $version] = array_pad(explode(' ', $pair, 2), 2, '');
+            expect($version)->toBe($tags[$name], $name.': the README list still does not show '.$tags[$name]);
+        }
+    } finally {
+        castVerRemoveDir($dir);
+    }
+});
+
+it('leaves the README byte-identical, old date kept, when no label changes', function (): void {
+    $dir = castVerStage();
+
+    try {
+        // The current fixture matches the committed page, so nothing may move.
+        [$code, $output] = castVerRun($dir, ['--today', '2026-12-01'], castVerRoot().'/tests/fixtures/cast-tags-current.json');
+        expect($code)->toBe(0, $output);
+        expect($output)->toContain('nothing to update');
+        expect(file_get_contents($dir.'/README.md'))->toBe((string) file_get_contents(castVerRoot().'/README.md'));
+        expect(file_get_contents($dir.'/index.html'))->toBe((string) file_get_contents(castVerRoot().'/site/index.html'));
+    } finally {
+        castVerRemoveDir($dir);
+    }
+});
+
+it('refuses a --today value that is not a real YYYY-MM-DD date', function (): void {
+    $dir = castVerStage();
+
+    try {
+        [$code, $output] = castVerRun($dir, ['--today', '2026-13-40']);
+        expect($code)->toBe(2, $output);
+        expect($output)->toContain('Usage: php bin/cast-versions.php');
+        // The usage error happens before any file is read or written.
+        expect(md5_file($dir.'/index.html'))->toBe(md5_file(castVerRoot().'/site/index.html'));
+        expect(md5_file($dir.'/README.md'))->toBe(md5_file(castVerRoot().'/README.md'));
     } finally {
         castVerRemoveDir($dir);
     }
