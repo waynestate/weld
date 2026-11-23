@@ -220,7 +220,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
     Inspection: In use
     [Docs for WELD](https://weld.apps.wayne.edu/docs/index.html) [Changes in WELD](https://weld.apps.wayne.edu/docs/changelog.html)
 
-Stable: released at 1.0 or later. In use: a 0.x release that WELD or the apps Sourdough bakes already run on. Pilot: built and tested, and not yet in front of a real app. Each release is the latest tag on that project's main branch, checked on November 10, 2026.
+Stable: released at 1.0 or later. In use: a 0.x release that WELD or the apps Sourdough bakes already run on. Pilot: built and tested, and not yet in front of a real app. Each release is the latest tag on that project's main branch, checked on November 22, 2026.
 
 ## The journey
 

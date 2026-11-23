@@ -58,7 +58,7 @@ git diff --exit-code resources/js/ziggy.*
 <h2 id="read-the-changelog">Read the <span class="docs-heading-tail"><span>CHANGELOG</span><a class="docs-heading-link" aria-label="Link to this section" href="#read-the-changelog">#</a></span></h2>
 <p>The CHANGELOG lists notable changes to WELD, newest first. Pending work sits under <code>## Unreleased</code>; each released version sits under a <code>## X.Y.Z (YYYY-MM-DD)</code> heading. To find what moved, read the entries between your current version and the one you are moving to.</p>
 <h2 id="what-a-release-does">What a release <span class="docs-heading-tail"><span>does</span><a class="docs-heading-link" aria-label="Link to this section" href="#what-a-release-does">#</a></span></h2>
-<p>WELD is tagged (0.1.0 through 0.2.1 so far). A release:</p>
+<p>WELD is tagged (0.1.0 through 0.4.0 so far). A release:</p>
 <ol>
 <li>Moves the lines under <code>## Unreleased</code> in <code>CHANGELOG.md</code> to a new <code>## X.Y.Z (YYYY-MM-DD)</code> heading.</li>
 <li>Needs all the checks green locally, then both pipelines green for that commit.</li>
@@ -83,6 +83,20 @@ any setting you changed into <code>.env</code> or that file.</li>
 </ul>
 <p>0.2.1 carries no breaking change. An app built from 0.2.0 that keeps WELD's <code>bin/weld.ps1</code> and <code>bin/weld.sh</code> copies
 their <code>down</code> from WELD, so it clears <code>public/hot</code> too.</p>
+<p>0.3.0 raises three part constraints that did not allow the current releases: SESAME <code>^0.8</code> (was <code>^0.7</code>), Pinstripe
+<code>^0.4</code> (was <code>^0.3</code>) and PROCTOR <code>^0.16</code> (was <code>^0.15</code>; the <code>deploy/</code> layer takes <code>^0.16</code> too). For one release,
+<code>bin/weld.sh</code> and <code>bin/weld.ps1</code> are thin pointers to Parity: <code>up</code>, <code>down</code> and <code>logs</code> print the Parity commands
+that replace them and exit 2, <code>test</code> and <code>doctor</code> still run, and the scripts are deleted next release. The deploy
+kit is Squire 0.11.1 (was 0.10.8), and ESLint and Prettier come from Pinstripe's npm presets (<code>@waynestate/pinstripe</code>
+<code>^0.4</code>).</p>
+<p>0.4.0 is a minor release. The <code>web</code> guard runs on SESAME's <code>sesame</code> driver (was Laravel's plain <code>session</code> driver),
+so inside <code>auth.sesame</code> routes <code>$request-&gt;user()</code>, <code>auth()-&gt;user()</code>, <code>@can</code> and <code>Gate::allows()</code> see the signed-in
+SESAME user instead of none. SESAME moves to <code>^0.11</code> (was <code>^0.8</code>); the fake driver now needs <code>APP_ENV</code> local or
+testing and <code>SESAME_FAKE_ALLOWED=true</code>, which <code>config/sesame.php</code> reads as <code>fake.allowed</code> (off by default), and
+<code>.env.example</code> is safe for a server as it stands (<code>APP_ENV=production</code>, <code>APP_DEBUG=false</code>, no fake sign-in). PROCTOR
+is <code>^0.17</code> in WELD and its <code>deploy/</code> layer (was <code>^0.16</code>), and the dev dependency ADVISOR is <code>^0.4</code> (was <code>^0.3</code>).
+Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example) are removed;
+Parity runs the app locally: <code>parity up</code> in <code>deploy/</code>.</p>
 <h2 id="related"><span class="docs-heading-tail"><span>Related</span><a class="docs-heading-link" aria-label="Link to this section" href="#related">#</a></span></h2>
 <ul>
 <li><a href="install.html">Install</a></li>
