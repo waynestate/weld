@@ -71,7 +71,7 @@
 </tr>
 <tr>
 <td><code>vendor/bin/squire init --check</code></td>
-<td><strong>Have the files Squire wrote drifted from its templates?</strong> Missing, outdated or edited copies. Writes nothing; exit 1 on drift.</td>
+<td><strong>Have the files Squire wrote drifted from its templates?</strong> Missing, outdated or edited copies, and a deploy layer whose <code>deploy/composer.json</code> has no <code>name</code> or a <code>waynestate/</code> one (D-171: it must be named app/deploy). Writes nothing; exit 1 on drift.</td>
 <td>After you upgrade Squire (then run <code>squire update</code>), and in CI.</td>
 <td>App repo, CI</td>
 </tr>
