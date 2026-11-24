@@ -49,7 +49,7 @@ The CHANGELOG lists notable changes to WELD, newest first. Pending work sits und
 
 ## What a release does [#](https://weld.apps.wayne.edu/docs/upgrading.html#what-a-release-does)
 
-WELD is tagged (0.1.0 through 0.2.1 so far). A release:
+WELD is tagged (0.1.0 through 0.4.0 so far). A release:
 
 1. Moves the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. Needs all the checks green locally, then both pipelines green for that commit.
@@ -75,6 +75,10 @@ Then run all the checks and commit the lock file.
 - **Deprecations fail the tests**: `phpunit.xml` sets `failOnDeprecation`, so fix what it reports before you merge.
 
 0.2.1 carries no breaking change. An app built from 0.2.0 that keeps WELD's `bin/weld.ps1` and `bin/weld.sh` copies their `down` from WELD, so it clears `public/hot` too.
+
+0.3.0 raises three part constraints that did not allow the current releases: SESAME `^0.8` (was `^0.7`), Pinstripe `^0.4` (was `^0.3`) and PROCTOR `^0.16` (was `^0.15`; the `deploy/` layer takes `^0.16` too). For one release, `bin/weld.sh` and `bin/weld.ps1` are thin pointers to Parity: `up`, `down` and `logs` print the Parity commands that replace them and exit 2, `test` and `doctor` still run, and the scripts are deleted next release. The deploy kit is Squire 0.11.1 (was 0.10.8), and ESLint and Prettier come from Pinstripe's npm presets (`@waynestate/pinstripe` `^0.4`).
+
+0.4.0 is a minor release. The `web` guard runs on SESAME's `sesame` driver (was Laravel's plain `session` driver), so inside `auth.sesame` routes `$request->user()`, `auth()->user()`, `@can` and `Gate::allows()` see the signed-in SESAME user instead of none. SESAME moves to `^0.11` (was `^0.8`); the fake driver now needs `APP_ENV` local or testing and `SESAME_FAKE_ALLOWED=true`, which `config/sesame.php` reads as `fake.allowed` (off by default), and `.env.example` is safe for a server as it stands (`APP_ENV=production`, `APP_DEBUG=false`, no fake sign-in). PROCTOR is `^0.17` in WELD and its `deploy/` layer (was `^0.16`), and the dev dependency ADVISOR is `^0.4` (was `^0.3`). Squire's local-running kit files (docker-compose.squire.yml, haproxy.cfg, parity scripts, env example) are removed; Parity runs the app locally: `parity up` in `deploy/`.
 
 ## Related [#](https://weld.apps.wayne.edu/docs/upgrading.html#related)
 

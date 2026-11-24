@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 function castVerRoot(): string
 {
-    return dirname(__DIR__);
+    return dirname(__DIR__, 2);
 }
 
 function castVerTempDir(): string
@@ -129,8 +129,11 @@ it('rewrites the weld log, the cast cards and the README list from the tags', fu
             expect($version)->toBe($tags[$name], $name.': the README list still does not show '.$tags[$name]);
         }
 
-        // WELD's own row is the docs builder's (data-docs-version), not this tool's.
-        expect($html)->toContain('<span data-docs-version>0.4.0</span>');
+        // WELD's own row is the docs builder's (data-docs-version), not this
+        // tool's: whatever release the page shows, the run leaves it as it was.
+        expect(preg_match('#<span data-docs-version>(\d+\.\d+\.\d+)</span>#', (string) file_get_contents(castVerRoot().'/site/index.html'), $own))
+            ->toBe(1, 'the committed front page has no data-docs-version label');
+        expect($html)->toContain('<span data-docs-version>'.$own[1].'</span>');
     } finally {
         castVerRemoveDir($dir);
     }

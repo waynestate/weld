@@ -4,6 +4,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased
 
+- Changed: PROCTOR is `^0.18` in WELD's dev dependencies and its `deploy/` layer (was `^0.17`, which does not allow 0.18), so an app started from WELD gets 0.18.0's update notice, fake-driver check and app-env warning (D-133).
 - Changed: Preflight 0.12.0 (commit b1fa380) in the pipeline's nine components and the GitHub workflow (was 0.9.0): php-test also runs an advisory PHP 8.6 job, the components gain a tag_pipeline input, and the a11y image digest moves.
 - Docs: SECURITY.md says how to report a vulnerability privately.
 - Changed: bin/cast-versions.php sets the README's "checked" date to today when it rewrites a version label (`--today` pins it for tests).

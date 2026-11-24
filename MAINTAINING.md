@@ -7,8 +7,8 @@ so most of the upkeep is keeping the parts it joins current.
 ## What WELD is and what it depends on
 
 - `waynestate/weld`, a Composer `project` (an app you clone), not a library. It is on Packagist, installed with `composer create-project waynestate/weld`.
-- **The stack parts it joins:** `waynestate/helmet` `^1.3` and `waynestate/sesame` `^0.8` at runtime;
-  `waynestate/creed` `^0.1.8`, `waynestate/pinstripe` `^0.4` and `waynestate/proctor` `^0.17` for checks, and
+- **The stack parts it joins:** `waynestate/helmet` `^1.3` and `waynestate/sesame` `^0.11` at runtime;
+  `waynestate/creed` `^0.1.8`, `waynestate/pinstripe` `^0.4` and `waynestate/proctor` `^0.18` for checks, and
   `waynestate/advisor` `^0.4` for coding agents (all four `require-dev`). WayneUI provides the interface (npm, 2.0.8),
   Preflight's components run CI (0.12.0), and Squire's kit in `deploy/` deploys it (0.12.0). Pinstripe's npm presets
   (`@waynestate/pinstripe` `^0.4`) run ESLint and Prettier (docs/reference/status.md, "Pinstripe's npm half").
@@ -64,7 +64,7 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 
 - **GitLab:** Preflight's `php-test` (PHP 8.3, 8.4, 8.5, running `vendor/bin/pest`) and `composer-audit` components, a `composer-ci` job, a
   `no-dev-install` job (a `composer install --no-dev` that fails if Laravel Boost comes along), a `proctor` job (warnings pass, failures block), a `ziggy` drift job and a `regen-gate` job (new drift fails the job;
-  `.sourdough/regen-baseline.json` records the drift already accepted). Preflight 0.5.0 also brings the `a11y` job
+  `.sourdough/regen-baseline.json` records the drift already accepted). Since Preflight 0.5.0 it also brings the `a11y` job
   (axe over `site/`), the `a11y-app` job (axe over the app's own pages, saved by the `a11y-pages` job), `sbom`,
   `secret-detection` and `portability`, and a `frontend` job runs `npm run lint`, `npm run format:check`, the typecheck
   and the build.
@@ -119,7 +119,7 @@ Pint skips `deploy/`. That folder is the stack's shared front-page deploy layer 
 
 ## Releasing
 
-WELD is tagged (0.1.0 through 0.2.1 so far). To release a version:
+WELD is tagged (0.1.0 through 0.4.0 so far). To release a version:
 
 1. Move the lines under `## Unreleased` in `CHANGELOG.md` to a new `## X.Y.Z (YYYY-MM-DD)` heading.
 2. All the checks above green locally, then both pipelines green for that commit.

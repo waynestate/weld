@@ -41,7 +41,7 @@
         "waynestate/advisor": "^0.4",
         "waynestate/creed": "^0.1.8",
         "waynestate/pinstripe": "^0.4",
-        "waynestate/proctor": "^0.17"
+        "waynestate/proctor": "^0.18"
     },
     "autoload": {
         "psr-4": {
