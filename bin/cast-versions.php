@@ -13,7 +13,7 @@ declare(strict_types=1);
  * which the docs builder keeps current.
  *
  * Usage:
- *   php bin/cast-versions.php [--tags <file>] [--site <file>] [--readme <file>] [--check]
+ *   php bin/cast-versions.php [--tags <file>] [--site <file>] [--readme <file>] [--today <YYYY-MM-DD>] [--check]
  *
  * Tag source, in order: --tags <file>, a JSON object of part name to version
  * (for tests and offline runs), else `git ls-remote --tags --refs` against
@@ -25,6 +25,12 @@ declare(strict_types=1);
  * --check writes nothing and exits 1 listing each stale label (part, shown,
  * tag). It is deliberately not part of `composer ci`: it fails on every new
  * tag until someone runs the rewrite, so it is a release step, not a gate.
+ *
+ * --today <YYYY-MM-DD> is the date a rewrite stamps in the README's
+ * "(checked ...)" line; the default is today in America/Detroit. A value
+ * that is not a real calendar date in that exact shape is a usage error.
+ * --check never reports or rewrites the date, and a run that changes no
+ * label leaves the date alone too.
  *
  * The "pins them at" sentence on the Preflight card is never touched: it
  * names the release WELD pins, not the latest tag.
@@ -59,12 +65,13 @@ const CAST_GIT_SPACING_SECONDS = 60;
 
 const CAST_GIT_TIMEOUT_SECONDS = 30;
 
-$usage = "Usage: php bin/cast-versions.php [--tags <file>] [--site <file>] [--readme <file>] [--check]\n"
+$usage = "Usage: php bin/cast-versions.php [--tags <file>] [--site <file>] [--readme <file>] [--today <YYYY-MM-DD>] [--check]\n"
     ."       php bin/cast-versions.php --help\n";
 
 $tagsFile = null;
 $siteArg = null;
 $readmeArg = null;
+$todayArg = null;
 $check = false;
 
 $i = 1;
@@ -91,6 +98,13 @@ while ($i < count($argv)) {
             exit(2);
         }
         $readmeArg = $value;
+    } elseif ($arg === '--today' || str_starts_with($arg, '--today=')) {
+        $value = str_starts_with($arg, '--today=') ? substr($arg, 8) : ($argv[++$i] ?? null);
+        if (! is_string($value) || $value === '' || ! castVersionsIsDate($value)) {
+            fwrite(STDERR, $usage);
+            exit(2);
+        }
+        $todayArg = $value;
     } elseif ($arg === '--check') {
         $check = true;
     } elseif ($arg === '--help' || $arg === '-h') {
@@ -102,6 +116,8 @@ while ($i < count($argv)) {
     }
     $i++;
 }
+
+$today = $todayArg ?? (new DateTimeImmutable('now', new DateTimeZone('America/Detroit')))->format('Y-m-d');
 
 $root = dirname(__DIR__);
 $sitePath = $siteArg !== null ? $siteArg : $root.'/site/index.html';
@@ -175,7 +191,7 @@ if ($check) {
 }
 
 [$newSite, $siteChanges] = castVersionsRewriteSite($siteHtml, $tags);
-[$newReadme, $readmeChanges] = castVersionsRewriteReadme($readmeText, $tags);
+[$newReadme, $readmeChanges] = castVersionsRewriteReadme($readmeText, $tags, $today);
 
 if ($newSite !== $siteHtml) {
     file_put_contents($sitePath, $newSite);
@@ -206,6 +222,14 @@ exit(0);
 function castVersionsIsVersion(string $value): bool
 {
     return preg_match('/^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$/', $value) === 1;
+}
+
+/** True when the value is a real calendar date written exactly YYYY-MM-DD. */
+function castVersionsIsDate(string $value): bool
+{
+    $date = DateTimeImmutable::createFromFormat('!Y-m-d', $value, new DateTimeZone('America/Detroit'));
+
+    return $date instanceof DateTimeImmutable && $date->format('Y-m-d') === $value;
 }
 
 /**
@@ -351,15 +375,17 @@ function castVersionsRewriteSite(string $html, array $tags): array
 
 /**
  * Rewrite the versions in the README's "Current versions" list, keeping the
- * names, the order and the pinning note after the list.
+ * names, the order and the pinning note after the list. When a label
+ * changes, the "(checked ...)" date becomes $today; when none changes, the
+ * README comes back exactly as it was, old date and all.
  */
-function castVersionsRewriteReadme(string $readme, array $tags): array
+function castVersionsRewriteReadme(string $readme, array $tags, string $today): array
 {
     $changes = [];
     $count = 0;
     $new = preg_replace_callback(
         '#(\*\*Current versions\*\* \(checked [0-9]{4}-[0-9]{2}-[0-9]{2}\): )(.+?)(\. These are the latest releases)#',
-        static function (array $m) use ($tags, &$changes): string {
+        static function (array $m) use ($tags, $today, &$changes): string {
             $pairs = explode(', ', $m[2]);
             $changed = false;
             foreach ($pairs as $i => $pair) {
@@ -372,7 +398,9 @@ function castVersionsRewriteReadme(string $readme, array $tags): array
                 $changed = true;
             }
 
-            return $changed ? $m[1].implode(', ', $pairs).$m[3] : $m[0];
+            return $changed
+                ? '**Current versions** (checked '.$today.'): '.implode(', ', $pairs).$m[3]
+                : $m[0];
         },
         $readme,
         1,
