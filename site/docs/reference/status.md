@@ -10,7 +10,7 @@ generator: Squire agent-ready
 
 This page records what is on the bench today: the state of every part welded into WELD, plus the gaps still open for the backlog.
 
-Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.12.0; the deploy layer runs Squire's kit 0.12.0. Pinstripe's PHP presets and [its npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half) are both installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
+Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED, Pinstripe, PROCTOR and ADVISOR are in `require-dev`; WayneUI 2.0.8 comes from npm; CI pins Preflight's components at 0.13.0; the deploy layer runs Squire's kit 0.12.0. Pinstripe's PHP presets and [its npm half](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half) are both installed. For what each part does in WELD, see [What is welded in](https://weld.apps.wayne.edu/docs/guides/whats-welded-in.html).
 
 ## What is on the bench today [#](https://weld.apps.wayne.edu/docs/reference/status.html#what-is-on-the-bench-today)
 
@@ -22,7 +22,7 @@ Every part of the stack is welded in: HELMET and SESAME are in `require`; CREED,
 | Index length | `Schema::defaultStringLength(191)` keeps index keys under Citadel's MySQL 5.6 767-byte cap |
 | `.gitattributes` | sets `* text=auto eol=lf` |
 | CI contract | `composer ci` runs validate, tests, Pint, PHPStan level 8, the agent-ready check, the practices sync check, the docs check and audit, the same command on GitLab and GitHub |
-| CI jobs | on GitLab, Preflight 0.12.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM, secret detection, the MySQL 5.6 migrate job (`php artisan migrate` against a real 5.6.51) and the portability job, which builds the portable image and boots it the way OpenShift would; the `frontend` job runs ESLint and Prettier |
+| CI jobs | on GitLab, Preflight 0.13.0 adds the PHP 8.3, 8.4 and 8.5 test matrix, the audit, PROCTOR, the accessibility gate over `site/` and over the app's own pages, an SBOM, secret detection, the MySQL 5.6 migrate job (`php artisan migrate` against a real 5.6.51) and the portability job, which builds the portable image and boots it the way OpenShift would; the `frontend` job runs ESLint and Prettier |
 | WayneUI | an npm dependency at 2.0.8; it draws every page of the app and the site |
 | HELMET | runs its security headers and CSP middleware in the global chain, so every response carries the baseline; the Vite build takes the per-request nonce; trusted proxies come from `TRUSTED_PROXIES` (`bootstrap/app.php`); `/up` stays Laravel's built-in liveness route and `/ready` is HELMET's readiness route, checking the database, the cache and the scheduler heartbeat |
 | SESAME | owns sign-in at `/login` and `/logout`; the fake driver stands in for the identity provider locally, and CAS is an env change away |
@@ -50,10 +50,10 @@ These mirror the gaps at the end of [BEST_PRACTICES.md](https://git.wayne.edu/en
 
 WELD's pipeline audits signed-in pages in two steps, copied from Sourdough's Inertia shape:
 
-1. The `a11y-pages` job boots the app as its first run on a desk does (`.env` from `.env.example`, a generated key, an SQLite database, `php artisan serve`), signs in with SESAME's fake driver, and saves each path in `A11Y_PATHS` (WELD: `/`, `/dashboard`, `/settings/profile` and `/settings/appearance`) into `a11y-site/` with `public/`'s static files. One cookie jar carries the sign-in from one path to the next, and the server's origin is cut out of the saved pages (`.gitlab-ci.yml:296-344`).
-2. The `a11y-app` include checks those saved pages: axe-core 4.14.0, light and dark, at 320 and 1280 px, plus WCAG 1.4.10 reflow, at WCAG 2.2 AA (`.gitlab-ci.yml:31-40`).
+1. The `a11y-pages` job boots the app as its first run on a desk does (`.env` from `.env.example`, a generated key, an SQLite database, `php artisan serve`), signs in with SESAME's fake driver, and saves each path in `A11Y_PATHS` (WELD: `/`, `/dashboard`, `/settings/profile` and `/settings/appearance`) into `a11y-site/` with `public/`'s static files. One cookie jar carries the sign-in from one path to the next, and the server's origin is cut out of the saved pages (`.gitlab-ci.yml:311-370`).
+2. The `a11y-app` include checks those saved pages: axe-core 4.14.1, light and dark, at 320 and 1280 px, plus WCAG 1.4.10 reflow, at WCAG 2.2 AA (`.gitlab-ci.yml:53-63`).
 
-For a derived app: add each page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages` together (`.gitlab-ci.yml:39`, `:301`). `tests/Feature/A11yPagesTest.php` holds you to it: it fails when the two lists differ, and it walks the list the way the job does (one session, redirects followed) and fails when an Inertia page under `resources/js/pages` is drawn by none of the paths. Until 2026-11-11 neither settings page was on the list. A fully gated app should keep one public page, the landing page, so the site audit has something to read.
+For a derived app: add each page you build to `A11Y_PATHS` and to the `a11y-app` include's `pages` together (`.gitlab-ci.yml:62`, `:329`). `tests/Feature/A11yPagesTest.php` holds you to it: it fails when the two lists differ, and it walks the list the way the job does (one session, redirects followed) and fails when an Inertia page under `resources/js/pages` is drawn by none of the paths. Until 2026-11-11 neither settings page was on the list. A fully gated app should keep one public page, the landing page, so the site audit has something to read.
 
 ## Pinstripe's npm half [#](https://weld.apps.wayne.edu/docs/reference/status.html#pinstripe-s-npm-half)
 

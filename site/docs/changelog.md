@@ -12,6 +12,7 @@ Notable changes to WELD, newest first.
 
 ## Unreleased [#](https://weld.apps.wayne.edu/docs/changelog.html#unreleased)
 
+- Changed: CI follows D-176 and pins Preflight 0.13.0 (axe-core 4.14.1 in the a11y checker copy). A push runs the fast tier (composer ci, the audits, PROCTOR, secret detection, SBOM, the front-end build, the Ziggy check, the no-dev install); the full tier (PHP matrix and advisory PHP, browser a11y on the app and the pages, portability, the regen gate) runs nightly, on tags and on manual runs. Portability now runs on the nightly schedule too. Branch pipelines only, so an open MR no longer doubles a push, and a new commit cancels the pipeline it replaces.
 - Changed: PROCTOR is `^0.18` in WELD's dev dependencies and its `deploy/` layer (was `^0.17`, which does not allow 0.18), so an app started from WELD gets 0.18.0's update notice, fake-driver check and app-env warning (D-133).
 - Changed: Preflight 0.12.0 (commit b1fa380) in the pipeline's nine components and the GitHub workflow (was 0.9.0): php-test also runs an advisory PHP 8.6 job, the components gain a tag_pipeline input, and the a11y image digest moves.
 - Docs: SECURITY.md says how to report a vulnerability privately.

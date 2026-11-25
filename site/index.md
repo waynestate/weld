@@ -146,7 +146,7 @@ Every project in the stack on one sheet: what it holds, its latest release, wher
    ### Preflight
    The CI runner
    GitLab CI/CD components: tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, the migrations on MySQL 5.6, a portability boot of the image with its own health check, Pint, PHPStan and ESLint.
-   Release 0.12.0
+   Release 0.13.0
    Inspection: In use
    [Site of Preflight](https://preflight.apps.wayne.edu/) [Docs for Preflight](https://preflight.apps.wayne.edu/docs/)
 6. Joint 05
@@ -325,7 +325,7 @@ $
 
 ### [Preflight](https://preflight.apps.wayne.edu/)
 
-0.12.0 Checklist | Long
+0.13.0 Checklist | Long
 
 GitLab CI/CD components. WELD's pipeline pins them at 0.13.0 for the tests on PHP 8.3, 8.4 and 8.5, PROCTOR, the audit, an SBOM, secret detection, accessibility, MySQL 5.6 migrations and a portability boot of the image.
 
