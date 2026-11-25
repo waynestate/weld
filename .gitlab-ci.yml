@@ -423,15 +423,11 @@ portability:
   rules:
     # The component's tier gate lives in its own rules, which this block
     # replaces, so the job carries it too (D-176): fast-tier pipelines skip
-    # it.
+    # it, and the nightly full-tier schedule, tags and manual runs of main run it.
     - if: '$PREFLIGHT_TIER != "full"'
       when: never
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
     - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: manual
+    - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   after_script:
     - buildah rm --all >/dev/null 2>&1 || true
     - buildah rmi --all --force >/dev/null 2>&1 || true

@@ -91,15 +91,13 @@ it('starts the image\'s own entrypoint with no shim, as the platforms do', funct
     expect(weldPortabilityInputs()['inputs'])->not->toHaveKey('start_command');
 });
 
-it('is full tier, runs on tags and full-tier pipelines, waits for a click on a merge request, and never runs from the schedule', function () {
+it('is full tier: runs nightly, on tags and on manual runs of main, never on a fast-tier pipeline', function () {
     // The first rule is the D-176 fast-tier gate: this block replaces the
     // component's rules, so the job carries the tier gate itself.
     expect(weldPortabilityCi()['portability']['rules'])->toBe([
         ['if' => '$PREFLIGHT_TIER != "full"', 'when' => 'never'],
-        ['if' => '$CI_PIPELINE_SOURCE == "schedule"', 'when' => 'never'],
         ['if' => '$CI_COMMIT_TAG'],
-        ['if' => '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'],
-        ['if' => '$CI_PIPELINE_SOURCE == "merge_request_event"', 'when' => 'manual'],
+        ['if' => '$CI_PIPELINE_SOURCE == "schedule" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'],
     ]);
 });
 
