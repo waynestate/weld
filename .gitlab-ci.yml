@@ -1,30 +1,52 @@
 # WELD's pipeline, built from the Preflight components on this GitLab.
-# Pinned to Preflight 0.12.0. Never use ~latest.
+# Pinned to Preflight 0.13.0. Never use ~latest.
 # WELD requires PHP ^8.3, so the test matrix starts at 8.3.
 # composer ci is the contract: every check runs from the "ci" script in composer.json.
 # Docker Hub images go through the GitLab Dependency Proxy to avoid the anonymous pull limit.
+# An app made from WELD runs the full tier only on tags, manual runs and a nightly schedule with PREFLIGHT_TIER=full: add that schedule (Preflight's recommended pipeline shape).
+# D-176 pipeline shape: branch pipelines only, a new commit cancels the old pipeline,
+# pushes run the fast tier, nightly schedules, tags and manual runs the full tier.
+workflow:
+  auto_cancel:
+    on_new_commit: interruptible
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_TAG
+      variables: { PREFLIGHT_TIER: full }
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $PREFLIGHT_TIER == "full"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      variables: { PREFLIGHT_TIER: fast }
+    - if: $CI_PIPELINE_SOURCE == "web"
+      variables: { PREFLIGHT_TIER: full }
+    - if: $CI_COMMIT_BRANCH
+      variables: { PREFLIGHT_TIER: fast }
+default:
+  interruptible: true
 include:
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.12.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/php-test@0.13.0
     inputs:
+      tier: full
       php_versions: ["8.3", "8.4", "8.5"]
       image: "php:${PHP_VERSION}-cli-trixie"
       # The tests are Pest files, and PHPUnit refuses to load them ("Please run
       # ./vendor/bin/pest instead"). Pest runs the PHPUnit class tests too.
       test_command: vendor/bin/pest
-  # Preflight 0.12.0 runs it on composer:2.11.1 by digest, so no image input.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@0.12.0
+  # Preflight 0.13.0 runs it on composer:2.11.1 by digest, so no image input.
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/composer-audit@0.13.0
   # The front page deploy layer (ADR-0017): PROCTOR checks deploy/ against CREED's policy.
   # Warnings pass and failures block, as in the proctor-root job.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@0.12.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/proctor@0.13.0
     inputs:
       working_dir: deploy
       proctor_command: vendor/bin/proctor check --format=codequality
       image: "php:8.5-cli-trixie@sha256:9236fd373d3bcda0659cf94838a744bd79791419292958963f8c6b34a0071554"
-  # Accessibility: Preflight's a11y component serves site/ and checks every page with axe-core 4.14.0, light and
+  # Accessibility: Preflight's a11y component serves site/ and checks every page with axe-core 4.14.1, light and
   # dark, at 320 and 1280 px, plus WCAG 1.4.10 reflow, at WCAG 2.2 AA. Its Playwright image comes from
   # mcr.microsoft.com, which the Dependency Proxy does not front, so it takes no image_prefix.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.12.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.13.0
     inputs:
+      tier: full
       site_dir: site
       pages: ["**/*.html"]
       wcag_tags: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]
@@ -32,8 +54,9 @@ include:
   # it: the a11y-pages job saves them into a11y-site/, signed in by SESAME's
   # fake driver. Named a11y-app so it sits beside the site's a11y job. The
   # pages list is the a11y-pages job's A11Y_PATHS: change the two together.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.12.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/a11y@0.13.0
     inputs:
+      tier: full
       job_name: a11y-app
       site_dir: a11y-site
       pages: ["/", "/dashboard", "/settings/profile", "/settings/appearance"]
@@ -42,18 +65,18 @@ include:
   # composer.lock installs, dev packages left out, kept as sbom.cdx.json for
   # 30 days. When the next advisory lands, finding out whether WELD has the
   # package is one search instead of one guess.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/sbom@0.12.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/sbom@0.13.0
   # Gitleaks reads the checkout and fails on anything shaped like a
   # credential, with the finding redacted in the log and in gitleaks.json.
   # A secret belongs in Settings > CI/CD > Variables, never in a file.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/secret-detection@0.12.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/secret-detection@0.13.0
   # Migrations meet the MySQL 5.6.51 that Citadel shares (CREED databases.md,
   # a MUST). The tests run on SQLite, which takes a JSON column or a long
   # utf8mb4 index that 5.6 rejects at deploy. This job runs php artisan
   # migrate against a real 5.6.51 service instead. The official 5.6 images
   # are amd64 only, so the job carries the amd64 runner tag. Test the weld
   # on the metal you will hang the gate from.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/mysql56-migrate@0.12.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/mysql56-migrate@0.13.0
   # PORTABILITY (ADR-0010): WELD must run off Citadel too, on OpenShift,
   # Coolify or plain Docker. The portability job builds the portable image
   # (deploy/.squire/portable.Dockerfile) with Buildah, no Docker daemon and no
@@ -77,8 +100,9 @@ include:
   # redirected from it, and a believed X-Forwarded-Host would show in the
   # Location. The runner is arm64: the Buildah image and both bases are
   # multi-arch, so no input names an architecture.
-  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.12.0
+  - component: $CI_SERVER_FQDN/enterprise-apps/preflight/portability@0.13.0
     inputs:
+      tier: full
       context: .
       dockerfile: deploy/.squire/portable.Dockerfile
       build_args: ["SQUIRE_KIT_DIR=deploy", "BASE_IMAGE=localhost/weld-portable-base:8.4"]
@@ -108,13 +132,13 @@ include:
       # that Citadel runs is proven by the mysql56-migrate job, so this one only
       # has to hold sessions.
       services: [{ name: "mysql:8.4.11@sha256:0f51e63e537a1f176423fa03ef559aabe6fa4372a53160a44bc7e75da7d15364", alias: db, variables: { MYSQL_ROOT_PASSWORD: "portability", MYSQL_DATABASE: "app" } }]
-      # Preflight 0.12.0 runs this once, in its own container of the image,
+      # Preflight 0.13.0 runs this once, in its own container of the image,
       # before either replica starts: the way a release migrates once before
       # the web pods start (W24). The loop waits out MySQL's first boot.
       setup_command: "cd /citadel/src && for i in 1 2 3 4 5 6 7 8 9 10; do php artisan migrate --force && exit 0; sleep 3; done; exit 1"
       session_login_path: /_portability/login
       session_check_path: /_portability/me
-      # Preflight 0.12.0 sends this header on every session-hop request,
+      # Preflight 0.13.0 sends this header on every session-hop request,
       # reading the variable at run time and never printing it.
       session_header: "X-Portability-Token: $PORTABILITY_PROBE_TOKEN"
       # No start_command: the probe runs the image's own entrypoint, as the
@@ -229,17 +253,21 @@ ziggy:
 # REGEN GATE: is WELD still Sourdough's Inertia shape? It generates a fresh
 # app from Sourdough's main and compares it with WELD by SHA-256. New drift
 # blocks the pipeline: fix it, or record it as accepted with --write-baseline.
-# It runs on every tag (the release check), on the nightly schedule and Run
-# pipeline (drift WELD did not cause: Sourdough's main or the Laravel
-# skeleton moved), and on a push only when the push touches a path the gate
-# compares, or the gate itself. A docs or site push cannot cause drift, so it
-# skips the gate. When Sourdough starts writing a new top-level path, add it
-# to the changes lists; until then the nightly finds it within a day.
+# It is a full-tier job (D-176): it runs on tags (the release check) and on
+# the full-tier pipelines (a nightly schedule with PREFLIGHT_TIER=full, or
+# Run pipeline), where it catches drift WELD did not cause: Sourdough's main
+# or the Laravel skeleton moved. A push runs the fast tier and skips it; when
+# Sourdough starts writing a new top-level path, the nightly finds it within
+# a day.
 regen-gate:
   extends: .composer-cache
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.11.1@sha256:8de2184c6de224f4689e8f80ed5f5edaf0030b6b8b7839a22a2bcb6722ac87d0
   interruptible: true
   rules:
+    # Fast-tier pipelines (a plain push, a schedule without PREFLIGHT_TIER=full)
+    # skip the gate.
+    - if: '$PREFLIGHT_TIER != "full"'
+      when: never
     # A tag is a release: the gate always runs and always blocks.
     - if: $CI_COMMIT_TAG
     # The nightly schedule, and Run pipeline in the UI: WELD against whatever
@@ -297,6 +325,10 @@ a11y-pages:
   extends: .composer-cache
   image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/composer:2.11.1@sha256:8de2184c6de224f4689e8f80ed5f5edaf0030b6b8b7839a22a2bcb6722ac87d0
   needs: [frontend]
+  rules:
+    # The pages feed the a11y-app gate, which is full tier (D-176); the fast
+    # tier has no reader for them, so it skips this job too.
+    - if: '$PREFLIGHT_TIER == "full"'
   variables:
     A11Y_PATHS: "/ /dashboard /settings/profile /settings/appearance"
   script:
@@ -377,10 +409,11 @@ a11y-app:
 # the job gets an hour. Measure twice, weld once.
 #
 # It is the heaviest job on the one shared arm64 runner (an hour, tens of GB
-# of vfs storage), so it runs on main and on tags, waits for a click on a
-# merge request, and never runs from the nightly regen schedule. Where it
-# runs, it blocks: a failed check fails the pipeline. A newer push cancels a
-# superseded run. The Buildah
+# of vfs storage), so it is full tier (D-176): it runs on tags and on the
+# full-tier pipelines (a nightly schedule with PREFLIGHT_TIER=full, or Run
+# pipeline), and never on a plain push or from the nightly regen schedule.
+# Where it runs, it blocks: a failed check fails the pipeline. A newer push
+# cancels a superseded run. The Buildah
 # image declares /var/lib/containers a volume, which the runner may keep as
 # a cache volume, and the probe removes only its containers, so after_script
 # deletes every container and image this job left in its own storage.
@@ -388,6 +421,11 @@ portability:
   timeout: 60 minutes
   interruptible: true
   rules:
+    # The component's tier gate lives in its own rules, which this block
+    # replaces, so the job carries it too (D-176): fast-tier pipelines skip
+    # it.
+    - if: '$PREFLIGHT_TIER != "full"'
+      when: never
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $CI_COMMIT_TAG

@@ -29,7 +29,7 @@ This page states WELD's build and supply chain practices, one per heading, each 
 
 **Practice:** Preflight components are referenced by commit SHA or a fixed tag, not a moving branch.
 
-**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.12.0 release tag (`@0.12.0` at `.gitlab-ci.yml:7`, `:15`, `:18`, `:26`, `:35`, `:45`, `:49`, `:56`, `:80`; published tags in the stack never move), and `.github/workflows/ci.yml:16` calls Preflight 0.12.0's reusable workflow at its release commit (`b1fa3809495794e98475e9d2c20877a331cd6975`). PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
+**Stack:** `Checked`. `.gitlab-ci.yml` pins every Preflight component to the 0.13.0 release tag (`@0.13.0` at `.gitlab-ci.yml:27`, `:36`, `:39`, `:47`, `:57`, `:68`, `:72`, `:79`, `:103`; published tags in the stack never move), and `.github/workflows/ci.yml:16` calls Preflight 0.13.0's reusable workflow at its release commit (`80ff4e366d6d7af1b95c29c7d4303b4cb90a863c`). PROCTOR's `preflight-pinned` check, run by the `proctor-root` job (`composer proctor`), warns on an include without a full release tag or a commit SHA.
 
 ## Related
 
