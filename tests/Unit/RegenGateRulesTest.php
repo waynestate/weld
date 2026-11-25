@@ -31,32 +31,20 @@ function weldCiJob(string $name): array
 it('always runs the gate on a tag, the schedule and Run pipeline', function () {
     $rules = weldCiJob('regen-gate')['rules'] ?? null;
 
-    expect($rules)->toBeArray()
-        ->and($rules[0])->toBe(['if' => '$CI_COMMIT_TAG'])
-        ->and($rules[1])->toBe(['if' => '$CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"']);
+    expect($rules)->toBeArray()->toHaveCount(3)
+        ->and($rules[0])->toBe(['if' => '$PREFLIGHT_TIER != "full"', 'when' => 'never'])
+        ->and($rules[1])->toBe(['if' => '$CI_COMMIT_TAG'])
+        ->and($rules[2])->toBe(['if' => '$CI_PIPELINE_SOURCE == "schedule" || $CI_PIPELINE_SOURCE == "web"']);
 });
 
-it('runs the gate on a push only when a compared path changes', function () {
+it('never runs the gate on a push: the fast tier skips it', function () {
     $rules = weldCiJob('regen-gate')['rules'];
 
-    expect($rules)->toHaveCount(3)
-        ->and($rules[2]['if'])->toBe('$CI_PIPELINE_SOURCE == "push"')
-        ->and($rules[2]['changes']['paths'])->toBe([
-            '{.*,*.json,*.js,*.ts,*.xml,*.neon,*.lock,artisan,AGENTS.md,CLAUDE.md}',
-            '{.ai,.sourdough,app,bootstrap,config,database,deploy,public,resources,routes,scripts,storage,stubs,tests,tools}/**/*',
-            'bin/regen-check.php',
-        ]);
-});
+    expect($rules[0])->toBe(['if' => '$PREFLIGHT_TIER != "full"', 'when' => 'never']);
 
-it('covers every top-level folder the bake writes outside the product files', function () {
-    // The folders a sourdough new --inertia bake writes (WELD keeps the
-    // Squire kit's under deploy/), less the product files. A new one needs
-    // a place in the push rule's folder list.
-    $folders = weldCiJob('regen-gate')['rules'][2]['changes']['paths'][1];
-
-    foreach (['.ai', '.sourdough', 'app', 'bootstrap', 'config', 'database', 'deploy', 'public', 'resources', 'routes', 'scripts', 'storage', 'stubs', 'tests'] as $folder) {
-        expect(str_contains($folders, '{'.$folder.',') || str_contains($folders, ','.$folder.',') || str_contains($folders, ','.$folder.'}'))
-            ->toBeTrue("the regen gate's push rule no longer watches {$folder}/");
+    foreach ($rules as $rule) {
+        expect(str_contains((string) ($rule['if'] ?? ''), 'push'))->toBeFalse('a rule still runs the gate on a push');
+        expect($rule)->not->toHaveKey('changes');
     }
 });
 
